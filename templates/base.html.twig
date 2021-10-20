@@ -27,7 +27,8 @@
 
         <div class="col-md-3 text-end">
             {% if app.user %}
-                <a href="{{ path('app_login') }}" class="btn btn-outline-primary me-2">Se déconnecter</a>
+                <a href="{{ path('admin') }}" class="btn btn-outline-primary me-2">Administration</a>
+                <a href="{{ path('app_logout') }}" class="btn btn-primary">Se déconnecter</a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-outline-primary me-2">Se connecter</a>
                 <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
