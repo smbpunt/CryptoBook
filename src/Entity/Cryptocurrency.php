@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CryptocurrencyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +68,16 @@ class Cryptocurrency
      * @ORM\Column(type="string", length=5, nullable=true)
      */
     private $symbol;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Position::class, mappedBy="coin")
+     */
+    private $positions;
+
+    public function __construct()
+    {
+        $this->positions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -191,4 +203,41 @@ class Cryptocurrency
 
         return $this;
     }
+
+    /**
+     * @return Collection|Position[]
+     */
+    public function getPositions(): Collection
+    {
+        return $this->positions;
+    }
+
+    public function addPosition(Position $position): self
+    {
+        if (!$this->positions->contains($position)) {
+            $this->positions[] = $position;
+            $position->setCoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removePosition(Position $position): self
+    {
+        if ($this->positions->removeElement($position)) {
+            // set the owning side to null (unless already changed)
+            if ($position->getCoin() === $this) {
+                $position->setCoin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->libelle;
+    }
+
+
 }

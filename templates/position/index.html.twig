@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Position index{% endblock %}
+
+{% block body %}
+    <h1>Position index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Ouvert le</th>
+            <th>Nombre achetés</th>
+            <th>Coût</th>
+            <th>Prix d'entrée</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for position in positions %}
+            <tr>
+                <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
+                <td>{{ position.coin.symbol|upper }}</td>
+                <td>{{ position.openedAt ? position.openedAt|date('Y-m-d') : '' }}</td>
+                <td>{{ position.nbCoins }}</td>
+                <td>$ {{ position.entryCost }}</td>
+                <td>$ {{ position.entryCoinValue }}</td>
+                <td>
+                    <a href="{{ path('position_show', {'id': position.id}) }}">show</a>
+                    <a href="{{ path('position_edit', {'id': position.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('position_new') }}">Create new</a>
+{% endblock %}

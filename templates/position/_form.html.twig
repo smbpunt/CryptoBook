@@ -1,0 +1,25 @@
+<div class="container">
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md">
+            {{ form_row(form.isOpened) }}
+        </div>
+        <div class="col-md">
+            {{ form_row(form.openedAt) }}
+        </div>
+        <div class="col-md">
+            {{ form_row(form.coin) }}
+        </div>
+        <div class="col-md">
+            {{ form_row(form.nbCoins) }}
+        </div>
+        <div class="col-md">
+            {{ form_row(form.entryCost) }}
+        </div>
+    </div>
+    <div class="row">
+        {{ form_row(form.submit) }}
+        {{ form_row(form.submitAndNext) }}
+    </div>
+    {{ form_end(form) }}
+</div>

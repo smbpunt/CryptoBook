@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Position{% endblock %}
+
+{% block body %}
+    <h1>Position</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ position.id }}</td>
+            </tr>
+            <tr>
+                <th>OpenedAt</th>
+                <td>{{ position.openedAt ? position.openedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>NbCoins</th>
+                <td>{{ position.nbCoins }}</td>
+            </tr>
+            <tr>
+                <th>IsOpened</th>
+                <td>{{ position.isOpened ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('position_index') }}">back to list</a>
+
+    <a href="{{ path('position_edit', {'id': position.id}) }}">edit</a>
+
+    {{ include('position/_delete_form.html.twig') }}
+{% endblock %}
