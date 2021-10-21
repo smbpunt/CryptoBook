@@ -18,15 +18,22 @@ class CryptobookController extends AbstractController
     public function index(PositionRepository $positionRepository): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser());
+        $totalUsd = 0;
+        $totalEur = 0;
         foreach ($positions as $key => $value) {
-            $value['valueUsd'] = $value['totalsum'] * $value['priceUsd'];
-            $value['valueEur'] = $value['totalsum'] * $value['priceEur'];
+            $valueUsd = $value['totalsum'] * $value['priceUsd'];
+            $valueEur = $value['totalsum'] * $value['priceEur'];
+            $value['valueUsd'] = $valueUsd;
+            $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
+            $totalUsd += $valueUsd;
+            $totalEur += $valueEur;
         }
 
-        dump($positions);
         return $this->render('cryptobook/index.html.twig', [
-            'positions' => $positions
+            'positions' => $positions,
+            'totalUsd' => $totalUsd,
+            'totalEur' => $totalEur,
         ]);
     }
 }
