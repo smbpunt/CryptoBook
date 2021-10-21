@@ -7,6 +7,7 @@ use App\Entity\Position;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -37,6 +38,14 @@ class PositionType extends AbstractType
                 'class' => Cryptocurrency::class,
                 'required' => true,
                 'attr' => ['class' => 'js-select2'],
+            ])
+            ->add('ventes', CollectionType::class, [
+                'entry_type' => VenteType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false
             ])
             ->add('submit', SubmitType::class)
             ->add('submitAndNext', SubmitType::class);

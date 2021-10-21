@@ -2,6 +2,10 @@
 
 {% block title %}New Position{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('position_form') }}
+{% endblock %}
+
 {% block body %}
     <h1>Create new Position</h1>
 
