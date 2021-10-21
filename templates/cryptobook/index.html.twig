@@ -2,5 +2,23 @@
 
 {% block title %}Hello CryptobookController!{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('home') }}
+{% endblock %}
+
 {% block body %}
+    <div id="id-array-positions" class="visually-hidden" data-pie="{{ positions|json_encode }}">
+    </div>
+    <div class="row">
+        <div class="col">
+            <ul>
+                {% for position in positions %}
+                    <li>{{ position.libelle }} : $ {{ position.valueUsd|round(2) }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col">
+            <canvas id="chart-pos"></canvas>
+        </div>
+    </div>
 {% endblock %}

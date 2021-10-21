@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Position|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,18 @@ class PositionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Position::class);
+    }
+
+    public function getSumCoinByUser(UserInterface $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.coin', 'c')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->select('SUM(p.nbCoins) as totalsum', 'c.libelle', 'c.priceUsd', 'c.priceEur')
+            ->groupBy('p.coin')
+            ->orderBy('c.mcapUsd', 'DESC')
+            ->getQuery()->getArrayResult();
     }
 
     // /**
