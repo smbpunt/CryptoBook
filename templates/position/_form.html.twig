@@ -1,3 +1,13 @@
+{% macro vente_prototype(vente) %}
+    <div class="row">
+        <div class="col">{{ form_row(vente.isStrategy) }}</div>
+        <div class="col">{{ form_row(vente.soldAt) }}</div>
+        <div class="col">{{ form_row(vente.percent) }}</div>
+        <div class="col">{{ form_row(vente.priceSold) }}</div>
+    </div>
+{% endmacro %}
+
+
 <div class="container">
     {{ form_start(form) }}
     <div class="row">
@@ -19,32 +29,12 @@
     </div>
     <div class="row">
         <ul class="ventes" data-index="{{ form.ventes|length > 0 ? form.ventes|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ form_widget(form.ventes.vars.prototype)|e('html_attr') }}">
-
+            data-prototype="{{ _self.vente_prototype(form.ventes.vars.prototype)|e }}">
+            {# data-prototype="{{ form_widget(form.ventes.vars.prototype)|e('html_attr') }}"> #}
         </ul>
-
         <button type="button" class="add_item_link" data-collection-holder-class="ventes">Ajouter une vente</button>
     </div>
-    {# <div class="row">
-        {{ form_label(form.ventes) }}
-        {{ form_errors(form.ventes) }}
 
-        <ul id="vente-fields-list"
-            data-prototype="{{ form_widget(form.ventes.vars.prototype)|e }}"
-            data-widgettags="{{ 'li'|e }}"
-            data-widgetcounter="{{ form.ventes|length }}">
-            {% for vente in form.ventes %}
-                <li>
-                    {{ form_errors(vente) }}
-                    {{ form_widget(vente) }}
-                </li>
-            {% endfor %}
-        </ul>
-        <button type="button" id="btn-add-vente" class="btn add-another-collection-widget"
-                data-listselector="vente-fields-list">
-            Ajouter une vente
-        </button>
-    </div> #}
     <div class="row">
         {{ form_row(form.submit) }}
         {{ form_row(form.submitAndNext) }}
