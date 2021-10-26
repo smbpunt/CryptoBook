@@ -65,7 +65,7 @@ class CryptocurrencyCrudController extends AbstractCrudController
 
     public function updateAllCryptocurrencies(BatchActionDto $batchActionDto)
     {
-        $this->cryptocurrencyService->updateAllCryptos(false);
+        $this->cryptocurrencyService->updateAllCryptos();
         return $this->redirect($batchActionDto->getReferrerUrl());
     }
 }

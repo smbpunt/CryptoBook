@@ -4,17 +4,15 @@ namespace App\Command;
 
 use App\Service\CryptocurrencyService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CryptoUpdatePricesCommand extends Command
 {
-    private CryptocurrencyService $cryptocurrencyService;
     protected static $defaultName = 'crypto:updatePrices';
-    protected static $defaultDescription = 'Add a short description for your command';
+    protected static $defaultDescription = 'Mets à jour les prix de tout le catalogue cryptos.';
+    private CryptocurrencyService $cryptocurrencyService;
 
     /**
      * @param CryptocurrencyService $cryptocurrencyService
@@ -29,11 +27,8 @@ class CryptoUpdatePricesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
-        $this->cryptocurrencyService->updateAllCryptos();
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-
+        $this->cryptocurrencyService->updatePrices();
+        $io->success('Execution de crypto:updatePrices terminé.');
         return Command::SUCCESS;
     }
 }
