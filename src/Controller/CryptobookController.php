@@ -17,7 +17,7 @@ class CryptobookController extends AbstractController
      */
     public function index(PositionRepository $positionRepository): Response
     {
-        $positions = $positionRepository->getSumCoinByUser($this->getUser());
+        $positions = $this->getUser() ? $positionRepository->getSumCoinByUser($this->getUser()) : [];
         $totalUsd = 0;
         $totalEur = 0;
         foreach ($positions as $key => $value) {
