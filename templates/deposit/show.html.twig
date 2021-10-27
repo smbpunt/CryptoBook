@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Deposit{% endblock %}
+
+{% block body %}
+    <h1>Deposit</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ deposit.id }}</td>
+            </tr>
+            <tr>
+                <th>DepositedAt</th>
+                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('deposit_index') }}">back to list</a>
+
+    <a href="{{ path('deposit_edit', {'id': deposit.id}) }}">edit</a>
+
+    {{ include('deposit/_delete_form.html.twig') }}
+{% endblock %}

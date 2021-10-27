@@ -49,9 +49,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $positions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Deposit::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $deposits;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
+        $this->deposits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +194,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->email;
+    }
+
+    /**
+     * @return Collection|Deposit[]
+     */
+    public function getDeposits(): Collection
+    {
+        return $this->deposits;
+    }
+
+    public function addDeposit(Deposit $deposit): self
+    {
+        if (!$this->deposits->contains($deposit)) {
+            $this->deposits[] = $deposit;
+            $deposit->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeposit(Deposit $deposit): self
+    {
+        if ($this->deposits->removeElement($deposit)) {
+            // set the owning side to null (unless already changed)
+            if ($deposit->getUser() === $this) {
+                $deposit->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 

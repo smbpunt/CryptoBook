@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Deposit index{% endblock %}
+
+{% block body %}
+    <h1>Deposit index</h1>
+
+    <p>Total : {{ totalEur }} €</p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>DepositedAt</th>
+            <th>Montant</th>
+            <th>Méthode</th>
+            <th>Plateforme</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for deposit in deposits %}
+            <tr>
+                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('Y-m-d') : '' }}</td>
+                <td>{{ deposit.valueEur|round(2) }} €</td>
+                <td>{{ deposit.type }}</td>
+                <td>{{ deposit.exchange }}</td>
+                <td>
+                    <a href="{{ path('deposit_edit', {'id': deposit.id}) }}">edit</a>
+                    {{ include('deposit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('deposit_new') }}">Create new</a>
+{% endblock %}

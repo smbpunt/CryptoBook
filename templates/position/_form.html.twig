@@ -11,20 +11,29 @@
 <div class="container">
     {{ form_start(form) }}
     <div class="row">
-        <div class="col-md">
-            {{ form_row(form.isOpened) }}
+        <div class="col-md  align-self-end">
+            <div class="mb-3">
+                {{ form_widget(form.isOpened) }}
+            </div>
         </div>
-        <div class="col-md">
+        <div class="col-md align-self-end">
             {{ form_row(form.openedAt) }}
         </div>
-        <div class="col-md">
+        <div class="col-md align-self-end">
             {{ form_row(form.coin) }}
         </div>
-        <div class="col-md">
+        <div class="col-md align-self-end">
             {{ form_row(form.nbCoins) }}
         </div>
-        <div class="col-md">
+        <div class="col-md align-self-end">
             {{ form_row(form.entryCost) }}
+        </div>
+        <div class="col-md align-self-end">
+            <div class="mb-3">
+                <button type="button" class="add_item_link btn btn-secondary" data-collection-holder-class="ventes">
+                    Ajouter une vente
+                </button>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -32,12 +41,13 @@
             data-prototype="{{ _self.vente_prototype(form.ventes.vars.prototype)|e }}">
             {# data-prototype="{{ form_widget(form.ventes.vars.prototype)|e('html_attr') }}"> #}
         </ul>
-        <button type="button" class="add_item_link" data-collection-holder-class="ventes">Ajouter une vente</button>
     </div>
 
     <div class="row">
-        {{ form_row(form.submit) }}
-        {{ form_row(form.submitAndNext) }}
+        <div class="col">{{ form_widget(form.submit) }}</div>
+        <div class="col-8"></div>
+        <div class="col">{{ form_widget(form.submitAndNext) }}</div>
     </div>
+
     {{ form_end(form) }}
 </div>
