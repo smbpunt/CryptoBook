@@ -54,6 +54,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $deposits;
 
+    /**
+     * @ORM\OneToOne(targetEntity=StrategyDca::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $strategyDca;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -222,6 +227,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $deposit->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStrategyDca(): ?StrategyDca
+    {
+        return $this->strategyDca;
+    }
+
+    public function setStrategyDca(StrategyDca $strategyDca): self
+    {
+        // set the owning side of the relation if necessary
+        if ($strategyDca->getUser() !== $this) {
+            $strategyDca->setUser($this);
+        }
+
+        $this->strategyDca = $strategyDca;
 
         return $this;
     }
