@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Deposit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -27,7 +28,11 @@ class DepositRepository extends ServiceEntityRepository
             ->where('d.user = :user')
             ->groupBy('d.user')
             ->setParameter('user', $user);
-        return $qb->getQuery()->getSingleScalarResult();
+        try {
+            return $qb->getQuery()->getSingleScalarResult();
+        } catch (Exception $e) {
+        }
+        return 0;
     }
 
     // /**
