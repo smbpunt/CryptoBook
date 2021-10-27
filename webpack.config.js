@@ -23,6 +23,15 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('home', './assets/home.js')
     .addEntry('position_form', './assets/position/position_form.js')
+    .copyFiles({
+        from: './assets/images',
+        // optional target path, relative to the output dir
+        to: 'images/[path][name].[ext]',
+        // if versioning is enabled, add the file hash too
+        //to: 'images/[path][name].[hash:8].[ext]',
+        // only copy files matching this pattern
+        //pattern: /\.(png|jpg|jpeg)$/
+    })
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
