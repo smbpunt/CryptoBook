@@ -26,10 +26,8 @@ class DepositController extends AbstractController
             'depositedAt' => 'ASC'
         ]) : [];
 
-        $totalEur = 0;
-        foreach ($deposits as $deposit) {
-            $totalEur += $deposit->getValueEur();
-        }
+        $totalEur = $depositRepository->getTotal($this->getUser());
+
         return $this->render('deposit/index.html.twig', [
             'deposits' => $deposits,
             'totalEur' => $totalEur,

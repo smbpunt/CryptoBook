@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\DepositRepository;
 use App\Repository\PositionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,10 @@ class CryptobookController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(PositionRepository $positionRepository): Response
+    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository): Response
     {
         $positions = $this->getUser() ? $positionRepository->getSumCoinByUser($this->getUser()) : [];
+        $totalDepositEur = $this->getUser() ? $depositRepository->getTotal($this->getUser()) : [];
         $totalUsd = 0;
         $totalEur = 0;
         foreach ($positions as $key => $value) {
@@ -32,6 +34,7 @@ class CryptobookController extends AbstractController
 
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
+            'totalDepositEur' => $totalDepositEur,
             'totalUsd' => $totalUsd,
             'totalEur' => $totalEur,
         ]);

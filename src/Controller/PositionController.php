@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Position;
-use App\Entity\User;
 use App\Form\PositionType;
 use App\Repository\PositionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,17 +39,12 @@ class PositionController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $position = new Position();
+        $position = new Position($this->getUser());
         $form = $this->createForm(PositionType::class, $position);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            /**
-             * @var User $user
-             */
-            $user = $this->getUser();
-            $position->setUser($user);
             $entityManager->persist($position);
             $entityManager->flush();
 

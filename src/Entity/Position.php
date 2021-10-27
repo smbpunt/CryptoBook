@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -56,8 +57,9 @@ class Position
      */
     private $ventes;
 
-    public function __construct()
+    public function __construct($user)
     {
+        $this->user = $user;
         $this->ventes = new ArrayCollection();
     }
 
@@ -66,12 +68,12 @@ class Position
         return $this->id;
     }
 
-    public function getOpenedAt(): ?\DateTimeImmutable
+    public function getOpenedAt(): ?DateTimeImmutable
     {
         return $this->openedAt;
     }
 
-    public function setOpenedAt(?\DateTimeImmutable $openedAt): self
+    public function setOpenedAt(?DateTimeImmutable $openedAt): self
     {
         $this->openedAt = $openedAt;
 

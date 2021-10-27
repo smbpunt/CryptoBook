@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Deposit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Deposit|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,16 @@ class DepositRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Deposit::class);
+    }
+
+    public function getTotal(UserInterface $user): float
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('SUM(d.valueEur) as totalsum')
+            ->where('d.user = :user')
+            ->groupBy('d.user')
+            ->setParameter('user', $user);
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     // /**
