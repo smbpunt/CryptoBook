@@ -20,8 +20,7 @@ class VenteType extends AbstractType
                 'required' => false
             ])
             ->add('percent')
-            ->add('priceSold')
-            ->add('isStrategy');
+            ->add('priceSold');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

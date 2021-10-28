@@ -29,6 +29,7 @@ class PositionType extends AbstractType
                 'required' => true
             ])
             ->add('isOpened', CheckboxType::class, [
+                'label' => 'Position ouverte ?',
                 'data' => true
             ])
             ->add('entryCost', NumberType::class, [
@@ -45,7 +46,15 @@ class PositionType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'by_reference' => false
+                'by_reference' => false,
+            ])
+            ->add('strategies', CollectionType::class, [
+                'entry_type' => StrategyType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class)
             ->add('submitAndNext', SubmitType::class);

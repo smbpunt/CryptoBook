@@ -1,62 +1,132 @@
 {% import _self as formMacros %}
 
 {% macro vente_prototype(vente) %}
-    <div class="col js-item" data-toto="coucou">
-        {# <a href="#" class="js-remove">
-            <span class="fa fa-close"></span>
-        </a> #}
-        <button type="button" class="js-remove btn btn-warning">remove</button>
-        {{ form_errors(vente) }}
-        {{ form_row(vente.isStrategy) }}
-        {{ form_row(vente.soldAt) }}
-        {{ form_row(vente.percent) }}
-        {{ form_row(vente.priceSold) }}
-    </div>
+    <tr class="js-item">
+        <td class="text-center align-middle">
+            <button type="button" class="js-remove btn btn-warning">-</button>
+        </td>
+        <td>
+            {{ form_widget(vente.soldAt) }}
+        </td>
+        <td>
+            {{ form_widget(vente.percent) }}
+        </td>
+        <td>
+            {{ form_widget(vente.priceSold) }}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro strategy_prototype(strategy) %}
+    <tr class="js-item">
+        <td class="text-center align-middle">
+            <button type="button" class="js-remove btn btn-warning">-</button>
+        </td>
+        <td>
+            {{ form_widget(strategy.percent) }}
+        </td>
+        <td>
+            {{ form_widget(strategy.priceSold) }}
+        </td>
+    </tr>
 {% endmacro %}
 
 
 <div class="container">
     {{ form_start(form) }}
+    <div class="row mb-2">
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.openedAt, 'Date') }}
+            {{ form_widget(form.openedAt) }}
+        </div>
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.coin, 'Coin') }}
+            {{ form_widget(form.coin) }}
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.nbCoins, 'Nombre') }}
+            {{ form_widget(form.nbCoins) }}
+        </div>
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.entryCost, 'Coût ($)') }}
+            {{ form_widget(form.entryCost) }}
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md  align-self-end">
-            <div class="mb-3">
-                {{ form_widget(form.isOpened) }}
-            </div>
-        </div>
-        <div class="col-md align-self-end">
-            {{ form_row(form.openedAt) }}
-        </div>
-        <div class="col-md align-self-end">
-            {{ form_row(form.coin) }}
-        </div>
-        <div class="col-md align-self-end">
-            {{ form_row(form.nbCoins) }}
-        </div>
-        <div class="col-md align-self-end">
-            {{ form_row(form.entryCost) }}
-        </div>
-        <div class="col-md align-self-end">
-            <div class="mb-3">
-                <button type="button" class="add_item_link btn btn-secondary" data-wrapper="ventes-wrapper">
-                    Ajouter une vente
-                </button>
-            </div>
+        <div class="col-md-2  align-self-end">
+            {{ form_row(form.isOpened) }}
         </div>
     </div>
-    {# <div class="row">
-        <ul class="ventes" data-index="{{ form.ventes|length > 0 ? form.ventes|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ _self.vente_prototype(form.ventes.vars.prototype)|e }}">
 
-        </ul>
-    </div> #}
-    <div class="row ventes-wrapper"
-         data-index="{{ form.ventes|length }}"
-         data-prototype="{{ formMacros.vente_prototype(form.ventes.vars.prototype)|e('html_attr') }}">
-
-        {% for vente in form.ventes %}
-            {{ formMacros.vente_prototype(vente) }}
-        {% endfor %}
+    <div class="row mb-4">
+        <div class="col-md-2 align-self-end">
+            <button type="button" class="add_item_link btn btn-outline-primary" data-wrapper="ventes-wrapper">
+                Ajouter une vente
+            </button>
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="button" class="add_item_link btn btn-outline-primary" data-wrapper="strategies-wrapper">
+                Ajouter une stratégie
+            </button>
+        </div>
     </div>
+
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="strategy-tab" data-bs-toggle="tab" data-bs-target="#strategy"
+                    type="button"
+                    role="tab" aria-controls="strategy" aria-selected="true">Stratégie
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="vente-tab" data-bs-toggle="tab" data-bs-target="#vente" type="button"
+                    role="tab" aria-controls="vente" aria-selected="false">Vente
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="strategy" role="tabpanel" aria-labelledby="strategy-tab">
+            <table class="table table-bordered table-responsive-md">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">%</th>
+                    <th scope="col">prix</th>
+                </tr>
+                </thead>
+                <tbody class="strategies-wrapper"
+                       data-index="{{ form.strategies|length }}"
+                       data-prototype="{{ formMacros.strategy_prototype(form.strategies.vars.prototype)|e('html_attr') }}">
+                {% for strategy in form.strategies %}
+                    {{ formMacros.strategy_prototype(strategy) }}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vente" role="tabpanel" aria-labelledby="vente-tab">
+            <table class="table table-bordered table-responsive-md">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Date</th>
+                    <th scope="col">%</th>
+                    <th scope="col">prix</th>
+                </tr>
+                </thead>
+                <tbody class="ventes-wrapper"
+                       data-index="{{ form.ventes|length }}"
+                       data-prototype="{{ formMacros.vente_prototype(form.ventes.vars.prototype)|e('html_attr') }}">
+                {% for vente in form.ventes %}
+                    {{ formMacros.vente_prototype(vente) }}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     <div class="row">
         <div class="col">{{ form_widget(form.submit) }}</div>

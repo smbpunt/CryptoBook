@@ -1,8 +1,10 @@
+{% import _self as formMacros %}
+
 {% macro part_prototype(part) %}
-    <div class="row">
-        <div class="col">{{ form_row(part.percent) }}</div>
-        <div class="col">{{ form_row(part.coin) }}</div>
-    </div>
+    <tr class="js-item">
+        <td>{{ form_widget(part.percent) }}</td>
+        <td>{{ form_widget(part.coin) }}</td>
+    </tr>
 {% endmacro %}
 
 <div class="container">
@@ -16,17 +18,28 @@
         </div>
         <div class="col-md align-self-end">
             <div class="mb-3">
-                <button type="button" class="add_item_link btn btn-secondary" data-collection-holder-class="parts">
+                <button type="button" class="add_item_link btn btn-secondary" data-wrapper="parts-wrapper">
                     Ajouter une part
                 </button>
             </div>
         </div>
     </div>
-    <div class="row">
-        <ul class="parts" data-index="{{ form.parts|length > 0 ? form.parts|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ _self.part_prototype(form.parts.vars.prototype)|e }}">
-        </ul>
-    </div>
+
+    <table class="table table-bordered table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">%</th>
+            <th scope="col">coin</th>
+        </tr>
+        </thead>
+        <tbody class="parts-wrapper"
+               data-index="{{ form.parts|length }}"
+               data-prototype="{{ formMacros.part_prototype(form.parts.vars.prototype)|e('html_attr') }}">
+        {% for part in form.parts %}
+            {{ formMacros.part_prototype(part) }}
+        {% endfor %}
+        </tbody>
+    </table>
 
     <button class="btn">{{ button_label|default('Save') }}</button>
 

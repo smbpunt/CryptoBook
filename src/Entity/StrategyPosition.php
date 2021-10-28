@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\VenteRepository;
-use DateTimeImmutable;
+use App\Repository\StrategyPositionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=VenteRepository::class)
+ * @ORM\Entity(repositoryClass=StrategyPositionRepository::class)
  */
-class Vente
+class StrategyPosition
 {
     /**
      * @ORM\Id
@@ -17,11 +16,6 @@ class Vente
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
-    private $soldAt;
 
     /**
      * @ORM\Column(type="float")
@@ -32,8 +26,9 @@ class Vente
      * @ORM\Column(type="float")
      */
     private $priceSold;
+
     /**
-     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="ventes")
+     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="strategies")
      * @ORM\JoinColumn(nullable=false)
      */
     private $position;
@@ -41,18 +36,6 @@ class Vente
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSoldAt(): ?DateTimeImmutable
-    {
-        return $this->soldAt;
-    }
-
-    public function setSoldAt(?DateTimeImmutable $soldAt): self
-    {
-        $this->soldAt = $soldAt;
-
-        return $this;
     }
 
     public function getPercent(): ?float

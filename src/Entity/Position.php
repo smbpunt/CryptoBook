@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,11 +18,6 @@ class Position
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $openedAt;
 
     /**
      * @ORM\Column(type="float")
@@ -57,27 +51,26 @@ class Position
      */
     private $ventes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyPosition::class, mappedBy="position", orphanRemoval=true, cascade={"persist"})
+     */
+    private $strategies;
+
+    /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $openedAt;
+
     public function __construct($user)
     {
         $this->user = $user;
         $this->ventes = new ArrayCollection();
+        $this->strategies = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getOpenedAt(): ?DateTimeImmutable
-    {
-        return $this->openedAt;
-    }
-
-    public function setOpenedAt(?DateTimeImmutable $openedAt): self
-    {
-        $this->openedAt = $openedAt;
-
-        return $this;
     }
 
     public function getCoin(): ?Cryptocurrency
@@ -163,6 +156,16 @@ class Position
         return $this;
     }
 
+    public function addStrategy(StrategyPosition $strategy): self
+    {
+        if (!$this->strategies->contains($strategy)) {
+            $this->strategies[] = $strategy;
+            $strategy->setPosition($this);
+        }
+
+        return $this;
+    }
+
     public function removeVente(Vente $vente): self
     {
         if ($this->ventes->removeElement($vente)) {
@@ -171,6 +174,38 @@ class Position
                 $vente->setPosition(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyPosition[]
+     */
+    public function getStrategies(): Collection
+    {
+        return $this->strategies;
+    }
+
+    public function removeStrategy(StrategyPosition $strategy): self
+    {
+        if ($this->strategies->removeElement($strategy)) {
+            // set the owning side to null (unless already changed)
+            if ($strategy->getPosition() === $this) {
+                $strategy->setPosition(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOpenedAt(): ?\DateTimeImmutable
+    {
+        return $this->openedAt;
+    }
+
+    public function setOpenedAt(?\DateTimeImmutable $openedAt): self
+    {
+        $this->openedAt = $openedAt;
 
         return $this;
     }

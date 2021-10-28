@@ -1,3 +1,9 @@
+/*
+import Choices from "choices.js";
+
+const choices = new Choices('.js-select2',);
+*/
+
 const createElementFromString = function (str) {
     const element = new DOMParser().parseFromString(str, 'text/html');
     return element.documentElement.querySelector('body').firstChild;
@@ -6,7 +12,8 @@ const createElementFromString = function (str) {
 const addFormToCollection = (e) => {
     e.preventDefault();
     const wrapper = document.querySelector('.' + e.currentTarget.dataset.wrapper);
-    /*const item = document.createElement('div');
+    const item = document.createElement('tr');
+    item.className = "js-item";
 
     item.innerHTML = wrapper
         .dataset
@@ -14,15 +21,7 @@ const addFormToCollection = (e) => {
         .replace(
             /__name__/g,
             wrapper.dataset.index
-        );*/
-
-    item = createElementFromString(wrapper
-        .dataset
-        .prototype
-        .replace(
-            /__name__/g,
-            wrapper.dataset.index
-        ));
+        );
 
     wrapper.appendChild(item);
 
