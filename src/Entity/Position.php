@@ -53,7 +53,7 @@ class Position
     private $entryCost;
 
     /**
-     * @ORM\OneToMany(targetEntity=Vente::class, mappedBy="position", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Vente::class, mappedBy="position", orphanRemoval=true, cascade={"persist"})
      */
     private $ventes;
 

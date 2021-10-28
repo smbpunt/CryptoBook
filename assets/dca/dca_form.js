@@ -1,12 +1,9 @@
-console.log('position_form.js loaded');
-
-
-/*
+console.log('dca_form.js loaded');
 
 const addTagFormDeleteLink = (venteFormLi) => {
     const removeFormButton = document.createElement('button')
     removeFormButton.classList
-    removeFormButton.innerText = 'Delete this vente'
+    removeFormButton.innerText = 'Delete this part'
 
     venteFormLi.append(removeFormButton);
 
@@ -17,13 +14,12 @@ const addTagFormDeleteLink = (venteFormLi) => {
     });
 }
 
-const tags = document.querySelectorAll('ul.ventes.li')
+const tags = document.querySelectorAll('ul.parts.li')
 tags.forEach((tag) => {
     addTagFormDeleteLink(tag)
 })
 
 const addFormToCollection = (e) => {
-    e.preventDefault();
     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
     const item = document.createElement('li');
 
@@ -44,7 +40,6 @@ const addFormToCollection = (e) => {
 document
     .querySelectorAll('.add_item_link')
     .forEach(btn => btn.addEventListener("click", addFormToCollection));
-*/
 
 /*
 

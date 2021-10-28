@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StrategyDca index{% endblock %}
+
+{% block body %}
+    <h1>StrategyDca index</h1>
+
+    {% if dca is defined and dca %}
+        <p>FIAT DCA : {{ dca.fiatToDcaEur }}€</p>
+        <p>Farming DCA : $ {{ dca.farmingToDcaUsd }}</p>
+        <ul>
+            {% for part in dca.parts %}
+                <li>{{ part.percent }}% : {{ part.coin.libelle }}</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ path('strategy_dca_edit') }}">edit</a>
+    {% else %}
+        <p>Aucune stratégie DCA définie.</p>
+        <a href="{{ path('strategy_dca_new') }}">Create new</a>
+    {% endif %}
+
+{% endblock %}

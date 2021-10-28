@@ -1,9 +1,16 @@
+{% import _self as formMacros %}
+
 {% macro vente_prototype(vente) %}
-    <div class="row">
-        <div class="col">{{ form_row(vente.isStrategy) }}</div>
-        <div class="col">{{ form_row(vente.soldAt) }}</div>
-        <div class="col">{{ form_row(vente.percent) }}</div>
-        <div class="col">{{ form_row(vente.priceSold) }}</div>
+    <div class="col js-item" data-toto="coucou">
+        {# <a href="#" class="js-remove">
+            <span class="fa fa-close"></span>
+        </a> #}
+        <button type="button" class="js-remove btn btn-warning">remove</button>
+        {{ form_errors(vente) }}
+        {{ form_row(vente.isStrategy) }}
+        {{ form_row(vente.soldAt) }}
+        {{ form_row(vente.percent) }}
+        {{ form_row(vente.priceSold) }}
     </div>
 {% endmacro %}
 
@@ -30,17 +37,25 @@
         </div>
         <div class="col-md align-self-end">
             <div class="mb-3">
-                <button type="button" class="add_item_link btn btn-secondary" data-collection-holder-class="ventes">
+                <button type="button" class="add_item_link btn btn-secondary" data-wrapper="ventes-wrapper">
                     Ajouter une vente
                 </button>
             </div>
         </div>
     </div>
-    <div class="row">
+    {# <div class="row">
         <ul class="ventes" data-index="{{ form.ventes|length > 0 ? form.ventes|last.vars.name + 1 : 0 }}"
             data-prototype="{{ _self.vente_prototype(form.ventes.vars.prototype)|e }}">
-            {# data-prototype="{{ form_widget(form.ventes.vars.prototype)|e('html_attr') }}"> #}
+
         </ul>
+    </div> #}
+    <div class="row ventes-wrapper"
+         data-index="{{ form.ventes|length }}"
+         data-prototype="{{ formMacros.vente_prototype(form.ventes.vars.prototype)|e('html_attr') }}">
+
+        {% for vente in form.ventes %}
+            {{ formMacros.vente_prototype(vente) }}
+        {% endfor %}
     </div>
 
     <div class="row">

@@ -26,12 +26,23 @@ class StrategyDca
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=CoinPercentDca::class, mappedBy="strategyDca", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=CoinPercentDca::class, mappedBy="strategyDca", orphanRemoval=true, cascade={"persist"})
      */
     private $parts;
 
-    public function __construct()
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $fiatToDcaEur;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $farmingToDcaUsd;
+
+    public function __construct($user)
     {
+        $this->user = $user;
         $this->parts = new ArrayCollection();
     }
 
@@ -78,6 +89,30 @@ class StrategyDca
                 $part->setStrategyDca(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFiatToDcaEur(): ?float
+    {
+        return $this->fiatToDcaEur;
+    }
+
+    public function setFiatToDcaEur(float $fiatToDcaEur): self
+    {
+        $this->fiatToDcaEur = $fiatToDcaEur;
+
+        return $this;
+    }
+
+    public function getFarmingToDcaUsd(): ?float
+    {
+        return $this->farmingToDcaUsd;
+    }
+
+    public function setFarmingToDcaUsd(float $farmingToDcaUsd): self
+    {
+        $this->farmingToDcaUsd = $farmingToDcaUsd;
 
         return $this;
     }

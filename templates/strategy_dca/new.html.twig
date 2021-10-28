@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New StrategyDca{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('dca_form') }}
+{% endblock %}
+
+{% block body %}
+    <h1>Create new StrategyDca</h1>
+
+    {{ include('strategy_dca/_form.html.twig') }}
+
+    <a href="{{ path('strategy_dca_index') }}">back to list</a>
+{% endblock %}

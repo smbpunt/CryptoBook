@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VenteRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +19,7 @@ class Vente
     private $id;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $soldAt;
 
@@ -48,12 +49,12 @@ class Vente
         return $this->id;
     }
 
-    public function getSoldAt(): ?\DateTimeImmutable
+    public function getSoldAt(): ?DateTimeImmutable
     {
         return $this->soldAt;
     }
 
-    public function setSoldAt(\DateTimeImmutable $soldAt): self
+    public function setSoldAt(?DateTimeImmutable $soldAt): self
     {
         $this->soldAt = $soldAt;
 
