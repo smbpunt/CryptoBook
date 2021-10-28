@@ -1,4 +1,4 @@
-console.log('position_form.js loaded');
+console.log('dca_form.js loaded');
 
 const addTagFormDeleteLink = (venteFormLi) => {
     const removeFormButton = document.createElement('button')
