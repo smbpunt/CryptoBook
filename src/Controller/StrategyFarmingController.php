@@ -20,28 +20,47 @@ class StrategyFarmingController extends AbstractController
      */
     public function index(StrategyFarmingRepository $strategyFarmingRepository): Response
     {
-        $strategies = $this->getUser() ? $strategyFarmingRepository->findBy([
-            'user' => $this->getUser()
-        ]) : [];
+        if ($this->getUser()) {
+            $strategies = $strategyFarmingRepository->findByStable($this->getUser(), false);
+            $strategies_stable = $strategyFarmingRepository->findByStable($this->getUser(), true);
 
-        $total_year = 0;
+            $total_year = 0;
+            $total_year_stable = 0;
 
-        $return_array = [];
-        foreach ($strategies as $strategy) {
-            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
-            $gain_year = $strategy->getApr() * $value_dollar / 100;
-            $total_year += $gain_year;
-            $return_array[] = [
-                'strategy' => $strategy,
-                'gain_year' => $gain_year,
-                'value_dollar' => $value_dollar
-            ];
+            $return_array = [];
+            foreach ($strategies as $strategy) {
+                $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
+                $gain_year = $strategy->getApr() * $value_dollar / 100;
+                $total_year += $gain_year;
+                $return_array[] = [
+                    'strategy' => $strategy,
+                    'gain_year' => $gain_year,
+                    'value_dollar' => $value_dollar
+                ];
+            }
+
+            $return_array_stable = [];
+            foreach ($strategies_stable as $strategy) {
+                $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
+                $gain_year = $strategy->getApr() * $value_dollar / 100;
+                $total_year_stable += $gain_year;
+                $return_array_stable[] = [
+                    'strategy' => $strategy,
+                    'gain_year' => $gain_year,
+                    'value_dollar' => $value_dollar
+                ];
+            }
+
+            return $this->render('strategy_farming/index.html.twig', [
+                'strategy_farmings' => $return_array,
+                'strategy_farmings_stable' => $return_array_stable,
+                'total_year' => $total_year,
+                'total_year_stable' => $total_year_stable,
+                'total_total_year' => $total_year + $total_year_stable
+            ]);
         }
 
-        return $this->render('strategy_farming/index.html.twig', [
-            'strategy_farmings' => $return_array,
-            'total_year' => $total_year
-        ]);
+        return $this->render('cryptobook/index.html.twig');
     }
 
     /**

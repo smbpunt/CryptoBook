@@ -84,6 +84,11 @@ class Cryptocurrency
      */
     private $farmingStrategies;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" : false})
+     */
+    private $isStable;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -247,7 +252,7 @@ class Cryptocurrency
 
     public function __toString()
     {
-        return $this->libelle;
+        return $this->libelle ?? "Non défini";
     }
 
     public function getBlockchain(): ?Blockchain
@@ -293,6 +298,18 @@ class Cryptocurrency
                 $farmingStrategy->setCoin(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsStable(): ?bool
+    {
+        return $this->isStable;
+    }
+
+    public function setIsStable(bool $isStable): self
+    {
+        $this->isStable = $isStable;
 
         return $this;
     }

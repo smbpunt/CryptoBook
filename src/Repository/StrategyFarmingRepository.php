@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\StrategyFarming;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method StrategyFarming|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,22 @@ class StrategyFarmingRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, StrategyFarming::class);
+    }
+
+    /**
+     * @param UserInterface $user
+     * @param bool $isStable
+     * @return StrategyFarming[]
+     */
+    public function findByStable(UserInterface $user, bool $isStable): array
+    {
+        return $this->createQueryBuilder('f')
+            ->join('f.coin', 'c')
+            ->where('f.user = :user')
+            ->andWhere('c.isStable = :isStable')
+            ->setParameter('user', $user)
+            ->setParameter('isStable', $isStable)
+            ->getQuery()->getResult();
     }
 
     // /**
