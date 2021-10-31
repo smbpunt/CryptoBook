@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[568],{6338:(e,s,n)=>{var o=n(4529),l=n.n(o);console.log("position_form.js loaded"),new(l())(".js-select2")}},e=>{e.O(0,[529],(()=>{return s=6338,e(e.s=s);var s}));e.O()}]);
