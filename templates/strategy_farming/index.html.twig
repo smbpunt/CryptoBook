@@ -9,160 +9,182 @@
 {% block body %}
     <h1>Farming</h1>
 
-    {% set total_total_day = total_total_year / 365 %}
-    {% set total_total_week = total_total_year / 52 %}
-    {% set total_total_month = total_total_year / 12 %}
+    {% if total_total_year > 0 %}
+
+        {% set total_total_day = total_total_year / 365 %}
+        {% set total_total_week = total_total_year / 52 %}
+        {% set total_total_month = total_total_year / 12 %}
 
 
-    <div>
-        <p>Farming total 1Y : {{ total_total_year|round(2) }} $</p>
-        <p>Farming total 1M : {{ total_total_month|round(2) }} $</p>
-        <p>Farming total 1W : {{ total_total_week|round(2) }} $</p>
-        <p>Farming total 1D : {{ total_total_day|round(2) }} $</p>
-    </div>
-
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="strategy-tab" data-bs-toggle="tab" data-bs-target="#strategy"
-                    type="button"
-                    role="tab" aria-controls="strategy" aria-selected="true">Stratégie
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
-                    role="tab" aria-controls="stable" aria-selected="false">stable
-            </button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="strategy" role="tabpanel" aria-labelledby="strategy-tab">
-
-
-            {% set total_day = total_year / 365 %}
-            {% set total_week = total_year / 52 %}
-            {% set total_month = total_year / 12 %}
-
-            <div>
-                <p>Farming total 1Y : {{ total_year|round(2) }} $</p>
-                <p>Farming total 1M : {{ total_month|round(2) }} $</p>
-                <p>Farming total 1W : {{ total_week|round(2) }} $</p>
-                <p>Farming total 1D : {{ total_day|round(2) }} $</p>
-            </div>
-
-
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Blockchain</th>
-                    <th>Dapp</th>
-                    <th>Montant</th>
-                    <th>Coin</th>
-                    <th>Apr</th>
-                    <th>$</th>
-                    <th>gains /jour</th>
-                    <th>gains /semaine</th>
-                    <th>gains /mois</th>
-                    <th>gains /an</th>
-                    <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {% for strategy_farming in strategy_farmings %}
-                    {% set gain_day = strategy_farming['gain_year'] / 365 %}
-                    {% set gain_week = strategy_farming['gain_year'] / 52 %}
-                    {% set gain_month = strategy_farming['gain_year'] / 12 %}
-
-                    <tr>
-                        <td>{{ strategy_farming['strategy'].dapp.blockchain.libelle }}</td>
-                        <td>{{ strategy_farming['strategy'].dapp.libelle }}</td>
-                        <td>{{ strategy_farming['strategy'].nbCoins }}</td>
-                        <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                        <td>{{ strategy_farming['strategy'].apr }} %</td>
-                        <td>{{ strategy_farming['value_dollar'] }} $</td>
-                        <td>{{ gain_day|round(2) }} $</td>
-                        <td>{{ gain_week|round(2) }} $</td>
-                        <td>{{ gain_month|round(2) }} $</td>
-                        <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
-                        <td>
-                            <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
-                            <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
+        <div>
+            <p>Farming total 1Y : {{ total_total_year|round(2) }} $</p>
+            <p>Farming total 1M : {{ total_total_month|round(2) }} $</p>
+            <p>Farming total 1W : {{ total_total_week|round(2) }} $</p>
+            <p>Farming total 1D : {{ total_total_day|round(2) }} $</p>
         </div>
-        <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="strategy-tab" data-bs-toggle="tab" data-bs-target="#strategy"
+                        type="button"
+                        role="tab" aria-controls="strategy" aria-selected="true">Crypto
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
+                        role="tab" aria-controls="stable" aria-selected="false">Stable
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="strategy" role="tabpanel" aria-labelledby="strategy-tab">
+                <h2>Crypto</h2>
+
+                {% set total_day = total_year / 365 %}
+                {% set total_week = total_year / 52 %}
+                {% set total_month = total_year / 12 %}
+
+                <div>
+                    <p>Farming total 1Y : {{ total_year|round(2) }} $</p>
+                    <p>Farming total 1M : {{ total_month|round(2) }} $</p>
+                    <p>Farming total 1W : {{ total_week|round(2) }} $</p>
+                    <p>Farming total 1D : {{ total_day|round(2) }} $</p>
+                </div>
 
 
-            {% set total_day_stable = total_year_stable / 365 %}
-            {% set total_week_stable = total_year_stable / 52 %}
-            {% set total_month_stable = total_year_stable / 12 %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Blockchain</th>
+                        <th>Dapp</th>
+                        <th>Montant</th>
+                        <th>Coin</th>
+                        <th>Apr</th>
+                        <th>$</th>
+                        <th>gains /jour</th>
+                        <th>gains /semaine</th>
+                        <th>gains /mois</th>
+                        <th>gains /an</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-            <div>
-                <p>Farming total 1Y : {{ total_year_stable|round(2) }} $</p>
-                <p>Farming total 1M : {{ total_month_stable|round(2) }} $</p>
-                <p>Farming total 1W : {{ total_week_stable|round(2) }} $</p>
-                <p>Farming total 1D : {{ total_day_stable|round(2) }} $</p>
+                    {% for strategy_farming in strategy_farmings %}
+                        {% set gain_day = strategy_farming['gain_year'] / 365 %}
+                        {% set gain_week = strategy_farming['gain_year'] / 52 %}
+                        {% set gain_month = strategy_farming['gain_year'] / 12 %}
+
+                        <tr>
+                            <td>
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.blockchain.libelle }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.libelle }}
+                                {% endif %}
+                            </td>
+                            <td>{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
+                            <td>{{ strategy_farming['strategy'].apr }} %</td>
+                            <td>{{ strategy_farming['value_dollar'] }} $</td>
+                            <td>{{ gain_day|round(2) }} $</td>
+                            <td>{{ gain_week|round(2) }} $</td>
+                            <td>{{ gain_month|round(2) }} $</td>
+                            <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td>
+                                <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
+                                <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
             </div>
+            <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
+                <h2>Stable</h2>
+
+                {% set total_day_stable = total_year_stable / 365 %}
+                {% set total_week_stable = total_year_stable / 52 %}
+                {% set total_month_stable = total_year_stable / 12 %}
+
+                <div>
+                    <p>Farming total 1Y : {{ total_year_stable|round(2) }} $</p>
+                    <p>Farming total 1M : {{ total_month_stable|round(2) }} $</p>
+                    <p>Farming total 1W : {{ total_week_stable|round(2) }} $</p>
+                    <p>Farming total 1D : {{ total_day_stable|round(2) }} $</p>
+                </div>
 
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Blockchain</th>
-                    <th>Dapp</th>
-                    <th>Montant</th>
-                    <th>Coin</th>
-                    <th>Apr</th>
-                    <th>$</th>
-                    <th>gains /jour</th>
-                    <th>gains /semaine</th>
-                    <th>gains /mois</th>
-                    <th>gains /an</th>
-                    <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {% for strategy_farming in strategy_farmings_stable %}
-                    {% set gain_day = strategy_farming['gain_year'] / 365 %}
-                    {% set gain_week = strategy_farming['gain_year'] / 52 %}
-                    {% set gain_month = strategy_farming['gain_year'] / 12 %}
-
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>{{ strategy_farming['strategy'].dapp.blockchain.libelle }}</td>
-                        <td>{{ strategy_farming['strategy'].dapp.libelle }}</td>
-                        <td>{{ strategy_farming['strategy'].nbCoins }}</td>
-                        <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                        <td>{{ strategy_farming['strategy'].apr }} %</td>
-                        <td>{{ strategy_farming['value_dollar'] }} $</td>
-                        <td>{{ gain_day|round(2) }} $</td>
-                        <td>{{ gain_week|round(2) }} $</td>
-                        <td>{{ gain_month|round(2) }} $</td>
-                        <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
-                        <td>
-                            <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
-                            <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
-                        </td>
+                        <th>Blockchain</th>
+                        <th>Dapp</th>
+                        <th>Montant</th>
+                        <th>Coin</th>
+                        <th>Apr</th>
+                        <th>$</th>
+                        <th>gains /jour</th>
+                        <th>gains /semaine</th>
+                        <th>gains /mois</th>
+                        <th>gains /an</th>
+                        <th>actions</th>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+
+                    {% for strategy_farming in strategy_farmings_stable %}
+                        {% set gain_day = strategy_farming['gain_year'] / 365 %}
+                        {% set gain_week = strategy_farming['gain_year'] / 52 %}
+                        {% set gain_month = strategy_farming['gain_year'] / 12 %}
+
+                        <tr>
+                            <td>
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.blockchain.libelle }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.libelle }}
+                                {% endif %}
+                            </td>
+                            <td>{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
+                            <td>{{ strategy_farming['strategy'].apr }} %</td>
+                            <td>{{ strategy_farming['value_dollar'] }} $</td>
+                            <td>{{ gain_day|round(2) }} $</td>
+                            <td>{{ gain_week|round(2) }} $</td>
+                            <td>{{ gain_month|round(2) }} $</td>
+                            <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td>
+                                <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
+                                <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
 
 
+            </div>
         </div>
-    </div>
+
+    {% else %}
+        <p>Vous n'avez encore aucun farming.</p>
+    {% endif %}
 
 
 

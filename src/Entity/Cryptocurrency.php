@@ -85,7 +85,7 @@ class Cryptocurrency
     private $farmingStrategies;
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean")
      */
     private $isStable;
 
