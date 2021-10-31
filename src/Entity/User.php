@@ -59,10 +59,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $strategyDca;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyFarming::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $farmingStrategies;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->deposits = new ArrayCollection();
+        $this->farmingStrategies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +250,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->strategyDca = $strategyDca;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyFarming[]
+     */
+    public function getFarmingStrategies(): Collection
+    {
+        return $this->farmingStrategies;
+    }
+
+    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if (!$this->farmingStrategies->contains($farmingStrategy)) {
+            $this->farmingStrategies[] = $farmingStrategy;
+            $farmingStrategy->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
+            // set the owning side to null (unless already changed)
+            if ($farmingStrategy->getUser() === $this) {
+                $farmingStrategy->setUser(null);
+            }
+        }
 
         return $this;
     }

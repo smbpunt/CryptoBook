@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StrategyFarming index{% endblock %}
+
+{% block body %}
+    <h1>Farming</h1>
+
+    {% set total_day = total_year / 365 %}
+    {% set total_week = total_year / 52 %}
+    {% set total_month = total_year / 12 %}
+
+    <div>
+        <p>Farming total 1Y : {{ total_year|round(2) }} $</p>
+        <p>Farming total 1M : {{ total_month|round(2) }} $</p>
+        <p>Farming total 1W : {{ total_week|round(2) }} $</p>
+        <p>Farming total 1D : {{ total_day|round(2) }} $</p>
+    </div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Blockchain</th>
+            <th>Dapp</th>
+            <th>Montant</th>
+            <th>Coin</th>
+            <th>Apr</th>
+            <th>$</th>
+            <th>gains /jour</th>
+            <th>gains /semaine</th>
+            <th>gains /mois</th>
+            <th>gains /an</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for strategy_farming in strategy_farmings %}
+            {% set gain_day = strategy_farming['gain_year'] / 365 %}
+            {% set gain_week = strategy_farming['gain_year'] / 52 %}
+            {% set gain_month = strategy_farming['gain_year'] / 12 %}
+
+            <tr>
+                <td>{{ strategy_farming['strategy'].dapp.blockchain.libelle }}</td>
+                <td>{{ strategy_farming['strategy'].dapp.libelle }}</td>
+                <td>{{ strategy_farming['strategy'].nbCoins }}</td>
+                <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
+                <td>{{ strategy_farming['strategy'].apr }} %</td>
+                <td>{{ strategy_farming['value_dollar'] }} $</td>
+                <td>{{ gain_day|round(2) }} $</td>
+                <td>{{ gain_week|round(2) }} $</td>
+                <td>{{ gain_month|round(2) }} $</td>
+                <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
+                <td>
+                    <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
+                    <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('strategy_farming_new') }}">Create new</a>
+{% endblock %}

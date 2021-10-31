@@ -74,9 +74,20 @@ class Cryptocurrency
      */
     private $positions;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Blockchain::class, mappedBy="coin", cascade={"persist", "remove"})
+     */
+    private $blockchain;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyFarming::class, mappedBy="coin", orphanRemoval=true)
+     */
+    private $farmingStrategies;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
+        $this->farmingStrategies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -237,6 +248,53 @@ class Cryptocurrency
     public function __toString()
     {
         return $this->libelle;
+    }
+
+    public function getBlockchain(): ?Blockchain
+    {
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(Blockchain $blockchain): self
+    {
+        // set the owning side of the relation if necessary
+        if ($blockchain->getCoin() !== $this) {
+            $blockchain->setCoin($this);
+        }
+
+        $this->blockchain = $blockchain;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyFarming[]
+     */
+    public function getFarmingStrategies(): Collection
+    {
+        return $this->farmingStrategies;
+    }
+
+    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if (!$this->farmingStrategies->contains($farmingStrategy)) {
+            $this->farmingStrategies[] = $farmingStrategy;
+            $farmingStrategy->setCoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
+            // set the owning side to null (unless already changed)
+            if ($farmingStrategy->getCoin() === $this) {
+                $farmingStrategy->setCoin(null);
+            }
+        }
+
+        return $this;
     }
 
 

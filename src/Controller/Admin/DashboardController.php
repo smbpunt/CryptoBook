@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Blockchain;
 use App\Entity\Cryptocurrency;
+use App\Entity\Dapp;
 use App\Entity\DepositType;
 use App\Entity\Exchange;
 use App\Entity\User;
@@ -35,5 +37,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Type de dépôt', 'fas fa-user', DepositType::class);
         yield MenuItem::linkToCrud('Exchange', 'fas fa-user', Exchange::class);
+        yield MenuItem::linkToCrud('Blockchain', 'fas fa-user', Blockchain::class);
+        yield MenuItem::linkToCrud('Dapps', 'fas fa-user', Dapp::class);
     }
 }
