@@ -25,15 +25,15 @@ class Blockchain
     private $libelle;
 
     /**
-     * @ORM\OneToOne(targetEntity=Cryptocurrency::class, inversedBy="blockchain", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $coin;
-
-    /**
      * @ORM\OneToMany(targetEntity=Dapp::class, mappedBy="blockchain", orphanRemoval=true)
      */
     private $dapps;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="blockchains")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $coin;
 
     public function __construct()
     {
@@ -53,18 +53,6 @@ class Blockchain
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    public function getCoin(): ?Cryptocurrency
-    {
-        return $this->coin;
-    }
-
-    public function setCoin(Cryptocurrency $coin): self
-    {
-        $this->coin = $coin;
 
         return $this;
     }
@@ -102,6 +90,18 @@ class Blockchain
     public function __toString()
     {
         return $this->libelle;
+    }
+
+    public function getCoin(): ?Cryptocurrency
+    {
+        return $this->coin;
+    }
+
+    public function setCoin(?Cryptocurrency $coin): self
+    {
+        $this->coin = $coin;
+
+        return $this;
     }
 
 

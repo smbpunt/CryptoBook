@@ -75,24 +75,25 @@ class Cryptocurrency
     private $positions;
 
     /**
-     * @ORM\OneToOne(targetEntity=Blockchain::class, mappedBy="coin", cascade={"persist", "remove"})
-     */
-    private $blockchain;
-
-    /**
      * @ORM\OneToMany(targetEntity=StrategyFarming::class, mappedBy="coin", orphanRemoval=true)
      */
     private $farmingStrategies;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" : false})
      */
     private $isStable;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Blockchain::class, mappedBy="coin")
+     */
+    private $blockchains;
 
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->farmingStrategies = new ArrayCollection();
+        $this->blockchains = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -255,23 +256,6 @@ class Cryptocurrency
         return $this->libelle ?? "Non défini";
     }
 
-    public function getBlockchain(): ?Blockchain
-    {
-        return $this->blockchain;
-    }
-
-    public function setBlockchain(Blockchain $blockchain): self
-    {
-        // set the owning side of the relation if necessary
-        if ($blockchain->getCoin() !== $this) {
-            $blockchain->setCoin($this);
-        }
-
-        $this->blockchain = $blockchain;
-
-        return $this;
-    }
-
     /**
      * @return Collection|StrategyFarming[]
      */
@@ -310,6 +294,36 @@ class Cryptocurrency
     public function setIsStable(bool $isStable): self
     {
         $this->isStable = $isStable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Blockchain[]
+     */
+    public function getBlockchains(): Collection
+    {
+        return $this->blockchains;
+    }
+
+    public function addBlockchain(Blockchain $blockchain): self
+    {
+        if (!$this->blockchains->contains($blockchain)) {
+            $this->blockchains[] = $blockchain;
+            $blockchain->setCoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlockchain(Blockchain $blockchain): self
+    {
+        if ($this->blockchains->removeElement($blockchain)) {
+            // set the owning side to null (unless already changed)
+            if ($blockchain->getCoin() === $this) {
+                $blockchain->setCoin(null);
+            }
+        }
 
         return $this;
     }
