@@ -3,9 +3,7 @@
 {% block title %}New StrategyFarming{% endblock %}
 
 {% block body %}
-    <h1>Create new StrategyFarming</h1>
+    <h1>Ajouter une stratégie de farming</h1>
 
-    {{ include('strategy_farming/_form.html.twig') }}
-
-    <a href="{{ path('strategy_farming_index') }}">back to list</a>
+    {{ include('strategy_farming/_form.html.twig', {'button_label': 'Créer'}) }}
 {% endblock %}

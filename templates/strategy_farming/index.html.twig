@@ -9,6 +9,8 @@
 {% block body %}
     <h1>Farming</h1>
 
+    <a href="{{ path('strategy_farming_new') }}" class="btn btn-primary m-2">Ajouter</a>
+
     {% if total_total_year > 0 %}
 
         {% set total_total_day = total_total_year / 365 %}
@@ -16,11 +18,11 @@
         {% set total_total_month = total_total_year / 12 %}
 
 
-        <div>
-            <p>Farming total 1Y : {{ total_total_year|round(2) }} $</p>
-            <p>Farming total 1M : {{ total_total_month|round(2) }} $</p>
-            <p>Farming total 1W : {{ total_total_week|round(2) }} $</p>
-            <p>Farming total 1D : {{ total_total_day|round(2) }} $</p>
+        <div class="row mb-3">
+            <div class="col">Jour : {{ total_total_day|round(2) }} $</div>
+            <div class="col">Semaine : {{ total_total_week|round(2) }} $</div>
+            <div class="col">Mois : {{ total_total_month|round(2) }} $</div>
+            <div class="col">année : {{ total_total_year|round(2) }} $</div>
         </div>
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -44,18 +46,17 @@
                 {% set total_week = total_year / 52 %}
                 {% set total_month = total_year / 12 %}
 
-                <div>
-                    <p>Farming total 1Y : {{ total_year|round(2) }} $</p>
-                    <p>Farming total 1M : {{ total_month|round(2) }} $</p>
-                    <p>Farming total 1W : {{ total_week|round(2) }} $</p>
-                    <p>Farming total 1D : {{ total_day|round(2) }} $</p>
-                </div>
 
+                <div class="row m-2">
+                    <div class="col">Jour : {{ total_day|round(2) }} $</div>
+                    <div class="col">Semaine : {{ total_week|round(2) }} $</div>
+                    <div class="col">Mois : {{ total_month|round(2) }} $</div>
+                    <div class="col">année : {{ total_year|round(2) }} $</div>
+                </div>
 
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Montant</th>
                         <th>Coin</th>
@@ -78,12 +79,7 @@
                         <tr>
                             <td>
                                 {% if strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain.libelle }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp.libelle }}
+                                    {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
                             <td>{{ strategy_farming['strategy'].nbCoins }}</td>
@@ -115,18 +111,16 @@
                 {% set total_week_stable = total_year_stable / 52 %}
                 {% set total_month_stable = total_year_stable / 12 %}
 
-                <div>
-                    <p>Farming total 1Y : {{ total_year_stable|round(2) }} $</p>
-                    <p>Farming total 1M : {{ total_month_stable|round(2) }} $</p>
-                    <p>Farming total 1W : {{ total_week_stable|round(2) }} $</p>
-                    <p>Farming total 1D : {{ total_day_stable|round(2) }} $</p>
+                <div class="row m-2">
+                    <div class="col">Jour : {{ total_day_stable|round(2) }} $</div>
+                    <div class="col">Semaine : {{ total_week_stable|round(2) }} $</div>
+                    <div class="col">Mois : {{ total_month_stable|round(2) }} $</div>
+                    <div class="col">année : {{ total_year_stable|round(2) }} $</div>
                 </div>
-
 
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Montant</th>
                         <th>Coin</th>
@@ -149,12 +143,7 @@
                         <tr>
                             <td>
                                 {% if strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain.libelle }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp.libelle }}
+                                    {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
                             <td>{{ strategy_farming['strategy'].nbCoins }}</td>
@@ -188,5 +177,4 @@
 
 
 
-    <a href="{{ path('strategy_farming_new') }}">Create new</a>
 {% endblock %}

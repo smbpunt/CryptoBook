@@ -2,12 +2,13 @@
 
 {% block title %}Edit StrategyFarming{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('select2') }}
+{% endblock %}
+
 {% block body %}
-    <h1>Edit StrategyFarming</h1>
+    <h1>Modifier la stratégie de farming</h1>
 
-    {{ include('strategy_farming/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('strategy_farming/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    <a href="{{ path('strategy_farming_index') }}">back to list</a>
-
-    {{ include('strategy_farming/_delete_form.html.twig') }}
 {% endblock %}

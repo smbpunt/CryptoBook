@@ -2,6 +2,9 @@
 
 {% macro part_prototype(part) %}
     <tr class="js-item">
+        <td class="text-center align-middle">
+            <button type="button" class="js-remove btn btn-warning">-</button>
+        </td>
         <td>{{ form_widget(part.percent) }}</td>
         <td>{{ form_widget(part.coin) }}</td>
     </tr>
@@ -9,25 +12,35 @@
 
 <div class="container">
     {{ form_start(form) }}
-    <div class="row">
-        <div class="col-md align-self-end">
-            {{ form_row(form.fiatToDcaEur) }}
+    <div class="row mb-2">
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.fiatToDcaEur, "Provenance FIAT") }}
+
+            <div class="input-group">
+                {{ form_widget(form.fiatToDcaEur) }}
+                <span class="input-group-text">€</span>
+            </div>
         </div>
-        <div class="col-md align-self-end">
-            {{ form_row(form.farmingToDcaUsd) }}
-        </div>
-        <div class="col-md align-self-end">
-            <div class="mb-3">
-                <button type="button" class="add_item_link btn btn-secondary" data-wrapper="parts-wrapper">
-                    Ajouter une part
-                </button>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.farmingToDcaUsd, "Provenance Farming") }}
+
+            <div class="input-group">
+                {{ form_widget(form.farmingToDcaUsd) }}
+                <span class="input-group-text">$</span>
             </div>
         </div>
     </div>
 
+
+    <div class="m-3">
+        <button type="button" class="add_item_link btn btn-secondary" data-wrapper="parts-wrapper">
+            Ajouter une allocation
+        </button>
+    </div>
     <table class="table table-bordered table-responsive-md">
         <thead>
         <tr>
+            <th scope="col"></th>
             <th scope="col">%</th>
             <th scope="col">coin</th>
         </tr>
@@ -41,7 +54,7 @@
         </tbody>
     </table>
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary m-3">{{ button_label|default('Save') }}</button>
 
     {{ form_end(form) }}
 </div>

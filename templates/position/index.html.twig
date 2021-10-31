@@ -3,7 +3,9 @@
 {% block title %}Position index{% endblock %}
 
 {% block body %}
-    <h1>Position index</h1>
+    <h1>Mes positions</h1>
+
+    <a href="{{ path('position_new') }}" class="btn btn-primary m-2">Ajouter une position</a>
 
     <table class="table">
         <thead>
@@ -22,13 +24,12 @@
             <tr>
                 <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
                 <td>{{ position.coin.symbol|upper }}</td>
-                <td>{{ position.openedAt ? position.openedAt|date('Y-m-d') : '' }}</td>
+                <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
                 <td>{{ position.nbCoins }}</td>
                 <td>$ {{ position.entryCost }}</td>
                 <td>$ {{ position.entryCoinValue }}</td>
                 <td>
-                    <a href="{{ path('position_show', {'id': position.id}) }}">show</a>
-                    <a href="{{ path('position_edit', {'id': position.id}) }}">edit</a>
+                    {{ include('position/_indexactions_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
@@ -39,5 +40,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('position_new') }}">Create new</a>
 {% endblock %}

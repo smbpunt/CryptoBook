@@ -19,6 +19,13 @@
         "/build/tab.993aac11.js"
       ]
     },
+    "select2": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/529.2b519d10.js",
+        "/build/select2.83668541.js"
+      ]
+    },
     "home": {
       "js": [
         "/build/runtime.e4b160ba.js",
@@ -30,8 +37,7 @@
     "position_form": {
       "js": [
         "/build/runtime.e4b160ba.js",
-        "/build/529.2b519d10.js",
-        "/build/position_form.53865e38.js"
+        "/build/position_form.3ceb48b8.js"
       ]
     },
     "dca_form": {

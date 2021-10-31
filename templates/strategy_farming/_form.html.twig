@@ -1,4 +1,33 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="container">
+    {{ form_start(form) }}
+    <div class="row mb-2">
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.nbCoins, "Nombre") }}
+            {{ form_widget(form.nbCoins) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.coin, "Crypto") }}
+            {{ form_widget(form.coin) }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.apr, "% APR") }}
+
+            <div class="input-group">
+                {{ form_widget(form.apr) }}
+                <span class="input-group-text">%</span>
+            </div>
+        </div>
+        <div class="col-md-4 align-self-end">
+            {{ form_label(form.dapp, "Dapp") }}
+            {{ form_widget(form.dapp) }}
+        </div>
+    </div>
+
+
+    <button class="btn btn-primary m-3">{{ button_label|default('Save') }}</button>
+
+    {{ form_end(form) }}
+</div>

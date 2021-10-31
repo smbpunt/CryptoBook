@@ -1,0 +1,8 @@
+<form method="post" action="{{ path('deposit_delete', {'id': deposit.id}) }}"
+      onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ deposit.id) }}">
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <a href="{{ path('deposit_edit', {'id': deposit.id}) }}" class="btn btn-outline-primary">Modifier</a>
+        <button type="submit" class="btn btn-outline-primary">Supprimer</button>
+    </div>
+</form>

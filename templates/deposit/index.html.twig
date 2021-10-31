@@ -3,13 +3,15 @@
 {% block title %}Deposit index{% endblock %}
 
 {% block body %}
-    <h1>Deposit index</h1>
+    <h1>Mes dépôts</h1>
+
+    <a href="{{ path('deposit_new') }}" class="btn btn-primary m-2">Ajouter un dépôt</a>
 
     <p>Total : {{ totalEur }} €</p>
     <table class="table">
         <thead>
         <tr>
-            <th>DepositedAt</th>
+            <th>Déposer le</th>
             <th>Montant</th>
             <th>Méthode</th>
             <th>Plateforme</th>
@@ -19,13 +21,12 @@
         <tbody>
         {% for deposit in deposits %}
             <tr>
-                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('Y-m-d') : '' }}</td>
+                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
                 <td>{{ deposit.valueEur|round(2) }} €</td>
                 <td>{{ deposit.type }}</td>
                 <td>{{ deposit.exchange }}</td>
                 <td>
-                    <a href="{{ path('deposit_edit', {'id': deposit.id}) }}">edit</a>
-                    {{ include('deposit/_delete_form.html.twig') }}
+                    {{ include('deposit/_indexactions_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
@@ -36,5 +37,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('deposit_new') }}">Create new</a>
 {% endblock %}

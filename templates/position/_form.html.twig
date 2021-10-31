@@ -6,13 +6,19 @@
             <button type="button" class="js-remove btn btn-warning">-</button>
         </td>
         <td>
-            {{ form_widget(vente.soldAt) }}
+            {{ form_widget(vente.soldAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
         </td>
         <td>
-            {{ form_widget(vente.percent) }}
+            <div class="input-group">
+                {{ form_widget(vente.percent) }}
+                <span class="input-group-text">%</span>
+            </div>
         </td>
         <td>
-            {{ form_widget(vente.priceSold) }}
+            <div class="input-group">
+                {{ form_widget(vente.priceSold) }}
+                <span class="input-group-text">$</span>
+            </div>
         </td>
     </tr>
 {% endmacro %}
@@ -23,10 +29,16 @@
             <button type="button" class="js-remove btn btn-warning">-</button>
         </td>
         <td>
-            {{ form_widget(strategy.percent) }}
+            <div class="input-group">
+                {{ form_widget(strategy.percent) }}
+                <span class="input-group-text">%</span>
+            </div>
         </td>
         <td>
-            {{ form_widget(strategy.priceSold) }}
+            <div class="input-group">
+                {{ form_widget(strategy.priceSold) }}
+                <span class="input-group-text">$</span>
+            </div>
         </td>
     </tr>
 {% endmacro %}
@@ -37,7 +49,7 @@
     <div class="row mb-2">
         <div class="col-md-3 align-self-end">
             {{ form_label(form.openedAt, 'Date') }}
-            {{ form_widget(form.openedAt) }}
+            {{ form_widget(form.openedAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
         </div>
         <div class="col-md-3 align-self-end">
             {{ form_label(form.coin, 'Coin') }}
@@ -47,11 +59,14 @@
     <div class="row mb-2">
         <div class="col-md-3 align-self-end">
             {{ form_label(form.nbCoins, 'Nombre') }}
-            {{ form_widget(form.nbCoins) }}
+            {{ form_widget(form.nbCoins, { 'attr': {'placeholder': 'ex: 0.1'} }) }}
         </div>
         <div class="col-md-3 align-self-end">
             {{ form_label(form.entryCost, 'Coût ($)') }}
-            {{ form_widget(form.entryCost) }}
+            <div class="input-group">
+                {{ form_widget(form.entryCost, { 'attr': {'placeholder': 'ex: 150'} }) }}
+                <span class="input-group-text">$</span>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -59,20 +74,6 @@
             {{ form_row(form.isOpened) }}
         </div>
     </div>
-
-    <div class="row mb-4">
-        <div class="col-md-2 align-self-end">
-            <button type="button" class="add_item_link btn btn-outline-primary" data-wrapper="ventes-wrapper">
-                Ajouter une vente
-            </button>
-        </div>
-        <div class="col-md-2 align-self-end">
-            <button type="button" class="add_item_link btn btn-outline-primary" data-wrapper="strategies-wrapper">
-                Ajouter une stratégie
-            </button>
-        </div>
-    </div>
-
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -89,6 +90,11 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="strategy" role="tabpanel" aria-labelledby="strategy-tab">
+
+            <button type="button" class="m-3 add_item_link btn btn-outline-primary" data-wrapper="strategies-wrapper">
+                Ajouter une stratégie
+            </button>
+
             <table class="table table-bordered table-responsive-md">
                 <thead>
                 <tr>
@@ -107,6 +113,11 @@
             </table>
         </div>
         <div class="tab-pane fade" id="vente" role="tabpanel" aria-labelledby="vente-tab">
+
+            <button type="button" class="m-3 add_item_link btn btn-outline-primary" data-wrapper="ventes-wrapper">
+                Ajouter une vente
+            </button>
+
             <table class="table table-bordered table-responsive-md">
                 <thead>
                 <tr>
