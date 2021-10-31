@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Position;
 use App\Form\PositionType;
 use App\Repository\PositionRepository;
-use App\Service\PositionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,6 +72,10 @@ class PositionController extends AbstractController
      */
     public function edit(Request $request, Position $position): Response
     {
+        if ($position->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('position_index');
+        }
+
         $form = $this->createForm(PositionType::class, $position);
         $form->handleRequest($request);
 
@@ -92,6 +95,10 @@ class PositionController extends AbstractController
      */
     public function delete(Request $request, Position $position): Response
     {
+        if ($position->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('position_index');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $position->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($position);
