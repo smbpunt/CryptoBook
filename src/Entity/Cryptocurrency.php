@@ -253,7 +253,7 @@ class Cryptocurrency
 
     public function __toString()
     {
-        return $this->libelle ?? "Non défini";
+        return $this->symbol ?? "Non défini";
     }
 
     /**
