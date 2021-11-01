@@ -28,7 +28,6 @@ class PositionRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->select('SUM(p.nbCoins) as totalsum', 'c.libelle', 'c.priceUsd', 'c.priceEur')
             ->groupBy('p.coin')
-            ->orderBy('totalsum', 'ASC')
             ->getQuery()->getArrayResult();
     }
 

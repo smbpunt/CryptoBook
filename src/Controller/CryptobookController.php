@@ -32,6 +32,9 @@ class CryptobookController extends AbstractController
             $totalEur += $valueEur;
         }
 
+        array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
+
+
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
             'totalDepositEur' => $totalDepositEur,
