@@ -253,7 +253,7 @@ class Cryptocurrency
 
     public function __toString()
     {
-        return $this->symbol ?? "Non défini";
+        return $this->symbol ? strtoupper($this->symbol) : "Non défini";
     }
 
     /**
