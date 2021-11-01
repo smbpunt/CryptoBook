@@ -21,16 +21,8 @@ class PositionController extends AbstractController
     public function index(PositionRepository $positionRepository): Response
     {
         return $this->render('position/index.html.twig', [
-            'positions' => $positionRepository->findBy(
-                [
-                    'user' => $this->getUser()
-                ],
-                [
-                    'coin' => 'ASC',
-                    'openedAt' => 'ASC',
-                    'entryCost' => 'DESC'
-                ]
-            ),
+            'positions' => $positionRepository->getPositions($this->getUser(), false),
+            'positions_stable' => $positionRepository->getPositions($this->getUser(), true)
         ]);
     }
 

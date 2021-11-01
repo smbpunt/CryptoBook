@@ -31,6 +31,20 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery()->getArrayResult();
     }
 
+    public function getPositions(UserInterface $user, bool $isStable): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.coin', 'c')
+            ->where('p.user = :user')
+            ->andWhere('c.isStable = :isStable')
+            ->setParameter('user', $user)
+            ->setParameter('isStable', $isStable)
+            ->addOrderBy('c.mcapUsd', 'DESC')
+            ->addOrderBy('p.openedAt', 'ASC')
+            ->addOrderBy('p.entryCost', 'DESC')
+            ->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Position[] Returns an array of Position objects
     //  */

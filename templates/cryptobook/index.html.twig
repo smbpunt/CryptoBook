@@ -8,7 +8,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">
+        <div class="col-4">
 
             <p>Total wallet : $ {{ totalUsd|round(1) }}</p>
             <p>Total dépôt FIAT : {{ totalDepositEur|round(2) }} €</p>
@@ -21,7 +21,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col">
+        <div class="col-8">
             <canvas id="chart-pos"></canvas>
         </div>
     </div>

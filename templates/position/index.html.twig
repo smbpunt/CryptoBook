@@ -2,42 +2,106 @@
 
 {% block title %}Position index{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('tab') }}
+{% endblock %}
+
 {% block body %}
     <h1>Mes positions</h1>
 
     <a href="{{ path('position_new') }}" class="btn btn-primary m-2">Ajouter une position</a>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th></th>
-            <th></th>
-            <th>Ouvert le</th>
-            <th>Nombre achetés</th>
-            <th>Coût</th>
-            <th>Prix d'entrée</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for position in positions %}
-            <tr>
-                <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
-                <td>{{ position.coin.symbol|upper }}</td>
-                <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                <td>{{ position.nbCoins }}</td>
-                <td>$ {{ position.entryCost }}</td>
-                <td>$ {{ position.entryCoinValue }}</td>
-                <td>
-                    {{ include('position/_indexactions_form.html.twig') }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto"
+                    type="button"
+                    role="tab" aria-controls="crypto" aria-selected="true">Crypto
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
+                    role="tab" aria-controls="stable" aria-selected="false">Stable
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="crypto" role="tabpanel" aria-labelledby="crypto-tab">
+
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Ouvert le</th>
+                    <th>Nombre achetés</th>
+                    <th>Coût</th>
+                    <th>Prix d'entrée</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions %}
+                    <tr>
+                        <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
+                        <td>{{ position.coin.symbol|upper }}</td>
+                        <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td>{{ position.nbCoins }}</td>
+                        <td>$ {{ position.entryCost }}</td>
+                        <td>$ {{ position.entryCoinValue }}</td>
+                        <td>
+                            {{ include('position/_indexactions_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
+
+
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Ouvert le</th>
+                    <th>Nombre achetés</th>
+                    <th>Coût</th>
+                    <th>Prix d'entrée</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions_stable %}
+                    <tr>
+                        <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
+                        <td>{{ position.coin.symbol|upper }}</td>
+                        <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td>{{ position.nbCoins }}</td>
+                        <td>$ {{ position.entryCost }}</td>
+                        <td>$ {{ position.entryCoinValue }}</td>
+                        <td>
+                            {{ include('position/_indexactions_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -8,7 +8,7 @@
     <a href="{{ path('deposit_new') }}" class="btn btn-primary m-2">Ajouter un dépôt</a>
 
     <p>Total : {{ totalEur }} €</p>
-    <table class="table">
+    <table class="table table-bordered table-striped table-responsive-md">
         <thead>
         <tr>
             <th>Déposer le</th>
@@ -31,7 +31,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

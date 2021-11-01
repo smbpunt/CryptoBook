@@ -5,16 +5,16 @@
 {% block body %}
     <h1>Deposit</h1>
 
-    <table class="table">
+    <table class="table table-bordered table-striped table-responsive-md">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ deposit.id }}</td>
-            </tr>
-            <tr>
-                <th>DepositedAt</th>
-                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('Y-m-d') : '' }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ deposit.id }}</td>
+        </tr>
+        <tr>
+            <th>DepositedAt</th>
+            <td>{{ deposit.depositedAt ? deposit.depositedAt|date('Y-m-d') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
