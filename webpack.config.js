@@ -25,6 +25,7 @@ Encore
     .addEntry('select2', './assets/select2.js')
     .addEntry('home', './assets/home.js')
     .addEntry('position_form', './assets/position/position_form.js')
+    .addEntry('farming_form', './assets/farming/form.js')
     .addEntry('dca_form', './assets/dca/dca_form.js')
     .addEntry('collection', './assets/collection.js')
     .copyFiles({

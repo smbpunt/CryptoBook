@@ -40,6 +40,13 @@
         "/build/position_form.3ceb48b8.js"
       ]
     },
+    "farming_form": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/529.2b519d10.js",
+        "/build/farming_form.003343e3.js"
+      ]
+    },
     "dca_form": {
       "js": [
         "/build/runtime.e4b160ba.js",
