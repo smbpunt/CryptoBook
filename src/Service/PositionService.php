@@ -1,17 +1,11 @@
 <?php
 
-namespace App\EventListener;
+namespace App\Service;
 
 use App\Entity\Position;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-class PositionChangedListener
+class PositionService
 {
-    public function prePersist(Position $position, LifecycleEventArgs $event): void
-    {
-        $this->calculateRemainingCoins($position);
-    }
-
     public function calculateRemainingCoins(Position $position): void
     {
         if ($position->getVentes()->isEmpty()) {
@@ -28,10 +22,5 @@ class PositionChangedListener
         }
 
         $position->setRemainingCoins($remainingCoins);
-    }
-
-    public function preUpdate(Position $position, LifecycleEventArgs $event): void
-    {
-        $this->calculateRemainingCoins($position);
     }
 }

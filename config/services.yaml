@@ -30,13 +30,3 @@ services:
     arguments:
       - '@coingecko.client'
 
-  App\EventListener\PositionChangedListener:
-    tags:
-      - # these are the options required to define the entity listener
-        name: 'doctrine.orm.entity_listener'
-        event: 'prePersist'
-        entity: 'App\Entity\Position'
-      - # these are the options required to define the entity listener
-        name: 'doctrine.orm.entity_listener'
-        event: 'preUpdate'
-        entity: 'App\Entity\Position'

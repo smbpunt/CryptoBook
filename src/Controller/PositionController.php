@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Position;
 use App\Form\PositionType;
 use App\Repository\PositionRepository;
+use App\Service\PositionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class PositionController extends AbstractController
     /**
      * @Route("/new", name="position_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, PositionService $service): Response
     {
         $position = new Position($this->getUser());
         $form = $this->createForm(PositionType::class, $position);
@@ -37,6 +38,7 @@ class PositionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $service->calculateRemainingCoins($position);
             $entityManager->persist($position);
             $entityManager->flush();
 
@@ -62,7 +64,7 @@ class PositionController extends AbstractController
     /**
      * @Route("/{id}/edit", name="position_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Position $position): Response
+    public function edit(Request $request, Position $position, PositionService $service): Response
     {
         if ($position->getUser() !== $this->getUser()) {
             $this->redirectToRoute('position_index');
@@ -72,6 +74,7 @@ class PositionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $service->calculateRemainingCoins($position);
             $this->getDoctrine()->getManager()->flush();
             return $form->get('submitAndNext')->isClicked() ? $this->redirectToRoute('position_new') : $this->redirectToRoute('position_index', [], Response::HTTP_SEE_OTHER);
         }
