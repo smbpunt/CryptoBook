@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[260],{5058:(e,a,n)=>{var r=n(4529),s=n.n(r);console.log("farming/form.js loaded"),new(s())("#strategy_farming_coin"),new(s())("#strategy_farming_dapp")}},e=>{e.O(0,[529],(()=>{return a=5058,e(e.s=a);var a}));e.O()}]);
