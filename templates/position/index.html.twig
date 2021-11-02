@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Position index{% endblock %}
+{% block title %}{{ parent() }} - Positions{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('tab') }}
@@ -35,9 +35,10 @@
                     <th></th>
                     <th></th>
                     <th>Ouvert le</th>
-                    <th>Nombre achetés</th>
-                    <th>Coût</th>
+                    <th>Nombre actuel/départ</th>
+                    <th>Coût d'entrée</th>
                     <th>Prix d'entrée</th>
+                    <th>Valeur actuelle</th>
                     <th>actions</th>
                 </tr>
                 </thead>
@@ -47,9 +48,10 @@
                         <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
                         <td>{{ position.coin.symbol|upper }}</td>
                         <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td>{{ position.nbCoins }}</td>
+                        <td>{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
                         <td>$ {{ position.entryCost }}</td>
                         <td>$ {{ position.entryCoinValue }}</td>
+                        <td>$ {{ position.remainingCoins*position.coin.priceUsd }} $</td>
                         <td>
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>

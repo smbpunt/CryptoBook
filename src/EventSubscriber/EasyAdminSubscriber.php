@@ -34,6 +34,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->cryptocurrencyService->updateDatas($entity, false);
+        $this->cryptocurrencyService->updateDatas($entity);
     }
 }

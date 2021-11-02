@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -61,11 +63,17 @@ class Position
      */
     private $openedAt;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $remainingCoins;
+
     public function __construct($user)
     {
         $this->user = $user;
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
+        $this->remainingCoins = 0;
     }
 
     public function getId(): ?int
@@ -146,6 +154,14 @@ class Position
         return $this->ventes;
     }
 
+    /**
+     * @return Collection|Vente[]
+     */
+    public function getVentesSortedByDate(): Collection
+    {
+        return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
+    }
+
     public function addVente(Vente $vente): self
     {
         if (!$this->ventes->contains($vente)) {
@@ -198,14 +214,26 @@ class Position
         return $this;
     }
 
-    public function getOpenedAt(): ?\DateTimeImmutable
+    public function getOpenedAt(): ?DateTimeImmutable
     {
         return $this->openedAt;
     }
 
-    public function setOpenedAt(?\DateTimeImmutable $openedAt): self
+    public function setOpenedAt(?DateTimeImmutable $openedAt): self
     {
         $this->openedAt = $openedAt;
+
+        return $this;
+    }
+
+    public function getRemainingCoins(): ?float
+    {
+        return $this->remainingCoins;
+    }
+
+    public function setRemainingCoins(float $remainingCoins): self
+    {
+        $this->remainingCoins = $remainingCoins;
 
         return $this;
     }

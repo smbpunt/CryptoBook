@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Position{% endblock %}
+{% block title %}{{ parent() }} - Positions{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('position_form') }}
@@ -10,9 +10,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create new Position</h1>
+    <h1>Nouvelle position</h1>
 
     {{ include('position/_form.html.twig') }}
-
-    <a href="{{ path('position_index') }}">back to list</a>
 {% endblock %}

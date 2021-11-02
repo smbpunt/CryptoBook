@@ -17,7 +17,11 @@ class VenteType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datetimepicker'],
-                'required' => false
+                'required' => false,
+
+
+                'format' => 'dd/MM/yyyy',
+                'input' => 'datetime_immutable',
             ])
             ->add('percent')
             ->add('priceSold');
