@@ -34,13 +34,10 @@ class CryptobookController extends AbstractController
 
         foreach ($positions as $key => $value) {
             $value['percent'] = round($value['valueUsd'] * 100 / $totalUsd, 2);
-            dump($totalUsd, $value['valueUsd'], $value);
             $positions[$key] = $value;
         }
 
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
-
-        dump($positions);
 
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
