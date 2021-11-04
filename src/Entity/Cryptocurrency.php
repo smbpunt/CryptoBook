@@ -90,7 +90,7 @@ class Cryptocurrency
     private $blockchains;
 
     /**
-     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="stablecoin", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="coin", orphanRemoval=true)
      */
     private $loans;
 

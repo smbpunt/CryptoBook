@@ -7,13 +7,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Mes positions</h1>
+    <div class="row mb-2">
+        <div class="col">
+            <h1>Mes positions</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('position_new') }}" class="btn btn-warning m-2">Ajouter une position</a>
+        </div>
+    </div>
 
-    <a href="{{ path('position_new') }}" class="btn btn-primary m-2">Ajouter une position</a>
 
-
-
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs navbar-dark" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto"
                     type="button"
@@ -29,7 +33,7 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="crypto" role="tabpanel" aria-labelledby="crypto-tab">
 
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
                     <th></th>
@@ -45,14 +49,17 @@
                 <tbody>
                 {% for position in positions %}
                     <tr>
-                        <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
-                        <td>{{ position.coin.symbol|upper }}</td>
-                        <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td>{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
-                        <td>$ {{ position.entryCost }}</td>
-                        <td>$ {{ position.entryCoinValue }}</td>
-                        <td>$ {{ position.remainingCoins*position.coin.priceUsd }} $</td>
-                        <td>
+                        <td class="text-white text-center align-middle">
+                            <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
+                        </td>
+                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
+                        <td class="text-white align-middle">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle">{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle">$ {{ position.entryCost }}</td>
+                        <td class="text-white align-middle">$ {{ position.entryCoinValue }}</td>
+                        <td class="text-white align-middle">$ {{ position.remainingCoins*position.coin.priceUsd }}$
+                        </td>
+                        <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>
                     </tr>
@@ -68,7 +75,7 @@
         <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
 
 
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
                     <th></th>
@@ -83,13 +90,14 @@
                 <tbody>
                 {% for position in positions_stable %}
                     <tr>
-                        <td><img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}"></td>
-                        <td>{{ position.coin.symbol|upper }}</td>
-                        <td>{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td>{{ position.nbCoins }}</td>
-                        <td>$ {{ position.entryCost }}</td>
-                        <td>$ {{ position.entryCoinValue }}</td>
-                        <td>
+                        <td class="text-white align-middle"><img src="{{ position.coin.urlImgThumb }}"
+                                                                 alt="Logo {{ position.coin.libelle }}"></td>
+                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
+                        <td class="text-white align-middle">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle">{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle">$ {{ position.entryCost }}</td>
+                        <td class="text-white align-middle">$ {{ position.entryCoinValue }}</td>
+                        <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>
                     </tr>

@@ -3,12 +3,17 @@
 {% block title %}{{ parent() }} - Dépôts{% endblock %}
 
 {% block body %}
-    <h1>Mes dépôts</h1>
-
-    <a href="{{ path('deposit_new') }}" class="btn btn-primary m-2">Ajouter un dépôt</a>
+    <div class="row mb-2">
+        <div class="col">
+            <h1>Mes dépôts</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('deposit_new') }}" class="btn btn-warning m-2">Ajouter un dépôt</a>
+        </div>
+    </div>
 
     <p>Total : {{ totalEur }} €</p>
-    <table class="table table-bordered table-striped table-responsive-md">
+    <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>
             <th>Déposer le</th>
@@ -21,11 +26,11 @@
         <tbody>
         {% for deposit in deposits %}
             <tr>
-                <td>{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
-                <td>{{ deposit.valueEur|round(2) }} €</td>
-                <td>{{ deposit.type }}</td>
-                <td>{{ deposit.exchange }}</td>
-                <td>
+                <td class="text-white align-middle">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
+                <td class="text-white align-middle text-end">{{ deposit.valueEur|round(2) }} €</td>
+                <td class="text-white align-middle">{{ deposit.type }}</td>
+                <td class="text-white align-middle">{{ deposit.exchange }}</td>
+                <td class="text-white align-middle text-center">
                     {{ include('deposit/_indexactions_form.html.twig') }}
                 </td>
             </tr>

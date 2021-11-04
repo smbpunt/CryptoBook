@@ -3,7 +3,7 @@
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ strategy_farming['strategy'].id) }}">
     <div class="btn-group" role="group" aria-label="Basic outlined example">
         <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}"
-           class="btn btn-outline-primary">Modifier</a>
-        <button type="submit" class="btn btn-outline-primary">Supprimer</button>
+           class="btn btn-outline-light">Modifier</a>
+        <button type="submit" class="btn btn-outline-light">Supprimer</button>
     </div>
 </form>

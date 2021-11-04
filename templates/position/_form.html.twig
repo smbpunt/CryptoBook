@@ -3,18 +3,18 @@
 {% macro vente_prototype(vente) %}
     <tr class="js-item">
         <td class="text-center align-middle">
-            <button type="button" class="js-remove btn btn-warning">-</button>
+            <button type="button" class="js-remove btn btn-secondary">-</button>
         </td>
-        <td>
+        <td class="text-white align-middle">
             {{ form_widget(vente.soldAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
         </td>
-        <td>
+        <td class="text-white align-middle">
             <div class="input-group">
                 {{ form_widget(vente.percent) }}
                 <span class="input-group-text">%</span>
             </div>
         </td>
-        <td>
+        <td class="text-white align-middle">
             <div class="input-group">
                 {{ form_widget(vente.priceSold) }}
                 <span class="input-group-text">$</span>
@@ -26,15 +26,15 @@
 {% macro strategy_prototype(strategy) %}
     <tr class="js-item">
         <td class="text-center align-middle">
-            <button type="button" class="js-remove btn btn-warning">-</button>
+            <button type="button" class="js-remove btn btn-secondary">-</button>
         </td>
-        <td>
+        <td class="text-white align-middle">
             <div class="input-group">
                 {{ form_widget(strategy.percent) }}
                 <span class="input-group-text">%</span>
             </div>
         </td>
-        <td>
+        <td class="text-white align-middle">
             <div class="input-group">
                 {{ form_widget(strategy.priceSold) }}
                 <span class="input-group-text">$</span>
@@ -91,11 +91,11 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="strategy" role="tabpanel" aria-labelledby="strategy-tab">
 
-            <button type="button" class="m-3 add_item_link btn btn-outline-primary" data-wrapper="strategies-wrapper">
+            <button type="button" class="m-3 add_item_link btn btn-outline-light" data-wrapper="strategies-wrapper">
                 Ajouter une stratégie
             </button>
 
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
                     <th scope="col"></th>
@@ -114,11 +114,11 @@
         </div>
         <div class="tab-pane fade" id="vente" role="tabpanel" aria-labelledby="vente-tab">
 
-            <button type="button" class="m-3 add_item_link btn btn-outline-primary" data-wrapper="ventes-wrapper">
+            <button type="button" class="m-3 add_item_link btn btn-outline-light" data-wrapper="ventes-wrapper">
                 Ajouter une vente
             </button>
 
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
                     <th scope="col"></th>

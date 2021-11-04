@@ -10,7 +10,7 @@ const rgbs = [];
 json_positions.forEach(position => {
     console.log(position);
     labels.push(position.libelle);
-    datasets.push(String(position.valueUsd))
+    datasets.push(String(position.percent))
     const r = randomBetween(0, 255);
     const g = randomBetween(0, 255);
     const b = randomBetween(0, 255);

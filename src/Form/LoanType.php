@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Cryptocurrency;
 use App\Entity\Loan;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,9 +15,11 @@ class LoanType extends AbstractType
     {
         $builder
             ->add('nbCoins')
-            ->add('user')
-            ->add('stablecoin')
-        ;
+            ->add('coin', EntityType::class, [
+                'class' => Cryptocurrency::class,
+                'required' => true,
+                'attr' => ['class' => 'js-select2'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -3,10 +3,10 @@
 {% macro part_prototype(part) %}
     <tr class="js-item">
         <td class="text-center align-middle">
-            <button type="button" class="js-remove btn btn-warning">-</button>
+            <button type="button" class="js-remove btn btn-secondary">-</button>
         </td>
-        <td>{{ form_widget(part.percent) }}</td>
-        <td>{{ form_widget(part.coin) }}</td>
+        <td class="text-white align-middle">{{ form_widget(part.percent) }}</td>
+        <td class="text-white align-middle">{{ form_widget(part.coin) }}</td>
     </tr>
 {% endmacro %}
 
@@ -37,7 +37,7 @@
             Ajouter une allocation
         </button>
     </div>
-    <table class="table table-bordered table-striped table-responsive-md">
+    <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>
             <th scope="col"></th>
@@ -54,7 +54,7 @@
         </tbody>
     </table>
 
-    <button class="btn btn-primary m-3">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
 
     {{ form_end(form) }}
 </div>

@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Loan{% endblock %}
+{% block title %}{{ parent() }} - Emprunts{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('select2') }}
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Loan</h1>
+    <h1>Modifier emprunt</h1>
 
     {{ include('loan/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('loan_index') }}">back to list</a>
-
-    {{ include('loan/_delete_form.html.twig') }}
 {% endblock %}

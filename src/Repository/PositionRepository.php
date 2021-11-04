@@ -26,7 +26,7 @@ class PositionRepository extends ServiceEntityRepository
             ->join('p.coin', 'c')
             ->andWhere('p.user = :user')
             ->setParameter('user', $user)
-            ->select('SUM(p.remainingCoins) as totalsum', 'c.libelle', 'c.priceUsd', 'c.priceEur')
+            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.priceUsd', 'c.priceEur')
             ->groupBy('p.coin')
             ->getQuery()->getArrayResult();
     }

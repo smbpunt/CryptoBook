@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Loan{% endblock %}
+{% block title %}{{ parent() }} - Emprunts{% endblock %}
 
 {% block body %}
     <h1>Loan</h1>
 
-    <table class="table">
+    <table class="table table-dark">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ loan.id }}</td>
-            </tr>
-            <tr>
-                <th>NbCoins</th>
-                <td>{{ loan.nbCoins }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td class="text-white align-middle">{{ loan.id }}</td>
+        </tr>
+        <tr>
+            <th>NbCoins</th>
+            <td class="text-white align-middle">{{ loan.nbCoins }}</td>
+        </tr>
         </tbody>
     </table>
 

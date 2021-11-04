@@ -5,23 +5,23 @@
 {% block body %}
     <h1>Position</h1>
 
-    <table class="table table-bordered table-striped table-responsive-md">
+    <table class="table table-bordered table-striped table-responsive-md table-dark">
         <tbody>
         <tr>
             <th>Id</th>
-            <td>{{ position.id }}</td>
+            <td class="text-white align-middle">{{ position.id }}</td>
         </tr>
         <tr>
             <th>OpenedAt</th>
-            <td>{{ position.openedAt ? position.openedAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td class="text-white align-middle">{{ position.openedAt ? position.openedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
             <th>NbCoins</th>
-            <td>{{ position.nbCoins }}</td>
+            <td class="text-white align-middle">{{ position.nbCoins }}</td>
         </tr>
         <tr>
             <th>IsOpened</th>
-            <td>{{ position.isOpened ? 'Yes' : 'No' }}</td>
+            <td class="text-white align-middle">{{ position.isOpened ? 'Yes' : 'No' }}</td>
         </tr>
         </tbody>
     </table>

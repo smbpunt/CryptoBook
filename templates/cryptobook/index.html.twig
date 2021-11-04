@@ -10,14 +10,31 @@
 
             <p>Total wallet : $ {{ totalUsd|round(1) }}</p>
             <p>Total dépôt FIAT : {{ totalDepositEur|round(2) }} €</p>
-
+            {#
             <div class="row">
                 <ul>
                     {% for position in positions %}
-                        <li>{{ position.libelle }} : $ {{ position.valueUsd|round(2) }}</li>
+                        <li>{{ position.totalsum }} {{ position.symbol }} =</li>
                     {% endfor %}
                 </ul>
             </div>
+            #}
+
+
+            <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
+                <tbody>
+                {% for position in positions %}
+                    <tr>
+                        <td class="text-white text-end">{{ position.totalsum|round(2) }}</td>
+                        <td class="text-white">{{ position.symbol|upper }}</td>
+                        <td class="text-white text-end">{{ position.valueUsd|round(2) }}$</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
         </div>
         <div class="col-8">
             <canvas id="chart-pos"></canvas>

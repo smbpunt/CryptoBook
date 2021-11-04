@@ -1,35 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Loan index{% endblock %}
+{% block title %}{{ parent() }} - Emprunts{% endblock %}
 
 {% block body %}
-    <h1>Loan index</h1>
+    <div class="row mb-2">
+        <div class="col">
+            <h1>Mes emprunts</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('loan_new') }}" class="btn btn-warning m-2">Ajouter un emprunt</a>
+        </div>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>NbCoins</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for loan in loans %}
-            <tr>
-                <td>{{ loan.id }}</td>
-                <td>{{ loan.nbCoins }}</td>
-                <td>
-                    <a href="{{ path('loan_show', {'id': loan.id}) }}">show</a>
-                    <a href="{{ path('loan_edit', {'id': loan.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('loan_new') }}">Create new</a>
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th>Coin</th>
+                    <th>Valeur ($)</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for loan in loans %}
+                    <tr>
+                        <td class="text-white align-middle">{{ loan.coin.symbol|upper }}</td>
+                        <td class="text-white align-middle">{{ loan.nbCoins * loan.coin.priceUsd }} $</td>
+                        <td class="text-white align-middle">
+                            {{ include('loan/_indexactions_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col"></div>
+    </div>
+
+
+
 {% endblock %}

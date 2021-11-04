@@ -21,7 +21,9 @@ class LoanController extends AbstractController
     public function index(LoanRepository $loanRepository): Response
     {
         return $this->render('loan/index.html.twig', [
-            'loans' => $loanRepository->findAll(),
+            'loans' => $loanRepository->findBy([
+                'user' => $this->getUser()
+            ]),
         ]);
     }
 
@@ -30,7 +32,7 @@ class LoanController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $loan = new Loan();
+        $loan = new Loan($this->getUser());
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
@@ -53,6 +55,10 @@ class LoanController extends AbstractController
      */
     public function show(Loan $loan): Response
     {
+        if ($loan->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('loan_index');
+        }
+
         return $this->render('loan/show.html.twig', [
             'loan' => $loan,
         ]);
@@ -63,6 +69,10 @@ class LoanController extends AbstractController
      */
     public function edit(Request $request, Loan $loan): Response
     {
+        if ($loan->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('loan_index');
+        }
+
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
@@ -83,6 +93,10 @@ class LoanController extends AbstractController
      */
     public function delete(Request $request, Loan $loan): Response
     {
+        if ($loan->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('loan_index');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$loan->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($loan);

@@ -7,9 +7,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Farming</h1>
-
-    <a href="{{ path('strategy_farming_new') }}" class="btn btn-primary m-2">Ajouter</a>
+    <div class="row mb-2">
+        <div class="col">
+            <h1>Mon farming</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('strategy_farming_new') }}" class="btn btn-warning m-2">Ajouter</a>
+        </div>
+    </div>
 
     {% if total_total_year > 0 %}
 
@@ -54,7 +59,7 @@
                     <div class="col">année : {{ total_year|round(2) }} $</div>
                 </div>
 
-                <table class="table table-bordered table-striped table-responsive-md">
+                <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
                         <th>Dapp</th>
@@ -77,20 +82,20 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
-                            <td>
+                            <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
-                            <td>{{ strategy_farming['strategy'].nbCoins }}</td>
-                            <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td>{{ strategy_farming['strategy'].apr }} %</td>
-                            <td>{{ strategy_farming['value_dollar'] }} $</td>
-                            <td>{{ gain_day|round(2) }} $</td>
-                            <td>{{ gain_week|round(2) }} $</td>
-                            <td>{{ gain_month|round(2) }} $</td>
-                            <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
-                            <td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle">{{ strategy_farming['value_dollar'] }} $</td>
+                            <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ gain_week|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td class="text-white align-middle">
                                 {{ include('strategy_farming/_indexactions_form.html.twig') }}
                             </td>
                         </tr>
@@ -117,7 +122,7 @@
                     <div class="col">année : {{ total_year_stable|round(2) }} $</div>
                 </div>
 
-                <table class="table table-bordered table-striped table-responsive-md">
+                <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
                         <th>Dapp</th>
@@ -140,20 +145,20 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
-                            <td>
+                            <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
-                            <td>{{ strategy_farming['strategy'].nbCoins }}</td>
-                            <td>{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td>{{ strategy_farming['strategy'].apr }} %</td>
-                            <td>{{ strategy_farming['value_dollar'] }} $</td>
-                            <td>{{ gain_day|round(2) }} $</td>
-                            <td>{{ gain_week|round(2) }} $</td>
-                            <td>{{ gain_month|round(2) }} $</td>
-                            <td>{{ strategy_farming['gain_year']|round(2) }} $</td>
-                            <td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle">{{ strategy_farming['value_dollar'] }} $</td>
+                            <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ gain_week|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
+                            <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td class="text-white align-middle">
                                 <a href="{{ path('strategy_farming_show', {'id': strategy_farming['strategy'].id}) }}">show</a>
                                 <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}">edit</a>
                             </td>

@@ -1,4 +1,4 @@
-$primary: darken(#428bca, 20%);
+$primary: darken(#ffffff, 0%);
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
@@ -10,4 +10,13 @@ $primary: darken(#428bca, 20%);
   max-width: 330px;
   padding: 15px;
   margin: auto;
+}
+
+
+.choices__item--selectable {
+  color: #000000;
+}
+
+html {
+  background-color: $dark;
 }
