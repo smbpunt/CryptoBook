@@ -89,11 +89,17 @@ class Cryptocurrency
      */
     private $blockchains;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="stablecoin", orphanRemoval=true)
+     */
+    private $loans;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->farmingStrategies = new ArrayCollection();
         $this->blockchains = new ArrayCollection();
+        $this->loans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -322,6 +328,36 @@ class Cryptocurrency
             // set the owning side to null (unless already changed)
             if ($blockchain->getCoin() === $this) {
                 $blockchain->setCoin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Loan[]
+     */
+    public function getLoans(): Collection
+    {
+        return $this->loans;
+    }
+
+    public function addLoan(Loan $loan): self
+    {
+        if (!$this->loans->contains($loan)) {
+            $this->loans[] = $loan;
+            $loan->setStablecoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLoan(Loan $loan): self
+    {
+        if ($this->loans->removeElement($loan)) {
+            // set the owning side to null (unless already changed)
+            if ($loan->getStablecoin() === $this) {
+                $loan->setStablecoin(null);
             }
         }
 
