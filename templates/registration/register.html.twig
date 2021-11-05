@@ -9,13 +9,40 @@
 
     <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <div class="text-center">
+        <main class="form-signin">
+            {{ form_start(registrationForm) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <img class="mb-4" src="{{ asset('build/images/btc.png') }}" alt="">
+            <h1 class="h3 mb-3 fw-normal">Veuillez vous inscrire</h1>
+
+            <div class="form-floating">
+                {{ form_row(registrationForm.email) }}
+            </div>
+
+            <div class="form-floating">
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password'
+                }) }}
+            </div>
+
+            <div class=" text-start text-white">
+                {{ form_row(registrationForm.agreeTerms) }}
+            </div>
+
+            <div class="form-floating text-warning">
+                <p>Attention, vous allez recevoir un mail d'une adresse gmail pour vérifier votre mail. à terme, ça
+                    devrait changer. Mais du
+                    coup, vérifiez vos indésirables.</p>
+            </div>
+
+
+            <button type="submit" class="btn btn-warning">Register</button>
+            {{ form_end(registrationForm) }}
+        </main>
+    </div>
+
+
+
+
 {% endblock %}
