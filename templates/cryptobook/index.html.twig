@@ -20,7 +20,8 @@
                 <tbody>
                 <tr>
                     <td class="text-white">Investi</td>
-                    <td class="text-white text-end">{{ (totalDepositEur*ratioUsdEur)|round(0) }} $</td>
+                    {% set totalDepositUsd = totalDepositEur*ratioUsdEur %}
+                    <td class="text-white text-end">{{ totalDepositUsd|round(0) }} $</td>
                     <td class="text-white text-end">{{ totalDepositEur|round(0) }} €</td>
                 </tr>
                 <tr>
@@ -35,9 +36,48 @@
                 </tr>
                 <tr>
                     <td class="text-white">Total</td>
-                    <td class="text-white text-end">{{ (totalUsd+totalUsdStable)|round(0) }} $</td>
-                    <td class="text-white text-end">{{ (totalEur+totalEurStable)|round(0) }} €</td>
+                    {% set totalWalletUsd = totalUsd+totalUsdStable %}
+                    {% set totalWalletEur = totalEur+totalEurStable %}
+                    <td class="text-white text-end">{{ totalWalletUsd|round(0) }} $</td>
+                    <td class="text-white text-end">{{ totalWalletEur|round(0) }} €</td>
                 </tr>
+                <tr>
+                    <td class="text-white">Résultat</td>
+                    <td class="text-end
+                        {% if (totalWalletUsd-totalDepositUsd) > 0 %}
+                            text-success
+                        {% else %}
+                            text-warning
+                        {% endif %}"
+                    >
+                        {{ (totalWalletUsd-totalDepositUsd)|round(0) }}$
+                    </td>
+                    <td class="text-end
+                        {% if (totalWalletEur-totalDepositEur) > 0 %}
+                            text-success
+                        {% else %}
+                            text-warning
+                        {% endif %}"
+                    >
+                        {{ (totalWalletEur-totalDepositEur)|round(0) }} €
+                    </td>
+                </tr>
+
+                <tr>
+                    {% set percent = totalWalletUsd*100/totalDepositUsd-100 %}
+                    <td class="text-white">Résultat %</td>
+                    <td colspan="2" class="text-end
+                        {% if percent > 0 %}
+                            text-success
+                        {% else %}
+                            text-warning
+                        {% endif %}"
+                    >
+                        {{ (percent)|round(0) }} %
+                    </td>
+                </tr>
+
+
                 {# <tr>
                     <td class="text-white">Farming Crypto</td>
                     <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
@@ -53,6 +93,8 @@
                     <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
                     <td class="text-white text-end">€</td>
                 </tr> #}
+
+
                 </tbody>
             </table>
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
