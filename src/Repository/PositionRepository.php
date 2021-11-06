@@ -26,6 +26,7 @@ class PositionRepository extends ServiceEntityRepository
             ->join('p.coin', 'c')
             ->andWhere('p.user = :user')
             ->andWhere('c.isStable = :isStable')
+            ->andWhere('p.isOpened = 1')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
             ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.priceUsd', 'c.priceEur')
@@ -33,14 +34,16 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery()->getArrayResult();
     }
 
-    public function getPositions(UserInterface $user, bool $isStable): array
+    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true): array
     {
         return $this->createQueryBuilder('p')
             ->join('p.coin', 'c')
             ->where('p.user = :user')
             ->andWhere('c.isStable = :isStable')
+            ->andWhere('p.isOpened = :isOpen')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
+            ->setParameter('isOpen', $isOpen)
             ->addOrderBy('c.mcapUsd', 'DESC')
             ->addOrderBy('p.openedAt', 'ASC')
             ->addOrderBy('p.entryCost', 'DESC')

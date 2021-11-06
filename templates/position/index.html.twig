@@ -21,12 +21,17 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto"
                     type="button"
-                    role="tab" aria-controls="crypto" aria-selected="true">Crypto
+                    role="tab" aria-controls="crypto" aria-selected="true">Crypto ({{ positions|length }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
-                    role="tab" aria-controls="stable" aria-selected="false">Stable
+                    role="tab" aria-controls="stable" aria-selected="false">Stable ({{ positions_stable|length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="closed-tab" data-bs-toggle="tab" data-bs-target="#closed" type="button"
+                    role="tab" aria-controls="closed" aria-selected="false">Fermée ({{ positions_closed|length }})
             </button>
         </li>
     </ul>
@@ -53,11 +58,11 @@
                             <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
                         </td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
-                        <td class="text-white align-middle">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle">{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
-                        <td class="text-white align-middle">$ {{ position.entryCost }}</td>
-                        <td class="text-white align-middle">$ {{ position.entryCoinValue }}</td>
-                        <td class="text-white align-middle">$ {{ position.remainingCoins*position.coin.priceUsd }}$
+                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle text-end">{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue }} $</td>
+                        <td class="text-white align-middle text-end">{{ (position.remainingCoins*position.coin.priceUsd)|round(2) }}$
                         </td>
                         <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
@@ -90,13 +95,52 @@
                 <tbody>
                 {% for position in positions_stable %}
                     <tr>
-                        <td class="text-white align-middle"><img src="{{ position.coin.urlImgThumb }}"
-                                                                 alt="Logo {{ position.coin.libelle }}"></td>
+                        <td class="text-white align-middle text-center"><img src="{{ position.coin.urlImgThumb }}"
+                                                                             alt="Logo {{ position.coin.libelle }}"></td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
-                        <td class="text-white align-middle">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle">{{ position.nbCoins }}</td>
-                        <td class="text-white align-middle">$ {{ position.entryCost }}</td>
-                        <td class="text-white align-middle">$ {{ position.entryCoinValue }}</td>
+                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle text-end">{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue }} $</td>
+                        <td class="text-white text-center align-middle">
+                            {{ include('position/_indexactions_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+
+
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Ouvert le</th>
+                    <th>Nombre</th>
+                    <th>Coût d'entrée</th>
+                    <th>Prix d'entrée</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions_closed %}
+                    <tr>
+                        <td class="text-white text-center align-middle">
+                            <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
+                        </td>
+                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
+                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle text-end">{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue }} $</td>
                         <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>
@@ -111,6 +155,8 @@
 
 
         </div>
+
+
     </div>
 
 

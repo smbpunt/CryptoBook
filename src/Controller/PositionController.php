@@ -23,7 +23,8 @@ class PositionController extends AbstractController
     {
         return $this->render('position/index.html.twig', [
             'positions' => $positionRepository->getPositions($this->getUser(), false),
-            'positions_stable' => $positionRepository->getPositions($this->getUser(), true)
+            'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
+            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false)
         ]);
     }
 

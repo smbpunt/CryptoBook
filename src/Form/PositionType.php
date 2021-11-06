@@ -32,7 +32,8 @@ class PositionType extends AbstractType
             ])
             ->add('isOpened', CheckboxType::class, [
                 'label' => 'Position ouverte ?',
-                'data' => true
+                'data' => true,
+                'required' => false
             ])
             ->add('entryCost', NumberType::class, [
                 'required' => true
