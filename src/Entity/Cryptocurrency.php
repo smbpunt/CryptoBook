@@ -94,12 +94,24 @@ class Cryptocurrency
      */
     private $loans;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="coin1", orphanRemoval=true)
+     */
+    private $strategyLp1s;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="coin2", orphanRemoval=true)
+     */
+    private $strategyLp2s;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->farmingStrategies = new ArrayCollection();
         $this->blockchains = new ArrayCollection();
         $this->loans = new ArrayCollection();
+        $this->strategyLp1s = new ArrayCollection();
+        $this->strategyLp2s = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -358,6 +370,66 @@ class Cryptocurrency
             // set the owning side to null (unless already changed)
             if ($loan->getStablecoin() === $this) {
                 $loan->setStablecoin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyLP[]
+     */
+    public function getStrategyLp1s(): Collection
+    {
+        return $this->strategyLp1s;
+    }
+
+    public function addStrategyLp1(StrategyLP $strategyLP): self
+    {
+        if (!$this->strategyLp1s->contains($strategyLP)) {
+            $this->strategyLp1s[] = $strategyLP;
+            $strategyLP->setCoin1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategyLp1(StrategyLP $strategyLP): self
+    {
+        if ($this->strategyLp1s->removeElement($strategyLP)) {
+            // set the owning side to null (unless already changed)
+            if ($strategyLP->getCoin1() === $this) {
+                $strategyLP->setCoin1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyLP[]
+     */
+    public function getStrategyLp2s(): Collection
+    {
+        return $this->strategyLp2s;
+    }
+
+    public function addStrategyLp2(StrategyLP $strategyLP): self
+    {
+        if (!$this->strategyLp2s->contains($strategyLP)) {
+            $this->strategyLp2s[] = $strategyLP;
+            $strategyLP->setCoin2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategyLp2(StrategyLP $strategyLP): self
+    {
+        if ($this->strategyLp2s->removeElement($strategyLP)) {
+            // set the owning side to null (unless already changed)
+            if ($strategyLP->getCoin2() === $this) {
+                $strategyLP->setCoin2(null);
             }
         }
 

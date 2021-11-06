@@ -20,12 +20,14 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
-    public function getSumCoinByUser(UserInterface $user): array
+    public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
     {
         return $this->createQueryBuilder('p')
             ->join('p.coin', 'c')
             ->andWhere('p.user = :user')
+            ->andWhere('c.isStable = :isStable')
             ->setParameter('user', $user)
+            ->setParameter('isStable', $isStable)
             ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.priceUsd', 'c.priceEur')
             ->groupBy('p.coin')
             ->getQuery()->getArrayResult();

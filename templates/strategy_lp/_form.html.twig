@@ -1,0 +1,70 @@
+<div class="container">
+    {{ form_start(form) }}
+    <div class="row mb-2">
+        <div class="col-md-4 align-self-end">
+            {{ form_label(form.dapp, "Dapp") }}
+            {{ form_widget(form.dapp) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.apr, "% APR") }}
+
+            <div class="input-group">
+                {{ form_widget(form.apr, { 'attr': {'placeholder': 'ex: 10.01'} }) }}
+                <span class="input-group-text">%</span>
+            </div>
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.startAt, "Date") }}
+            {{ form_widget(form.startAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 align-self-end">
+            {{ form_label(form.coin1, "Crypto 1") }}
+            {{ form_widget(form.coin1) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.nbCoin1, "Nombre") }}
+            {{ form_widget(form.nbCoin1, { 'attr': {'placeholder': 'ex: 1'} }) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.priceCoin1, "Prix de la crypto") }}
+
+            <div class="input-group">
+                {{ form_widget(form.priceCoin1, { 'attr': {'placeholder': 'ex: 60 000'} }) }}
+                <span class="input-group-text">$</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 align-self-end">
+            {{ form_label(form.coin2, "Crypto 2") }}
+            {{ form_widget(form.coin2) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.nbCoin2, "Nombre") }}
+            {{ form_widget(form.nbCoin2, { 'attr': {'placeholder': 'ex: 60 000'} }) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            {{ form_label(form.priceCoin2, "Prix") }}
+            <div class="input-group">
+                {{ form_widget(form.priceCoin2, { 'attr': {'placeholder': 'ex: 1'} }) }}
+                <span class="input-group-text">$</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 align-self-end">
+            {{ form_label(form.lpDeposit, "Nombre dans la LP (Pas obligatoire)") }}
+            {{ form_widget(form.lpDeposit) }}
+        </div>
+    </div>
+
+    <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
+
+    {{ form_errors(form) }}
+    {{ form_end(form) }}
+</div>

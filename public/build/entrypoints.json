@@ -47,6 +47,13 @@
         "/build/farming_form.003343e3.js"
       ]
     },
+    "lp_form": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/529.2b519d10.js",
+        "/build/lp_form.1cdff70b.js"
+      ]
+    },
     "dca_form": {
       "js": [
         "/build/runtime.e4b160ba.js",

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\StrategyFarming;
 use App\Form\StrategyFarmingType;
 use App\Repository\StrategyFarmingRepository;
+use App\Repository\StrategyLPRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,14 +19,18 @@ class StrategyFarmingController extends AbstractController
     /**
      * @Route("/", name="strategy_farming_index", methods={"GET"})
      */
-    public function index(StrategyFarmingRepository $strategyFarmingRepository): Response
+    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository): Response
     {
         if ($this->getUser()) {
             $strategies = $strategyFarmingRepository->findByStable($this->getUser(), false);
             $strategies_stable = $strategyFarmingRepository->findByStable($this->getUser(), true);
+            $strategies_lp = $strategyLPRepository->findBy([
+                'user' => $this->getUser()
+            ]);
 
             $total_year = 0;
             $total_year_stable = 0;
+            $total_year_lp = 0;
 
             $return_array = [];
             foreach ($strategies as $strategy) {
@@ -51,12 +56,26 @@ class StrategyFarmingController extends AbstractController
                 ];
             }
 
+            $return_array_lp = [];
+            foreach ($strategies_lp as $strategy) {
+                $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
+                $gain_year = $strategy->getApr() * $value_dollar / 100;
+                $total_year_lp += $gain_year;
+                $return_array_lp[] = [
+                    'strategy' => $strategy,
+                    'gain_year' => $gain_year,
+                    'value_dollar' => $value_dollar
+                ];
+            }
+
             return $this->render('strategy_farming/index.html.twig', [
                 'strategy_farmings' => $return_array,
                 'strategy_farmings_stable' => $return_array_stable,
+                'strategy_farmings_lp' => $return_array_lp,
                 'total_year' => $total_year,
                 'total_year_stable' => $total_year_stable,
-                'total_total_year' => $total_year + $total_year_stable
+                'total_year_lp' => $total_year_lp,
+                'total_total_year' => $total_year + $total_year_stable + $total_year_lp
             ]);
         }
 

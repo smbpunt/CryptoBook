@@ -69,12 +69,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $loans;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $strategyLPs;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
         $this->deposits = new ArrayCollection();
         $this->farmingStrategies = new ArrayCollection();
         $this->loans = new ArrayCollection();
+        $this->strategyLPs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,6 +320,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($loan->getUser() === $this) {
                 $loan->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategyLP[]
+     */
+    public function getStrategyLPs(): Collection
+    {
+        return $this->strategyLPs;
+    }
+
+    public function addStrategyLP(StrategyLP $strategyLP): self
+    {
+        if (!$this->strategyLPs->contains($strategyLP)) {
+            $this->strategyLPs[] = $strategyLP;
+            $strategyLP->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategyLP(StrategyLP $strategyLP): self
+    {
+        if ($this->strategyLPs->removeElement($strategyLP)) {
+            // set the owning side to null (unless already changed)
+            if ($strategyLP->getUser() === $this) {
+                $strategyLP->setUser(null);
             }
         }
 

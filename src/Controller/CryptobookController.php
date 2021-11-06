@@ -18,10 +18,13 @@ class CryptobookController extends AbstractController
      */
     public function index(PositionRepository $positionRepository, DepositRepository $depositRepository): Response
     {
-        $positions = $this->getUser() ? $positionRepository->getSumCoinByUser($this->getUser()) : [];
-        $totalDepositEur = $this->getUser() ? $depositRepository->getTotal($this->getUser()) : [];
+        $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
+        $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
+        $totalDepositEur = $depositRepository->getTotal($this->getUser()) ?? 0.0;
         $totalUsd = 0;
         $totalEur = 0;
+        $totalUsdStable = 0;
+        $totalEurStable = 0;
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
             $valueEur = $value['totalsum'] * $value['priceEur'];
@@ -30,6 +33,17 @@ class CryptobookController extends AbstractController
             $positions[$key] = $value;
             $totalUsd += $valueUsd;
             $totalEur += $valueEur;
+        }
+
+
+        foreach ($positions_stable as $key => $value) {
+            $valueUsd = $value['totalsum'] * $value['priceUsd'];
+            $valueEur = $value['totalsum'] * $value['priceEur'];
+//            $value['valueUsd'] = $valueUsd;
+//            $value['valueEur'] = $valueEur;
+            $positions_stable[$key] = $value;
+            $totalUsdStable += $valueUsd;
+            $totalEurStable += $valueEur;
         }
 
         foreach ($positions as $key => $value) {
@@ -44,6 +58,8 @@ class CryptobookController extends AbstractController
             'totalDepositEur' => $totalDepositEur,
             'totalUsd' => $totalUsd,
             'totalEur' => $totalEur,
+            'totalUsdStable' => $totalUsdStable,
+            'totalEurStable' => $totalEurStable,
         ]);
     }
 }

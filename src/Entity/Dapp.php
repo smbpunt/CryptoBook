@@ -40,9 +40,15 @@ class Dapp
      */
     private $farmingStrategies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="dapp", orphanRemoval=true)
+     */
+    private $strategyLPs;
+
     public function __construct()
     {
         $this->farmingStrategies = new ArrayCollection();
+        $this->strategyLPs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,6 +125,36 @@ class Dapp
     public function __toString()
     {
         return "[" . $this->blockchain->getLibelle() . "] " . $this->libelle;
+    }
+
+    /**
+     * @return Collection|StrategyLP[]
+     */
+    public function getStrategyLPs(): Collection
+    {
+        return $this->strategyLPs;
+    }
+
+    public function addStrategyLP(StrategyLP $strategyLP): self
+    {
+        if (!$this->strategyLPs->contains($strategyLP)) {
+            $this->strategyLPs[] = $strategyLP;
+            $strategyLP->setDapp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategyLP(StrategyLP $strategyLP): self
+    {
+        if ($this->strategyLPs->removeElement($strategyLP)) {
+            // set the owning side to null (unless already changed)
+            if ($strategyLP->getDapp() === $this) {
+                $strategyLP->setDapp(null);
+            }
+        }
+
+        return $this;
     }
 
 
