@@ -104,6 +104,11 @@ class Cryptocurrency
      */
     private $strategyLp2s;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $color;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -358,7 +363,7 @@ class Cryptocurrency
     {
         if (!$this->loans->contains($loan)) {
             $this->loans[] = $loan;
-            $loan->setStablecoin($this);
+            $loan->setCoin($this);
         }
 
         return $this;
@@ -368,8 +373,8 @@ class Cryptocurrency
     {
         if ($this->loans->removeElement($loan)) {
             // set the owning side to null (unless already changed)
-            if ($loan->getStablecoin() === $this) {
-                $loan->setStablecoin(null);
+            if ($loan->getCoin() === $this) {
+                $loan->setCoin(null);
             }
         }
 
@@ -432,6 +437,18 @@ class Cryptocurrency
                 $strategyLP->setCoin2(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

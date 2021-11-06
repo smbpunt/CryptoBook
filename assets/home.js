@@ -11,11 +11,15 @@ json_positions.forEach(position => {
     console.log(position);
     labels.push(position.libelle);
     datasets.push(String(position.percent))
-    const r = randomBetween(0, 255);
-    const g = randomBetween(0, 255);
-    const b = randomBetween(0, 255);
-    const rgb = `rgb(${r},${g},${b})`;
-    rgbs.push(rgb);
+    if (position.color) {
+        rgbs.push(position.color)
+    } else {
+        const r = randomBetween(0, 255);
+        const g = randomBetween(0, 255);
+        const b = randomBetween(0, 255);
+        const rgb = `rgb(${r},${g},${b})`;
+        rgbs.push(rgb);
+    }
 })
 
 console.log(datasets);
