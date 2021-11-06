@@ -12,7 +12,7 @@
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th>Bilan</th>
                     <th class="text-end">{{ ratioUsdEur|round(4) }} $</th>
                     <th class="text-end">1 €</th>
                 </tr>
@@ -98,6 +98,11 @@
                 </tbody>
             </table>
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th colspan="3">Wallet Crypto</th>
+                </tr>
+                </thead>
                 <tbody>
                 {% for position in positions %}
                     <tr>
@@ -107,6 +112,40 @@
                     </tr>
                 {% endfor %}
 
+                </tbody>
+            </table>
+
+            {% set totalYearFarmingEur = totalYearFarmingUsd/ratioUsdEur %}
+            <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th>Farming</th>
+                    <th class="text-end">{{ ratioUsdEur|round(4) }} $</th>
+                    <th class="text-end">1 €</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-white">Jour</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/356)|round(0) }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round(0) }} €</td>
+                </tr>
+                <tr>
+                    <td class="text-white">Semaine</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/52)|round(0) }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round(0) }} €</td>
+                </tr>
+                <tr>
+                    {% set totalYearFarmingEur = totalYearFarmingUsd/ratioUsdEur %}
+                    <td class="text-white">Mois</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/12)|round(0) }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round(0) }} €</td>
+                </tr>
+                <tr>
+                    <td class="text-white">Année</td>
+                    <td class="text-white text-end">{{ totalYearFarmingUsd|round(0) }} $</td>
+                    <td class="text-white text-end">{{ totalYearFarmingEur|round(0) }} €</td>
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Repository\DepositRepository;
 use App\Repository\PositionRepository;
+use App\Repository\StrategyFarmingRepository;
+use App\Repository\StrategyLPRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +18,7 @@ class CryptobookController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository): Response
+    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
@@ -58,6 +60,27 @@ class CryptobookController extends AbstractController
 
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
 
+
+        $strategies = $strategyFarmingRepository->findBy([
+            'user' => $this->getUser()
+        ]);
+        $strategies_lp = $strategyLPRepository->findBy([
+            'user' => $this->getUser()
+        ]);
+
+        $totalYearFarming = 0;
+
+        foreach ($strategies as $strategy) {
+            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
+            $totalYearFarming += $strategy->getApr() * $value_dollar / 100;
+        }
+
+        foreach ($strategies_lp as $strategy) {
+            $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
+            $totalYearFarming += $strategy->getApr() * $value_dollar / 100;
+        }
+
+
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
             'positions_stable' => $positions_stable,
@@ -66,6 +89,7 @@ class CryptobookController extends AbstractController
             'totalEur' => $totalEur,
             'totalUsdStable' => $totalUsdStable,
             'totalEurStable' => $totalEurStable,
+            'totalYearFarmingUsd' => $totalYearFarming
         ]);
     }
 }
