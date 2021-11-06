@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-4">
+        <div class="col-3">
 
             {% set ratioUsdEur = totalUsd/totalEur %}
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
@@ -55,7 +55,6 @@
                 </tr> #}
                 </tbody>
             </table>
-
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
                 <tbody>
                 {% for position in positions %}
@@ -68,16 +67,39 @@
 
                 </tbody>
             </table>
-
-
         </div>
-        <div class="col-8">
-            <canvas id="chart-pos"></canvas>
+        <div class="col">
+            <div class="row mb-1">
+                <div class="col-2"></div>
+                <div class="col text-center">
+                    <p>Mes positions</p>
+                    <canvas id="chart-pos"></canvas>
+                </div>
+                <div class="col-2"></div>
+            </div>
+
+            {% if positions_stable|length > 0 %}
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <p>Ratio Crypto/Stable</p>
+                        <canvas id="chart-ratio"></canvas>
+                    </div>
+                    <div class="col-6 text-center">
+                        {% if positions_stable|length > 1 %}
+                            <p>Mes positions stable</p>
+                            <canvas id="chart-stable"></canvas>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 
 
-
-    <div id="id-array-positions" class="visually-hidden" data-pie="{{ positions|json_encode }}">
+    <div id="id-array-positions" class="visually-hidden"
+         data-pie="{{ positions|json_encode }}"
+         data-piestable="{{ positions_stable|json_encode }}"
+         data-crypto="{{ totalUsd }}"
+         data-stable="{{ totalUsdStable }}">
     </div>
 {% endblock %}

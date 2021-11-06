@@ -39,8 +39,8 @@ class CryptobookController extends AbstractController
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
             $valueEur = $value['totalsum'] * $value['priceEur'];
-//            $value['valueUsd'] = $valueUsd;
-//            $value['valueEur'] = $valueEur;
+            $value['valueUsd'] = $valueUsd;
+            $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;
             $totalUsdStable += $valueUsd;
             $totalEurStable += $valueEur;
@@ -51,10 +51,16 @@ class CryptobookController extends AbstractController
             $positions[$key] = $value;
         }
 
+        foreach ($positions_stable as $key => $value) {
+            $value['percent'] = round($value['valueUsd'] * 100 / $totalUsdStable, 2);
+            $positions_stable[$key] = $value;
+        }
+
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
 
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
+            'positions_stable' => $positions_stable,
             'totalDepositEur' => $totalDepositEur,
             'totalUsd' => $totalUsd,
             'totalEur' => $totalEur,
