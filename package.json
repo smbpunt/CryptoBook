@@ -23,6 +23,7 @@
     "dependencies": {
         "chart.js": "^3.5.1",
         "choices.js": "^9.0.1",
+        "flatpickr": "^4.6.9",
         "moment": "^2.29.1",
         "pikaday": "^1.8.2"
     }

@@ -10,41 +10,40 @@ const stableTotal = parseInt(element.dataset.stable);
 
 const json_positions = JSON.parse(positions);
 const json_positions_stable = JSON.parse(positions_stable);
-console.log(json_positions_stable);
+if (json_positions.length > 1) {
+    const labels = [];
+    const datasets = [];
+    const rgbs = [];
+    json_positions.forEach(position => {
+        labels.push(position.libelle);
+        datasets.push(String(position.percent))
+        if (position.color) {
+            rgbs.push(position.color)
+        } else {
+            const r = randomBetween(0, 255);
+            const g = randomBetween(0, 255);
+            const b = randomBetween(0, 255);
+            const rgb = `rgb(${r},${g},${b})`;
+            rgbs.push(rgb);
+        }
+    });
 
-const labels = [];
-const datasets = [];
-const rgbs = [];
-json_positions.forEach(position => {
-    labels.push(position.libelle);
-    datasets.push(String(position.percent))
-    if (position.color) {
-        rgbs.push(position.color)
-    } else {
-        const r = randomBetween(0, 255);
-        const g = randomBetween(0, 255);
-        const b = randomBetween(0, 255);
-        const rgb = `rgb(${r},${g},${b})`;
-        rgbs.push(rgb);
-    }
-});
-
-const data_crypto = {
-    labels: labels,
-    datasets: [{
-        label: 'Mes positions',
-        data: datasets,
-        backgroundColor: rgbs,
-    }]
-};
-console.log(data_crypto);
+    const data_crypto = {
+        labels: labels,
+        datasets: [{
+            label: 'Mes positions',
+            data: datasets,
+            backgroundColor: rgbs,
+        }]
+    };
 
 
-const canvas = document.getElementById('chart-pos').getContext('2d');
-new Chart(canvas, {
-    type: 'pie',
-    data: data_crypto
-});
+    const canvas = document.getElementById('chart-pos').getContext('2d');
+    new Chart(canvas, {
+        type: 'pie',
+        data: data_crypto
+    });
+}
 
 if (stableTotal > 0) {
     const totalStableCrypto = stableTotal + cryptoTotal;

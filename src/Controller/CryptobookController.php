@@ -89,7 +89,8 @@ class CryptobookController extends AbstractController
             'totalEur' => $totalEur,
             'totalUsdStable' => $totalUsdStable,
             'totalEurStable' => $totalEurStable,
-            'totalYearFarmingUsd' => $totalYearFarming
+            'totalYearFarmingUsd' => $totalYearFarming,
+            'ratioUsdEur' => $totalEur > 0 ? $totalUsd / $totalEur : 1.35,
         ]);
     }
 }

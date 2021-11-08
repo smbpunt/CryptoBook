@@ -8,7 +8,6 @@
     <div class="row">
         <div class="col-3">
 
-            {% set ratioUsdEur = totalUsd/totalEur %}
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
@@ -64,7 +63,7 @@
                 </tr>
 
                 <tr>
-                    {% set percent = totalWalletUsd*100/totalDepositUsd-100 %}
+                    {% set percent = totalDepositUsd > 0 ? totalWalletUsd*100/totalDepositUsd-100 : 0 %}
                     <td class="text-white">Résultat %</td>
                     <td colspan="2" class="text-end
                         {% if percent > 0 %}
@@ -150,14 +149,16 @@
             </table>
         </div>
         <div class="col">
-            <div class="row mb-1">
-                <div class="col-2"></div>
-                <div class="col text-center">
-                    <p>Mes positions</p>
-                    <canvas id="chart-pos"></canvas>
+            {% if positions|length > 0 %}
+                <div class="row mb-1">
+                    <div class="col-2"></div>
+                    <div class="col text-center">
+                        <p>Mes positions</p>
+                        <canvas id="chart-pos"></canvas>
+                    </div>
+                    <div class="col-2"></div>
                 </div>
-                <div class="col-2"></div>
-            </div>
+            {% endif %}
 
             {% if positions_stable|length > 0 %}
                 <div class="row">

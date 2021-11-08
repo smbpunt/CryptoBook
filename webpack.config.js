@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('tab', './assets/tab.js')
     .addEntry('select2', './assets/select2.js')
+    .addEntry('datepicker', './assets/date-picker.js')
     .addEntry('home', './assets/home.js')
     .addEntry('position_form', './assets/position/position_form.js')
     .addEntry('farming_form', './assets/farming/form.js')

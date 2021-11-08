@@ -2,6 +2,10 @@
 
 {% block title %}{{ parent() }} - Dépôts{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('datepicker') }}
+{% endblock %}
+
 {% block body %}
     <h1>Modifier dépôt</h1>
 

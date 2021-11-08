@@ -2,18 +2,18 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/811.90ee8671.js",
-        "/build/758.a509f46e.js",
-        "/build/app.cf85335e.js"
+        "/build/app.53d3852b.js"
       ],
       "css": [
-        "/build/app.9f696bdf.css"
+        "/build/945.0e5f52dd.css",
+        "/build/app.384b9810.css"
       ]
     },
     "tab": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/811.90ee8671.js",
         "/build/653.5c1fd8cc.js",
         "/build/tab.993aac11.js"
@@ -21,48 +21,55 @@
     },
     "select2": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/529.2b519d10.js",
         "/build/select2.83668541.js"
       ]
     },
+    "datepicker": {
+      "js": [
+        "/build/runtime.8dfd28cf.js",
+        "/build/527.32cbf647.js",
+        "/build/datepicker.f6645a49.js"
+      ]
+    },
     "home": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/811.90ee8671.js",
         "/build/727.8fcaf27e.js",
-        "/build/home.1b5e3284.js"
+        "/build/home.de9ba819.js"
       ]
     },
     "position_form": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/position_form.3ceb48b8.js"
       ]
     },
     "farming_form": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/529.2b519d10.js",
         "/build/farming_form.003343e3.js"
       ]
     },
     "lp_form": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/529.2b519d10.js",
         "/build/lp_form.1cdff70b.js"
       ]
     },
     "dca_form": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/dca_form.15572dde.js"
       ]
     },
     "collection": {
       "js": [
-        "/build/runtime.e4b160ba.js",
+        "/build/runtime.8dfd28cf.js",
         "/build/811.90ee8671.js",
         "/build/collection.0e80487b.js"
       ]
