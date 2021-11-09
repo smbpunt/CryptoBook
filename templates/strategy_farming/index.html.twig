@@ -35,17 +35,17 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="strategy-tab" data-bs-toggle="tab" data-bs-target="#strategy"
                         type="button"
-                        role="tab" aria-controls="strategy" aria-selected="true">Crypto
+                        role="tab" aria-controls="strategy" aria-selected="true">Crypto ({{ strategy_farmings|length }})
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
-                        role="tab" aria-controls="stable" aria-selected="false">Stable
+                        role="tab" aria-controls="stable" aria-selected="false">Stable ({{ strategy_farmings_stable|length }})
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="lp-tab" data-bs-toggle="tab" data-bs-target="#lp" type="button"
-                        role="tab" aria-controls="lp" aria-selected="false">LP
+                        role="tab" aria-controls="lp" aria-selected="false">LP ({{ strategy_farmings_lp|length }})
                 </button>
             </li>
         </ul>
@@ -67,6 +67,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
                         <th>Coin</th>
@@ -85,6 +86,11 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-white align-middle">
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                {% endif %}
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
@@ -126,6 +132,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
                         <th>Coin</th>
@@ -144,6 +151,11 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-white align-middle">
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                {% endif %}
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
@@ -185,6 +197,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Pair</th>
                         <th>Apr</th>
@@ -203,6 +216,11 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-white align-middle">
+                                {% if strategy_farming['strategy'].dapp is not null %}
+                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                {% endif %}
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}

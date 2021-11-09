@@ -36,6 +36,11 @@ class StrategyLP
     private $dapp;
 
     /**
+     * @var Blockchain
+     */
+    private $blockchain;
+
+    /**
      * @ORM\Column(type="date_immutable", nullable=true)
      */
     private $startAt;
@@ -121,6 +126,21 @@ class StrategyLP
     public function setDapp(?Dapp $dapp): self
     {
         $this->dapp = $dapp;
+
+        return $this;
+    }
+
+    public function getBlockchain(): ?Blockchain
+    {
+        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+            $this->blockchain = $this->dapp->getBlockchain();
+        }
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(?Blockchain $blockchain): self
+    {
+        $this->blockchain = $blockchain;
 
         return $this;
     }

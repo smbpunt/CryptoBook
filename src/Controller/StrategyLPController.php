@@ -24,7 +24,7 @@ class StrategyLPController extends AbstractController
         $form = $this->createForm(StrategyLPType::class, $strategyLP);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($strategyLP);
             $entityManager->flush();
@@ -60,7 +60,7 @@ class StrategyLPController extends AbstractController
         $form = $this->createForm(StrategyLPType::class, $strategyLP);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('strategy_farming_index', [], Response::HTTP_SEE_OTHER);
