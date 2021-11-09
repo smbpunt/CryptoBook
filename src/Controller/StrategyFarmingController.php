@@ -91,7 +91,7 @@ class StrategyFarmingController extends AbstractController
         $form = $this->createForm(StrategyFarmingType::class, $strategyFarming);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($strategyFarming);
             $entityManager->flush();
@@ -131,7 +131,7 @@ class StrategyFarmingController extends AbstractController
         $form = $this->createForm(StrategyFarmingType::class, $strategyFarming);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('strategy_farming_index', [], Response::HTTP_SEE_OTHER);

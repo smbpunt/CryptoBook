@@ -124,7 +124,7 @@ class Dapp
 
     public function __toString()
     {
-        return "[" . $this->blockchain->getLibelle() . "] " . $this->libelle;
+        return $this->libelle;
     }
 
     /**

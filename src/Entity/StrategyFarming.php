@@ -29,6 +29,11 @@ class StrategyFarming
     private $nbCoins;
 
     /**
+     * @var Blockchain
+     */
+    private $blockchain;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="farmingStrategies")
      */
     private $dapp;
@@ -90,6 +95,21 @@ class StrategyFarming
     public function setDapp(?Dapp $dapp): self
     {
         $this->dapp = $dapp;
+
+        return $this;
+    }
+
+    public function getBlockchain(): ?Blockchain
+    {
+        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+            $this->blockchain = $this->dapp->getBlockchain();
+        }
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(?Blockchain $blockchain): self
+    {
+        $this->blockchain = $blockchain;
 
         return $this;
     }

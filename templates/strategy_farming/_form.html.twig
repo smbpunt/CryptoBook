@@ -21,6 +21,10 @@
             </div>
         </div>
         <div class="col-md-4 align-self-end">
+            {{ form_label(form.blockchain, "Blockchain") }}
+            {{ form_widget(form.blockchain) }}
+        </div>
+        <div id="id-dapp" class="col-md-4 align-self-end">
             {{ form_label(form.dapp, "Dapp") }}
             {{ form_widget(form.dapp) }}
         </div>

@@ -36,7 +36,6 @@ const handleRemoveButtons = () => {
 }
 
 const removeFormToCollection = (e) => {
-    console.log(e.currentTarget);
     e.currentTarget.closest('.js-item').remove();
 };
 
