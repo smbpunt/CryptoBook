@@ -1,0 +1,8 @@
+<form method="post" action="{{ path('nft_delete', {'id': nft.id}) }}"
+      onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ nft.id) }}">
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <a href="{{ path('nft_edit', {'id': nft.id}) }}" class="btn btn-outline-light">Modifier</a>
+        <button type="submit" class="btn btn-outline-light">Supprimer</button>
+    </div>
+</form>

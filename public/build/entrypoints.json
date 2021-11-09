@@ -22,8 +22,9 @@
     "select2": {
       "js": [
         "/build/runtime.8dfd28cf.js",
+        "/build/811.90ee8671.js",
         "/build/529.2b519d10.js",
-        "/build/select2.83668541.js"
+        "/build/select2.139576bc.js"
       ]
     },
     "datepicker": {

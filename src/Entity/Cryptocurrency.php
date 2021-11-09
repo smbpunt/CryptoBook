@@ -109,6 +109,11 @@ class Cryptocurrency
      */
     private $color;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="cryptocurrency")
+     */
+    private $nfts;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -117,6 +122,7 @@ class Cryptocurrency
         $this->loans = new ArrayCollection();
         $this->strategyLp1s = new ArrayCollection();
         $this->strategyLp2s = new ArrayCollection();
+        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -449,6 +455,36 @@ class Cryptocurrency
     public function setColor(?string $color): self
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Nft[]
+     */
+    public function getNfts(): Collection
+    {
+        return $this->nfts;
+    }
+
+    public function addNft(Nft $nft): self
+    {
+        if (!$this->nfts->contains($nft)) {
+            $this->nfts[] = $nft;
+            $nft->setCryptocurrency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNft(Nft $nft): self
+    {
+        if ($this->nfts->removeElement($nft)) {
+            // set the owning side to null (unless already changed)
+            if ($nft->getCryptocurrency() === $this) {
+                $nft->setCryptocurrency(null);
+            }
+        }
 
         return $this;
     }

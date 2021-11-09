@@ -74,6 +74,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $strategyLPs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $nfts;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -81,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->farmingStrategies = new ArrayCollection();
         $this->loans = new ArrayCollection();
         $this->strategyLPs = new ArrayCollection();
+        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -350,6 +356,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($strategyLP->getUser() === $this) {
                 $strategyLP->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Nft[]
+     */
+    public function getNfts(): Collection
+    {
+        return $this->nfts;
+    }
+
+    public function addNft(Nft $nft): self
+    {
+        if (!$this->nfts->contains($nft)) {
+            $this->nfts[] = $nft;
+            $nft->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNft(Nft $nft): self
+    {
+        if ($this->nfts->removeElement($nft)) {
+            // set the owning side to null (unless already changed)
+            if ($nft->getUser() === $this) {
+                $nft->setUser(null);
             }
         }
 

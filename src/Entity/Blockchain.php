@@ -35,9 +35,15 @@ class Blockchain
      */
     private $coin;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="blockchain", orphanRemoval=true)
+     */
+    private $nfts;
+
     public function __construct()
     {
         $this->dapps = new ArrayCollection();
+        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +106,36 @@ class Blockchain
     public function setCoin(?Cryptocurrency $coin): self
     {
         $this->coin = $coin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Nft[]
+     */
+    public function getNfts(): Collection
+    {
+        return $this->nfts;
+    }
+
+    public function addNft(Nft $nft): self
+    {
+        if (!$this->nfts->contains($nft)) {
+            $this->nfts[] = $nft;
+            $nft->setBlockchain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNft(Nft $nft): self
+    {
+        if ($this->nfts->removeElement($nft)) {
+            // set the owning side to null (unless already changed)
+            if ($nft->getBlockchain() === $this) {
+                $nft->setBlockchain(null);
+            }
+        }
 
         return $this;
     }
