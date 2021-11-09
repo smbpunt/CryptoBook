@@ -16,20 +16,20 @@
     <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>
-            <th>Déposer le</th>
             <th>Montant</th>
-            <th>Méthode</th>
-            <th>Plateforme</th>
-            <th>actions</th>
+            <th>Déposer le</th>
+            <th>Sur</th>
+            <th>Par</th>
+            <th class="th-actions">actions</th>
         </tr>
         </thead>
         <tbody>
         {% for deposit in deposits %}
             <tr>
-                <td class="text-white align-middle">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
                 <td class="text-white align-middle text-end">{{ deposit.valueEur|round(2) }} €</td>
-                <td class="text-white align-middle">{{ deposit.type }}</td>
+                <td class="text-white align-middle text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
                 <td class="text-white align-middle">{{ deposit.exchange }}</td>
+                <td class="text-white align-middle">{{ deposit.type }}</td>
                 <td class="text-white align-middle text-center">
                     {{ include('deposit/_indexactions_form.html.twig') }}
                 </td>

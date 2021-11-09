@@ -20,15 +20,15 @@
                 <tr>
                     <th>Coin</th>
                     <th>Valeur ($)</th>
-                    <th>actions</th>
+                    <th class="th-actions">actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for loan in loans %}
                     <tr>
                         <td class="text-white align-middle">{{ loan.coin.symbol|upper }}</td>
-                        <td class="text-white align-middle">{{ loan.nbCoins * loan.coin.priceUsd }} $</td>
-                        <td class="text-white align-middle">
+                        <td class="text-white align-middle text-end">{{ loan.nbCoins * loan.coin.priceUsd }} $</td>
+                        <td class="text-white align-middle text-center">
                             {{ include('loan/_indexactions_form.html.twig') }}
                         </td>
                     </tr>

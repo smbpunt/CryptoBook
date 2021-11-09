@@ -114,6 +114,11 @@ class Cryptocurrency
      */
     private $nfts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ProjectMonitoring::class, mappedBy="coin")
+     */
+    private $userProjectMonitorings;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -123,6 +128,7 @@ class Cryptocurrency
         $this->strategyLp1s = new ArrayCollection();
         $this->strategyLp2s = new ArrayCollection();
         $this->nfts = new ArrayCollection();
+        $this->userProjectMonitorings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -483,6 +489,36 @@ class Cryptocurrency
             // set the owning side to null (unless already changed)
             if ($nft->getCryptocurrency() === $this) {
                 $nft->setCryptocurrency(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProjectMonitoring[]
+     */
+    public function getUserProjectMonitorings(): Collection
+    {
+        return $this->userProjectMonitorings;
+    }
+
+    public function addUserProjectMonitoring(ProjectMonitoring $userProjectMonitoring): self
+    {
+        if (!$this->userProjectMonitorings->contains($userProjectMonitoring)) {
+            $this->userProjectMonitorings[] = $userProjectMonitoring;
+            $userProjectMonitoring->setCoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProjectMonitoring(ProjectMonitoring $userProjectMonitoring): self
+    {
+        if ($this->userProjectMonitorings->removeElement($userProjectMonitoring)) {
+            // set the owning side to null (unless already changed)
+            if ($userProjectMonitoring->getCoin() === $this) {
+                $userProjectMonitoring->setCoin(null);
             }
         }
 

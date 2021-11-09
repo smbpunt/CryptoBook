@@ -1,0 +1,74 @@
+{% import _self as formMacros %}
+
+{% macro links_prototype(link) %}
+    <tr class="js-item">
+        <td class="text-center align-middle">
+            <button type="button" class="js-remove btn btn-secondary">-</button>
+        </td>
+        <td class="text-white align-middle">
+            {{ form_widget(link) }}
+        </td>
+    </tr>
+{% endmacro %}
+
+<div class="container">
+    {{ form_start(form) }}
+
+
+    <div class="row">
+        <div class="col-8 ">
+            <div class="row mb-2">
+                <div class="col-4">
+                    {{ form_label(form.libelle, "Nom du projet") }}
+                    {{ form_widget(form.libelle) }}
+                </div>
+                <div class="col-4">
+                    {{ form_label(form.type, "Type de projet") }}
+                    {{ form_widget(form.type) }}
+                </div>
+                <div class="col-4">
+                    {{ form_label(form.coin, "Lié à la cryptomonnaie") }}
+                    {{ form_widget(form.coin) }}
+                </div>
+            </div>
+
+
+            <div class="row mb-2">
+                {{ form_label(form.description, "Description du projet") }}
+                {{ form_widget(form.description, { 'attr': {'rows' : '6' }}) }}
+            </div>
+            <div class="row mb-2">
+                {{ form_label(form.note, "Note perso") }}
+                {{ form_widget(form.note, { 'attr': {'rows' : '6' }}) }}
+            </div>
+
+        </div>
+        <div class="col-4 ">
+
+            <button type="button" class="m-3 add_item_link btn btn-outline-light" data-wrapper="links-wrapper">
+                Ajouter un lien
+            </button>
+            <table class="table table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th class="th-remove-collection" scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody class="links-wrapper"
+                       data-index="{{ form.links|length }}"
+                       data-prototype="{{ formMacros.links_prototype(form.links.vars.prototype)|e('html_attr') }}">
+                {% for link in form.links %}
+                    {{ formMacros.links_prototype(link) }}
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+
+    <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+</div>

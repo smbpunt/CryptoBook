@@ -79,6 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $nfts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ProjectMonitoring::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $projectMonitorings;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -87,6 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->loans = new ArrayCollection();
         $this->strategyLPs = new ArrayCollection();
         $this->nfts = new ArrayCollection();
+        $this->projectMonitorings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -386,6 +392,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($nft->getUser() === $this) {
                 $nft->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProjectMonitoring[]
+     */
+    public function getProjectMonitorings(): Collection
+    {
+        return $this->projectMonitorings;
+    }
+
+    public function addProjectMonitoring(ProjectMonitoring $projectMonitoring): self
+    {
+        if (!$this->projectMonitorings->contains($projectMonitoring)) {
+            $this->projectMonitorings[] = $projectMonitoring;
+            $projectMonitoring->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectMonitoring(ProjectMonitoring $projectMonitoring): self
+    {
+        if ($this->projectMonitorings->removeElement($projectMonitoring)) {
+            // set the owning side to null (unless already changed)
+            if ($projectMonitoring->getUser() === $this) {
+                $projectMonitoring->setUser(null);
             }
         }
 

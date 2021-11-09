@@ -7,6 +7,7 @@ use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
 use App\Entity\DepositType;
 use App\Entity\Exchange;
+use App\Entity\TypeProject;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -39,5 +40,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Exchange', 'fas fa-user', Exchange::class);
         yield MenuItem::linkToCrud('Blockchain', 'fas fa-user', Blockchain::class);
         yield MenuItem::linkToCrud('Dapps', 'fas fa-user', Dapp::class);
+        yield MenuItem::linkToCrud('Type de projet', 'fas fa-user', TypeProject::class);
     }
 }

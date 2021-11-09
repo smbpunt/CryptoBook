@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProjectMonitoring index{% endblock %}
+
+{% block body %}
+
+    <div class="row mb-2">
+        <div class="col">
+            <h1>Mes projets à suivre</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('project_monitoring_new') }}" class="btn btn-warning m-2">Ajouter un projet</a>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped table-responsive-md table-dark">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Crypto</th>
+            <th>Links</th>
+            <th class="th-actions">actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for project_monitoring in project_monitorings %}
+            <tr>
+                <td class="align-middle text-white">{{ project_monitoring.libelle }}</td>
+                <td class="align-middle text-white text-end">{{ project_monitoring.coin ? project_monitoring.coin : '' }}</td>
+                <td>
+                    {% if project_monitoring.links|length > 0 %}
+                        <ul>
+                            {% for link in project_monitoring.links %}
+                                <li><a href="{{ link }}">{{ link }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+                <td class="text-white text-center align-middle">
+                    {{ include('project_monitoring/_indexactions_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -57,6 +57,10 @@ class PositionController extends AbstractController
      */
     public function show(Position $position): Response
     {
+        if ($position->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('position_index');
+        }
+        
         return $this->render('position/show.html.twig', [
             'position' => $position,
         ]);

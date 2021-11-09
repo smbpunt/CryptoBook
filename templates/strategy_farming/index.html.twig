@@ -76,7 +76,7 @@
                         <th>gains /jour</th>
                         <th>gains /mois</th>
                         <th>gains /an</th>
-                        <th>actions</th>
+                        <th class="th-actions">actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -103,7 +103,7 @@
                             <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
                             <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
                             <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
-                            <td class="text-white align-middle">
+                            <td class="text-white align-middle text-center">
                                 {{ include('strategy_farming/_indexactions_form.html.twig') }}
                             </td>
                         </tr>
@@ -141,7 +141,7 @@
                         <th>gains /jour</th>
                         <th>gains /mois</th>
                         <th>gains /an</th>
-                        <th>actions</th>
+                        <th class="th-actions">actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -168,7 +168,7 @@
                             <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
                             <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
                             <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
-                            <td class="text-white align-middle">
+                            <td class="text-white align-middle text-center">
                                 {{ include('strategy_farming/_indexactions_form.html.twig') }}
                             </td>
                         </tr>
@@ -239,7 +239,7 @@
                             <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
                             <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
                             <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
-                            <td class="text-white align-middle">
+                            <td class="text-white align-middle text-center">
                                 {{ include('strategy_lp/_indexactions_form.html.twig') }}
                             </td>
                         </tr>

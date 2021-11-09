@@ -17,10 +17,10 @@
     </div>
 
     {% if nfts_sold|length > 0 %}
-    <div class="row mb-3">
-        <div class="col">Résultat : {{ total_benef|round(2) }} $</div>
-    </div>
-    {
+        <div class="row mb-3">
+            <div class="col">Résultat : {{ total_benef|round(2) }} $</div>
+        </div>
+    {% endif %}
 
     <ul class="nav nav-tabs navbar-dark" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -46,7 +46,7 @@
                     <th>Prix Crypto</th>
                     <th>Crypto</th>
                     <th>Prix Dollar</th>
-                    <th>actions</th>
+                    <th class="th-actions">actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,7 +82,7 @@
                     <th>PriceSoldUsd</th>
                     <th>PercentSaleFees</th>
                     <th>Gains/Pertes</th>
-                    <th>actions</th>
+                    <th class="th-actions">actions</th>
                 </tr>
                 </thead>
                 <tbody>

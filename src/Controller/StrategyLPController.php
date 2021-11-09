@@ -43,6 +43,10 @@ class StrategyLPController extends AbstractController
      */
     public function show(StrategyLP $strategyLP): Response
     {
+        if ($strategyLP->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('strategy_farming_index');
+        }
+        
         return $this->render('strategy_lp/show.html.twig', [
             'strategy_l_p' => $strategyLP,
         ]);

@@ -62,6 +62,10 @@ class DepositController extends AbstractController
      */
     public function show(Deposit $deposit): Response
     {
+        if ($deposit->getUser() !== $this->getUser()) {
+            $this->redirectToRoute('deposit_index');
+        }
+
         return $this->render('deposit/show.html.twig', [
             'deposit' => $deposit,
         ]);
