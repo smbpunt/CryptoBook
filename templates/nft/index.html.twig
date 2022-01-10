@@ -57,7 +57,7 @@
                         <td class="align-middle text-white">{{ nft.num }}</td>
                         <td class="align-middle text-white text-end">{{ nft.priceCrypto }}</td>
                         <td class="align-middle text-white">{{ nft.cryptocurrency.symbol|upper }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceUsd }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
                             {{ include('nft/_indexactions_form.html.twig') }}
                         </td>
@@ -90,11 +90,11 @@
                     <tr>
                         <td class="align-middle text-white text-end">{{ nft['nft'].purchasedOn ? nft['nft'].purchasedOn|date('d/m/Y') : '' }}</td>
                         <td class="align-middle text-white">{{ nft['nft'].collection }}</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].priceUsd }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft['nft'].priceUsd|number_format(0, '.', ' ') }} $</td>
                         <td class="align-middle text-white text-end">{{ nft['nft'].soldOn ? nft['nft'].soldOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].priceSoldUsd }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft['nft'].priceSoldUsd|number_format(0, '.', ' ') }} $</td>
                         <td class="align-middle text-white text-end">{{ nft['nft'].percentSaleFees }} %</td>
-                        <td class="align-middle text-white text-end">{{ nft['benef'] }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft['benef']|number_format(0, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
                             {{ include('nft/_indexactions_sold_form.html.twig') }}
                         </td>

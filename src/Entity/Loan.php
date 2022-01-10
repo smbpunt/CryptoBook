@@ -35,6 +35,21 @@ class Loan
     private $nbCoins;
 
     /**
+     * @var Blockchain
+     */
+    private $blockchain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="loans")
+     */
+    private $dapp;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @param $user
      */
     public function __construct($user)
@@ -79,6 +94,45 @@ class Loan
     public function setNbCoins(float $nbCoins): self
     {
         $this->nbCoins = $nbCoins;
+
+        return $this;
+    }
+
+    public function getBlockchain(): ?Blockchain
+    {
+        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+            $this->blockchain = $this->dapp->getBlockchain();
+        }
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(?Blockchain $blockchain): self
+    {
+        $this->blockchain = $blockchain;
+
+        return $this;
+    }
+
+    public function getDapp(): ?Dapp
+    {
+        return $this->dapp;
+    }
+
+    public function setDapp(?Dapp $dapp): self
+    {
+        $this->dapp = $dapp;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

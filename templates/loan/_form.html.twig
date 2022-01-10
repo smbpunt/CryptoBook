@@ -12,5 +12,25 @@
     </div>
 </div>
 
+
+<div class="row mb-2">
+    <div class="col-md-3 align-self-end">
+        {{ form_label(form.blockchain, "Blockchain") }}
+        {{ form_widget(form.blockchain) }}
+    </div>
+    <div id="id-dapp" class="col-md-3 align-self-end">
+        {{ form_label(form.dapp, "Dapp") }}
+        {{ form_widget(form.dapp) }}
+    </div>
+</div>
+
+<div class="col-6 mb-3">
+    {{ form_label(form.description, 'Description') }}
+    {{ form_widget(form.description, { 'attr': {
+        'placeholder': 'ex: Mon emprunt est sur telle Dapp/Exchange, ou sur la blockchain...',
+        'rows': 3
+    } }) }}
+</div>
+
 <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

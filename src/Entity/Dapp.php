@@ -45,10 +45,16 @@ class Dapp
      */
     private $strategyLPs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="dapp")
+     */
+    private $loans;
+
     public function __construct()
     {
         $this->farmingStrategies = new ArrayCollection();
         $this->strategyLPs = new ArrayCollection();
+        $this->loans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +157,36 @@ class Dapp
             // set the owning side to null (unless already changed)
             if ($strategyLP->getDapp() === $this) {
                 $strategyLP->setDapp(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Loan[]
+     */
+    public function getLoans(): Collection
+    {
+        return $this->loans;
+    }
+
+    public function addLoan(Loan $loan): self
+    {
+        if (!$this->loans->contains($loan)) {
+            $this->loans[] = $loan;
+            $loan->setDapp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLoan(Loan $loan): self
+    {
+        if ($this->loans->removeElement($loan)) {
+            // set the owning side to null (unless already changed)
+            if ($loan->getDapp() === $this) {
+                $loan->setDapp(null);
             }
         }
 

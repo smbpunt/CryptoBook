@@ -20,10 +20,17 @@ class LoanController extends AbstractController
      */
     public function index(LoanRepository $loanRepository): Response
     {
+        $loans = $loanRepository->findBy([
+            'user' => $this->getUser()
+        ]);
+
+        $total = 0;
+        foreach ($loans as $loan) {
+            $total += $loan->getNbCoins() * $loan->getCoin()->getPriceUsd();
+        }
         return $this->render('loan/index.html.twig', [
-            'loans' => $loanRepository->findBy([
-                'user' => $this->getUser()
-            ]),
+            'loans' => $loans,
+            'total' => $total
         ]);
     }
 
@@ -36,7 +43,7 @@ class LoanController extends AbstractController
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($loan);
             $entityManager->flush();
@@ -65,6 +72,16 @@ class LoanController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/infos", name="loan-infos-ajax", methods={"POST"})
+     */
+    public function ajaxStrategy(Request $request, Loan $loan): Response
+    {
+        return $this->render('loan/_informations.html.twig', [
+            'loan' => $loan,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="loan_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Loan $loan): Response
@@ -76,7 +93,7 @@ class LoanController extends AbstractController
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('loan_index', [], Response::HTTP_SEE_OTHER);
@@ -97,7 +114,7 @@ class LoanController extends AbstractController
             $this->redirectToRoute('loan_index');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$loan->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $loan->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($loan);
             $entityManager->flush();

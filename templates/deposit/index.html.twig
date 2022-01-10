@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <p>Total : {{ totalEur }} €</p>
+    <p>Total : {{ totalEur|number_format(0, '.', ' ') }} €</p>
     <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>
@@ -26,7 +26,7 @@
         <tbody>
         {% for deposit in deposits %}
             <tr>
-                <td class="text-white align-middle text-end">{{ deposit.valueEur|round(2) }} €</td>
+                <td class="text-white align-middle text-end">{{ deposit.valueEur|round|number_format(0, '.', ' ') }} €</td>
                 <td class="text-white align-middle text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
                 <td class="text-white align-middle">{{ deposit.exchange }}</td>
                 <td class="text-white align-middle">{{ deposit.type }}</td>

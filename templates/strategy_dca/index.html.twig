@@ -28,15 +28,15 @@
                     <tbody>
                     <tr>
                         <td class="text-white">FIAT</td>
-                        <td class="text-white text-end">{{ dca.fiatToDcaEur }}€</td>
+                        <td class="text-white text-end">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</td>
                     </tr>
                     <tr>
                         <td class="text-white">Farming</td>
-                        <td class="text-white text-end">{{ dca.farmingToDcaUsd }} $</td>
+                        <td class="text-white text-end">{{ dca.farmingToDcaUsd|number_format(2, '.', ' ') }} $</td>
                     </tr>
                     <tr>
                         <td class="text-white">Total</td>
-                        <td class="text-white text-end">~ {{ totaltousd|round(2) }} $</td>
+                        <td class="text-white text-end">~ {{ totaltousd|round(2)|number_format(2, '.', ' ') }} $</td>
                     </tr>
                     </tbody>
                 </table>
@@ -59,7 +59,7 @@
                 <tr>
                     <td class="text-white">{{ part.coin.symbol|upper }}</td>
                     <td class="text-white text-end">{{ part.percent }} %</td>
-                    <td class="text-white text-end">{{ (totaltousd * part.percent /100)|round(2) }} $</td>
+                    <td class="text-white text-end">{{ (totaltousd * part.percent /100)|round(2)|number_format(2, '.', ' ') }} $</td>
                     <td class="text-white text-end">{{ ((totaltousd * part.percent /100)/part.coin.priceUsd)|round(6) }}</td>
                 </tr>
             {% else %}

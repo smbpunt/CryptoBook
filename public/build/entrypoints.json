@@ -64,11 +64,25 @@
         "/build/position_index.d8381d24.js"
       ]
     },
+    "loan_index": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/loan_index.9df6bf39.js"
+      ]
+    },
     "farming_form": {
       "js": [
         "/build/runtime.e4b160ba.js",
         "/build/529.2b519d10.js",
         "/build/farming_form.7ab61bd1.js"
+      ]
+    },
+    "loan_form": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/529.2b519d10.js",
+        "/build/loan_form.2bdb4183.js"
       ]
     },
     "lp_form": {

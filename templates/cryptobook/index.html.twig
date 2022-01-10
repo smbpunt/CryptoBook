@@ -20,25 +20,25 @@
                 <tr>
                     <td class="text-white">Investi</td>
                     {% set totalDepositUsd = totalDepositEur*ratioUsdEur %}
-                    <td class="text-white text-end">{{ totalDepositUsd|round(0) }} $</td>
-                    <td class="text-white text-end">{{ totalDepositEur|round(0) }} €</td>
+                    <td class="text-white text-end">{{ totalDepositUsd|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ totalDepositEur|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Wallet crypto</td>
-                    <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
-                    <td class="text-white text-end">{{ totalEur|round(0) }} €</td>
+                    <td class="text-white text-end">{{ totalUsd|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ totalEur|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Wallet stable</td>
-                    <td class="text-white text-end">{{ totalUsdStable|round(0) }} $</td>
-                    <td class="text-white text-end">{{ totalEurStable|round(0) }} €</td>
+                    <td class="text-white text-end">{{ totalUsdStable|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ totalEurStable|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Total</td>
                     {% set totalWalletUsd = totalUsd+totalUsdStable %}
                     {% set totalWalletEur = totalEur+totalEurStable %}
-                    <td class="text-white text-end">{{ totalWalletUsd|round(0) }} $</td>
-                    <td class="text-white text-end">{{ totalWalletEur|round(0) }} €</td>
+                    <td class="text-white text-end">{{ totalWalletUsd|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ totalWalletEur|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Résultat</td>
@@ -49,7 +49,7 @@
                             text-warning
                         {% endif %}"
                     >
-                        {{ (totalWalletUsd-totalDepositUsd)|round(0) }}$
+                        {{ (totalWalletUsd-totalDepositUsd)|round|number_format(0, '.', ' ') }}$
                     </td>
                     <td class="text-end
                         {% if (totalWalletEur-totalDepositEur) > 0 %}
@@ -58,7 +58,7 @@
                             text-warning
                         {% endif %}"
                     >
-                        {{ (totalWalletEur-totalDepositEur)|round(0) }} €
+                        {{ (totalWalletEur-totalDepositEur)|round|number_format(0, '.', ' ') }} €
                     </td>
                 </tr>
 
@@ -72,28 +72,9 @@
                             text-warning
                         {% endif %}"
                     >
-                        {{ (percent)|round(0) }} %
+                        {{ (percent)|round|number_format(0, '.', ' ') }} %
                     </td>
                 </tr>
-
-
-                {# <tr>
-                    <td class="text-white">Farming Crypto</td>
-                    <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
-                    <td class="text-white text-end">€</td>
-                </tr>
-                <tr>
-                    <td class="text-white">Farming Stable</td>
-                    <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
-                    <td class="text-white text-end">€</td>
-                </tr>
-                <tr>
-                    <td class="text-white">Emprunt</td>
-                    <td class="text-white text-end">{{ totalUsd|round(0) }} $</td>
-                    <td class="text-white text-end">€</td>
-                </tr> #}
-
-
                 </tbody>
             </table>
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
@@ -105,9 +86,9 @@
                 <tbody>
                 {% for position in positions %}
                     <tr>
-                        <td class="text-white text-end">{{ position.totalsum|round(2) }}</td>
+                        <td class="text-white text-end">{{ position.totalsum|round(2)|number_format(2, '.', ' ') }}</td>
                         <td class="text-white">{{ position.symbol|upper }}</td>
-                        <td class="text-white text-end">{{ position.valueUsd|round(2) }}$</td>
+                        <td class="text-white text-end">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }}$</td>
                     </tr>
                 {% endfor %}
 
@@ -126,24 +107,24 @@
                 <tbody>
                 <tr>
                     <td class="text-white">Jour</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingUsd/356)|round(0) }} $</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round(0) }} €</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/356)|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Semaine</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingUsd/52)|round(0) }} $</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round(0) }} €</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/52)|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     {% set totalYearFarmingEur = totalYearFarmingUsd/ratioUsdEur %}
                     <td class="text-white">Mois</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingUsd/12)|round(0) }} $</td>
-                    <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round(0) }} €</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingUsd/12)|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 <tr>
                     <td class="text-white">Année</td>
-                    <td class="text-white text-end">{{ totalYearFarmingUsd|round(0) }} $</td>
-                    <td class="text-white text-end">{{ totalYearFarmingEur|round(0) }} €</td>
+                    <td class="text-white text-end">{{ totalYearFarmingUsd|round|number_format(0, '.', ' ') }} $</td>
+                    <td class="text-white text-end">{{ totalYearFarmingEur|round|number_format(0, '.', ' ') }} €</td>
                 </tr>
                 </tbody>
             </table>

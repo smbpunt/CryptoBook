@@ -25,10 +25,10 @@
 
 
         <div class="row mb-3">
-            <div class="col">Jour : {{ total_total_day|round(2) }} $</div>
-            <div class="col">Semaine : {{ total_total_week|round(2) }} $</div>
-            <div class="col">Mois : {{ total_total_month|round(2) }} $</div>
-            <div class="col">année : {{ total_total_year|round(2) }} $</div>
+            <div class="col">Jour : {{ total_total_day|round(2)|number_format(0, '.', ' ') }} $</div>
+            <div class="col">Semaine : {{ total_total_week|round(2)|number_format(0, '.', ' ') }} $</div>
+            <div class="col">Mois : {{ total_total_month|round(2)|number_format(0, '.', ' ') }} $</div>
+            <div class="col">année : {{ total_total_year|round(2)|number_format(0, '.', ' ') }} $</div>
         </div>
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -58,10 +58,10 @@
 
 
                 <div class="row m-2">
-                    <div class="col">Jour : {{ total_day|round(2) }} $</div>
-                    <div class="col">Semaine : {{ total_week|round(2) }} $</div>
-                    <div class="col">Mois : {{ total_month|round(2) }} $</div>
-                    <div class="col">année : {{ total_year|round(2) }} $</div>
+                    <div class="col">Jour : {{ total_day|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">Semaine : {{ total_week|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">Mois : {{ total_month|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">année : {{ total_year|round(2)|number_format(0, '.', ' ') }} $</div>
                 </div>
 
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
@@ -96,13 +96,15 @@
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
                             <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle">{{ strategy_farming['value_dollar'] }} $</td>
-                            <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar'] }} $</td>
+                            <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                                $
+                            </td>
                             <td class="text-white align-middle text-center">
                                 {{ include('strategy_farming/_indexactions_form.html.twig') }}
                             </td>
@@ -123,10 +125,10 @@
                 {% set total_month_stable = total_year_stable / 12 %}
 
                 <div class="row m-2">
-                    <div class="col">Jour : {{ total_day_stable|round(2) }} $</div>
-                    <div class="col">Semaine : {{ total_week_stable|round(2) }} $</div>
-                    <div class="col">Mois : {{ total_month_stable|round(2) }} $</div>
-                    <div class="col">année : {{ total_year_stable|round(2) }} $</div>
+                    <div class="col">Jour : {{ total_day_stable|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">Semaine : {{ total_week_stable|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">Mois : {{ total_month_stable|round(2)|number_format(0, '.', ' ') }} $</div>
+                    <div class="col">année : {{ total_year_stable|round(2)|number_format(0, '.', ' ') }} $</div>
                 </div>
 
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
@@ -161,13 +163,15 @@
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].nbCoins }}</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
                             <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle">{{ strategy_farming['value_dollar'] }} $</td>
-                            <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar'] }} $</td>
+                            <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                                $
+                            </td>
                             <td class="text-white align-middle text-center">
                                 {{ include('strategy_farming/_indexactions_form.html.twig') }}
                             </td>
@@ -229,16 +233,21 @@
                             <td class="text-white align-middle">
                                 {{ strategy_farming['strategy'].coin1.symbol|upper }}/{{ strategy_farming['strategy'].coin2.symbol|upper }}
                             </td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle">
-                                {{ strategy_farming['strategy'].priceCoin1*strategy_farming['strategy'].nbCoin1
+                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle text-end">
+                                {{ (strategy_farming['strategy'].priceCoin1*strategy_farming['strategy'].nbCoin1
                                 +
-                                strategy_farming['strategy'].priceCoin2*strategy_farming['strategy'].nbCoin2 }} $
+                                strategy_farming['strategy'].priceCoin2*strategy_farming['strategy'].nbCoin2)|number_format(2, '.', ' ') }}
+                                $
                             </td>
-                            <td class="text-white align-middle">{{ strategy_farming['value_dollar'] }} $</td>
-                            <td class="text-white align-middle">{{ gain_day|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ gain_month|round(2) }} $</td>
-                            <td class="text-white align-middle">{{ strategy_farming['gain_year']|round(2) }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar']|number_format(2, '.', ' ') }}
+                                $
+                            </td>
+                            <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                                $
+                            </td>
                             <td class="text-white align-middle text-center">
                                 {{ include('strategy_lp/_indexactions_form.html.twig') }}
                             </td>
