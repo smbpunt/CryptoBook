@@ -60,7 +60,7 @@ class PositionController extends AbstractController
         if ($position->getUser() !== $this->getUser()) {
             $this->redirectToRoute('position_index');
         }
-        
+
         return $this->render('position/show.html.twig', [
             'position' => $position,
         ]);
@@ -87,6 +87,17 @@ class PositionController extends AbstractController
         return $this->renderForm('position/edit.html.twig', [
             'position' => $position,
             'form' => $form,
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}/infos", name="position-infos-ajax", methods={"POST"})
+     */
+    public function ajaxStrategy(Request $request, Position $position): Response
+    {
+        return $this->render('position/_strategy_position.html.twig', [
+            'position' => $position,
         ]);
     }
 

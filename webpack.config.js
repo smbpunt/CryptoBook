@@ -22,10 +22,12 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('tab', './assets/tab.js')
+    .addEntry('tooltip', './assets/tooltip.js')
     .addEntry('select2', './assets/select2.js')
     .addEntry('datepicker', './assets/date-picker.js')
     .addEntry('home', './assets/home.js')
     .addEntry('position_form', './assets/position/position_form.js')
+    .addEntry('position_index', './assets/position/index.js')
     .addEntry('farming_form', './assets/farming/form.js')
     .addEntry('lp_form', './assets/lp/form.js')
     .addEntry('dca_form', './assets/dca/dca_form.js')

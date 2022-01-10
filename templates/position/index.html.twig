@@ -4,6 +4,8 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('tab') }}
+    {{ encore_entry_script_tags('position_index') }}
+    {{ encore_entry_script_tags('tooltip') }}
 {% endblock %}
 
 {% block body %}
@@ -43,6 +45,7 @@
                 <tr>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>Ouvert le</th>
                     <th>Nombre actuel/départ</th>
                     <th>Coût d'entrée</th>
@@ -54,6 +57,12 @@
                 <tbody>
                 {% for position in positions %}
                     <tr>
+                        <td class="text-center align-middle">
+                            <button id="btn-{{ position.id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                    data-id="{{ position.id }}" data-ajax="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                +
+                            </button>
+                        </td>
                         <td class="text-white text-center align-middle">
                             <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
                         </td>

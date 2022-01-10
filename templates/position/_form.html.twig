@@ -62,7 +62,10 @@
             {{ form_widget(form.nbCoins, { 'attr': {'placeholder': 'ex: 0.1'} }) }}
         </div>
         <div class="col-md-3 align-self-end">
-            {{ form_label(form.entryCost, 'Coût ($)') }}
+            <i class="bi bi-info-circle-fill" role="img" aria-label="" data-bs-toggle="tooltip"
+               title="Coût total payé (Pas le coût du coin)"></i>
+            {{ form_label(form.entryCost, 'Coût total ($)') }}
+
             <div class="input-group">
                 {{ form_widget(form.entryCost, { 'attr': {'placeholder': 'ex: 150'} }) }}
                 <span class="input-group-text">$</span>
@@ -70,9 +73,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2  align-self-end">
+        <div class="col-md-2 align-self-end">
             {{ form_row(form.isOpened) }}
         </div>
+    </div>
+
+    <div class="col-6 mb-3">
+        {{ form_label(form.description, 'Description') }}
+        {{ form_widget(form.description, { 'attr': {
+            'placeholder': 'ex: Ma position est sur telle Dapp/Exchange, ou sur la blockchain...',
+            'rows': 3
+        } }) }}
     </div>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">

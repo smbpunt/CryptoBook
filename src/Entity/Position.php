@@ -68,12 +68,18 @@ class Position
      */
     private $remainingCoins;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
     public function __construct($user)
     {
         $this->user = $user;
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
         $this->remainingCoins = 0;
+        $this->description = "";
     }
 
     public function getId(): ?int
@@ -234,6 +240,18 @@ class Position
     public function setRemainingCoins(float $remainingCoins): self
     {
         $this->remainingCoins = $remainingCoins;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

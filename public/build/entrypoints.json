@@ -2,77 +2,93 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
-        "/build/811.90ee8671.js",
-        "/build/app.53d3852b.js"
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/702.42ec319a.js",
+        "/build/app.95cdf759.js"
       ],
       "css": [
-        "/build/945.0e5f52dd.css",
+        "/build/702.2a65b998.css",
         "/build/app.6f139c8d.css"
       ]
     },
     "tab": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
-        "/build/811.90ee8671.js",
-        "/build/653.5c1fd8cc.js",
-        "/build/tab.993aac11.js"
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/692.17dec864.js",
+        "/build/tab.63a8f120.js"
+      ]
+    },
+    "tooltip": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/692.17dec864.js",
+        "/build/tooltip.6d739230.js"
       ]
     },
     "select2": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
-        "/build/811.90ee8671.js",
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
         "/build/529.2b519d10.js",
-        "/build/select2.139576bc.js"
+        "/build/select2.f45aa261.js"
       ]
     },
     "datepicker": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
+        "/build/runtime.e4b160ba.js",
         "/build/527.32cbf647.js",
         "/build/datepicker.f6645a49.js"
       ]
     },
     "home": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
-        "/build/811.90ee8671.js",
-        "/build/727.8fcaf27e.js",
-        "/build/home.de9ba819.js"
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/727.29751ebe.js",
+        "/build/home.30de14db.js"
       ]
     },
     "position_form": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
+        "/build/runtime.e4b160ba.js",
         "/build/position_form.3ceb48b8.js"
+      ]
+    },
+    "position_index": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/position_index.d8381d24.js"
       ]
     },
     "farming_form": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
+        "/build/runtime.e4b160ba.js",
         "/build/529.2b519d10.js",
         "/build/farming_form.7ab61bd1.js"
       ]
     },
     "lp_form": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
+        "/build/runtime.e4b160ba.js",
         "/build/529.2b519d10.js",
         "/build/lp_form.8b98666f.js"
       ]
     },
     "dca_form": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
+        "/build/runtime.e4b160ba.js",
         "/build/dca_form.15572dde.js"
       ]
     },
     "collection": {
       "js": [
-        "/build/runtime.8dfd28cf.js",
-        "/build/811.90ee8671.js",
-        "/build/collection.ff8d5f74.js"
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/collection.2b54c7cf.js"
       ]
     }
   }

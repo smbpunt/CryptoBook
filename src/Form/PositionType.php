@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -37,6 +38,9 @@ class PositionType extends AbstractType
             ])
             ->add('entryCost', NumberType::class, [
                 'required' => true
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false
             ])
             ->add('coin', EntityType::class, [
                 'class' => Cryptocurrency::class,
