@@ -52,16 +52,16 @@
 
     <div class="row mb-2">
         <div class="col-md-2 align-self-end">
+            {{ form_label(form.startAt, "Date d\'entrée") }}
+            {{ form_widget(form.startAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
+        </div>
+        <div class="col-md-2 align-self-end">
             {{ form_label(form.apr, "% APR") }}
 
             <div class="input-group">
                 {{ form_widget(form.apr, { 'attr': {'placeholder': 'ex: 10.01'} }) }}
                 <span class="input-group-text">%</span>
             </div>
-        </div>
-        <div class="col-md-2 align-self-end">
-            {{ form_label(form.startAt, "Date") }}
-            {{ form_widget(form.startAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
         </div>
         <div class="col-md-4 align-self-end">
             {{ form_label(form.lpDeposit, "Nombre dans la LP (Pas obligatoire)") }}

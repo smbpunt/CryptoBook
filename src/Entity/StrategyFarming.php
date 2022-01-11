@@ -50,6 +50,11 @@ class StrategyFarming
     private $user;
 
     /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $enteredAt;
+
+    /**
      * @param $user
      */
     public function __construct($user)
@@ -134,6 +139,18 @@ class StrategyFarming
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEnteredAt(): ?\DateTimeImmutable
+    {
+        return $this->enteredAt;
+    }
+
+    public function setEnteredAt(?\DateTimeImmutable $enteredAt): self
+    {
+        $this->enteredAt = $enteredAt;
 
         return $this;
     }
