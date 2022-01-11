@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ProjectMonitoring{% endblock %}
+{% block title %}{{ parent() }} - Suivi Projet{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('select2') }}
@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create new ProjectMonitoring</h1>
+    <h1>Ajout d'un projet</h1>
 
-    {{ include('project_monitoring/_form.html.twig') }}
+    {{ include('project_monitoring/_form.html.twig', {'button_label': 'Ajouter'}) }}
 {% endblock %}

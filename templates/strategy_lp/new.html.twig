@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New StrategyLP{% endblock %}
+{% block title %}{{ parent() }} - LP{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('lp_form') }}

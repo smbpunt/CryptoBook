@@ -9,5 +9,5 @@
 {% block body %}
     <h1>Ajouter un dépôt</h1>
 
-    {{ include('deposit/_form.html.twig') }}
+    {{ include('deposit/_form.html.twig', {'button_label': 'Ajouter'}) }}
 {% endblock %}
