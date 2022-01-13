@@ -109,9 +109,9 @@
                                                                              alt="Logo {{ position.coin.libelle }}"></td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
                         <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(0, '.', ' ') }}</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(0, '.', ' ') }} $</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(0, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(2, '.', ' ') }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>
@@ -148,9 +148,9 @@
                         </td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
                         <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(0, '.', ' ') }}</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(0, '.', ' ') }} $</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(0, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(2, '.', ' ') }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
                         </td>
