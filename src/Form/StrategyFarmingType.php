@@ -8,6 +8,7 @@ use App\Entity\StrategyFarming;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -28,6 +29,9 @@ class StrategyFarmingType extends AbstractType
                 'input' => 'datetime_immutable',
             ])
             ->add('nbCoins')
+            ->add('description', TextareaType::class, [
+                'required' => false
+            ])
             ->add('apr')
             ->add('coin')
             ->add('blockchain', EntityType::class, [

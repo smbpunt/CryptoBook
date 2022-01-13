@@ -55,6 +55,11 @@ class StrategyFarming
     private $enteredAt;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @param $user
      */
     public function __construct($user)
@@ -151,6 +156,18 @@ class StrategyFarming
     public function setEnteredAt(?\DateTimeImmutable $enteredAt): self
     {
         $this->enteredAt = $enteredAt;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

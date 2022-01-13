@@ -21,7 +21,7 @@ const handleButtons = (e) => {
                 const trChild = document.createElement('tr');
                 trChild.id = 'info' + id;
                 const tdChild = document.createElement('td');
-                tdChild.colSpan = 9;
+                tdChild.colSpan = 20;
                 tdChild.innerHTML = this.response;
                 trChild.appendChild(tdChild);
                 tr.after(trChild);

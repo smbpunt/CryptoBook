@@ -69,7 +69,12 @@
         </div>
     </div>
 
-    <div class="row mb-2">
+    <div class="col-8 mb-3">
+        {{ form_label(form.description, 'Description') }}
+        {{ form_widget(form.description, { 'attr': {
+            'placeholder': 'ex: Farming sur telle Dapp/Exchange, avec yield optimizer untel...',
+            'rows': 3
+        } }) }}
     </div>
 
     <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>

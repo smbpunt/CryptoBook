@@ -105,6 +105,17 @@ class StrategyFarmingController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/{id}/infos", name="farming-infos-ajax", methods={"POST"})
+     */
+    public function ajaxStrategy(Request $request, StrategyFarming $strategyFarming): Response
+    {
+        return $this->render('strategy_farming/_informations.twig', [
+            'entity' => $strategyFarming,
+        ]);
+    }
+
     /**
      * @Route("/{id}", name="strategy_farming_show", methods={"GET"})
      */

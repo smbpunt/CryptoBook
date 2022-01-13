@@ -38,6 +38,17 @@ class StrategyLPController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/{id}/infos", name="farminglp-infos-ajax", methods={"POST"})
+     */
+    public function ajaxStrategy(Request $request, StrategyLP $strategyLP): Response
+    {
+        return $this->render('strategy_lp/_informations.twig', [
+            'entity' => $strategyLP,
+        ]);
+    }
+
     /**
      * @Route("/{id}", name="strategy_l_p_show", methods={"GET"})
      */
@@ -46,7 +57,7 @@ class StrategyLPController extends AbstractController
         if ($strategyLP->getUser() !== $this->getUser()) {
             return $this->redirectToRoute('strategy_farming_index');
         }
-        
+
         return $this->render('strategy_lp/show.html.twig', [
             'strategy_l_p' => $strategyLP,
         ]);

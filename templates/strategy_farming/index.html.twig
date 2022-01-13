@@ -4,6 +4,7 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('tab') }}
+    {{ encore_entry_script_tags('position_index') }}
 {% endblock %}
 
 {% block body %}
@@ -67,6 +68,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
@@ -86,6 +88,13 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-center align-middle">
+                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-ajax="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    +
+                                </button>
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}
@@ -134,6 +143,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
@@ -153,6 +163,13 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-center align-middle">
+                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-ajax="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    +
+                                </button>
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}
@@ -201,6 +218,7 @@
                 <table class="table table-bordered table-striped table-responsive-md table-dark">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Pair</th>
@@ -220,6 +238,13 @@
                         {% set gain_month = strategy_farming['gain_year'] / 12 %}
 
                         <tr>
+                            <td class="text-center align-middle">
+                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-ajax="{{ path('farminglp-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    +
+                                </button>
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}

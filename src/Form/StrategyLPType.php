@@ -9,6 +9,7 @@ use App\Entity\StrategyLP;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -27,6 +28,9 @@ class StrategyLPType extends AbstractType
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
                 'input' => 'datetime_immutable',
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false
             ])
             ->add('priceCoin1')
             ->add('priceCoin2')
