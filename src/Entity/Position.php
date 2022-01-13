@@ -75,6 +75,7 @@ class Position
 
     public function __construct($user)
     {
+        $this->isOpened = true;
         $this->user = $user;
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();

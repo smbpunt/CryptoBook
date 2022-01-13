@@ -95,6 +95,7 @@
                 <tr>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>Ouvert le</th>
                     <th>Nombre achetés</th>
                     <th>Coût</th>
@@ -105,6 +106,12 @@
                 <tbody>
                 {% for position in positions_stable %}
                     <tr>
+                        <td class="text-center align-middle">
+                            <button id="btn-{{ position.id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                    data-id="{{ position.id }}" data-ajax="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                +
+                            </button>
+                        </td>
                         <td class="text-white align-middle text-center"><img src="{{ position.coin.urlImgThumb }}"
                                                                              alt="Logo {{ position.coin.libelle }}"></td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
@@ -133,6 +140,7 @@
                 <tr>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>Ouvert le</th>
                     <th>Nombre</th>
                     <th>Coût d'entrée</th>
@@ -143,6 +151,12 @@
                 <tbody>
                 {% for position in positions_closed %}
                     <tr>
+                        <td class="text-center align-middle">
+                            <button id="btn-{{ position.id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                    data-id="{{ position.id }}" data-ajax="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                +
+                            </button>
+                        </td>
                         <td class="text-white text-center align-middle">
                             <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
                         </td>
