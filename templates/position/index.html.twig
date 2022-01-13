@@ -51,11 +51,18 @@
                     <th>Coût d'entrée</th>
                     <th>Prix d'entrée</th>
                     <th>Valeur actuelle</th>
+                    <th>Évolution %</th>
                     <th class="th-actions">actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for position in positions %}
+                    {% set va = position.remainingCoins*position.coin.priceUsd %}
+                    {% if position.entryCost > 0 %}
+                        {% set percentEvolution = ((va - position.entryCost)/position.entryCost)*100 %}
+                    {% else %}
+                        {% set percentEvolution = 9999 %}
+                    {% endif %}
                     <tr>
                         <td class="text-center align-middle">
                             <button id="btn-{{ position.id }}" type="button" class="btn btn-xs btn-light infos_pos"
@@ -71,8 +78,16 @@
                         <td class="text-white align-middle text-end">{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
                         <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
-                        <td class="text-white align-middle text-end">{{ (position.remainingCoins*position.coin.priceUsd)|round(2)|number_format(2, '.', ' ') }}
+                        <td class="text-white align-middle text-end">{{ va|round(2)|number_format(2, '.', ' ') }}
                             $
+                        </td>
+                        <td class="align-middle text-end
+                        {% if percentEvolution > 0 %}
+                            text-success
+                        {% else %}
+                            text-warning
+                        {% endif %}">
+                            {{ percentEvolution|number_format(0, '.', ' ') }} %
                         </td>
                         <td class="text-white text-center align-middle">
                             {{ include('position/_indexactions_form.html.twig') }}
