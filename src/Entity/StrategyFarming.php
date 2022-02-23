@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=StrategyFarmingRepository::class)
+ * @ApiResource(
+ *     normalizationContext={"groups"={"farming_read"}}
+ * )
  */
 class StrategyFarming
 {
@@ -14,17 +20,22 @@ class StrategyFarming
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"farming_read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="farmingStrategies")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank (message="La cryptomonnaie est obligatoire.")
+     * @Assert\NotNull (message="La cryptomonnaie est obligatoire.")
+     * @Groups({"farming_read"})
      */
     private $coin;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank (message="Le nombre de coins est obligatoire.")
      */
     private $nbCoins;
 
@@ -35,11 +46,14 @@ class StrategyFarming
 
     /**
      * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="farmingStrategies")
+     * @Assert\NotBlank (message="La dapp est obligatoire. Si votre dapp n'est pas disponible, veuillez contacter les admins.")
+     * @Assert\NotNull (message="La dapp est obligatoire. Si votre dapp n'est pas disponible, veuillez contacter les admins.")
      */
     private $dapp;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank (message="L'APR est obligatoire.")
      */
     private $apr;
 
@@ -58,15 +72,6 @@ class StrategyFarming
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
-
-    /**
-     * @param $user
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-    }
-
 
     public function getId(): ?int
     {
@@ -90,7 +95,7 @@ class StrategyFarming
         return $this->nbCoins;
     }
 
-    public function setNbCoins(float $nbCoins): self
+    public function setNbCoins($nbCoins): self
     {
         $this->nbCoins = $nbCoins;
 
@@ -129,7 +134,7 @@ class StrategyFarming
         return $this->apr;
     }
 
-    public function setApr(float $apr): self
+    public function setApr($apr): self
     {
         $this->apr = $apr;
 
@@ -153,7 +158,7 @@ class StrategyFarming
         return $this->enteredAt;
     }
 
-    public function setEnteredAt(?\DateTimeImmutable $enteredAt): self
+    public function setEnteredAt($enteredAt): self
     {
         $this->enteredAt = $enteredAt;
 

@@ -62,9 +62,6 @@ class CryptocurrencyService
                         if (array_key_exists('usd', $datas['market_data']['current_price'])) {
                             $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
                         }
-                        if (array_key_exists('eur', $datas['market_data']['current_price'])) {
-                            $cryptocurrency->setPriceEur($datas['market_data']['current_price']['eur']);
-                        }
                     }
 
                     //Mets à jour le libelle
@@ -95,9 +92,6 @@ class CryptocurrencyService
                         if (array_key_exists('usd', $datas['market_data']['market_cap'])) {
                             $cryptocurrency->setMcapUsd($datas['market_data']['market_cap']['usd']);
                         }
-                        if (array_key_exists('eur', $datas['market_data']['market_cap'])) {
-                            $cryptocurrency->setMcapEur($datas['market_data']['market_cap']['eur']);
-                        }
                     }
                 }
             }
@@ -119,7 +113,7 @@ class CryptocurrencyService
         }, $cryptos);
         $string = implode(',', $libelles);
         try {
-            $prices = $this->client->simple()->getPrice($string, 'usd,eur');
+            $prices = $this->client->simple()->getPrice($string, 'usd');
             foreach ($cryptos as $crypto) {
                 $libelleCg = $crypto->getLibelleCoingecko();
                 if (array_key_exists($libelleCg, $prices)) {
@@ -127,11 +121,6 @@ class CryptocurrencyService
                         $crypto->setPriceUsd($prices[$libelleCg]['usd']);
                     } else {
                         $this->logger->warning('Erreur lors de la récupération des prix EN DOLLAR pour ' . $crypto->getLibelleCoingecko());
-                    }
-                    if (array_key_exists('eur', $prices[$libelleCg])) {
-                        $crypto->setPriceEur($prices[$libelleCg]['eur']);
-                    } else {
-                        $this->logger->warning('Erreur lors de la récupération des prix EN EURO pour ' . $crypto->getLibelleCoingecko());
                     }
                     $this->entityManager->persist($crypto);
                 } else {

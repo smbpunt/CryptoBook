@@ -2,13 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CryptocurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CryptocurrencyRepository::class)
+ * @UniqueEntity("libelleCoingecko", message="Cette cryptomonnaie existe déjà.")
+ * @ApiResource(
+ *     normalizationContext={"groups"={"currencies_read"}},
+ *     denormalizationContext={"disable_type_enforcement" = true},
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={"GET", "PATCH", "DELETE", "PUT"}
+ * )
  */
 class Cryptocurrency
 {
@@ -16,56 +27,56 @@ class Cryptocurrency
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"currencies_read", "blockchains_read", "farming_read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Groups({"currencies_read"})
+     * @Assert\NotBlank(message="l'ID de l'API Coingecko est obligatoire.")
      */
     private $libelleCoingecko;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"currencies_read", "position_read", "blockchains_read", "farming_read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"currencies_read", "position_read", "farming_read"})
      */
     private $priceUsd;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     */
-    private $priceEur;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
+     * @Groups({"currencies_read"})
      */
     private $mcapUsd;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $mcapEur;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"currencies_read", "position_read", "farming_read"})
      */
     private $urlImgThumb;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"currencies_read"})
      */
     private $urlImgSmall;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"currencies_read"})
      */
     private $urlImgLarge;
 
     /**
      * @ORM\Column(type="string", length=8, nullable=true)
+     * @Groups({"currencies_read", "position_read", "farming_read"})
      */
     private $symbol;
 
@@ -80,12 +91,15 @@ class Cryptocurrency
     private $farmingStrategies;
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean", options={"default" : false}, nullable=false)
+     * @Groups({"currencies_read", "farming_read"})
+     * @Assert\Type(type="bool", message="Erreur de format sur isStable.")
      */
     private $isStable;
 
     /**
      * @ORM\OneToMany(targetEntity=Blockchain::class, mappedBy="coin")
+     * @Groups({"currencies_read"})
      */
     private $blockchains;
 
@@ -106,6 +120,7 @@ class Cryptocurrency
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
+     * @Groups({"currencies_read", "position_read", "farming_read"})
      */
     private $color;
 
@@ -119,6 +134,13 @@ class Cryptocurrency
      */
     private $userProjectMonitorings;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TypeCryptocurrency::class, inversedBy="cryptocurrencies")
+     * @Groups({"position_read"})
+     */
+    private $type;
+
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -129,6 +151,7 @@ class Cryptocurrency
         $this->strategyLp2s = new ArrayCollection();
         $this->nfts = new ArrayCollection();
         $this->userProjectMonitorings = new ArrayCollection();
+        $this->isStable = false;
     }
 
     public function getId(): ?int
@@ -172,18 +195,6 @@ class Cryptocurrency
         return $this;
     }
 
-    public function getPriceEur(): ?float
-    {
-        return $this->priceEur;
-    }
-
-    public function setPriceEur(?float $priceEur): self
-    {
-        $this->priceEur = $priceEur;
-
-        return $this;
-    }
-
     public function getMcapUsd(): ?float
     {
         return $this->mcapUsd;
@@ -192,18 +203,6 @@ class Cryptocurrency
     public function setMcapUsd(?float $mcapUsd): self
     {
         $this->mcapUsd = $mcapUsd;
-
-        return $this;
-    }
-
-    public function getMcapEur(): ?float
-    {
-        return $this->mcapEur;
-    }
-
-    public function setMcapEur(?float $mcapEur): self
-    {
-        $this->mcapEur = $mcapEur;
 
         return $this;
     }
@@ -326,7 +325,7 @@ class Cryptocurrency
         return $this->isStable;
     }
 
-    public function setIsStable(bool $isStable): self
+    public function setIsStable($isStable): self
     {
         $this->isStable = $isStable;
 
@@ -526,4 +525,15 @@ class Cryptocurrency
     }
 
 
+    public function getType(): ?TypeCryptocurrency
+    {
+        return $this->type;
+    }
+
+    public function setType(?TypeCryptocurrency $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
 }

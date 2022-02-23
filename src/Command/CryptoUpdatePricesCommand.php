@@ -27,7 +27,9 @@ class CryptoUpdatePricesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->cryptocurrencyService->updatePrices();
+       // $this->cryptocurrencyService->updatePrices();
+        $this->cryptocurrencyService->updateAllCryptos();
+
         $io->success('Execution de crypto:updatePrices terminé.');
         return Command::SUCCESS;
     }

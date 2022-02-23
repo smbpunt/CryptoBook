@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,10 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte avec cette adresse email.")
+ * @ApiResource(
+ *     normalizationContext={"groups"={"users_read"}},
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={"GET", "PATCH", "DELETE"}
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -25,22 +33,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Veuillez renseigner l'email.")
+     * @Assert\Email(message="L'adresse n'est pas au bon format.")
+     * @Groups({"users_read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users_read"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Veuillez renseigner le mot de passe.")
      */
     private $password;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"users_read"})
      */
     private $isVerified = false;
 
@@ -93,6 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->strategyLPs = new ArrayCollection();
         $this->nfts = new ArrayCollection();
         $this->projectMonitorings = new ArrayCollection();
+        $this->roles[] = 'ROLE_USER';
     }
 
     public function getId(): ?int
@@ -184,7 +199,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function isVerified(): bool
+    public function getIsVerified(): bool
     {
         return $this->isVerified;
     }

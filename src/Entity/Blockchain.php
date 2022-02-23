@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BlockchainRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BlockchainRepository::class)
+ * @ApiResource(
+ *     normalizationContext={"groups"={"blockchains_read"}},
+ * )
+ * @UniqueEntity("libelle", message="Une blockchain existe déjà avec ce nom.")
  */
 class Blockchain
 {
@@ -16,11 +24,14 @@ class Blockchain
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"blockchains_read", "dapps_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"blockchains_read", "dapps_read"})
+     * @Assert\NotBlank(message="Le libelle est obligatoire.")
      */
     private $libelle;
 
@@ -32,6 +43,7 @@ class Blockchain
     /**
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="blockchains")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"blockchains_read"})
      */
     private $coin;
 

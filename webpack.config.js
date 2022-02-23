@@ -21,28 +21,6 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('tab', './assets/tab.js')
-    .addEntry('tooltip', './assets/tooltip.js')
-    .addEntry('select2', './assets/select2.js')
-    .addEntry('datepicker', './assets/date-picker.js')
-    .addEntry('home', './assets/home.js')
-    .addEntry('position_form', './assets/position/position_form.js')
-    .addEntry('position_index', './assets/position/index.js')
-    .addEntry('loan_index', './assets/loan/index.js')
-    .addEntry('farming_form', './assets/farming/form.js')
-    .addEntry('loan_form', './assets/loan/form.js')
-    .addEntry('lp_form', './assets/lp/form.js')
-    .addEntry('dca_form', './assets/dca/dca_form.js')
-    .addEntry('collection', './assets/collection.js')
-    .copyFiles({
-        from: './assets/images',
-        // optional target path, relative to the output dir
-        to: 'images/[path][name].[ext]',
-        // if versioning is enabled, add the file hash too
-        //to: 'images/[path][name].[hash:8].[ext]',
-        // only copy files matching this pattern
-        //pattern: /\.(png|jpg|jpeg)$/
-    })
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -80,12 +58,11 @@ Encore
     // enables Sass/SCSS support
     .enableSassLoader()
 
-// uncomment if you use TypeScript
-//.enableTypeScriptLoader()
+    // uncomment if you use TypeScript
+    //.enableTypeScriptLoader()
 
-// uncomment if you use React
-//.enableReactPreset()
-
+    // uncomment if you use React
+    .enableReactPreset()
 // uncomment to get integrity="..." attributes on your script & link tags
 // requires WebpackEncoreBundle 1.4 or higher
 //.enableIntegrityHashes(Encore.isProduction())

@@ -2,49 +2,64 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PositionRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
+ * @ApiResource(
+ *     normalizationContext={"groups"={"position_read"}},
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={"GET", "PUT", "DELETE"},
+ *     denormalizationContext={"disable_type_enforcement" = true}
+ * )
  */
-class Position
+class Position extends AbstractUser
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"position_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"position_read"})
+     * @Assert\NotBlank(message="Le nombre de coin est obligatoire.")
+     * @Assert\Positive(message="Le nombre de coin doit être supérieur à 0.")
      */
     private $nbCoins;
 
     /**
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="positions")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="La cryptomonnaie est obligatoire.")
+     * @Assert\NotNull(message="La cryptomonnaie est obligatoire.")
+     * @Groups({"position_read"})
      */
     private $coin;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="positions")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="boolean")
+     * @Groups({"position_read"})
      */
     private $isOpened;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"position_read"})
+     * @Assert\NotBlank(message="Le coût est obligatoire.")
+     * @Assert\PositiveOrZero(message="Le coût d'entrée doit être supérieur ou égal à 0.")
      */
     private $entryCost;
 
@@ -60,23 +75,25 @@ class Position
 
     /**
      * @ORM\Column(type="date_immutable", nullable=true)
+     * @Groups({"position_read"})
      */
     private $openedAt;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"position_read"})
      */
     private $remainingCoins;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"position_read"})
      */
     private $description;
 
-    public function __construct($user)
+    public function __construct()
     {
         $this->isOpened = true;
-        $this->user = $user;
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
         $this->remainingCoins = 0;
@@ -96,18 +113,6 @@ class Position
     public function setCoin(?Cryptocurrency $coin): self
     {
         $this->coin = $coin;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -134,7 +139,7 @@ class Position
         return $this->entryCost;
     }
 
-    public function setEntryCost(float $entryCost): self
+    public function setEntryCost($entryCost): self
     {
         $this->entryCost = $entryCost;
 
@@ -146,7 +151,7 @@ class Position
         return $this->nbCoins;
     }
 
-    public function setNbCoins(float $nbCoins): self
+    public function setNbCoins($nbCoins): self
     {
         $this->nbCoins = $nbCoins;
 
@@ -226,7 +231,7 @@ class Position
         return $this->openedAt;
     }
 
-    public function setOpenedAt(?DateTimeImmutable $openedAt): self
+    public function setOpenedAt($openedAt): self
     {
         $this->openedAt = $openedAt;
 
@@ -256,5 +261,4 @@ class Position
 
         return $this;
     }
-
 }
