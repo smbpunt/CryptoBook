@@ -24,19 +24,20 @@ class Blockchain
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"blockchains_read", "dapps_read"})
+     * @Groups({"blockchains_read", "dapps_read", "farming_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"blockchains_read", "dapps_read"})
+     * @Groups({"blockchains_read", "dapps_read", "farming_read"})
      * @Assert\NotBlank(message="Le libelle est obligatoire.")
      */
     private $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity=Dapp::class, mappedBy="blockchain", orphanRemoval=true)
+     * @Groups({"blockchains_read"})
      */
     private $dapps;
 

@@ -21,26 +21,26 @@ class Dapp
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"dapps_read"})
+     * @Groups({"dapps_read", "farming_read", "blockchains_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"dapps_read"})
+     * @Groups({"dapps_read", "farming_read", "blockchains_read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"dapps_read"})
+     * @Groups({"dapps_read", "farming_read"})
      */
     private $url;
 
     /**
      * @ORM\ManyToOne(targetEntity=Blockchain::class, inversedBy="dapps")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"dapps_read"})
+     * @Groups({"dapps_read", "farming_read"})
      */
     private $blockchain;
 

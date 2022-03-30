@@ -27,6 +27,8 @@ import ProjectTypes from "./js/pages/ProjectType/ProjectTypes";
 import ProjectType from "./js/pages/ProjectType/ProjectType";
 import Positions from "./js/pages/Position/Positions";
 import Position from "./js/pages/Position/Position";
+import Farmings from "./js/pages/Farming/Farmings";
+import Farming from "./js/pages/Farming/Farming";
 
 AuthAPI.setup();
 
@@ -47,6 +49,8 @@ const App = () => {
                                    element={<LoginPage/>}/>
                             <Route path="/positions" element={<RequireAuth><Positions/></RequireAuth>}/>
                             <Route path="/positions/:id" element={<RequireAuth><Position/></RequireAuth>}/>
+                            <Route path="/farmings" element={<RequireAuth><Farmings/></RequireAuth>}/>
+                            <Route path="/farmings/:id" element={<RequireAuth><Farming/></RequireAuth>}/>
                             <Route path="/cryptos" element={<RequireAuth><Cryptocurrencies/></RequireAuth>}/>
                             <Route path="/cryptos/:id" element={<RequireAuth><Cryptocurrency/></RequireAuth>}/>
                             <Route path="/blockchains/:id" element={<RequireAuth><Blockchain/></RequireAuth>}/>

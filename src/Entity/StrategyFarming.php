@@ -36,6 +36,7 @@ class StrategyFarming
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank (message="Le nombre de coins est obligatoire.")
+     * @Groups({"farming_read"})
      */
     private $nbCoins;
 
@@ -48,12 +49,14 @@ class StrategyFarming
      * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="farmingStrategies")
      * @Assert\NotBlank (message="La dapp est obligatoire. Si votre dapp n'est pas disponible, veuillez contacter les admins.")
      * @Assert\NotNull (message="La dapp est obligatoire. Si votre dapp n'est pas disponible, veuillez contacter les admins.")
+     * @Groups({"farming_read"})
      */
     private $dapp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank (message="L'APR est obligatoire.")
+     * @Groups({"farming_read"})
      */
     private $apr;
 
@@ -65,6 +68,7 @@ class StrategyFarming
 
     /**
      * @ORM\Column(type="date_immutable", nullable=true)
+     * @Groups({"farming_read"})
      */
     private $enteredAt;
 

@@ -28,6 +28,9 @@ const NavBar = () => {
                             <NavLink className="nav-link" to="/positions">Positions</NavLink>
                         </li>
                         <li className="nav-item">
+                            <NavLink className="nav-link" to="/farmings">Farming</NavLink>
+                        </li>
+                      {/*  <li className="nav-item">
                             <NavLink className="nav-link" to="/cryptos">Cryptos</NavLink>
                         </li>
                         <li className="nav-item">
@@ -44,7 +47,7 @@ const NavBar = () => {
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/project_types">Project Types</NavLink>
-                        </li>
+                        </li>*/}
                     </ul>
                     <ul className="navbar-nav ml-auto">
                         {(isAuthenticated && (
