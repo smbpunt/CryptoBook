@@ -24,10 +24,8 @@ class LoanController extends AbstractController
             'user' => $this->getUser()
         ]);
 
-        $total = 0;
-        foreach ($loans as $loan) {
-            $total += $loan->getNbCoins() * $loan->getCoin()->getPriceUsd();
-        }
+        $total = $loanRepository->getTotal($this->getUser());
+
         return $this->render('loan/index.html.twig', [
             'loans' => $loans,
             'total' => $total

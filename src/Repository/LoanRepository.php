@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Loan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Loan|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,18 @@ class LoanRepository extends ServiceEntityRepository
         parent::__construct($registry, Loan::class);
     }
 
-    // /**
-    //  * @return Loan[] Returns an array of Loan objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getTotal(UserInterface $user): float
     {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('l')
+            ->select('SUM(l.nbCoins * c.priceUsd) as totalsum')
+            ->join('l.coin', 'c')
+            ->where('l.user = :user')
+            ->groupBy('l.user')
+            ->setParameter('user', $user);
+        try {
+            return $qb->getQuery()->getSingleScalarResult();
+        } catch (Exception $e) {
+        }
+        return 0;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Loan
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

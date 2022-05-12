@@ -24,6 +24,7 @@ class Loan
     private $user;
 
     /**
+     * @var Cryptocurrency
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="loans")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -153,4 +154,10 @@ class Loan
 
         return $this;
     }
+
+    public function getCurrentValue(): float
+    {
+        return $this->getNbCoins() * $this->coin->getPriceUsd();
+    }
+
 }

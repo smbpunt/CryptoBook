@@ -4,10 +4,9 @@
     {{ encore_entry_script_tags('home') }}
 {% endblock %}
 
-{% block body %}
+{% block full_screen %}
     <div class="row">
-        <div class="col-3">
-
+        <div class="col-2">
             <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
@@ -75,22 +74,17 @@
                         {{ (percent)|round|number_format(0, '.', ' ') }} %
                     </td>
                 </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-                <thead>
+
+
                 <tr>
-                    <th colspan="3">Wallet Crypto</th>
+                    <td class="text-white">Total emprunt</td>
+                    <td class="text-end">
+                        {{ totalLoan|round|number_format(0, '.', ' ') }}$
+                    </td>
+                    <td class="text-end">
+                        {{ (totalLoan/ratioUsdEur)|round|number_format(0, '.', ' ') }} €
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for position in positions %}
-                    <tr>
-                        <td class="text-white text-end">{{ position.totalsum|round(2)|number_format(2, '.', ' ') }}</td>
-                        <td class="text-white">{{ position.symbol|upper }}</td>
-                        <td class="text-white text-end">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }}$</td>
-                    </tr>
-                {% endfor %}
 
                 </tbody>
             </table>
@@ -128,31 +122,44 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="col">
-            {% if positions|length > 0 %}
-                <div class="row mb-1">
-                    <div class="col-2"></div>
-                    <div class="col text-center">
-                        <p>Mes positions</p>
-                        <canvas id="chart-pos"></canvas>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            {% endif %}
+            <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
+                <thead>
+                <tr>
+                    <th colspan="3">Wallet Crypto</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions %}
+                    <tr>
+                        <td class="text-white text-end">{{ position.totalsum|round(2)|number_format(2, '.', ' ') }}</td>
+                        <td class="text-white">{{ position.symbol|upper }}</td>
+                        <td class="text-white text-end">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }}$</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
+        </div>
+        <div class="col-1"></div>
+        <div class="col text-center">
+            {% if positions|length > 0 %}
+                <p>Mes positions</p>
+                <canvas id="chart-pos"></canvas>
+            {% endif %}
+        </div>
+        <div class="col-1"></div>
+
+        <div class="col-2  text-center">
             {% if positions_stable|length > 0 %}
                 <div class="row">
-                    <div class="col-6 text-center">
-                        <p>Ratio Crypto/Stable</p>
-                        <canvas id="chart-ratio"></canvas>
-                    </div>
-                    <div class="col-6 text-center">
-                        {% if positions_stable|length > 1 %}
-                            <p>Mes positions stable</p>
-                            <canvas id="chart-stable"></canvas>
-                        {% endif %}
-                    </div>
+                    <p>Ratio Crypto/Stable</p>
+                    <canvas id="chart-ratio"></canvas>
+                </div>
+                <div class="row">
+                    {% if positions_stable|length > 1 %}
+                        <p>Mes positions stable</p>
+                        <canvas id="chart-stable"></canvas>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

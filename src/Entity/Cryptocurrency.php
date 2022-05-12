@@ -162,18 +162,6 @@ class Cryptocurrency
         return $this;
     }
 
-    public function getPriceEur(): ?float
-    {
-        return $this->priceEur;
-    }
-
-    public function setPriceEur(?float $priceEur): self
-    {
-        $this->priceEur = $priceEur;
-
-        return $this;
-    }
-
     public function getMcapUsd(): ?float
     {
         return $this->mcapUsd;

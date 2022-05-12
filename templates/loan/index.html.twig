@@ -48,7 +48,7 @@
                 </td>
                 <td class="align-middle text-white">{{ loan.dapp }}</td>
                 <td class="text-white align-middle">{{ loan.coin.symbol|upper }}</td>
-                <td class="text-white align-middle text-end">{{ (loan.nbCoins * loan.coin.priceUsd)|number_format(2, '.', ' ') }}
+                <td class="text-white align-middle text-end">{{ loan.currentValue|number_format(2, '.', ' ') }}
                     $
                 </td>
                 <td class="text-white align-middle text-center">
@@ -62,8 +62,4 @@
         {% endfor %}
         </tbody>
     </table>
-    </div>
-
-
-
 {% endblock %}

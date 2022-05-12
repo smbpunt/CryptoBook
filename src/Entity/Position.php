@@ -27,6 +27,7 @@ class Position
     private $nbCoins;
 
     /**
+     * @var Cryptocurrency
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="positions")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -49,6 +50,7 @@ class Position
     private $entryCost;
 
     /**
+     * @var Vente[]
      * @ORM\OneToMany(targetEntity=Vente::class, mappedBy="position", orphanRemoval=true, cascade={"persist"})
      */
     private $ventes;
@@ -255,6 +257,31 @@ class Position
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getCurrentValue(): float
+    {
+        return $this->remainingCoins * $this->coin->getPriceUsd();
+    }
+
+    public function getPercentRemainingCoins(): float
+    {
+        return $this->remainingCoins / $this->nbCoins;
+    }
+
+    public function getPercentEvolution(): float
+    {
+        if ($this->getPercentRemainingCoins() !== 1.0) {
+            dump($this);
+            dump($this->getPercentRemainingCoins());
+        }
+        return $this->entryCost > 0 ? (
+
+
+                ($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
+
+
+            : 9999;
     }
 
 }

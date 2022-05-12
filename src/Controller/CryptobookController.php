@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use App\Repository\CryptocurrencyRepository;
 use App\Repository\DepositRepository;
+use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLPRepository;
-use App\Service\CryptocurrencyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,7 @@ class CryptobookController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository, CryptocurrencyService $cryptocurrencyService): Response
+    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository, CryptocurrencyRepository $cryptocurrencyRepository, LoanRepository $loanRepository): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
@@ -28,12 +29,13 @@ class CryptobookController extends AbstractController
         $totalEur = 0;
         $totalUsdStable = 0;
         $totalEurStable = 0;
+
+        $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'jarvis-synthetic-euro']);
+        $ratioUsdEur = ($jeur !== null && $jeur->getPriceUsd() !== null) ? $jeur->getPriceUsd() : 1.04;
+
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-
-            //@todo
-           // $valueEur = $value['totalsum'] * $value['priceEur'];
-            $valueEur = 10;
+            $valueEur = $valueUsd / $ratioUsdEur;
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
@@ -41,11 +43,9 @@ class CryptobookController extends AbstractController
             $totalEur += $valueEur;
         }
 
-
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-           // $valueEur = $value['totalsum'] * $value['priceEur'];
-            $valueEur =10;
+            $valueEur = $valueUsd / $ratioUsdEur;
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;
@@ -85,6 +85,8 @@ class CryptobookController extends AbstractController
         }
 
 
+        $totalLoan = $loanRepository->getTotal($this->getUser());
+
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,
             'positions_stable' => $positions_stable,
@@ -94,7 +96,8 @@ class CryptobookController extends AbstractController
             'totalUsdStable' => $totalUsdStable,
             'totalEurStable' => $totalEurStable,
             'totalYearFarmingUsd' => $totalYearFarming,
-            'ratioUsdEur' =>  1.1,
+            'ratioUsdEur' => $ratioUsdEur,
+            'totalLoan' => $totalLoan,
         ]);
     }
 }
