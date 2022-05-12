@@ -96,7 +96,7 @@ const Farmings = () => {
                                 <td className="text-end">{(farming.apr/100) * (farming.coin.priceUsd * farming.nbCoins)} $</td>
                                 <td className="text-end">
                                     <div className="btn-group" role="group">
-                                        <Link to={"/deposit_types/" + farming.id} className="btn btn-primary btn-sm">Modifier</Link>
+                                        <Link to={"/farmings/" + farming.id} className="btn btn-primary btn-sm">Modifier</Link>
                                         <button onClick={() => handleDelete(farming.id)}
                                                 className="btn btn-sm btn-danger"
                                         >Supprimer

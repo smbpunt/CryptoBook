@@ -5,13 +5,16 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=StrategyFarmingRepository::class)
  * @ApiResource(
- *     normalizationContext={"groups"={"farming_read"}}
+ *     normalizationContext={"groups"={"farming_read"}},
+ *     denormalizationContext={"disable_type_enforcement" = true},
  * )
  */
 class StrategyFarming
@@ -36,6 +39,7 @@ class StrategyFarming
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank (message="Le nombre de coins est obligatoire.")
+     * @Assert\Type(type="numeric", message="Le nombre de coin doit être un numérique !")
      * @Groups({"farming_read"})
      */
     private $nbCoins;
@@ -56,6 +60,7 @@ class StrategyFarming
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank (message="L'APR est obligatoire.")
+     * @Assert\Type(type="numeric", message="Le nombre de coin doit être un numérique !")
      * @Groups({"farming_read"})
      */
     private $apr;

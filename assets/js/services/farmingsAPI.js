@@ -13,7 +13,8 @@ function create(data) {
     console.log(data);
     return axios.post("http://127.0.0.1:8000/api/strategy_farmings", {
         ...data,
-        coin: `/api/cryptocurrencies/${data.coin}`
+        coin: `/api/cryptocurrencies/${data.coin}`,
+        dapp: `/api/dapps/${data.dapp}`
     })
         .then(response => console.log(response));
 }

@@ -37,6 +37,7 @@ class Position extends AbstractUser
      * @Groups({"position_read"})
      * @Assert\NotBlank(message="Le nombre de coin est obligatoire.")
      * @Assert\Positive(message="Le nombre de coin doit être supérieur à 0.")
+     * @Assert\Type(type="numeric", message="Le nombre de coin doit être un numérique !")
      */
     private $nbCoins;
 
@@ -60,6 +61,7 @@ class Position extends AbstractUser
      * @Groups({"position_read"})
      * @Assert\NotBlank(message="Le coût est obligatoire.")
      * @Assert\PositiveOrZero(message="Le coût d'entrée doit être supérieur ou égal à 0.")
+     * @Assert\Type(type="numeric", message="Le coût d'entrée doit être un numérique !")
      */
     private $entryCost;
 

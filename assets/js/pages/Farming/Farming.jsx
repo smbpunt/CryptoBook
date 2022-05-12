@@ -7,6 +7,7 @@ import Field from "../../components/Forms/Field";
 import Select from "../../components/Forms/Select";
 import FieldGroup from "../../components/Forms/FieldGroup";
 import Textarea from "../../components/Forms/Textarea";
+import {func} from "prop-types";
 
 
 const Farming = () => {
@@ -19,6 +20,7 @@ const Farming = () => {
         dapp: "",
         apr: 0,
         enteredAt: "2022-01-01",
+        nbCoins: 0,
         description: ""
     });
 
@@ -41,7 +43,7 @@ const Farming = () => {
         try {
             const data = await CryptoCurrencyAPI.findAll();
             setCryptocurrencies(data);
-            if (!farming.coin && id === "new") setFarming({...farming, coin: data[0].id});
+            if (!farming.coin && id === "new") setFarming({...farming, coin: data[0].id.toString()});
         } catch (error) {
             console.log("Impossible de charger les cryptos.");
         }
@@ -52,7 +54,9 @@ const Farming = () => {
         try {
             const data = await BlockchainAPI.findAll();
             setBlockchains(data);
-            //if (!farming.dapp && id === "new") setFarming({...farming, dapp: data[0].id});
+            if(!farming.dapp && id === "new") {
+                setBlockchain(data[0].id);
+            }
         } catch (error) {
             console.log("Impossible de charger les dapps.");
         }
@@ -86,14 +90,22 @@ const Farming = () => {
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setFarming({...farming, [name]: value});
-        console.log(farming);
     };
 
     const handleChangeBlockchain = ({currentTarget}) => {
         const {value} = currentTarget;
         setBlockchain(value);
-        console.log(blockchain);
+        blockchains.forEach(function (blockchain) {
+            if(parseInt(value) === parseInt(blockchain.id)) {
+                console.log(blockchain);
+                setDapps(blockchain.dapps);
+                setFarming({...farming, dapp: blockchain.dapps[0].id.toString()});
+            }
+        });
     }
+
+    console.log(farming);
+
 
     // Gestion de la soumission du formulaire
     const handleSubmit = async event => {
@@ -201,7 +213,22 @@ const Farming = () => {
 
                     </div>
                     <div className="col">
-
+                        <Select name="dapp"
+                                label="Dapp"
+                                value={farming.dapp}
+                                onChange={handleChange}
+                        >
+                            {
+                                dapps.map(
+                                    dapp => (
+                                        <option key={dapp.id}
+                                                value={dapp.id}>
+                                            {dapp.libelle}
+                                        </option>
+                                    )
+                                )
+                            }
+                        </Select>
                     </div>
                 </div>
 
