@@ -42,11 +42,17 @@
                     </button>
                 </td>
                 <td class="align-middle text-white">
-                    {% if loan.dapp %}
+                    {% if loan.dapp is not null and loan.dapp.blockchain is not null %}
                         {{ loan.dapp.blockchain }}
                     {% endif %}
                 </td>
-                <td class="align-middle text-white">{{ loan.dapp }}</td>
+                <td class="align-middle text-white">
+                    {% if loan.dapp is not null and loan.dapp.url is not null and loan.dapp.url is not empty %}
+                        <a href="{{ loan.dapp.url }}">{{ loan.dapp }}</a>
+                    {% elseif loan.dapp is not null %}
+                        {{ loan.dapp }}
+                    {% endif %}
+                </td>
                 <td class="text-white align-middle">{{ loan.coin.symbol|upper }}</td>
                 <td class="text-white align-middle text-end">{{ loan.currentValue|number_format(2, '.', ' ') }}
                     $

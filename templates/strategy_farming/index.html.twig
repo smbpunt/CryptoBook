@@ -96,12 +96,14 @@
                                 </button>
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
+                                {% elseif strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
@@ -171,12 +173,14 @@
                                 </button>
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
+                                {% elseif strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>
@@ -246,12 +250,14 @@
                                 </button>
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
                                     {{ strategy_farming['strategy'].dapp.blockchain }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null %}
+                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
+                                {% elseif strategy_farming['strategy'].dapp is not null %}
                                     {{ strategy_farming['strategy'].dapp }}
                                 {% endif %}
                             </td>

@@ -28,7 +28,13 @@
             <tr>
                 <td class="text-white align-middle text-end">{{ deposit.valueEur|round|number_format(0, '.', ' ') }} €</td>
                 <td class="text-white align-middle text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
-                <td class="text-white align-middle">{{ deposit.exchange }}</td>
+                <td class="text-white align-middle">
+                    {% if deposit.exchange is not null and deposit.exchange.url is not null and deposit.exchange.url is not empty %}
+                        <a href="{{ deposit.exchange.url }}">{{ deposit.exchange }}</a>
+                    {% else %}
+                        {{ deposit.exchange }}
+                    {% endif %}
+                </td>
                 <td class="text-white align-middle">{{ deposit.type }}</td>
                 <td class="text-white align-middle text-center">
                     {{ include('deposit/_indexactions_form.html.twig') }}
