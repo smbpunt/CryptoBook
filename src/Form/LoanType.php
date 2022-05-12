@@ -8,6 +8,7 @@ use App\Entity\Dapp;
 use App\Entity\Loan;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -21,6 +22,14 @@ class LoanType extends AbstractType
     {
         $builder
             ->add('nbCoins')
+            ->add('loanedAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
+                'attr' => ['class' => 'js-datetimepicker'],
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'input' => 'datetime_immutable',
+            ])
             ->add('coin', EntityType::class, [
                 'class' => Cryptocurrency::class,
                 'required' => true,

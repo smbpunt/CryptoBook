@@ -50,6 +50,11 @@ class Loan
     private $description;
 
     /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $loanedAt;
+
+    /**
      * @param $user
      */
     public function __construct($user)
@@ -133,6 +138,18 @@ class Loan
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLoanedAt(): ?\DateTimeImmutable
+    {
+        return $this->loanedAt;
+    }
+
+    public function setLoanedAt(?\DateTimeImmutable $loanedAt): self
+    {
+        $this->loanedAt = $loanedAt;
 
         return $this;
     }

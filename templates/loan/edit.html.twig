@@ -5,11 +5,10 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('select2') }}
     {{ encore_entry_script_tags('loan_form') }}
+    {{ encore_entry_script_tags('datepicker') }}
 {% endblock %}
 
 {% block body %}
     <h1>Modifier emprunt</h1>
-
     {{ include('loan/_form.html.twig', {'button_label': 'Modifier'}) }}
-
 {% endblock %}

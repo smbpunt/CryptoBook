@@ -6,6 +6,7 @@ use App\Repository\DepositRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLPRepository;
+use App\Service\CryptocurrencyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +19,7 @@ class CryptobookController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository): Response
+    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository, CryptocurrencyService $cryptocurrencyService): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
@@ -29,7 +30,10 @@ class CryptobookController extends AbstractController
         $totalEurStable = 0;
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $value['totalsum'] * $value['priceEur'];
+
+            //@todo
+           // $valueEur = $value['totalsum'] * $value['priceEur'];
+            $valueEur = 10;
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
@@ -40,7 +44,8 @@ class CryptobookController extends AbstractController
 
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $value['totalsum'] * $value['priceEur'];
+           // $valueEur = $value['totalsum'] * $value['priceEur'];
+            $valueEur =10;
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;
@@ -59,7 +64,6 @@ class CryptobookController extends AbstractController
         }
 
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
-
 
         $strategies = $strategyFarmingRepository->findBy([
             'user' => $this->getUser()
@@ -90,7 +94,7 @@ class CryptobookController extends AbstractController
             'totalUsdStable' => $totalUsdStable,
             'totalEurStable' => $totalEurStable,
             'totalYearFarmingUsd' => $totalYearFarming,
-            'ratioUsdEur' => $totalEur > 0 ? $totalUsd / $totalEur : 1.35,
+            'ratioUsdEur' =>  1.1,
         ]);
     }
 }

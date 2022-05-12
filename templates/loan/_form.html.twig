@@ -3,6 +3,15 @@
 
 <div class="row mb-2">
     <div class="col-md-3 align-self-end">
+        {{ form_label(form.loanedAt, 'Emprunté le') }}
+        {{ form_widget(form.loanedAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
+    </div>
+    <div class="col-md-3 align-self-end">
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-md-3 align-self-end">
         {{ form_label(form.nbCoins, 'Nombre') }}
         {{ form_widget(form.nbCoins, { 'attr': {'placeholder': 'ex: 1000'} }) }}
     </div>

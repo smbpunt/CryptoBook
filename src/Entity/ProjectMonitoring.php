@@ -44,9 +44,10 @@ class ProjectMonitoring
     private $user;
 
     /**
+     * @var string[]
      * @ORM\Column(type="array")
      */
-    private $links = [];
+    private array $links = [];
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeProject::class, inversedBy="projectMonitorings")
@@ -136,6 +137,15 @@ class ProjectMonitoring
     public function setLinks(array $links): self
     {
         $this->links = $links;
+
+        return $this;
+    }
+
+    public function addLink(string $link): self
+    {
+        if (!in_array($link, $this->links, true)) {
+            $this->links[] = $link;
+        }
 
         return $this;
     }

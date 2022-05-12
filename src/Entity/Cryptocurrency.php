@@ -20,7 +20,7 @@ class Cryptocurrency
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $libelleCoingecko;
 
@@ -33,21 +33,10 @@ class Cryptocurrency
      * @ORM\Column(type="float", nullable=true)
      */
     private $priceUsd;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $priceEur;
-
     /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $mcapUsd;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $mcapEur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -80,7 +69,7 @@ class Cryptocurrency
     private $farmingStrategies;
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean", options={"default" : false}, nullable=false)
      */
     private $isStable;
 
@@ -129,6 +118,7 @@ class Cryptocurrency
         $this->strategyLp2s = new ArrayCollection();
         $this->nfts = new ArrayCollection();
         $this->userProjectMonitorings = new ArrayCollection();
+        $this->isStable = false;
     }
 
     public function getId(): ?int

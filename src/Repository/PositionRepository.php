@@ -29,7 +29,7 @@ class PositionRepository extends ServiceEntityRepository
             ->andWhere('p.isOpened = 1')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
-            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.priceEur')
+            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd')
             ->groupBy('p.coin')
             ->getQuery()->getArrayResult();
     }
