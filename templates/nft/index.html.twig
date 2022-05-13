@@ -44,6 +44,7 @@
             <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>Acheté le</th>
                     <th>Collection</th>
                     <th>ID</th>
@@ -56,6 +57,15 @@
                 <tbody>
                 {% for nft in nfts %}
                     <tr>
+                        <td class="text-center align-middle">
+                            <button type="button"
+                                    class="btn btn-sm btn-light rounded-circle button-infos"
+                                    data-id="{{ nft.id }}"
+                                    data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
+                                    data-url="{{ path('nft_ajax', {'id': nft.id}) }}">
+                                <i class="bi bi-info"></i>
+                            </button>
+                        </td>
                         <td class="align-middle text-white text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') : '' }}</td>
                         <td class="align-middle text-white">{{ nft.collection }}</td>
                         <td class="align-middle text-white">{{ nft.num }}</td>
