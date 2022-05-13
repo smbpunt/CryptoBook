@@ -22,6 +22,7 @@ class NftType extends AbstractType
             ->add('supply')
             ->add('priceCrypto')
             ->add('priceUsd')
+            ->add('description')
             ->add('purchasedOn', DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => false,

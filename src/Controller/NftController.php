@@ -22,21 +22,28 @@ class NftController extends AbstractController
     {
         $nfts = $nftRepository->findBySold($this->getUser(), false);
         $nfts_sold = $nftRepository->findBySold($this->getUser(), true);
-        $ar_nft_sold = [];
         $total_benef = 0;
         foreach ($nfts_sold as $nft) {
-            $benef = $nft->getPriceSoldUsd() * (1 - ($nft->getPercentSaleFees() ?? 0.) / 100) - $nft->getPriceUsd();
-            $total_benef += $benef;
-            $ar_nft_sold[] = [
-                'nft' => $nft,
-                'benef' => $benef
-            ];
+            $total_benef += $nft->getBenefice();
         }
 
         return $this->render('nft/index.html.twig', [
             'nfts' => $nfts,
-            'nfts_sold' => $ar_nft_sold,
+            'nfts_sold' => $nfts_sold,
             'total_benef' => $total_benef,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/infos", name="nft_ajax", methods={"POST"})
+     */
+    public function ajaxStrategy(Request $request, Nft $nft): Response
+    {
+        if ($nft->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+        return $this->render('nft/show.html.twig', [
+            'nft' => $nft,
         ]);
     }
 
@@ -60,20 +67,6 @@ class NftController extends AbstractController
         return $this->renderForm('nft/new.html.twig', [
             'nft' => $nft,
             'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="nft_show", methods={"GET"})
-     */
-    public function show(Nft $nft): Response
-    {
-        if ($nft->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('nft_index');
-        }
-
-        return $this->render('nft/show.html.twig', [
-            'nft' => $nft,
         ]);
     }
 

@@ -9,23 +9,31 @@
       ],
       "css": [
         "/build/702.2a65b998.css",
-        "/build/app.6f139c8d.css"
+        "/build/app.4f251d1c.css"
       ]
     },
     "tab": {
       "js": [
         "/build/runtime.e4b160ba.js",
         "/build/773.0a74bc55.js",
-        "/build/692.17dec864.js",
-        "/build/tab.63a8f120.js"
+        "/build/169.47bac26f.js",
+        "/build/tab.1d94055d.js"
+      ]
+    },
+    "modal": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/773.0a74bc55.js",
+        "/build/169.47bac26f.js",
+        "/build/modal.de5919e9.js"
       ]
     },
     "tooltip": {
       "js": [
         "/build/runtime.e4b160ba.js",
         "/build/773.0a74bc55.js",
-        "/build/692.17dec864.js",
-        "/build/tooltip.6d739230.js"
+        "/build/169.47bac26f.js",
+        "/build/tooltip.f47385af.js"
       ]
     },
     "select2": {

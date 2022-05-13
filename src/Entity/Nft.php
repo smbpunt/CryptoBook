@@ -91,6 +91,11 @@ class Nft
     private $user;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
      * @param $user
      */
     public function __construct($user)
@@ -270,5 +275,22 @@ class Nft
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getBenefice(): float
+    {
+        return $this->soldOn === null ? 0 : $this->priceSoldUsd * (1 - ($this->percentSaleFees ?? 0.) / 100) - $this->priceUsd;
     }
 }

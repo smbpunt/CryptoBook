@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('tab', './assets/tab.js')
+    .addEntry('modal', './assets/modal.js')
     .addEntry('tooltip', './assets/tooltip.js')
     .addEntry('select2', './assets/select2.js')
     .addEntry('datepicker', './assets/date-picker.js')

@@ -96,6 +96,9 @@ class PositionController extends AbstractController
      */
     public function ajaxStrategy(Request $request, Position $position): Response
     {
+        if ($position->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
         return $this->render('position/_strategy_position.html.twig', [
             'position' => $position,
         ]);

@@ -4,9 +4,13 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('tab') }}
+    {{ encore_entry_script_tags('modal') }}
 {% endblock %}
 
 {% block body %}
+
+    {{ include('modal_informations.html.twig') }}
+
     <div class="row mb-2">
         <div class="col">
             <h1>Mes NFT</h1>
@@ -75,6 +79,7 @@
             <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>Acheté le</th>
                     <th>Collection</th>
                     <th>Prix d'achat</th>
@@ -88,15 +93,24 @@
                 <tbody>
                 {% for nft in nfts_sold %}
                     <tr>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].purchasedOn ? nft['nft'].purchasedOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white">{{ nft['nft'].collection }}</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].priceUsd|number_format(0, '.', ' ') }} $</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].soldOn ? nft['nft'].soldOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].priceSoldUsd|number_format(0, '.', ' ') }} $</td>
-                        <td class="align-middle text-white text-end">{{ nft['nft'].percentSaleFees }} %</td>
-                        <td class="align-middle text-white text-end">{{ nft['benef']|number_format(0, '.', ' ') }} $</td>
+                        <td class="text-center align-middle">
+                            <button type="button"
+                                    class="btn btn-sm btn-light rounded-circle button-infos"
+                                    data-id="{{ nft.id }}"
+                                    data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
+                                    data-url="{{ path('nft_ajax', {'id': nft.id}) }}">
+                                <i class="bi bi-info"></i>
+                            </button>
+                        </td>
+                        <td class="align-middle text-white text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') : '' }}</td>
+                        <td class="align-middle text-white">{{ nft.collection }}</td>
+                        <td class="align-middle text-white text-end">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft.soldOn ? nft.soldOn|date('d/m/Y') : '' }}</td>
+                        <td class="align-middle text-white text-end">{{ nft.priceSoldUsd|number_format(0, '.', ' ') }} $</td>
+                        <td class="align-middle text-white text-end">{{ nft.percentSaleFees }} %</td>
+                        <td class="align-middle text-white text-end">{{ nft.benefice|number_format(0, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
-                            {{ include('nft/_indexactions_sold_form.html.twig') }}
+                            {{ include('nft/_indexactions_form.html.twig') }}
                         </td>
                     </tr>
                 {% else %}
