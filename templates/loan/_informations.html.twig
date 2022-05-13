@@ -1,1 +1,12 @@
-<p>Description : {{ loan.description }}</p>
+<h1 class="h3">Information sur l'emprunt</h1>
+{% if loan.loanedAt %}
+    <p>Depuis le : {{ loan.loanedAt|date('d/m/Y') }}</p>
+{% endif %}
+<p>{{ loan.nbCoins }} {{ loan.coin.symbol|upper }}
+    (~{{ loan.currentValue|round(2)|number_format(2, '.', ' ') }} $)</p>
+
+<p><a href="{{ loan.dapp.url }}">{{ loan.dapp }}</a> sur {{ loan.dapp.blockchain }}</p>
+
+{% if loan.description is not empty %}
+    <p>Description : {{ loan.description }}</p>
+{% endif %}

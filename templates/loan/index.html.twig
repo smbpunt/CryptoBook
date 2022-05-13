@@ -4,7 +4,7 @@
 
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('position_index') }}
+    {{ encore_entry_script_tags('modal') }}
 {% endblock %}
 
 {% block body %}
@@ -36,9 +36,12 @@
         {% for loan in loans %}
             <tr>
                 <td class="text-center align-middle">
-                    <button id="btn-{{ loan.id }}" type="button" class="btn btn-xs btn-light infos_pos"
-                            data-id="{{ loan.id }}" data-ajax="{{ path('loan-infos-ajax', {'id': loan.id}) }}">
-                        +
+                    <button type="button"
+                            class="btn btn-sm btn-light rounded-circle button-infos"
+                            data-id="{{ loan.id }}"
+                            data-titlemodal=""
+                            data-url="{{ path('loan-infos-ajax', {'id': loan.id}) }}">
+                        <i class="bi bi-info"></i>
                     </button>
                 </td>
                 <td class="align-middle text-white">
@@ -53,7 +56,7 @@
                         {{ loan.dapp }}
                     {% endif %}
                 </td>
-                <td class="text-white align-middle">{{ loan.coin.symbol|upper }}</td>
+                <td class="text-white align-middle text-end">{{ loan.nbCoins }} {{ loan.coin.symbol|upper }}</td>
                 <td class="text-white align-middle text-end">{{ loan.currentValue|number_format(2, '.', ' ') }}
                     $
                 </td>
@@ -68,4 +71,7 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {{ include('modal_informations.html.twig') }}
+
 {% endblock %}
