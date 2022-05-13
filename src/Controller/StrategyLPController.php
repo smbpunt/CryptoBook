@@ -45,7 +45,7 @@ class StrategyLPController extends AbstractController
     public function ajaxStrategy(Request $request, StrategyLP $strategyLP): Response
     {
         return $this->render('strategy_lp/_informations.twig', [
-            'entity' => $strategyLP,
+            'farming' => $strategyLP,
         ]);
     }
 

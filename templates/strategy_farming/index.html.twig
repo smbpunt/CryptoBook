@@ -4,7 +4,7 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('tab') }}
-    {{ encore_entry_script_tags('position_index') }}
+    {{ encore_entry_script_tags('modal') }}
 {% endblock %}
 
 {% block full_screen %}
@@ -89,10 +89,12 @@
 
                         <tr>
                             <td class="text-center align-middle">
-                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                <button type="button"
+                                        class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
-                                        data-ajax="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
-                                    +
+                                        data-titlemodal=""
+                                        data-url="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    <i class="bi bi-info"></i>
                                 </button>
                             </td>
                             <td class="text-white align-middle">
@@ -166,10 +168,12 @@
 
                         <tr>
                             <td class="text-center align-middle">
-                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                <button type="button"
+                                        class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
-                                        data-ajax="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
-                                    +
+                                        data-titlemodal=""
+                                        data-url="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    <i class="bi bi-info"></i>
                                 </button>
                             </td>
                             <td class="text-white align-middle">
@@ -243,10 +247,12 @@
 
                         <tr>
                             <td class="text-center align-middle">
-                                <button id="btn-{{ strategy_farming['strategy'].id }}" type="button" class="btn btn-xs btn-light infos_pos"
+                                <button type="button"
+                                        class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
-                                        data-ajax="{{ path('farminglp-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
-                                    +
+                                        data-titlemodal=""
+                                        data-url="{{ path('farminglp-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                    <i class="bi bi-info"></i>
                                 </button>
                             </td>
                             <td class="text-white align-middle">
@@ -302,5 +308,6 @@
     {% endif %}
 
 
+    {{ include('modal_informations.html.twig') }}
 
 {% endblock %}

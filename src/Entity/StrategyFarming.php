@@ -18,6 +18,7 @@ class StrategyFarming
     private $id;
 
     /**
+     * @var Cryptocurrency
      * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="farmingStrategies")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -170,5 +171,30 @@ class StrategyFarming
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getCurrentValue(): float
+    {
+        return $this->nbCoins * $this->coin->getPriceUsd();
+    }
+
+    public function getFarmingYear(): float
+    {
+        return $this->getCurrentValue() * $this->apr / 100;
+    }
+
+    public function getFarmingMonthly(): float
+    {
+        return $this->getFarmingYear() / 12;
+    }
+
+    public function getFarmingWeekly(): float
+    {
+        return $this->getFarmingYear() / 52;
+    }
+
+    public function getFarmingDaily(): float
+    {
+        return $this->getFarmingYear() / 365;
     }
 }

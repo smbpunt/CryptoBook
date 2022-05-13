@@ -112,7 +112,7 @@ class StrategyFarmingController extends AbstractController
     public function ajaxStrategy(Request $request, StrategyFarming $strategyFarming): Response
     {
         return $this->render('strategy_farming/_informations.twig', [
-            'entity' => $strategyFarming,
+            'farming' => $strategyFarming,
         ]);
     }
 

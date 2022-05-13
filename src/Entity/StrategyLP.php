@@ -257,4 +257,39 @@ class StrategyLP
 
         return $this;
     }
+
+    public function getCurrentValue1(): float
+    {
+        return $this->nbCoin1 * $this->coin1->getPriceUsd();
+    }
+
+    public function getCurrentValue2(): float
+    {
+        return $this->nbCoin2 * $this->coin2->getPriceUsd();
+    }
+
+    public function getCurrentValueTotal(): float
+    {
+        return $this->getCurrentValue1() + $this->getCurrentValue1();
+    }
+
+    public function getFarmingYear(): float
+    {
+        return $this->getCurrentValueTotal() * $this->apr / 100;
+    }
+
+    public function getFarmingMonthly(): float
+    {
+        return $this->getFarmingYear() / 12;
+    }
+
+    public function getFarmingWeekly(): float
+    {
+        return $this->getFarmingYear() / 52;
+    }
+
+    public function getFarmingDaily(): float
+    {
+        return $this->getFarmingYear() / 365;
+    }
 }

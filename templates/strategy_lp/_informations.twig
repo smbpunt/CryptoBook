@@ -1,1 +1,24 @@
-<p>Description : {{ entity.description }}</p>
+<h1 class="h3">Information sur le farming</h1>
+{% if farming.startAt %}
+    <p>Depuis le : {{ farming.startAt|date('d/m/Y') }}</p>
+{% endif %}
+<p>{{ farming.nbCoin1 }} {{ farming.coin1.symbol|upper }}
+    (~{{ farming.currentValue1|round(2)|number_format(2, '.', ' ') }} $)</p>
+<p>{{ farming.nbCoin2 }} {{ farming.coin2.symbol|upper }}
+    (~{{ farming.currentValue2|round(2)|number_format(2, '.', ' ') }} $)</p>
+<p>Total : ~{{ farming.currentValueTotal|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>APR : {{ farming.apr }} %</p>
+
+{% if farming.description is not empty %}
+    <p>Description : {{ farming.description }}</p>
+{% endif %}
+
+<p><a href="{{ farming.dapp.url }}">{{ farming.dapp }}</a> sur {{ farming.dapp.blockchain }}</p>
+
+<h2 class="h4">Gains (*)</h2>
+<p>Annuel : ~{{ farming.farmingYear|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Mensuel : ~{{ farming.farmingMonthly|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Hebdomadaire : ~{{ farming.farmingWeekly|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Journalier : ~{{ farming.farmingDaily|round(2)|number_format(2, '.', ' ') }} $</p>
+
+<p>* : Ces calculs ne prennent pas en compte un potentiel impermanent-loss.</p>
