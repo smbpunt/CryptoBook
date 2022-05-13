@@ -271,16 +271,8 @@ class Position
 
     public function getPercentEvolution(): float
     {
-        if ($this->getPercentRemainingCoins() !== 1.0) {
-            dump($this);
-            dump($this->getPercentRemainingCoins());
-        }
-        return $this->entryCost > 0 ? (
-
-
-                ($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
-
-
+        return $this->entryCost > 0
+            ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
             : 9999;
     }
 
