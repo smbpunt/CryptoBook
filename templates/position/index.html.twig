@@ -70,7 +70,8 @@
                         </td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
                         <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle text-end">{{ position.remainingCoins }}/{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle text-end">{{ position.remainingCoins }}
+                            /{{ position.nbCoins }}</td>
                         <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white align-middle text-end">{{ position.currentValue|round(2)|number_format(2, '.', ' ') }}

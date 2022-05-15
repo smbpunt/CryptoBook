@@ -2,6 +2,9 @@ $primary: darken(#ffffff, 0%);
 $modal-content-bg: #212529;
 $modal-header-border-color: #000;
 $form-check-input-checked-color: #ffc107;
+$list-group-bg: #212529;
+$list-group-color: $primary;
+$list-group-border-color: grey;
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";

@@ -34,6 +34,7 @@ Encore
     .addEntry('loan_form', './assets/loan/form.js')
     .addEntry('lp_form', './assets/lp/form.js')
     .addEntry('dca_form', './assets/dca/dca_form.js')
+    .addEntry('dca_index', './assets/dca/index.js')
     .addEntry('collection', './assets/collection.js')
     .copyFiles({
         from: './assets/images',

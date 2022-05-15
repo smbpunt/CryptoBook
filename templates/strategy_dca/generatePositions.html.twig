@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - DCA{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('collection') }}
+{% endblock %}
+
+{% block body %}
+    <h1>Génerer vos positions DCA</h1>
+
+    {{ form_start(form_dca) }}
+    <ul class="list-group list-group-flush">
+        {% for form in form_dca.positions %}
+            <li class="list-group-item">
+                {{ include('position/_form_dca.html.twig') }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button class="btn btn-light m-3">{{ button_label|default('Valider') }}</button>
+    {{ form_end(form_dca) }}
+{% endblock %}

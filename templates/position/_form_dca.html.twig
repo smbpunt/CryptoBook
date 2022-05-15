@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.openedAt, 'Date') }}
+            {{ form_widget(form.openedAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
+        </div>
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.coin, 'Coin') }}
+            {{ form_widget(form.coin) }}
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.nbCoins, 'Nombre') }}
+            {{ form_widget(form.nbCoins, { 'attr': {'placeholder': 'ex: 0.1'} }) }}
+        </div>
+        <div class="col-md-3 align-self-end">
+            <i class="bi bi-info-circle-fill" role="img" aria-label="" data-bs-toggle="tooltip"
+               title="Coût total payé (Pas le coût du coin)"></i>
+            {{ form_label(form.entryCost, 'Coût total ($)') }}
+
+            <div class="input-group">
+                {{ form_widget(form.entryCost, { 'attr': {'placeholder': 'ex: 150'} }) }}
+                <span class="input-group-text">$</span>
+            </div>
+        </div>
+    </div>
+
+</div>

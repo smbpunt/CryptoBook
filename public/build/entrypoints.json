@@ -9,7 +9,7 @@
       ],
       "css": [
         "/build/702.2a65b998.css",
-        "/build/app.4f251d1c.css"
+        "/build/app.e4c01152.css"
       ]
     },
     "tab": {
@@ -104,6 +104,13 @@
       "js": [
         "/build/runtime.e4b160ba.js",
         "/build/dca_form.15572dde.js"
+      ]
+    },
+    "dca_index": {
+      "js": [
+        "/build/runtime.e4b160ba.js",
+        "/build/169.47bac26f.js",
+        "/build/dca_index.f263f1ab.js"
       ]
     },
     "collection": {

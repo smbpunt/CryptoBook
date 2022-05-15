@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
@@ -23,6 +25,7 @@ class Position
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Positive
      */
     private $nbCoins;
 
@@ -46,6 +49,7 @@ class Position
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Positive
      */
     private $entryCost;
 
@@ -75,7 +79,7 @@ class Position
      */
     private $description;
 
-    public function __construct($user)
+    public function __construct(UserInterface $user)
     {
         $this->isOpened = true;
         $this->user = $user;

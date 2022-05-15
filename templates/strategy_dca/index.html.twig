@@ -2,24 +2,23 @@
 
 {% block title %}{{ parent() }} - DCA{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('dca_index') }}
+{% endblock %}
+
 {% block body %}
-    <div class="row mb-2">
-    <div class="col">
-        <h1>Mon DCA</h1>
-    </div>
-    <div class="col text-end">
-
-    {% if dca is defined and dca %}
-        <a href="{{ path('strategy_dca_edit') }}" class="btn btn-warning m-2">Modifier mon DCA</a>
+    {% if dca is not null %}
+        <div class="row mb-2">
+            <div class="col">
+                <h1>Mon DCA</h1>
+            </div>
+            <div class="col text-end">
+                <a id="show-modal" class="btn btn-primary m-2">Génerer mes positions</a>
+                <a href="{{ path('strategy_dca_edit') }}" class="btn btn-secondary m-2">Modifier mon DCA</a>
+            </div>
         </div>
-        </div>
 
-        {% set totaltousd = dca.fiatToDcaEur * 1.1553 + dca.farmingToDcaUsd %}
-
-        <p class="text-warning">Attention, pour le calcul du total, j'ai pris 1€ = 1.1553$. Dans l'avenir, je vais
-            trouver une API
-            pour avoir le cours
-            EUR/USD en live.</p>
+        {% set totaltousd = dca.fiatToDcaEur * ratioUsdEur + dca.farmingToDcaUsd %}
 
         <div class="row">
             <div class="col-4">
@@ -71,10 +70,43 @@
         </table>
 
 
+        <div class="modal" id="modal_informations" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="modal-title-id" class="modal-title">DCA</h5>
+                        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div id="modal-body-id" class="modal-body p-3">
+                        <label for="dca_value" class="form-label required">Argent investi ($)</label>
+                        <div class="input-group">
+                            <input type="text"
+                                   id="dca_value"
+                                   required="required"
+                                   placeholder="ex: 100"
+                                   value="{{ totaltousd|round(2) }}"
+                                   class="form-control">
+                            <span class="input-group-text">$</span>
+                        </div>
+
+                        <button data-path="{{ absolute_url(path('generatePositions')) }}"
+                                id="btn-generate"
+                                class="btn btn-light mt-3">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     {% else %}
-        <a href="{{ path('strategy_dca_new') }}" class="btn btn-warning m-2">Créer mon DCA</a>
-        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <h1>Mon DCA</h1>
+            </div>
+            <div class="col text-end">
+                <a href="{{ path('strategy_dca_new') }}" class="btn btn-warning m-2">Créer mon DCA</a>
+            </div>
         </div>
         <p>Aucune stratégie DCA définie.</p>
     {% endif %}
