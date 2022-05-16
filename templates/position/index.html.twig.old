@@ -3,7 +3,6 @@
 {% block title %}{{ parent() }} - Positions{% endblock %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('position_index') }}
     {{ encore_entry_script_tags('tab') }}
     {{ encore_entry_script_tags('tooltip') }}
     {{ encore_entry_script_tags('modal') }}
@@ -45,85 +44,55 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Ouvert le</th>
+                    <th>Nombre actuel/départ</th>
+                    <th>Coût d'entrée</th>
+                    <th>Prix d'entrée</th>
+                    <th>Valeur actuelle</th>
+                    <th>Évolution %</th>
+                    <th class="th-actions">actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for position in positions %}
                     <tr>
-                        <td class="text-white align-middle text-center" style="width: 30px;">({{ position['splitted']|length }})</td>
-                        <td class="text-center" style="width: 53px;">
+                        <td class="text-center align-middle">
                             <button type="button"
-                                    class="btn btn-xs btn-light btn-split"
-                                    data-id="{{ position['grouped']['coin'].id }}">
-                                <i class="bi bi-arrows-expand"></i>
+                                    class="btn btn-sm btn-light rounded-circle button-infos"
+                                    data-id="{{ position.id }}"
+                                    data-titlemodal=""
+                                    data-url="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                <i class="bi bi-info"></i>
                             </button>
                         </td>
-                        <td class="text-white text-center align-middle" style="width: 53px;">
-                            <img src="{{ position['grouped']['coin'].urlImgThumb }}" alt="Logo {{ position['grouped']['coin'].libelle }}">
+                        <td class="text-white text-center align-middle">
+                            <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
                         </td>
-                        <td class="text-white align-middle text-end">{{ position['grouped'].totalsum|round(8) }} {{ position['grouped']['coin'].symbol|upper }}</td>
-                        <td class="text-white align-middle text-end">
-                            ~ {{ (position['grouped'].totalsum * position['grouped']['coin'].priceUsd)|round(2) }} $
+                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
+                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
+                        <td class="text-white align-middle text-end">{{ position.remainingCoins }}
+                            /{{ position.nbCoins }}</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
+                        <td class="text-white align-middle text-end">{{ position.currentValue|round(2)|number_format(2, '.', ' ') }}
+                            $
+                        </td>
+                        <td class="align-middle text-end
+                        {% if position.percentEvolution > 0 %}
+                            text-success
+                        {% else %}
+                            text-warning
+                        {% endif %}">
+                            {% if position.percentEvolution <= -99.9 %}
+                                LUNA SPOTTED
+                            {% else %}
+                                {{ position.percentEvolution|number_format(0, '.', ' ') }} %
+                            {% endif %}
+                        </td>
+                        <td class="text-white text-center align-middle">
+                            {{ include('position/_indexactions_form.html.twig') }}
                         </td>
                     </tr>
-                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="5">
-                        <table class="table table-bordered table-striped table-responsive-md table-dark">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Ouvert le</th>
-                                <th>Nombre actuel/départ</th>
-                                <th>Coût d'entrée</th>
-                                <th>Prix d'entrée</th>
-                                <th>Valeur actuelle</th>
-                                <th>Évolution %</th>
-                                <th class="th-actions">actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for detail in position['splitted'] %}
-                                <tr>
-                                    <td class="text-center align-middle">
-                                        <button type="button"
-                                                class="btn btn-sm btn-light rounded-circle button-infos"
-                                                data-id="{{ detail.id }}"
-                                                data-titlemodal=""
-                                                data-url="{{ path('position-infos-ajax', {'id': detail.id}) }}">
-                                            <i class="bi bi-info"></i>
-                                        </button>
-                                    </td>
-                                    <td class="text-white align-middle text-center">{{ detail.openedAt ? detail.openedAt|date('d/m/Y') : '' }}</td>
-                                    <td class="text-white align-middle text-end">{{ detail.remainingCoins }}
-                                        /{{ detail.nbCoins }}</td>
-                                    <td class="text-white align-middle text-end">{{ detail.entryCost|number_format(2, '.', ' ') }} $</td>
-                                    <td class="text-white align-middle text-end">{{ detail.entryCoinValue|number_format(2, '.', ' ') }}
-                                        $
-                                    </td>
-                                    <td class="text-white align-middle text-end">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }}
-                                        $
-                                    </td>
-                                    <td class="align-middle text-end
-                                        {% if detail.percentEvolution > 0 %}
-                                            text-success
-                                        {% else %}
-                                            text-warning
-                                        {% endif %}">
-                                        {% if detail.percentEvolution <= -99.9 %}
-                                            LUNA SPOTTED
-                                        {% else %}
-                                            {{ detail.percentEvolution|number_format(0, '.', ' ') }} %
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-white text-center align-middle">
-                                        {{ include('position/_indexactions_form.html.twig') }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </td>
                 {% else %}
                     <tr>
                         <td colspan="8">no records found</td>
@@ -132,8 +101,6 @@
                 </tbody>
             </table>
         </div>
-
-
         <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
             <table class="table table-bordered table-striped table-responsive-md table-dark">
                 <thead>
