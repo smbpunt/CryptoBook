@@ -168,7 +168,7 @@
                         <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
-                            {{ include('position/_indexactions_form.html.twig') }}
+                            {{ include('position/_indexactions_form_position.html.twig') }}
                         </td>
                     </tr>
                 {% else %}
@@ -215,7 +215,7 @@
                         <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
                         <td class="text-white text-center align-middle">
-                            {{ include('position/_indexactions_form.html.twig') }}
+                            {{ include('position/_indexactions_form_position.html.twig') }}
                         </td>
                     </tr>
                 {% else %}
