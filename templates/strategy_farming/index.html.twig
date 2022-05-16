@@ -69,6 +69,7 @@
                     <thead>
                     <tr>
                         <th></th>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
@@ -97,16 +98,20 @@
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
+                            <td class="text-white text-center align-middle">
+                                <img src="{{ strategy_farming['strategy'].coin.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming['strategy'].coin.libelle }}">
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                    {{ strategy_farming['strategy'].dapp.blockchain|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
-                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
+                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp|capitalize }}</a>
                                 {% elseif strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp }}
+                                    {{ strategy_farming['strategy'].dapp|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
@@ -148,6 +153,7 @@
                     <thead>
                     <tr>
                         <th></th>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Nombre</th>
@@ -176,16 +182,20 @@
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
+                            <td class="text-white text-center align-middle">
+                                <img src="{{ strategy_farming['strategy'].coin.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming['strategy'].coin.libelle }}">
+                            </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                    {{ strategy_farming['strategy'].dapp.blockchain|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
-                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
+                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp|capitalize }}</a>
                                 {% elseif strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp }}
+                                    {{ strategy_farming['strategy'].dapp|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
@@ -227,6 +237,7 @@
                     <thead>
                     <tr>
                         <th></th>
+                        <th></th>
                         <th>Blockchain</th>
                         <th>Dapp</th>
                         <th>Pair</th>
@@ -254,6 +265,13 @@
                                         data-url="{{ path('farminglp-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
+                            </td>
+
+                            <td class="text-white text-center align-middle">
+                                <img src="{{ strategy_farming['strategy'].coin1.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming['strategy'].coin1.libelle }}">
+                                <img src="{{ strategy_farming['strategy'].coin2.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming['strategy'].coin2.libelle }}">
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
