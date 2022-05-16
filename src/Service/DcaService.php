@@ -32,6 +32,7 @@ class DcaService
                 ->setNbCoins($nbCoinBought)
                 ->setRemainingCoins($nbCoinBought)
                 ->setIsOpened(true)
+                ->setIsDca(true)
                 ->setDescription("DCA " . $part->getPercent() . "%");
             $positions[] = $position;
         }

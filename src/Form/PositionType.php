@@ -36,6 +36,10 @@ class PositionType extends AbstractType
                 'label' => 'Position ouverte ?',
                 'required' => false
             ])
+            ->add('isDca', CheckboxType::class, [
+                'label' => 'DCA ?',
+                'required' => false
+            ])
             ->add('entryCost', NumberType::class, [
                 'required' => true
             ])

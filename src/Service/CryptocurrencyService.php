@@ -56,14 +56,10 @@ class CryptocurrencyService
             $datas = $this->client->coins()->getCoin($libelleCG);
             if (is_array($datas)) {
                 if (array_key_exists('market_data', $datas)) {
-
                     //Mets à jour les prix
                     if (array_key_exists('current_price', $datas['market_data'])) {
                         if (array_key_exists('usd', $datas['market_data']['current_price'])) {
                             $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
-                        }
-                        if (array_key_exists('eur', $datas['market_data']['current_price'])) {
-                            $cryptocurrency->setPriceEur($datas['market_data']['current_price']['eur']);
                         }
                     }
 

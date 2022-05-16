@@ -79,12 +79,18 @@ class Position
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDca;
+
     public function __construct(UserInterface $user)
     {
-        $this->isOpened = true;
-        $this->user = $user;
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
+        $this->user = $user;
+        $this->isOpened = true;
+        $this->isDca = false;
         $this->remainingCoins = 0;
         $this->description = "";
     }
@@ -278,6 +284,18 @@ class Position
         return $this->entryCost > 0
             ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
             : 9999;
+    }
+
+    public function isIsDca(): ?bool
+    {
+        return $this->isDca;
+    }
+
+    public function setIsDca(bool $isDca): self
+    {
+        $this->isDca = $isDca;
+
+        return $this;
     }
 
 }

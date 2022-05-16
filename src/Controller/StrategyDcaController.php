@@ -39,11 +39,12 @@ class StrategyDcaController extends AbstractController
 
     /**
      * @Route("/generatePositions/{value}", name="generatePositions", methods={"GET","POST"})
-     * @param float $value
      * @param Request $request
      * @param StrategyDcaRepository $strategyDcaRepository
      * @param ManagerRegistry $doctrine
      * @param DcaService $dcaService
+     * @param CryptocurrencyRepository $cryptocurrencyRepository
+     * @param float $value
      * @return Response
      */
     public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, ManagerRegistry $doctrine, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, float $value = 0): Response
