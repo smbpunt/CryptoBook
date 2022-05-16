@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Cryptocurrency;
 use App\Entity\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,14 +30,14 @@ class PositionRepository extends ServiceEntityRepository
             ->andWhere('p.isOpened = 1')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
-            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd')
+            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
             ->groupBy('p.coin')
             ->getQuery()->getArrayResult();
     }
 
-    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true): array
+    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true, Cryptocurrency $cryptocurrency = null): array
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->join('p.coin', 'c')
             ->where('p.user = :user')
             ->andWhere('c.isStable = :isStable')
@@ -46,8 +47,14 @@ class PositionRepository extends ServiceEntityRepository
             ->setParameter('isOpen', $isOpen)
             ->addOrderBy('c.mcapUsd', 'DESC')
             ->addOrderBy('p.openedAt', 'ASC')
-            ->addOrderBy('p.entryCost', 'DESC')
-            ->getQuery()->getResult();
+            ->addOrderBy('p.entryCost', 'DESC');
+
+        if ($cryptocurrency) {
+            $qb->andWhere('p.coin = :coin')
+                ->setParameter('coin', $cryptocurrency);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**

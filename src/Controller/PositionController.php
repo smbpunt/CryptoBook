@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Position;
 use App\Form\PositionType;
+use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
 use App\Service\PositionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +18,37 @@ use Symfony\Component\Routing\Annotation\Route;
 class PositionController extends AbstractController
 {
     /**
+     * OLD index position 16/05/22
+     *
+     * public function index(PositionRepository $positionRepository): Response
+     * {
+     * return $this->render('position/index.html.twig', [
+     * 'positions' => $positionRepository->getPositions($this->getUser(), false),
+     * 'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
+     * 'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false)
+     * ]);
+     * }     */
+
+
+    /**
      * @Route("/", name="position_index", methods={"GET"})
      */
-    public function index(PositionRepository $positionRepository): Response
+    public function index(PositionRepository $positionRepository, CryptocurrencyRepository $cryptocurrencyRepository): Response
     {
+        $positions_sum = $cryptocurrencyRepository->getSumCoinByUser($this->getUser()) ?? [];
+
+        $map = [];
+        foreach ($positions_sum as $byCoin) {
+            $coin = $byCoin['coin'];
+            $positionsByCoin = $positionRepository->getPositions($this->getUser(), false, true, $coin);
+            $map[] = [
+                'grouped' => $byCoin,
+                'splitted' => $positionsByCoin
+            ];
+        }
+
         return $this->render('position/index.html.twig', [
-            'positions' => $positionRepository->getPositions($this->getUser(), false),
+            'positions' => $map,
             'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
             'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false)
         ]);

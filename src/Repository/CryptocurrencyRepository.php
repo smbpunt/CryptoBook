@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Cryptocurrency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Cryptocurrency|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +20,18 @@ class CryptocurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, Cryptocurrency::class);
     }
 
-    // /**
-    //  * @return Cryptocurrency[] Returns an array of Cryptocurrency objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Cryptocurrency
+    public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->join('c.positions', 'p')
+            ->andWhere('p.user = :user')
+            ->andWhere('c.isStable = :isStable')
+            ->andWhere('p.isOpened = 1')
+            ->setParameter('user', $user)
+            ->setParameter('isStable', $isStable)
+            ->select('SUM(p.remainingCoins) as totalsum', 'c as coin')
+            ->groupBy('p.coin')
+            ->getQuery()->getResult();
     }
-    */
 }
