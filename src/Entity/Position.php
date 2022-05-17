@@ -49,7 +49,7 @@ class Position
 
     /**
      * @ORM\Column(type="float")
-     * @Assert\Positive
+     * @Assert\PositiveOrZero
      */
     private $entryCost;
 
