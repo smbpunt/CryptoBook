@@ -30,7 +30,6 @@ class DcaService
                 ->setCoin($coin)
                 ->setEntryCost($dollarInvested)
                 ->setNbCoins($nbCoinBought)
-                ->setRemainingCoins($nbCoinBought)
                 ->setIsOpened(true)
                 ->setIsDca(true)
                 ->setDescription("DCA " . $part->getPercent() . "%");

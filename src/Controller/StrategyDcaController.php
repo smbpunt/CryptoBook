@@ -8,6 +8,7 @@ use App\Form\StrategyDcaType;
 use App\Repository\CryptocurrencyRepository;
 use App\Repository\StrategyDcaRepository;
 use App\Service\DcaService;
+use App\Service\PositionService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,7 +48,7 @@ class StrategyDcaController extends AbstractController
      * @param float $value
      * @return Response
      */
-    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, ManagerRegistry $doctrine, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, float $value = 0): Response
+    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, ManagerRegistry $doctrine, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, PositionService $positionService, float $value = 0): Response
     {
         $strategyDca = $strategyDcaRepository->findOneBy([
             'user' => $this->getUser()
@@ -71,6 +72,7 @@ class StrategyDcaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $doctrine->getManager();
             foreach ($positions as $position) {
+                $positionService->calculateRemainingCoins($position);
                 $entityManager->persist($position);
             }
             $entityManager->flush();
