@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
@@ -25,7 +24,6 @@ class Position
 
     /**
      * @ORM\Column(type="float")
-     * @Assert\Positive
      */
     private $nbCoins;
 
@@ -49,7 +47,6 @@ class Position
 
     /**
      * @ORM\Column(type="float")
-     * @Assert\PositiveOrZero
      */
     private $entryCost;
 
