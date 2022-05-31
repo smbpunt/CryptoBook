@@ -53,6 +53,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: StrategyLp::class, orphanRemoval: true)]
     private $strategyLps;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $lastConnectedAt;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -365,5 +368,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->email;
+    }
+
+    public function getLastConnectedAt(): ?\DateTimeImmutable
+    {
+        return $this->lastConnectedAt;
+    }
+
+    public function setLastConnectedAt(?\DateTimeImmutable $lastConnectedAt): self
+    {
+        $this->lastConnectedAt = $lastConnectedAt;
+
+        return $this;
     }
 }
