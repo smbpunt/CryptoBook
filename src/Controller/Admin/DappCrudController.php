@@ -17,11 +17,8 @@ class DappCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
-
         yield TextField::new('libelle');
         yield TextField::new('url');
         yield AssociationField::new('blockchain', 'Blockchain');
     }
-
 }

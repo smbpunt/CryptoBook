@@ -5,33 +5,23 @@ namespace App\Entity;
 use App\Repository\CoinPercentDcaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CoinPercentDcaRepository::class)
- */
+#[ORM\Entity(repositoryClass: CoinPercentDcaRepository::class)]
 class CoinPercentDca
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $percent;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=StrategyDca::class, inversedBy="parts")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: StrategyDca::class, inversedBy: 'parts')]
+    #[ORM\JoinColumn(nullable: false)]
     private $strategyDca;
 
     public function getId(): ?int

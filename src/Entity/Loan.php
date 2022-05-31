@@ -5,62 +5,43 @@ namespace App\Entity;
 use App\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=LoanRepository::class)
- */
+#[ORM\Entity(repositoryClass: LoanRepository::class)]
 class Loan
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="loans")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'loans')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
-    /**
-     * @var Cryptocurrency
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="loans")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'loans')]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $nbCoins;
 
-    /**
-     * @var Blockchain
-     */
-    private $blockchain;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="loans")
-     */
+    #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'loans')]
+    #[ORM\JoinColumn(nullable: false)]
     private $dapp;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    private Blockchain $blockchain;
+
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $loanedAt;
 
     /**
-     * @param $user
+     * @param $owner
      */
-    public function __construct($user)
+    public function __construct($owner)
     {
-        $this->user = $user;
+        $this->owner = $owner;
     }
 
     public function getId(): ?int
@@ -68,14 +49,14 @@ class Loan
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getOwner(): ?User
     {
-        return $this->user;
+        return $this->owner;
     }
 
-    public function setUser(?User $user): self
+    public function setOwner(?User $owner): self
     {
-        $this->user = $user;
+        $this->owner = $owner;
 
         return $this;
     }
@@ -104,21 +85,6 @@ class Loan
         return $this;
     }
 
-    public function getBlockchain(): ?Blockchain
-    {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
-            $this->blockchain = $this->dapp->getBlockchain();
-        }
-        return $this->blockchain;
-    }
-
-    public function setBlockchain(?Blockchain $blockchain): self
-    {
-        $this->blockchain = $blockchain;
-
-        return $this;
-    }
-
     public function getDapp(): ?Dapp
     {
         return $this->dapp;
@@ -136,7 +102,7 @@ class Loan
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -160,4 +126,18 @@ class Loan
         return $this->getNbCoins() * $this->coin->getPriceUsd();
     }
 
+    public function getBlockchain(): ?Blockchain
+    {
+        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+            $this->blockchain = $this->dapp->getBlockchain();
+        }
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(?Blockchain $blockchain): self
+    {
+        $this->blockchain = $blockchain;
+
+        return $this;
+    }
 }

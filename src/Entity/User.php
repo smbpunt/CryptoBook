@@ -10,79 +10,48 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte avec cette adresse email.")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private $roles = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private $password;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isVerified = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Position::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $positions;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Deposit::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Deposit::class, orphanRemoval: true)]
     private $deposits;
 
-    /**
-     * @ORM\OneToOne(targetEntity=StrategyDca::class, mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $strategyDca;
-
-    /**
-     * @ORM\OneToMany(targetEntity=StrategyFarming::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $farmingStrategies;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $loans;
-
-    /**
-     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $strategyLPs;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Nft::class, orphanRemoval: true)]
     private $nfts;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProjectMonitoring::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Position::class, orphanRemoval: true)]
+    private $positions;
+
+    #[ORM\OneToOne(mappedBy: 'owner', targetEntity: StrategyDca::class, cascade: ['persist', 'remove'])]
+    private $strategyDca;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Loan::class, orphanRemoval: true)]
+    private $loans;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: ProjectMonitoring::class, orphanRemoval: true)]
     private $projectMonitorings;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: StrategyFarming::class, orphanRemoval: true)]
+    private $farmingStrategies;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: StrategyLp::class, orphanRemoval: true)]
+    private $strategyLps;
 
     public function __construct()
     {
@@ -90,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->deposits = new ArrayCollection();
         $this->farmingStrategies = new ArrayCollection();
         $this->loans = new ArrayCollection();
-        $this->strategyLPs = new ArrayCollection();
+        $this->strategyLps = new ArrayCollection();
         $this->nfts = new ArrayCollection();
         $this->projectMonitorings = new ArrayCollection();
         $this->roles[] = 'ROLE_USER';
@@ -120,15 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
@@ -166,17 +127,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
-     * @see UserInterface
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
      * @see UserInterface
      */
     public function eraseCredentials()
@@ -185,55 +135,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): self
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Position[]
-     */
-    public function getPositions(): Collection
-    {
-        return $this->positions;
-    }
-
-    public function addPosition(Position $position): self
-    {
-        if (!$this->positions->contains($position)) {
-            $this->positions[] = $position;
-            $position->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePosition(Position $position): self
-    {
-        if ($this->positions->removeElement($position)) {
-            // set the owning side to null (unless already changed)
-            if ($position->getUser() === $this) {
-                $position->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return Collection|Deposit[]
+     * @return Collection<int, Deposit>
      */
     public function getDeposits(): Collection
     {
@@ -244,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->deposits->contains($deposit)) {
             $this->deposits[] = $deposit;
-            $deposit->setUser($this);
+            $deposit->setOwner($this);
         }
 
         return $this;
@@ -254,8 +157,68 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->deposits->removeElement($deposit)) {
             // set the owning side to null (unless already changed)
-            if ($deposit->getUser() === $this) {
-                $deposit->setUser(null);
+            if ($deposit->getOwner() === $this) {
+                $deposit->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Nft>
+     */
+    public function getNfts(): Collection
+    {
+        return $this->nfts;
+    }
+
+    public function addNft(Nft $nft): self
+    {
+        if (!$this->nfts->contains($nft)) {
+            $this->nfts[] = $nft;
+            $nft->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNft(Nft $nft): self
+    {
+        if ($this->nfts->removeElement($nft)) {
+            // set the owning side to null (unless already changed)
+            if ($nft->getOwner() === $this) {
+                $nft->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Position>
+     */
+    public function getPositions(): Collection
+    {
+        return $this->positions;
+    }
+
+    public function addPosition(Position $position): self
+    {
+        if (!$this->positions->contains($position)) {
+            $this->positions[] = $position;
+            $position->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removePosition(Position $position): self
+    {
+        if ($this->positions->removeElement($position)) {
+            // set the owning side to null (unless already changed)
+            if ($position->getOwner() === $this) {
+                $position->setOwner(null);
             }
         }
 
@@ -270,8 +233,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStrategyDca(StrategyDca $strategyDca): self
     {
         // set the owning side of the relation if necessary
-        if ($strategyDca->getUser() !== $this) {
-            $strategyDca->setUser($this);
+        if ($strategyDca->getOwner() !== $this) {
+            $strategyDca->setOwner($this);
         }
 
         $this->strategyDca = $strategyDca;
@@ -280,37 +243,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|StrategyFarming[]
-     */
-    public function getFarmingStrategies(): Collection
-    {
-        return $this->farmingStrategies;
-    }
-
-    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if (!$this->farmingStrategies->contains($farmingStrategy)) {
-            $this->farmingStrategies[] = $farmingStrategy;
-            $farmingStrategy->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
-            // set the owning side to null (unless already changed)
-            if ($farmingStrategy->getUser() === $this) {
-                $farmingStrategy->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Loan[]
+     * @return Collection<int, Loan>
      */
     public function getLoans(): Collection
     {
@@ -321,7 +254,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->loans->contains($loan)) {
             $this->loans[] = $loan;
-            $loan->setUser($this);
+            $loan->setOwner($this);
         }
 
         return $this;
@@ -331,8 +264,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->loans->removeElement($loan)) {
             // set the owning side to null (unless already changed)
-            if ($loan->getUser() === $this) {
-                $loan->setUser(null);
+            if ($loan->getOwner() === $this) {
+                $loan->setOwner(null);
             }
         }
 
@@ -340,67 +273,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|StrategyLP[]
-     */
-    public function getStrategyLPs(): Collection
-    {
-        return $this->strategyLPs;
-    }
-
-    public function addStrategyLP(StrategyLP $strategyLP): self
-    {
-        if (!$this->strategyLPs->contains($strategyLP)) {
-            $this->strategyLPs[] = $strategyLP;
-            $strategyLP->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStrategyLP(StrategyLP $strategyLP): self
-    {
-        if ($this->strategyLPs->removeElement($strategyLP)) {
-            // set the owning side to null (unless already changed)
-            if ($strategyLP->getUser() === $this) {
-                $strategyLP->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Nft[]
-     */
-    public function getNfts(): Collection
-    {
-        return $this->nfts;
-    }
-
-    public function addNft(Nft $nft): self
-    {
-        if (!$this->nfts->contains($nft)) {
-            $this->nfts[] = $nft;
-            $nft->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNft(Nft $nft): self
-    {
-        if ($this->nfts->removeElement($nft)) {
-            // set the owning side to null (unless already changed)
-            if ($nft->getUser() === $this) {
-                $nft->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ProjectMonitoring[]
+     * @return Collection<int, ProjectMonitoring>
      */
     public function getProjectMonitorings(): Collection
     {
@@ -411,7 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->projectMonitorings->contains($projectMonitoring)) {
             $this->projectMonitorings[] = $projectMonitoring;
-            $projectMonitoring->setUser($this);
+            $projectMonitoring->setOwner($this);
         }
 
         return $this;
@@ -421,13 +294,76 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->projectMonitorings->removeElement($projectMonitoring)) {
             // set the owning side to null (unless already changed)
-            if ($projectMonitoring->getUser() === $this) {
-                $projectMonitoring->setUser(null);
+            if ($projectMonitoring->getOwner() === $this) {
+                $projectMonitoring->setOwner(null);
             }
         }
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, StrategyFarming>
+     */
+    public function getFarmingStrategies(): Collection
+    {
+        return $this->farmingStrategies;
+    }
 
+    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if (!$this->farmingStrategies->contains($farmingStrategy)) {
+            $this->farmingStrategies[] = $farmingStrategy;
+            $farmingStrategy->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
+            // set the owning side to null (unless already changed)
+            if ($farmingStrategy->getOwner() === $this) {
+                $farmingStrategy->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StrategyLp>
+     */
+    public function getStrategyLps(): Collection
+    {
+        return $this->strategyLps;
+    }
+
+    public function addStrategyLp(StrategyLp $strategyLp): self
+    {
+        if (!$this->strategyLps->contains($strategyLp)) {
+            $this->strategyLps[] = $strategyLp;
+            $strategyLp->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategyLp(StrategyLp $strategyLp): self
+    {
+        if ($this->strategyLps->removeElement($strategyLp)) {
+            // set the owning side to null (unless already changed)
+            if ($strategyLp->getOwner() === $this) {
+                $strategyLp->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->email;
+    }
 }

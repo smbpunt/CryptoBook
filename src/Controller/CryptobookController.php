@@ -7,20 +7,15 @@ use App\Repository\DepositRepository;
 use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyFarmingRepository;
-use App\Repository\StrategyLPRepository;
+use App\Repository\StrategyLpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/")
- */
 class CryptobookController extends AbstractController
 {
-    /**
-     * @Route("", name="home")
-     */
-    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLPRepository $strategyLPRepository, CryptocurrencyRepository $cryptocurrencyRepository, LoanRepository $loanRepository): Response
+    #[Route('/', name: 'home')]
+    public function index(PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, CryptocurrencyRepository $cryptocurrencyRepository, LoanRepository $loanRepository): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
@@ -66,10 +61,10 @@ class CryptobookController extends AbstractController
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
 
         $strategies = $strategyFarmingRepository->findBy([
-            'user' => $this->getUser()
+            'owner' => $this->getUser()
         ]);
-        $strategies_lp = $strategyLPRepository->findBy([
-            'user' => $this->getUser()
+        $strategies_lp = $strategyLpRepository->findBy([
+            'owner' => $this->getUser()
         ]);
 
         $totalYearFarming = 0;
@@ -83,7 +78,6 @@ class CryptobookController extends AbstractController
             $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
             $totalYearFarming += $strategy->getApr() * $value_dollar / 100;
         }
-
 
         $totalLoan = $loanRepository->getTotal($this->getUser());
 

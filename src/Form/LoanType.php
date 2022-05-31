@@ -36,7 +36,8 @@ class LoanType extends AbstractType
                 'attr' => ['class' => 'js-select2'],
             ])
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
+                'empty_data' => ''
             ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,
@@ -44,7 +45,7 @@ class LoanType extends AbstractType
                 'attr' => ['class' => 'js-select2'],
             ]);
 
-        $formModifier = function (FormInterface $form, Blockchain $blockchain = null) {
+        $formModifier = static function (FormInterface $form, Blockchain $blockchain = null) {
             $dapps = null === $blockchain ? [] : $blockchain->getDapps();
             $form->add('dapp', EntityType::class, [
                 'class' => Dapp::class,
@@ -62,7 +63,7 @@ class LoanType extends AbstractType
                  * @var Loan $data
                  */
                 $data = $event->getData();
-                $blockchain = $data->getDapp() ? $data->getDapp()->getBlockchain() : null;
+                $blockchain = $data->getDapp()?->getBlockchain();
                 $formModifier($event->getForm(), $blockchain);
             }
         );

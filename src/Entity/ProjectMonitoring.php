@@ -5,64 +5,44 @@ namespace App\Entity;
 use App\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectMonitoringRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProjectMonitoringRepository::class)]
 class ProjectMonitoring
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="userProjectMonitorings")
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'projectMonitorings')]
     private $coin;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $note;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projectMonitorings")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectMonitorings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
-    /**
-     * @var string[]
-     * @ORM\Column(type="array")
-     */
-    private array $links = [];
+    #[ORM\Column(type: 'array')]
+    private $links = [];
 
-    /**
-     * @ORM\ManyToOne(targetEntity=TypeProject::class, inversedBy="projectMonitorings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $type;
 
     /**
-     * @param $user
+     * @param $owner
      */
-    public function __construct($user)
+    public function __construct($owner)
     {
-        $this->user = $user;
+        $this->owner = $owner;
     }
-
 
     public function getId(): ?int
     {
@@ -117,14 +97,14 @@ class ProjectMonitoring
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getOwner(): ?User
     {
-        return $this->user;
+        return $this->owner;
     }
 
-    public function setUser(?User $user): self
+    public function setOwner(?User $owner): self
     {
-        $this->user = $user;
+        $this->owner = $owner;
 
         return $this;
     }

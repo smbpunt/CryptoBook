@@ -7,42 +7,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StrategyDcaRepository::class)
- */
+#[ORM\Entity(repositoryClass: StrategyDcaRepository::class)]
 class StrategyDca
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="strategyDca", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\OneToOne(inversedBy: 'strategyDca', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
-    /**
-     * @ORM\OneToMany(targetEntity=CoinPercentDca::class, mappedBy="strategyDca", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(mappedBy: 'strategyDca', targetEntity: CoinPercentDca::class, cascade: ['persist'], orphanRemoval: true)]
     private $parts;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $fiatToDcaEur;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $farmingToDcaUsd;
 
-    public function __construct($user)
+    public function __construct($owner)
     {
-        $this->user = $user;
+        $this->owner = $owner;
         $this->parts = new ArrayCollection();
     }
 
@@ -51,20 +39,20 @@ class StrategyDca
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getOwner(): ?User
     {
-        return $this->user;
+        return $this->owner;
     }
 
-    public function setUser(User $user): self
+    public function setOwner(User $owner): self
     {
-        $this->user = $user;
+        $this->owner = $owner;
 
         return $this;
     }
 
     /**
-     * @return Collection|CoinPercentDca[]
+     * @return Collection<int, CoinPercentDca>
      */
     public function getParts(): Collection
     {

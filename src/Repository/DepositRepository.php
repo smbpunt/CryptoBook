@@ -9,6 +9,8 @@ use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * @extends ServiceEntityRepository<Deposit>
+ *
  * @method Deposit|null find($id, $lockMode = null, $lockVersion = null)
  * @method Deposit|null findOneBy(array $criteria, array $orderBy = null)
  * @method Deposit[]    findAll()
@@ -21,12 +23,30 @@ class DepositRepository extends ServiceEntityRepository
         parent::__construct($registry, Deposit::class);
     }
 
+    public function add(Deposit $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Deposit $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     public function getTotal(UserInterface $user): float
     {
         $qb = $this->createQueryBuilder('d')
             ->select('SUM(d.valueEur) as totalsum')
-            ->where('d.user = :user')
-            ->groupBy('d.user')
+            ->where('d.owner = :user')
+            ->groupBy('d.owner')
             ->setParameter('user', $user);
         try {
             return $qb->getQuery()->getSingleScalarResult();
@@ -35,32 +55,28 @@ class DepositRepository extends ServiceEntityRepository
         return 0;
     }
 
-    // /**
-    //  * @return Deposit[] Returns an array of Deposit objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+//    /**
+//     * @return Deposit[] Returns an array of Deposit objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('d')
+//            ->andWhere('d.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('d.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
-    /*
-    public function findOneBySomeField($value): ?Deposit
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+//    public function findOneBySomeField($value): ?Deposit
+//    {
+//        return $this->createQueryBuilder('d')
+//            ->andWhere('d.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

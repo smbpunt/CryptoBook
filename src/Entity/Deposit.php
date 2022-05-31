@@ -3,81 +3,55 @@
 namespace App\Entity;
 
 use App\Repository\DepositRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DepositRepository::class)
- */
+#[ORM\Entity(repositoryClass: DepositRepository::class)]
 class Deposit
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $depositedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Exchange::class, inversedBy="deposits")
-     */
+    #[ORM\ManyToOne(targetEntity: DepositType::class, inversedBy: 'deposits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $type;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'deposits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
+
+    #[ORM\Column(type: 'float')]
+    private $valueEur;
+
+    #[ORM\ManyToOne(targetEntity: Exchange::class, inversedBy: 'deposits')]
+    #[ORM\JoinColumn(nullable: false)]
     private $exchange;
 
     /**
-     * @ORM\ManyToOne(targetEntity=DepositType::class, inversedBy="deposits")
+     * @param $owner
      */
-    private $type;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="deposits")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $valueEur;
-
-    /**
-     * @param $user
-     */
-    public function __construct($user)
+    public function __construct($owner)
     {
-        $this->user = $user;
+        $this->owner = $owner;
     }
-
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDepositedAt(): ?DateTimeImmutable
+    public function getDepositedAt(): ?\DateTimeImmutable
     {
         return $this->depositedAt;
     }
 
-    public function setDepositedAt(?DateTimeImmutable $depositedAt): self
+    public function setDepositedAt(?\DateTimeImmutable $depositedAt): self
     {
         $this->depositedAt = $depositedAt;
-
-        return $this;
-    }
-
-    public function getExchange(): ?Exchange
-    {
-        return $this->exchange;
-    }
-
-    public function setExchange(?Exchange $exchange): self
-    {
-        $this->exchange = $exchange;
 
         return $this;
     }
@@ -94,14 +68,14 @@ class Deposit
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getOwner(): ?User
     {
-        return $this->user;
+        return $this->owner;
     }
 
-    public function setUser(?User $user): self
+    public function setOwner(?User $owner): self
     {
-        $this->user = $user;
+        $this->owner = $owner;
 
         return $this;
     }
@@ -114,6 +88,18 @@ class Deposit
     public function setValueEur(float $valueEur): self
     {
         $this->valueEur = $valueEur;
+
+        return $this;
+    }
+
+    public function getExchange(): ?Exchange
+    {
+        return $this->exchange;
+    }
+
+    public function setExchange(?Exchange $exchange): self
+    {
+        $this->exchange = $exchange;
 
         return $this;
     }

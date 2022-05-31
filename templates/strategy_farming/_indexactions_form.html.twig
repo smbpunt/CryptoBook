@@ -1,8 +1,8 @@
-<form method="post" action="{{ path('strategy_farming_delete', {'id': strategy_farming['strategy'].id}) }}"
+<form method="post" action="{{ path('app_strategy_farming_delete', {'id': strategy_farming['strategy'].id}) }}"
       onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ strategy_farming['strategy'].id) }}">
     <div class="btn-group" role="group" aria-label="Basic outlined example">
-        <a href="{{ path('strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}"
+        <a href="{{ path('app_strategy_farming_edit', {'id': strategy_farming['strategy'].id}) }}"
            class="btn btn-outline-light">Modifier</a>
         <button type="submit" class="btn btn-outline-light">Supprimer</button>
     </div>

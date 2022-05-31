@@ -3,89 +3,60 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=PositionRepository::class)
- */
+#[ORM\Entity(repositoryClass: PositionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Position
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $nbCoins;
 
-    /**
-     * @var Cryptocurrency
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="positions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'positions')]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="positions")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'positions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isOpened;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $entryCost;
 
-    /**
-     * @var Vente[]
-     * @ORM\OneToMany(targetEntity=Vente::class, mappedBy="position", orphanRemoval=true, cascade={"persist"})
-     */
-    private $ventes;
-
-    /**
-     * @ORM\OneToMany(targetEntity=StrategyPosition::class, mappedBy="position", orphanRemoval=true, cascade={"persist"})
-     */
-    private $strategies;
-
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $openedAt;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $remainingCoins;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isDca;
 
-    public function __construct(UserInterface $user)
+    #[ORM\OneToMany(mappedBy: 'position', targetEntity: Vente::class, cascade: ['persist'], orphanRemoval: true)]
+    private $ventes;
+
+    #[ORM\OneToMany(mappedBy: 'position', targetEntity: StrategyPosition::class, cascade: ['persist'], orphanRemoval: true)]
+    private $strategies;
+
+    public function __construct($owner)
     {
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
-        $this->user = $user;
+        $this->owner = $owner;
         $this->isOpened = true;
         $this->isDca = false;
         $this->remainingCoins = 0;
@@ -95,59 +66,6 @@ class Position
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCoin(): ?Cryptocurrency
-    {
-        return $this->coin;
-    }
-
-    public function setCoin(?Cryptocurrency $coin): self
-    {
-        $this->coin = $coin;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getIsOpened(): ?bool
-    {
-        return $this->isOpened;
-    }
-
-    public function setIsOpened(bool $isOpened): self
-    {
-        $this->isOpened = $isOpened;
-
-        return $this;
-    }
-
-    public function getEntryCoinValue(): ?float
-    {
-        return round(($this->getEntryCost() / $this->getNbCoins()), 2);
-    }
-
-    public function getEntryCost(): ?float
-    {
-        return $this->entryCost;
-    }
-
-    public function setEntryCost(float $entryCost): self
-    {
-        $this->entryCost = $entryCost;
-
-        return $this;
     }
 
     public function getNbCoins(): ?float
@@ -162,80 +80,60 @@ class Position
         return $this;
     }
 
-    /**
-     * @return Collection|Vente[]
-     */
-    public function getVentes(): Collection
+    public function getCoin(): ?Cryptocurrency
     {
-        return $this->ventes;
+        return $this->coin;
     }
 
-    /**
-     * @return Collection|Vente[]
-     */
-    public function getVentesSortedByDate(): Collection
+    public function setCoin(?Cryptocurrency $coin): self
     {
-        return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
-    }
-
-    public function addVente(Vente $vente): self
-    {
-        if (!$this->ventes->contains($vente)) {
-            $this->ventes[] = $vente;
-            $vente->setPosition($this);
-        }
+        $this->coin = $coin;
 
         return $this;
     }
 
-    public function addStrategy(StrategyPosition $strategy): self
+    public function getOwner(): ?User
     {
-        if (!$this->strategies->contains($strategy)) {
-            $this->strategies[] = $strategy;
-            $strategy->setPosition($this);
-        }
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
 
-    public function removeVente(Vente $vente): self
+    public function isIsOpened(): ?bool
     {
-        if ($this->ventes->removeElement($vente)) {
-            // set the owning side to null (unless already changed)
-            if ($vente->getPosition() === $this) {
-                $vente->setPosition(null);
-            }
-        }
+        return $this->isOpened;
+    }
+
+    public function setIsOpened(bool $isOpened): self
+    {
+        $this->isOpened = $isOpened;
 
         return $this;
     }
 
-    /**
-     * @return Collection|StrategyPosition[]
-     */
-    public function getStrategies(): Collection
+    public function getEntryCost(): ?float
     {
-        return $this->strategies;
+        return $this->entryCost;
     }
 
-    public function removeStrategy(StrategyPosition $strategy): self
+    public function setEntryCost(float $entryCost): self
     {
-        if ($this->strategies->removeElement($strategy)) {
-            // set the owning side to null (unless already changed)
-            if ($strategy->getPosition() === $this) {
-                $strategy->setPosition(null);
-            }
-        }
+        $this->entryCost = $entryCost;
 
         return $this;
     }
 
-    public function getOpenedAt(): ?DateTimeImmutable
+    public function getOpenedAt(): ?\DateTimeImmutable
     {
         return $this->openedAt;
     }
 
-    public function setOpenedAt(?DateTimeImmutable $openedAt): self
+    public function setOpenedAt(?\DateTimeImmutable $openedAt): self
     {
         $this->openedAt = $openedAt;
 
@@ -259,11 +157,88 @@ class Position
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
+    }
+
+    public function isIsDca(): ?bool
+    {
+        return $this->isDca;
+    }
+
+    public function setIsDca(bool $isDca): self
+    {
+        $this->isDca = $isDca;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vente>
+     */
+    public function getVentes(): Collection
+    {
+        return $this->ventes;
+    }
+
+    public function addVente(Vente $vente): self
+    {
+        if (!$this->ventes->contains($vente)) {
+            $this->ventes[] = $vente;
+            $vente->setPosition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVente(Vente $vente): self
+    {
+        if ($this->ventes->removeElement($vente)) {
+            // set the owning side to null (unless already changed)
+            if ($vente->getPosition() === $this) {
+                $vente->setPosition(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StrategyPosition>
+     */
+    public function getStrategies(): Collection
+    {
+        return $this->strategies;
+    }
+
+    public function addStrategy(StrategyPosition $strategy): self
+    {
+        if (!$this->strategies->contains($strategy)) {
+            $this->strategies[] = $strategy;
+            $strategy->setPosition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategy(StrategyPosition $strategy): self
+    {
+        if ($this->strategies->removeElement($strategy)) {
+            // set the owning side to null (unless already changed)
+            if ($strategy->getPosition() === $this) {
+                $strategy->setPosition(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEntryCoinValue(): ?float
+    {
+        return round(($this->getEntryCost() / $this->getNbCoins()), 2);
     }
 
     public function getCurrentValue(): float
@@ -283,16 +258,25 @@ class Position
             : 9999;
     }
 
-    public function isIsDca(): ?bool
+    /**
+     * @return Collection
+     */
+    public function getVentesSortedByDate(): Collection
     {
-        return $this->isDca;
+        return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
     }
 
-    public function setIsDca(bool $isDca): self
+    #[ORM\PreFlush]
+    public function calculateRemainingCoins(): void
     {
-        $this->isDca = $isDca;
+        $this->remainingCoins = $this->nbCoins;
+        if ($this->ventes->isEmpty()) {
+            return;
+        }
 
-        return $this;
+        $ventes = $this->getVentesSortedByDate();
+        foreach ($ventes as $vente) {
+            $this->remainingCoins *= (1 - ($vente->getPercent() / 100));
+        }
     }
-
 }

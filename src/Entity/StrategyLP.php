@@ -2,97 +2,66 @@
 
 namespace App\Entity;
 
-use App\Repository\StrategyLPRepository;
+use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StrategyLPRepository::class)
- */
-class StrategyLP
+#[ORM\Entity(repositoryClass: StrategyLpRepository::class)]
+class StrategyLp
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="strategyLp1s")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin1;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="strategyLp2s")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin2;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="strategyLPs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Dapp::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $dapp;
 
-    /**
-     * @var Blockchain
-     */
-    private $blockchain;
+    private Blockchain $blockchain;
 
     /**
-     * @ORM\Column(type="date_immutable", nullable=true)
+     * @param $owner
      */
+    public function __construct($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $startAt;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceCoin1;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceCoin2;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $nbCoin1;
+    #[ORM\Column(type: 'float')]
+    private $nbcoin1;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $nbCoin2;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private $lpDeposit;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $apr;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="strategyLPs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @param $user
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-    }
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'strategyLps')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
     public function getId(): ?int
     {
@@ -137,7 +106,7 @@ class StrategyLP
 
     public function getBlockchain(): ?Blockchain
     {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+        if (null === $this->blockchain && null !== $this->dapp && $this->dapp->getBlockchain() !== $this->blockchain) {
             $this->blockchain = $this->dapp->getBlockchain();
         }
         return $this->blockchain;
@@ -186,14 +155,14 @@ class StrategyLP
         return $this;
     }
 
-    public function getNbCoin1(): ?float
+    public function getNbcoin1(): ?float
     {
-        return $this->nbCoin1;
+        return $this->nbcoin1;
     }
 
-    public function setNbCoin1(float $nbCoin1): self
+    public function setNbcoin1(float $nbcoin1): self
     {
-        $this->nbCoin1 = $nbCoin1;
+        $this->nbcoin1 = $nbcoin1;
 
         return $this;
     }
@@ -234,62 +203,27 @@ class StrategyLP
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getCurrentValue1(): float
+    public function getOwner(): ?User
     {
-        return $this->nbCoin1 * $this->coin1->getPriceUsd();
+        return $this->owner;
     }
 
-    public function getCurrentValue2(): float
+    public function setOwner(?User $owner): self
     {
-        return $this->nbCoin2 * $this->coin2->getPriceUsd();
-    }
+        $this->owner = $owner;
 
-    public function getCurrentValueTotal(): float
-    {
-        return $this->getCurrentValue1() + $this->getCurrentValue1();
-    }
-
-    public function getFarmingYear(): float
-    {
-        return $this->getCurrentValueTotal() * $this->apr / 100;
-    }
-
-    public function getFarmingMonthly(): float
-    {
-        return $this->getFarmingYear() / 12;
-    }
-
-    public function getFarmingWeekly(): float
-    {
-        return $this->getFarmingYear() / 52;
-    }
-
-    public function getFarmingDaily(): float
-    {
-        return $this->getFarmingYear() / 365;
+        return $this;
     }
 }

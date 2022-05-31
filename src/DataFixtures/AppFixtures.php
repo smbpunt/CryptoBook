@@ -15,7 +15,7 @@ use App\Entity\Position;
 use App\Entity\ProjectMonitoring;
 use App\Entity\StrategyDca;
 use App\Entity\StrategyFarming;
-use App\Entity\StrategyLP;
+use App\Entity\StrategyLp;
 use App\Entity\TypeProject;
 use App\Entity\User;
 use App\Service\CryptocurrencyService;
@@ -27,22 +27,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-
-    private CryptocurrencyService $cryptoService;
+    private CryptocurrencyService $cryptocurrencyService;
     private UserPasswordHasherInterface $hasher;
 
-    /**
-     * @param CryptocurrencyService $cryptoService
-     * @param UserPasswordHasherInterface $hasher
-     */
-    public function __construct(CryptocurrencyService $cryptoService, UserPasswordHasherInterface $hasher)
+    public function __construct(CryptocurrencyService $cryptocurrencyService, UserPasswordHasherInterface $hasher)
     {
-        $this->cryptoService = $cryptoService;
+        $this->cryptocurrencyService = $cryptocurrencyService;
         $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager): void
     {
+
         $faker = Factory::create('fr_FR');
 
         $btc = new Cryptocurrency();
@@ -56,6 +52,7 @@ class AppFixtures extends Fixture
         $stable = new Cryptocurrency();
         $stable->setLibelleCoingecko('usd-coin')->setIsStable(true);
         $manager->persist($stable);
+
 
         $btc_chain = new Blockchain();
         $btc_chain->setCoin($btc)->setLibelle('bitcoin');
@@ -95,8 +92,7 @@ class AppFixtures extends Fixture
         for ($u = 0; $u < 10; $u++) {
             $user = new User();
             $user->setEmail($faker->email)
-                ->setPassword($this->hasher->hashPassword($user, 'password'))
-                ->setIsVerified(false);
+                ->setPassword($this->hasher->hashPassword($user, 'password'));
 
             for ($p = 0; $p < random_int(2, 4); $p++) {
                 $position = new Position($user);
@@ -145,7 +141,7 @@ class AppFixtures extends Fixture
 
             for ($p = 0; $p < random_int(1, 3); $p++) {
                 //farming lp
-                $farming = new StrategyLP($user);
+                $farming = new StrategyLp($user);
                 $farming->setDapp($aave)
                     ->setCoin1($btc)
                     ->setCoin2($eth)
@@ -233,6 +229,6 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         $manager->flush();
-        $this->cryptoService->updateAllCryptos();
+        //$this->cryptocurrencyService->updateAllCryptos();
     }
 }

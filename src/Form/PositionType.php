@@ -30,21 +30,22 @@ class PositionType extends AbstractType
             ])
             ->add('nbCoins', NumberType::class, [
                 'required' => true,
-                'scale' => 8
+                'scale' => 8,
             ])
             ->add('isOpened', CheckboxType::class, [
                 'label' => 'Position ouverte ?',
-                'required' => false
+                'required' => false,
             ])
             ->add('isDca', CheckboxType::class, [
                 'label' => 'DCA ?',
-                'required' => false
+                'required' => false,
             ])
             ->add('entryCost', NumberType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
+                'empty_data' => '',
             ])
             ->add('coin', EntityType::class, [
                 'class' => Cryptocurrency::class,
@@ -60,7 +61,7 @@ class PositionType extends AbstractType
                 'by_reference' => false,
             ])
             ->add('strategies', CollectionType::class, [
-                'entry_type' => StrategyType::class,
+                'entry_type' => StrategyPositionType::class,
                 'label' => false,
                 'allow_add' => true,
                 'allow_delete' => true,

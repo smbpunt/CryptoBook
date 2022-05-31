@@ -15,7 +15,7 @@
             <h1>Mes positions</h1>
         </div>
         <div class="col text-end">
-            <a href="{{ path('position_new') }}" class="btn btn-warning m-2">Ajouter une position</a>
+            <a href="{{ path('app_position_new') }}" class="btn btn-warning m-2">Ajouter une position</a>
         </div>
     </div>
 
@@ -90,7 +90,7 @@
                                                 class="btn btn-sm btn-light rounded-circle button-infos"
                                                 data-id="{{ detail.id }}"
                                                 data-titlemodal=""
-                                                data-url="{{ path('position-infos-ajax', {'id': detail.id}) }}">
+                                                data-url="{{ path('app_position_ajax_infos', {'id': detail.id}) }}">
                                             <i class="bi bi-info"></i>
                                         </button>
                                     </td>
@@ -156,7 +156,7 @@
                                     class="btn btn-sm btn-light rounded-circle button-infos"
                                     data-id="{{ position.id }}"
                                     data-titlemodal=""
-                                    data-url="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                    data-url="{{ path('app_position_ajax_infos', {'id': position.id}) }}">
                                 <i class="bi bi-info"></i>
                             </button>
                         </td>
@@ -202,7 +202,7 @@
                                     class="btn btn-sm btn-light rounded-circle button-infos"
                                     data-id="{{ position.id }}"
                                     data-titlemodal=""
-                                    data-url="{{ path('position-infos-ajax', {'id': position.id}) }}">
+                                    data-url="{{ path('app_position_ajax_infos', {'id': position.id}) }}">
                                 <i class="bi bi-info"></i>
                             </button>
                         </td>

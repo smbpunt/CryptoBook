@@ -19,21 +19,6 @@ class BlockchainCrudController extends AbstractCrudController
     {
         yield TextField::new('libelle');
         yield AssociationField::new('coin', 'Coin')
-            ->autocomplete()/*->setChoices([
-                'User' => 'ROLE_USER',
-                'Admin' => 'ROLE_ADMIN'
-            ])*/
-        ;
+            ->autocomplete();
     }
-
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }

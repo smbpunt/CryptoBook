@@ -13,7 +13,7 @@
             <h1>Mes emprunts</h1>
         </div>
         <div class="col text-end">
-            <a href="{{ path('loan_new') }}" class="btn btn-warning m-2">Ajouter un emprunt</a>
+            <a href="{{ path('app_loan_new') }}" class="btn btn-warning m-2">Ajouter un emprunt</a>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
                             class="btn btn-sm btn-light rounded-circle button-infos"
                             data-id="{{ loan.id }}"
                             data-titlemodal=""
-                            data-url="{{ path('loan-infos-ajax', {'id': loan.id}) }}">
+                            data-url="{{ path('app_loan_ajax_infos', {'id': loan.id}) }}">
                         <i class="bi bi-info"></i>
                     </button>
                 </td>

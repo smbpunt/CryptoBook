@@ -8,6 +8,7 @@ use App\Entity\Nft;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,7 +23,10 @@ class NftType extends AbstractType
             ->add('supply')
             ->add('priceCrypto')
             ->add('priceUsd')
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'empty_data' => ''
+            ])
             ->add('purchasedOn', DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => false,

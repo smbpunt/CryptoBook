@@ -43,7 +43,6 @@ class CryptocurrencyService
     /**
      * Mets à jour toutes les infos de $cryptocurrency
      * @param Cryptocurrency $cryptocurrency
-     * @param bool $onlyPrices
      */
     public function updateDatas(Cryptocurrency $cryptocurrency): void
     {
@@ -54,48 +53,42 @@ class CryptocurrencyService
 
         try {
             $datas = $this->client->coins()->getCoin($libelleCG);
-            if (is_array($datas)) {
-                if (array_key_exists('market_data', $datas)) {
-                    //Mets à jour les prix
-                    if (array_key_exists('current_price', $datas['market_data'])) {
-                        if (array_key_exists('usd', $datas['market_data']['current_price'])) {
-                            $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
-                        }
-                    }
+            if (is_array($datas) && array_key_exists('market_data', $datas)) {
+                //Mets à jour les prix
+                if (array_key_exists('current_price', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['current_price'])) {
+                    $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
+                }
 
-                    //Mets à jour le libelle
-                    if (array_key_exists('name', $datas)) {
-                        $cryptocurrency->setLibelle($datas['name']);
-                    }
+                //Mets à jour le libelle
+                if (array_key_exists('name', $datas)) {
+                    $cryptocurrency->setLibelle($datas['name']);
+                }
 
-                    //Mets à jour le symbol
-                    if (array_key_exists('symbol', $datas)) {
-                        $cryptocurrency->setSymbol($datas['symbol']);
-                    }
+                //Mets à jour le symbol
+                if (array_key_exists('symbol', $datas)) {
+                    $cryptocurrency->setSymbol($datas['symbol']);
+                }
 
-                    //Mets à jour les images
-                    if (array_key_exists('image', $datas)) {
-                        if (array_key_exists('thumb', $datas['image'])) {
-                            $cryptocurrency->setUrlImgThumb($datas['image']['thumb']);
-                        }
-                        if (array_key_exists('small', $datas['image'])) {
-                            $cryptocurrency->setUrlImgSmall($datas['image']['small']);
-                        }
-                        if (array_key_exists('large', $datas['image'])) {
-                            $cryptocurrency->setUrlImgLarge($datas['image']['large']);
-                        }
+                //Mets à jour les images
+                if (array_key_exists('image', $datas)) {
+                    if (array_key_exists('thumb', $datas['image'])) {
+                        $cryptocurrency->setUrlImgThumb($datas['image']['thumb']);
                     }
-
-                    //Mets à jour les market cap
-                    if (array_key_exists('market_cap', $datas['market_data'])) {
-                        if (array_key_exists('usd', $datas['market_data']['market_cap'])) {
-                            $cryptocurrency->setMcapUsd($datas['market_data']['market_cap']['usd']);
-                        }
+                    if (array_key_exists('small', $datas['image'])) {
+                        $cryptocurrency->setUrlImgSmall($datas['image']['small']);
+                    }
+                    if (array_key_exists('large', $datas['image'])) {
+                        $cryptocurrency->setUrlImgLarge($datas['image']['large']);
                     }
                 }
+
+                //Mets à jour les market cap
+                if (array_key_exists('market_cap', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['market_cap'])) {
+                    $cryptocurrency->setMcapUsd($datas['market_data']['market_cap']['usd']);
+                }
             }
-            $this->entityManager->persist($cryptocurrency);
-            $this->entityManager->flush();
+         //   $this->entityManager->persist($cryptocurrency);
+         //   $this->entityManager->flush();
         } catch (Exception $e) {
             $this->logger->critical('Erreur lors de la récupération des données pour le coin ' . $cryptocurrency->getLibelleCoingecko() . '. Exception : ' . $e->getMessage());
         }
@@ -107,7 +100,7 @@ class CryptocurrencyService
     public function updatePrices(): void
     {
         $cryptos = $this->repoCryptocurrency->findAll();
-        $libelles = array_map(function ($crypto) {
+        $libelles = array_map(static function ($crypto) {
             return $crypto->getLibelleCoingecko();
         }, $cryptos);
         $string = implode(',', $libelles);

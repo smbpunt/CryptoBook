@@ -3,39 +3,27 @@
 namespace App\Entity;
 
 use App\Repository\VenteRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=VenteRepository::class)
- */
+#[ORM\Entity(repositoryClass: VenteRepository::class)]
 class Vente
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $soldAt;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $percent;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceSold;
-    /**
-     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="ventes")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'ventes')]
+    #[ORM\JoinColumn(nullable: false)]
     private $position;
 
     public function getId(): ?int
@@ -43,12 +31,12 @@ class Vente
         return $this->id;
     }
 
-    public function getSoldAt(): ?DateTimeImmutable
+    public function getSoldAt(): ?\DateTimeImmutable
     {
         return $this->soldAt;
     }
 
-    public function setSoldAt(?DateTimeImmutable $soldAt): self
+    public function setSoldAt(?\DateTimeImmutable $soldAt): self
     {
         $this->soldAt = $soldAt;
 

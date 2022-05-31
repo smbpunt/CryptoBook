@@ -3,15 +3,20 @@
 namespace App\Command;
 
 use App\Service\CryptocurrencyService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'crypto:updatePrices',
+    description: 'Mets à jour les prix de tout le catalogue cryptos',
+)]
 class CryptoUpdatePricesCommand extends Command
 {
-    protected static $defaultName = 'crypto:updatePrices';
-    protected static $defaultDescription = 'Mets à jour les prix de tout le catalogue cryptos.';
     private CryptocurrencyService $cryptocurrencyService;
 
     /**
@@ -22,7 +27,6 @@ class CryptoUpdatePricesCommand extends Command
         $this->cryptocurrencyService = $cryptocurrencyService;
         parent::__construct();
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

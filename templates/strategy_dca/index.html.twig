@@ -14,7 +14,7 @@
             </div>
             <div class="col text-end">
                 <a id="show-modal" class="btn btn-primary m-2">Génerer mes positions</a>
-                <a href="{{ path('strategy_dca_edit') }}" class="btn btn-secondary m-2">Modifier mon DCA</a>
+                <a href="{{ path('app_strategy_dca_edit') }}" class="btn btn-secondary m-2">Modifier mon DCA</a>
             </div>
         </div>
 
@@ -89,7 +89,7 @@
                             <span class="input-group-text">$</span>
                         </div>
 
-                        <button data-path="{{ absolute_url(path('generatePositions')) }}"
+                        <button data-path="{{ absolute_url(path('app_strategy_dca_generate_positions')) }}"
                                 id="btn-generate"
                                 class="btn btn-light mt-3">
                             Valider
@@ -105,7 +105,7 @@
                 <h1>Mon DCA</h1>
             </div>
             <div class="col text-end">
-                <a href="{{ path('strategy_dca_new') }}" class="btn btn-warning m-2">Créer mon DCA</a>
+                <a href="{{ path('app_strategy_dca_new') }}" class="btn btn-warning m-2">Créer mon DCA</a>
             </div>
         </div>
         <p>Aucune stratégie DCA définie.</p>

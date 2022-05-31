@@ -5,69 +5,46 @@ namespace App\Entity;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StrategyFarmingRepository::class)
- */
+#[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
 class StrategyFarming
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @var Cryptocurrency
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="farmingStrategies")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'farmingStrategies')]
+    #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $nbCoins;
 
-    /**
-     * @var Blockchain
-     */
-    private $blockchain;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Dapp::class, inversedBy="farmingStrategies")
-     */
+    #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'farmingStrategies')]
     private $dapp;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    private Blockchain $blockchain;
+
+    #[ORM\Column(type: 'float')]
     private $apr;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="farmingStrategies")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $enteredAt;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @param $user
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-    }
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'farmingStrategies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
+    /**
+     * @param $owner
+     */
+    public function __construct($owner)
+    {
+        $this->owner = $owner;
+    }
 
     public function getId(): ?int
     {
@@ -110,21 +87,6 @@ class StrategyFarming
         return $this;
     }
 
-    public function getBlockchain(): ?Blockchain
-    {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
-            $this->blockchain = $this->dapp->getBlockchain();
-        }
-        return $this->blockchain;
-    }
-
-    public function setBlockchain(?Blockchain $blockchain): self
-    {
-        $this->blockchain = $blockchain;
-
-        return $this;
-    }
-
     public function getApr(): ?float
     {
         return $this->apr;
@@ -133,18 +95,6 @@ class StrategyFarming
     public function setApr(float $apr): self
     {
         $this->apr = $apr;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -166,35 +116,37 @@ class StrategyFarming
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getCurrentValue(): float
+    public function getOwner(): ?User
     {
-        return $this->nbCoins * $this->coin->getPriceUsd();
+        return $this->owner;
     }
 
-    public function getFarmingYear(): float
+    public function setOwner(?User $owner): self
     {
-        return $this->getCurrentValue() * $this->apr / 100;
+        $this->owner = $owner;
+
+        return $this;
     }
 
-    public function getFarmingMonthly(): float
+    public function getBlockchain(): ?Blockchain
     {
-        return $this->getFarmingYear() / 12;
+        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+            $this->blockchain = $this->dapp->getBlockchain();
+        }
+        return $this->blockchain;
     }
 
-    public function getFarmingWeekly(): float
+    public function setBlockchain(?Blockchain $blockchain): self
     {
-        return $this->getFarmingYear() / 52;
-    }
+        $this->blockchain = $blockchain;
 
-    public function getFarmingDaily(): float
-    {
-        return $this->getFarmingYear() / 365;
+        return $this;
     }
 }

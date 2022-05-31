@@ -16,7 +16,7 @@
             <h1>Mes NFT</h1>
         </div>
         <div class="col text-end">
-            <a href="{{ path('nft_new') }}" class="btn btn-warning m-2">Ajouter</a>
+            <a href="{{ path('app_nft_new') }}" class="btn btn-warning m-2">Ajouter</a>
         </div>
     </div>
 
@@ -62,7 +62,7 @@
                                     class="btn btn-sm btn-light rounded-circle button-infos"
                                     data-id="{{ nft.id }}"
                                     data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
-                                    data-url="{{ path('nft_ajax', {'id': nft.id}) }}">
+                                    data-url="{{ path('app_nft_ajax_infos', {'id': nft.id}) }}">
                                 <i class="bi bi-info"></i>
                             </button>
                         </td>
@@ -108,7 +108,7 @@
                                     class="btn btn-sm btn-light rounded-circle button-infos"
                                     data-id="{{ nft.id }}"
                                     data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
-                                    data-url="{{ path('nft_ajax', {'id': nft.id}) }}">
+                                    data-url="{{ path('app_nft_ajax_infos', {'id': nft.id}) }}">
                                 <i class="bi bi-info"></i>
                             </button>
                         </td>

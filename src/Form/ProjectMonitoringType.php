@@ -8,6 +8,7 @@ use App\Entity\TypeProject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,8 +19,14 @@ class ProjectMonitoringType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('description')
-            ->add('note')
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'empty_data' => ''
+            ])
+            ->add('note', TextareaType::class, [
+                'required' => false,
+                'empty_data' => ''
+            ])
             ->add('links', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'label' => false,

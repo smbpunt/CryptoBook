@@ -13,7 +13,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class CryptocurrencyCrudController extends AbstractCrudController
 {
-
     public static function getEntityFqcn(): string
     {
         return Cryptocurrency::class;

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Position;
 use App\Entity\StrategyDca;
+use App\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\Security\Core\User\UserInterface;
 

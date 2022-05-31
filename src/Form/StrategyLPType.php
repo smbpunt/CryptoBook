@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Blockchain;
 use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
-use App\Entity\StrategyLP;
+use App\Entity\StrategyLp;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StrategyLPType extends AbstractType
+class StrategyLpType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -30,7 +30,8 @@ class StrategyLPType extends AbstractType
                 'input' => 'datetime_immutable',
             ])
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
+                'empty_data' => '',
             ])
             ->add('priceCoin1')
             ->add('priceCoin2')
@@ -56,7 +57,7 @@ class StrategyLPType extends AbstractType
             ]);
 
 
-        $formModifier = function (FormInterface $form, Blockchain $blockchain = null) {
+        $formModifier = static function (FormInterface $form, Blockchain $blockchain = null) {
             $dapps = null === $blockchain ? [] : $blockchain->getDapps();
             $form->add('dapp', EntityType::class, [
                 'class' => Dapp::class,
@@ -71,10 +72,10 @@ class StrategyLPType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
                 /**
-                 * @var StrategyLP $data
+                 * @var StrategyLp $data
                  */
                 $data = $event->getData();
-                $blockchain = $data->getDapp() ? $data->getDapp()->getBlockchain() : null;
+                $blockchain = $data->getDapp()?->getBlockchain();
                 $formModifier($event->getForm(), $blockchain);
             }
         );
@@ -91,7 +92,7 @@ class StrategyLPType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => StrategyLP::class,
+            'data_class' => StrategyLp::class,
         ]);
     }
 }

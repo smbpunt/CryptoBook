@@ -10,18 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/deposit")
- */
+#[Route('/deposit')]
 class DepositController extends AbstractController
 {
-    /**
-     * @Route("/", name="deposit_index", methods={"GET"})
-     */
+    #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
     public function index(DepositRepository $depositRepository): Response
     {
         $deposits = $this->getUser() ? $depositRepository->findBy([
-            'user' => $this->getUser()
+            'owner' => $this->getUser()
         ], [
             'depositedAt' => 'ASC'
         ]) : [];
@@ -34,21 +30,17 @@ class DepositController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="deposit_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    #[Route('/new', name: 'app_deposit_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, DepositRepository $depositRepository): Response
     {
         $deposit = new Deposit($this->getUser());
         $form = $this->createForm(DepositType::class, $deposit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($deposit);
-            $entityManager->flush();
+            $depositRepository->add($deposit, true);
 
-            return $this->redirectToRoute('deposit_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('deposit/new.html.twig', [
@@ -57,36 +49,20 @@ class DepositController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="deposit_show", methods={"GET"})
-     */
-    public function show(Deposit $deposit): Response
+    #[Route('/{id}/edit', name: 'app_deposit_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
-        if ($deposit->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('deposit_index');
-        }
-
-        return $this->render('deposit/show.html.twig', [
-            'deposit' => $deposit,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="deposit_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Deposit $deposit): Response
-    {
-        if ($deposit->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('deposit_index');
+        if ($deposit->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_deposit_index');
         }
 
         $form = $this->createForm(DepositType::class, $deposit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $depositRepository->add($deposit, true);
 
-            return $this->redirectToRoute('deposit_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('deposit/edit.html.twig', [
@@ -95,21 +71,17 @@ class DepositController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="deposit_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Deposit $deposit): Response
+    #[Route('/{id}', name: 'app_deposit_delete', methods: ['POST'])]
+    public function delete(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
-        if ($deposit->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('deposit_index');
+        if ($deposit->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_deposit_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $deposit->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($deposit);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$deposit->getId(), $request->request->get('_token'))) {
+            $depositRepository->remove($deposit, true);
         }
 
-        return $this->redirectToRoute('deposit_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
     }
 }

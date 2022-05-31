@@ -13,8 +13,8 @@
             <h1>Mon farming</h1>
         </div>
         <div class="col text-end">
-            <a href="{{ path('strategy_l_p_new') }}" class="btn btn-outline-warning m-2">Ajouter LP</a>
-            <a href="{{ path('strategy_farming_new') }}" class="btn btn-warning m-2">Ajouter</a>
+            <a href="{{ path('app_strategy_lp_new') }}" class="btn btn-outline-warning m-2">Ajouter LP</a>
+            <a href="{{ path('app_strategy_farming_new') }}" class="btn btn-warning m-2">Ajouter</a>
         </div>
     </div>
 
@@ -94,7 +94,7 @@
                                         class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
@@ -178,7 +178,7 @@
                                         class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('farming-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
@@ -262,7 +262,7 @@
                                         class="btn btn-sm btn-light rounded-circle button-infos"
                                         data-id="{{ strategy_farming['strategy'].id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('farminglp-infos-ajax', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_lp_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>

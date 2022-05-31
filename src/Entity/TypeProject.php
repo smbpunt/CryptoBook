@@ -7,26 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TypeProjectRepository::class)
- */
+#[ORM\Entity(repositoryClass: TypeProjectRepository::class)]
 class TypeProject
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProjectMonitoring::class, mappedBy="type")
-     */
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: ProjectMonitoring::class)]
     private $projectMonitorings;
 
     public function __construct()
@@ -52,7 +44,7 @@ class TypeProject
     }
 
     /**
-     * @return Collection|ProjectMonitoring[]
+     * @return Collection<int, ProjectMonitoring>
      */
     public function getProjectMonitorings(): Collection
     {
@@ -81,10 +73,8 @@ class TypeProject
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->libelle;
     }
-
-
 }

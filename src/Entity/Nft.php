@@ -5,105 +5,70 @@ namespace App\Entity;
 use App\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=NftRepository::class)
- */
+#[ORM\Entity(repositoryClass: NftRepository::class)]
 class Nft
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $collection;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $num;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $rank;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $supply;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Blockchain::class, inversedBy="nfts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $blockchain;
-
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceCrypto;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Cryptocurrency::class, inversedBy="nfts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $cryptocurrency;
-
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceUsd;
 
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
-    private $purchasedOn;
-
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
-    private $soldOn;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private $priceSoldCrypto;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private $priceSoldUsd;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private $percentSaleFees;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="nfts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $description;
 
-    /**
-     * @param $user
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-        $this->description = "";
-    }
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $purchasedOn;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $soldOn;
+
+    #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'nfts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $blockchain;
+
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'nfts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $cryptocurrency;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'nfts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
+
+    /**
+     * @param $owner
+     */
+    public function __construct($owner)
+    {
+        $this->owner = $owner;
+        $this->description = '';
+    }
 
     public function getId(): ?int
     {
@@ -158,18 +123,6 @@ class Nft
         return $this;
     }
 
-    public function getBlockchain(): ?Blockchain
-    {
-        return $this->blockchain;
-    }
-
-    public function setBlockchain(?Blockchain $blockchain): self
-    {
-        $this->blockchain = $blockchain;
-
-        return $this;
-    }
-
     public function getPriceCrypto(): ?float
     {
         return $this->priceCrypto;
@@ -182,18 +135,6 @@ class Nft
         return $this;
     }
 
-    public function getCryptocurrency(): ?Cryptocurrency
-    {
-        return $this->cryptocurrency;
-    }
-
-    public function setCryptocurrency(?Cryptocurrency $cryptocurrency): self
-    {
-        $this->cryptocurrency = $cryptocurrency;
-
-        return $this;
-    }
-
     public function getPriceUsd(): ?float
     {
         return $this->priceUsd;
@@ -202,30 +143,6 @@ class Nft
     public function setPriceUsd(float $priceUsd): self
     {
         $this->priceUsd = $priceUsd;
-
-        return $this;
-    }
-
-    public function getPurchasedOn(): ?\DateTimeImmutable
-    {
-        return $this->purchasedOn;
-    }
-
-    public function setPurchasedOn(?\DateTimeImmutable $purchasedOn): self
-    {
-        $this->purchasedOn = $purchasedOn;
-
-        return $this;
-    }
-
-    public function getSoldOn(): ?\DateTimeImmutable
-    {
-        return $this->soldOn;
-    }
-
-    public function setSoldOn(?\DateTimeImmutable $soldOn): self
-    {
-        $this->soldOn = $soldOn;
 
         return $this;
     }
@@ -266,18 +183,6 @@ class Nft
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -290,8 +195,68 @@ class Nft
         return $this;
     }
 
+    public function getPurchasedOn(): ?\DateTimeImmutable
+    {
+        return $this->purchasedOn;
+    }
+
+    public function setPurchasedOn(?\DateTimeImmutable $purchasedOn): self
+    {
+        $this->purchasedOn = $purchasedOn;
+
+        return $this;
+    }
+
+    public function getSoldOn(): ?\DateTimeImmutable
+    {
+        return $this->soldOn;
+    }
+
+    public function setSoldOn(?\DateTimeImmutable $soldOn): self
+    {
+        $this->soldOn = $soldOn;
+
+        return $this;
+    }
+
+    public function getBlockchain(): ?Blockchain
+    {
+        return $this->blockchain;
+    }
+
+    public function setBlockchain(?Blockchain $blockchain): self
+    {
+        $this->blockchain = $blockchain;
+
+        return $this;
+    }
+
+    public function getCryptocurrency(): ?Cryptocurrency
+    {
+        return $this->cryptocurrency;
+    }
+
+    public function setCryptocurrency(?Cryptocurrency $cryptocurrency): self
+    {
+        $this->cryptocurrency = $cryptocurrency;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
     public function getBenefice(): float
     {
-        return $this->soldOn === null ? 0 : $this->priceSoldUsd * (1 - ($this->percentSaleFees ?? 0.) / 100) - $this->priceUsd;
+        return null === $this->soldOn ? 0 : $this->priceSoldUsd * (1 - ($this->percentSaleFees ?? 0.) / 100) - $this->priceUsd;
     }
 }

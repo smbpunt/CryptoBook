@@ -7,31 +7,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ExchangeRepository::class)
- */
+#[ORM\Entity(repositoryClass: ExchangeRepository::class)]
 class Exchange
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $url;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Deposit::class, mappedBy="exchange")
-     */
+    #[ORM\OneToMany(mappedBy: 'exchange', targetEntity: Deposit::class)]
     private $deposits;
 
     public function __construct()
@@ -69,7 +59,7 @@ class Exchange
     }
 
     /**
-     * @return Collection|Deposit[]
+     * @return Collection<int, Deposit>
      */
     public function getDeposits(): Collection
     {
@@ -98,7 +88,7 @@ class Exchange
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->libelle;
     }

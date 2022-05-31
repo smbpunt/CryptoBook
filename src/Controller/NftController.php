@@ -10,14 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/nft")
- */
+#[Route('/nft')]
 class NftController extends AbstractController
 {
-    /**
-     * @Route("/", name="nft_index", methods={"GET"})
-     */
+    #[Route('/', name: 'app_nft_index', methods: ['GET'])]
     public function index(NftRepository $nftRepository): Response
     {
         $nfts = $nftRepository->findBySold($this->getUser(), false);
@@ -34,34 +30,17 @@ class NftController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/infos", name="nft_ajax", methods={"POST"})
-     */
-    public function ajaxStrategy(Request $request, Nft $nft): Response
-    {
-        if ($nft->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
-        return $this->render('nft/show.html.twig', [
-            'nft' => $nft,
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="nft_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    #[Route('/new', name: 'app_nft_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, NftRepository $nftRepository): Response
     {
         $nft = new Nft($this->getUser());
         $form = $this->createForm(NftType::class, $nft);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($nft);
-            $entityManager->flush();
+            $nftRepository->add($nft, true);
 
-            return $this->redirectToRoute('nft_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('nft/new.html.twig', [
@@ -70,22 +49,32 @@ class NftController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="nft_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Nft $nft): Response
+    #[Route('/{id}/infos', name: 'app_nft_ajax_infos', methods: ['POST'])]
+    public function ajax(Nft $nft): Response
     {
-        if ($nft->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('nft_index');
+        if ($nft->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('nft/show.html.twig', [
+            'nft' => $nft,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_nft_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Nft $nft, NftRepository $nftRepository): Response
+    {
+        if ($nft->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_nft_index');
         }
 
         $form = $this->createForm(NftType::class, $nft);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $nftRepository->add($nft, true);
 
-            return $this->redirectToRoute('nft_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('nft/edit.html.twig', [
@@ -94,21 +83,17 @@ class NftController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="nft_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Nft $nft): Response
+    #[Route('/{id}', name: 'app_nft_delete', methods: ['POST'])]
+    public function delete(Request $request, Nft $nft, NftRepository $nftRepository): Response
     {
-        if ($nft->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('nft_index');
+        if ($nft->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_nft_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $nft->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($nft);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$nft->getId(), $request->request->get('_token'))) {
+            $nftRepository->remove($nft, true);
         }
 
-        return $this->redirectToRoute('nft_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
     }
 }

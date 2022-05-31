@@ -5,32 +5,22 @@ namespace App\Entity;
 use App\Repository\StrategyPositionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StrategyPositionRepository::class)
- */
+#[ORM\Entity(repositoryClass: StrategyPositionRepository::class)]
 class StrategyPosition
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $percent;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private $priceSold;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="strategies")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'strategies')]
+    #[ORM\JoinColumn(nullable: false)]
     private $position;
 
     public function getId(): ?int

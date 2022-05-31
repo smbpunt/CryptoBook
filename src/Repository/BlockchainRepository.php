@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Blockchain>
+ *
  * @method Blockchain|null find($id, $lockMode = null, $lockVersion = null)
  * @method Blockchain|null findOneBy(array $criteria, array $orderBy = null)
  * @method Blockchain[]    findAll()
@@ -19,32 +21,46 @@ class BlockchainRepository extends ServiceEntityRepository
         parent::__construct($registry, Blockchain::class);
     }
 
-    // /**
-    //  * @return Blockchain[] Returns an array of Blockchain objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function add(Blockchain $entity, bool $flush = false): void
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $this->getEntityManager()->persist($entity);
 
-    /*
-    public function findOneBySomeField($value): ?Blockchain
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
-    */
+
+    public function remove(Blockchain $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+//    /**
+//     * @return Blockchain[] Returns an array of Blockchain objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('b')
+//            ->andWhere('b.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('b.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
+//    public function findOneBySomeField($value): ?Blockchain
+//    {
+//        return $this->createQueryBuilder('b')
+//            ->andWhere('b.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

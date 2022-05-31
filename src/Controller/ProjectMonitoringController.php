@@ -10,36 +10,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/project-monitoring")
- */
+#[Route('/project/monitoring')]
 class ProjectMonitoringController extends AbstractController
 {
-    /**
-     * @Route("/", name="project_monitoring_index", methods={"GET"})
-     */
+    #[Route('/', name: 'app_project_monitoring_index', methods: ['GET'])]
     public function index(ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         return $this->render('project_monitoring/index.html.twig', [
-            'project_monitorings' => $projectMonitoringRepository->findBy(['user' => $this->getUser()]),
+            'project_monitorings' => $projectMonitoringRepository->findBy(['owner' => $this->getUser()]),
         ]);
     }
 
-    /**
-     * @Route("/new", name="project_monitoring_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    #[Route('/new', name: 'app_project_monitoring_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         $projectMonitoring = new ProjectMonitoring($this->getUser());
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($projectMonitoring);
-            $entityManager->flush();
+            $projectMonitoringRepository->add($projectMonitoring, true);
 
-            return $this->redirectToRoute('project_monitoring_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('project_monitoring/new.html.twig', [
@@ -48,36 +40,20 @@ class ProjectMonitoringController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="project_monitoring_show", methods={"GET"})
-     */
-    public function show(ProjectMonitoring $projectMonitoring): Response
+    #[Route('/{id}/edit', name: 'app_project_monitoring_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
-        if ($projectMonitoring->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('project_monitoring_index');
-        }
-
-        return $this->render('project_monitoring/show.html.twig', [
-            'project_monitoring' => $projectMonitoring,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="project_monitoring_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, ProjectMonitoring $projectMonitoring): Response
-    {
-        if ($projectMonitoring->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('project_monitoring_index');
+        if ($projectMonitoring->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_project_monitoring_index');
         }
 
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $projectMonitoringRepository->add($projectMonitoring, true);
 
-            return $this->redirectToRoute('project_monitoring_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('project_monitoring/edit.html.twig', [
@@ -86,21 +62,17 @@ class ProjectMonitoringController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="project_monitoring_delete", methods={"POST"})
-     */
-    public function delete(Request $request, ProjectMonitoring $projectMonitoring): Response
+    #[Route('/{id}', name: 'app_project_monitoring_delete', methods: ['POST'])]
+    public function delete(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
-        if ($projectMonitoring->getUser() !== $this->getUser()) {
-            $this->redirectToRoute('project_monitoring_index');
+        if ($projectMonitoring->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_project_monitoring_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $projectMonitoring->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($projectMonitoring);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$projectMonitoring->getId(), $request->request->get('_token'))) {
+            $projectMonitoringRepository->remove($projectMonitoring, true);
         }
 
-        return $this->redirectToRoute('project_monitoring_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
     }
 }

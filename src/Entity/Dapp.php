@@ -7,53 +7,33 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DappRepository::class)
- */
+#[ORM\Entity(repositoryClass: DappRepository::class)]
 class Dapp
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Blockchain::class, inversedBy="dapps")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
+    #[ORM\JoinColumn(nullable: false)]
     private $blockchain;
 
-    /**
-     * @ORM\OneToMany(targetEntity=StrategyFarming::class, mappedBy="dapp")
-     */
-    private $farmingStrategies;
-
-    /**
-     * @ORM\OneToMany(targetEntity=StrategyLP::class, mappedBy="dapp", orphanRemoval=true)
-     */
-    private $strategyLPs;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Loan::class, mappedBy="dapp")
-     */
+    #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: Loan::class)]
     private $loans;
+
+    #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: StrategyFarming::class)]
+    private $farmingStrategies;
 
     public function __construct()
     {
         $this->farmingStrategies = new ArrayCollection();
-        $this->strategyLPs = new ArrayCollection();
         $this->loans = new ArrayCollection();
     }
 
@@ -99,72 +79,7 @@ class Dapp
     }
 
     /**
-     * @return Collection|StrategyFarming[]
-     */
-    public function getFarmingStrategies(): Collection
-    {
-        return $this->farmingStrategies;
-    }
-
-    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if (!$this->farmingStrategies->contains($farmingStrategy)) {
-            $this->farmingStrategies[] = $farmingStrategy;
-            $farmingStrategy->setDapp($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
-            // set the owning side to null (unless already changed)
-            if ($farmingStrategy->getDapp() === $this) {
-                $farmingStrategy->setDapp(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->libelle;
-    }
-
-    /**
-     * @return Collection|StrategyLP[]
-     */
-    public function getStrategyLPs(): Collection
-    {
-        return $this->strategyLPs;
-    }
-
-    public function addStrategyLP(StrategyLP $strategyLP): self
-    {
-        if (!$this->strategyLPs->contains($strategyLP)) {
-            $this->strategyLPs[] = $strategyLP;
-            $strategyLP->setDapp($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStrategyLP(StrategyLP $strategyLP): self
-    {
-        if ($this->strategyLPs->removeElement($strategyLP)) {
-            // set the owning side to null (unless already changed)
-            if ($strategyLP->getDapp() === $this) {
-                $strategyLP->setDapp(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Loan[]
+     * @return Collection<int, Loan>
      */
     public function getLoans(): Collection
     {
@@ -193,5 +108,38 @@ class Dapp
         return $this;
     }
 
+    /**
+     * @return Collection<int, StrategyFarming>
+     */
+    public function getFarmingStrategies(): Collection
+    {
+        return $this->farmingStrategies;
+    }
 
+    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if (!$this->farmingStrategies->contains($farmingStrategy)) {
+            $this->farmingStrategies[] = $farmingStrategy;
+            $farmingStrategy->setDapp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
+    {
+        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
+            // set the owning side to null (unless already changed)
+            if ($farmingStrategy->getDapp() === $this) {
+                $farmingStrategy->setDapp(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->libelle;
+    }
 }

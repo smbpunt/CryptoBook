@@ -2,106 +2,81 @@
 
 namespace App\Controller;
 
-use App\Entity\StrategyLP;
-use App\Form\StrategyLPType;
+use App\Entity\StrategyLp;
+use App\Form\StrategyLpType;
+use App\Repository\StrategyLpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/strategy/lp")
- */
-class StrategyLPController extends AbstractController
+#[Route('/strategy/lp')]
+class StrategyLpController extends AbstractController
 {
-
-    /**
-     * @Route("/new", name="strategy_l_p_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    #[Route('/{id}/infos', name: 'app_strategy_lp_ajax_infos', methods: ['POST'])]
+    public function ajax(StrategyLp $strategyLp): Response
     {
-        $strategyLP = new StrategyLP($this->getUser());
-        $form = $this->createForm(StrategyLPType::class, $strategyLP);
+        if ($strategyLp->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('strategy_lp/_informations.twig', [
+            'farming' => $strategyLp,
+        ]);
+    }
+
+    #[Route('/new', name: 'app_strategy_lp_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, StrategyLpRepository $strategyLpRepository): Response
+    {
+        $strategyLp = new StrategyLp($this->getUser());
+        $form = $this->createForm(StrategyLpType::class, $strategyLp);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($strategyLP);
-            $entityManager->flush();
+            $strategyLpRepository->add($strategyLp, true);
 
-            return $this->redirectToRoute('strategy_farming_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('strategy_lp/new.html.twig', [
-            'strategy_l_p' => $strategyLP,
+            'strategy_lp' => $strategyLp,
             'form' => $form,
         ]);
     }
 
-
-    /**
-     * @Route("/{id}/infos", name="farminglp-infos-ajax", methods={"POST"})
-     */
-    public function ajaxStrategy(Request $request, StrategyLP $strategyLP): Response
+    #[Route('/{id}/edit', name: 'app_strategy_lp_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, StrategyLp $strategyLp, StrategyLpRepository $strategyLpRepository): Response
     {
-        return $this->render('strategy_lp/_informations.twig', [
-            'farming' => $strategyLP,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="strategy_l_p_show", methods={"GET"})
-     */
-    public function show(StrategyLP $strategyLP): Response
-    {
-        if ($strategyLP->getUser() !== $this->getUser()) {
-            return $this->redirectToRoute('strategy_farming_index');
+        if ($strategyLp->getOwner() !== $this->getUser()) {
+            return $this->redirectToRoute('app_strategy_farming_index');
         }
-
-        return $this->render('strategy_lp/show.html.twig', [
-            'strategy_l_p' => $strategyLP,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="strategy_l_p_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, StrategyLP $strategyLP): Response
-    {
-        if ($strategyLP->getUser() !== $this->getUser()) {
-            return $this->redirectToRoute('strategy_farming_index');
-        }
-
-        $form = $this->createForm(StrategyLPType::class, $strategyLP);
+        
+        $form = $this->createForm(StrategyLpType::class, $strategyLp);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
-            $this->getDoctrine()->getManager()->flush();
+            $strategyLpRepository->add($strategyLp, true);
 
-            return $this->redirectToRoute('strategy_farming_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('strategy_lp/edit.html.twig', [
-            'strategy_l_p' => $strategyLP,
+            'strategy_lp' => $strategyLp,
             'form' => $form,
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="strategy_l_p_delete", methods={"POST"})
-     */
-    public function delete(Request $request, StrategyLP $strategyLP): Response
+    #[Route('/{id}', name: 'app_strategy_lp_delete', methods: ['POST'])]
+    public function delete(Request $request, StrategyLp $strategyLp, StrategyLpRepository $strategyLpRepository): Response
     {
-        if ($strategyLP->getUser() !== $this->getUser()) {
-            return $this->redirectToRoute('strategy_farming_index');
+        if ($strategyLp->getOwner() !== $this->getUser()) {
+            return $this->redirectToRoute('app_strategy_farming_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $strategyLP->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($strategyLP);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$strategyLp->getId(), $request->request->get('_token'))) {
+            $strategyLpRepository->remove($strategyLp, true);
         }
 
-        return $this->redirectToRoute('strategy_farming_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
     }
 }
