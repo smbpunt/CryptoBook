@@ -88,6 +88,8 @@ class Cryptocurrency
         $this->nfts = new ArrayCollection();
         $this->projectMonitorings = new ArrayCollection();
         $this->isStable = false;
+        $this->priceUsd = 0;
+        $this->mcapUsd = 0;
     }
 
 
