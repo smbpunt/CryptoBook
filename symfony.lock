@@ -127,6 +127,9 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.12"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v1.1.1"
+    },
     "guzzlehttp/guzzle": {
         "version": "7.4.2"
     },
