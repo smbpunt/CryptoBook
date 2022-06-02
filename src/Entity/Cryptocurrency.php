@@ -2,12 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CryptocurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
+#[UniqueEntity('libelleCoingecko', message: 'Cette cryptomonnaie existe déjà.')]
+#[ApiResource(
+    collectionOperations: ['GET', 'POST'],
+    itemOperations: ['GET', 'PUT', 'DELETE', 'PATCH'],
+    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['crypto:write']],
+    normalizationContext: ['groups' => ['crypto:write', 'position:list', 'position:item']]
+)]
 class Cryptocurrency
 {
     #[ORM\Id]
@@ -19,15 +29,18 @@ class Cryptocurrency
     private $libelleCoingecko;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['position:item', 'position:list'])]
     private $libelle;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['position:item', 'position:list'])]
     private $priceUsd;
 
     #[ORM\Column(type: 'float')]
     private $mcapUsd;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['position:item', 'position:list'])]
     private $urlImgThumb;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -37,12 +50,15 @@ class Cryptocurrency
     private $urlImgLarge;
 
     #[ORM\Column(type: 'string', length: 8)]
+    #[Groups(['position:item', 'position:list'])]
     private $symbol;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    #[Groups(['position:item', 'position:list'])]
     private $color;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['position:item', 'position:list'])]
     private $isStable;
 
     #[ORM\OneToMany(mappedBy: 'coin', targetEntity: Blockchain::class)]

@@ -2,26 +2,38 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    collectionOperations: ['GET', 'POST'],
+    itemOperations: ['GET', 'PUT', 'DELETE'],
+    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['position:write']],
+    normalizationContext: ['groups' => ['position:list', 'position:item']]
+)]
 class Position
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['position:list', 'position:item'])]
     private $id;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['position:list', 'position:item'])]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'positions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['position:list', 'position:item'])]
     private $coin;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'positions')]
@@ -29,18 +41,23 @@ class Position
     private $owner;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['position:list', 'position:item'])]
     private $isOpened;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['position:list', 'position:item'])]
     private $entryCost;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['position:list', 'position:item'])]
     private $openedAt;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['position:list', 'position:item'])]
     private $remainingCoins;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['position:list', 'position:item'])]
     private $description;
 
     #[ORM\Column(type: 'boolean')]
@@ -241,6 +258,7 @@ class Position
         return round(($this->getEntryCost() / $this->getNbCoins()), 2);
     }
 
+    #[Groups(['position:item', 'position:list'])]
     public function getCurrentValue(): float
     {
         return $this->remainingCoins * $this->coin->getPriceUsd();
