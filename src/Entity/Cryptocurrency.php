@@ -16,31 +16,32 @@ use Symfony\Component\Serializer\Annotation\Groups;
     collectionOperations: ['GET', 'POST'],
     itemOperations: ['GET', 'PUT', 'DELETE', 'PATCH'],
     denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['crypto:write']],
-    normalizationContext: ['groups' => ['crypto:write', 'position:list', 'position:item']]
+    normalizationContext: ['groups' => ['crypto:item', 'crypto:list']]
 )]
 class Cryptocurrency
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $libelleCoingecko;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $priceUsd;
 
     #[ORM\Column(type: 'float')]
     private $mcapUsd;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $urlImgThumb;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -50,15 +51,15 @@ class Cryptocurrency
     private $urlImgLarge;
 
     #[ORM\Column(type: 'string', length: 8)]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $symbol;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $color;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['position:item', 'position:list'])]
+    #[Groups(['crypto:item', 'crypto:list','position:item', 'position:list', 'loan:list', 'loan:item'])]
     private $isStable;
 
     #[ORM\OneToMany(mappedBy: 'coin', targetEntity: Blockchain::class)]

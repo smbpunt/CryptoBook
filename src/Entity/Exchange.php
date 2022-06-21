@@ -2,23 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ExchangeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ExchangeRepository::class)]
+#[ApiResource(
+    collectionOperations: ['GET'],
+    itemOperations: ['GET'],
+    normalizationContext: ['groups' => ['deposit:list', 'deposit:item']]
+)]
 class Exchange
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $url;
 
     #[ORM\OneToMany(mappedBy: 'exchange', targetEntity: Deposit::class)]

@@ -2,22 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DepositRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DepositRepository::class)]
+#[ApiResource(
+    collectionOperations: ['GET', 'POST'],
+    itemOperations: ['GET', 'PUT', 'DELETE'],
+    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['deposit:write']],
+    normalizationContext: ['groups' => ['deposit:list', 'deposit:item']]
+)]
 class Deposit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $id;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $depositedAt;
 
     #[ORM\ManyToOne(targetEntity: DepositType::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $type;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'deposits')]
@@ -25,10 +36,12 @@ class Deposit
     private $owner;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $valueEur;
 
     #[ORM\ManyToOne(targetEntity: Exchange::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deposit:list', 'deposit:item'])]
     private $exchange;
 
     /**
