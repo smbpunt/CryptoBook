@@ -20,11 +20,11 @@ class Blockchain
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'blockchains')]

@@ -23,25 +23,25 @@ class Cryptocurrency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $libelleCoingecko;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $priceUsd;
 
     #[ORM\Column(type: 'float')]
     private $mcapUsd;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $urlImgThumb;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -51,15 +51,15 @@ class Cryptocurrency
     private $urlImgLarge;
 
     #[ORM\Column(type: 'string', length: 8)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $symbol;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $color;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['crypto:item', 'crypto:list','position:item', 'position:list', 'loan:list', 'loan:item'])]
+    #[Groups(['crypto:item', 'crypto:list','position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $isStable;
 
     #[ORM\OneToMany(mappedBy: 'coin', targetEntity: Blockchain::class)]

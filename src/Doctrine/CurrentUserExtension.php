@@ -7,6 +7,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use App\Entity\Deposit;
 use App\Entity\Loan;
 use App\Entity\Position;
+use App\Entity\StrategyFarming;
+use App\Entity\StrategyLp;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
@@ -31,7 +33,7 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        $ownerClass = [Position::class, Loan::class, Deposit::class];
+        $ownerClass = [Position::class, Loan::class, Deposit::class, StrategyFarming::class, StrategyLp::class];
         if (!in_array($resourceClass, $ownerClass) || null === $user = $this->security->getUser()) {
             return;
         }

@@ -20,20 +20,20 @@ class Dapp
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $url;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['loan:list', 'loan:item'])]
+    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $blockchain;
 
     #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: Loan::class)]

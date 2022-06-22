@@ -2,36 +2,51 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
+#[ApiResource(
+    collectionOperations: ['GET', 'POST'],
+    itemOperations: ['GET', 'PUT', 'DELETE'],
+    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['farming:write']],
+    normalizationContext: ['groups' => ['farming:list', 'farming:item']]
+)]
 class StrategyFarming
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['farming:list', 'farming:item'])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'farmingStrategies')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['farming:list', 'farming:item'])]
     private $coin;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['farming:list', 'farming:item'])]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'farmingStrategies')]
+    #[Groups(['farming:list', 'farming:item'])]
     private $dapp;
 
     private Blockchain $blockchain;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['farming:list', 'farming:item'])]
     private $apr;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['farming:list', 'farming:item'])]
     private $enteredAt;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['farming:list', 'farming:item'])]
     private $description;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'farmingStrategies')]
@@ -148,5 +163,15 @@ class StrategyFarming
         $this->blockchain = $blockchain;
 
         return $this;
+    }
+
+    public function getValue(): float
+    {
+        return $this->nbCoins * $this->coin->getPriceUsd();
+    }
+
+    public function getAnnualRewards(): float
+    {
+        return $this->apr * $this->getValue() / 100;
     }
 }
