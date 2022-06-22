@@ -2,27 +2,39 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StrategyLpRepository::class)]
+#[ApiResource(
+    collectionOperations: ['GET', 'POST'],
+    itemOperations: ['GET', 'PUT', 'DELETE'],
+    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['lp:write']],
+    normalizationContext: ['groups' => ['lp:list', 'lp:item']]
+)]
 class StrategyLp
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['lp:list', 'lp:item'])]
     private $coin1;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['lp:list', 'lp:item'])]
     private $coin2;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['lp:list', 'lp:item'])]
     private $dapp;
 
     private Blockchain $blockchain;
@@ -36,27 +48,35 @@ class StrategyLp
     }
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['lp:list', 'lp:item'])]
     private $startAt;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $priceCoin1;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $priceCoin2;
 
     #[ORM\Column(type: 'float')]
-    private $nbcoin1;
+    #[Groups(['lp:list', 'lp:item'])]
+    private $nbCoin1;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $nbCoin2;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups(['lp:list', 'lp:item'])]
     private $lpDeposit;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $apr;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['lp:list', 'lp:item'])]
     private $description;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'strategyLps')]
@@ -155,14 +175,14 @@ class StrategyLp
         return $this;
     }
 
-    public function getNbcoin1(): ?float
+    public function getNbCoin1(): ?float
     {
-        return $this->nbcoin1;
+        return $this->nbCoin1;
     }
 
-    public function setNbcoin1(float $nbcoin1): self
+    public function setNbCoin1(float $nbCoin1): self
     {
-        $this->nbcoin1 = $nbcoin1;
+        $this->nbCoin1 = $nbCoin1;
 
         return $this;
     }
