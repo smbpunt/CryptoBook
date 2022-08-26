@@ -49,6 +49,34 @@ class AppFixtures extends Fixture
         $eth->setLibelleCoingecko('ethereum');
         $manager->persist($eth);
 
+        $a = new Cryptocurrency();
+        $a->setLibelleCoingecko('binancecoin');
+        $manager->persist($a);
+
+        $b = new Cryptocurrency();
+        $b->setLibelleCoingecko('aave');
+        $manager->persist($b);
+
+        $c = new Cryptocurrency();
+        $c->setLibelleCoingecko('avalanche-2');
+        $manager->persist($c);
+
+        $d = new Cryptocurrency();
+        $d->setLibelleCoingecko('ripple');
+        $manager->persist($d);
+
+        $e = new Cryptocurrency();
+        $e->setLibelleCoingecko('solana');
+        $manager->persist($e);
+
+        $f = new Cryptocurrency();
+        $f->setLibelleCoingecko('polkadot');
+        $manager->persist($f);
+
+        $g = new Cryptocurrency();
+        $g->setLibelleCoingecko('cardano');
+        $manager->persist($g);
+
         $stable = new Cryptocurrency();
         $stable->setLibelleCoingecko('usd-coin')->setIsStable(true);
         $manager->persist($stable);
@@ -96,7 +124,7 @@ class AppFixtures extends Fixture
 
             for ($p = 0; $p < random_int(2, 4); $p++) {
                 $position = new Position($user);
-                $nbCoins =$faker->randomFloat(4, 0.01, 0.1);
+                $nbCoins = $faker->randomFloat(4, 0.01, 0.1);
                 $position->setCoin($btc)
                     ->setNbCoins($nbCoins)
                     ->setRemainingCoins($nbCoins)
@@ -108,7 +136,7 @@ class AppFixtures extends Fixture
 
             for ($p = 0; $p < random_int(2, 6); $p++) {
                 $position = new Position($user);
-                $nbCoins =$faker->randomFloat(2, 0.1, 1);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
                 $position->setCoin($eth)
                     ->setNbCoins($nbCoins)
                     ->setRemainingCoins($nbCoins)
@@ -117,9 +145,94 @@ class AppFixtures extends Fixture
                 $manager->persist($position);
             }
 
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($a)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($b)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($c)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($d)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($e)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($f)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
+            for ($p = 0; $p < random_int(2, 6); $p++) {
+                $position = new Position($user);
+                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+                $position->setCoin($g)
+                    ->setNbCoins($nbCoins)
+                    ->setRemainingCoins($nbCoins)
+                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+                $manager->persist($position);
+            }
+
+
             for ($p = 0; $p < random_int(1, 2); $p++) {
                 $position = new Position($user);
-                $nbCoins =$faker->randomFloat(0, 1000, 5000);
+                $nbCoins = $faker->randomFloat(0, 1000, 5000);
                 $position->setCoin($stable)
                     ->setNbCoins($nbCoins)
                     ->setRemainingCoins($nbCoins)

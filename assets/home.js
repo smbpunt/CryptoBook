@@ -14,19 +14,28 @@ if (json_positions.length > 1) {
     const labels = [];
     const datasets = [];
     const rgbs = [];
+    let percentOther = 0;
     json_positions.forEach(position => {
-        labels.push(position.libelle);
-        datasets.push(String(position.percent))
-        if (position.color) {
-            rgbs.push(position.color)
+        if (position.percent > 0.3) {
+            labels.push(position.libelle);
+            datasets.push(String(position.percent))
+            if (position.color) {
+                rgbs.push(position.color)
+            } else {
+                const r = randomBetween(0, 255);
+                const g = randomBetween(0, 255);
+                const b = randomBetween(0, 255);
+                const rgb = `rgb(${r},${g},${b})`;
+                rgbs.push(rgb);
+            }
         } else {
-            const r = randomBetween(0, 255);
-            const g = randomBetween(0, 255);
-            const b = randomBetween(0, 255);
-            const rgb = `rgb(${r},${g},${b})`;
-            rgbs.push(rgb);
+            percentOther += position.percent;
         }
     });
+
+    labels.push("Autre(s)");
+    datasets.push(String(percentOther));
+    rgbs.push(`rgb(255, 255, 255)`);
 
     const data_crypto = {
         labels: labels,
@@ -40,7 +49,7 @@ if (json_positions.length > 1) {
 
     const canvas = document.getElementById('chart-pos').getContext('2d');
     new Chart(canvas, {
-        type: 'pie',
+        type: 'doughnut',
         data: data_crypto
     });
 }
@@ -100,8 +109,6 @@ if (stableTotal > 0) {
                 backgroundColor: rgbs_stable,
             }]
         };
-
-        console.log(data_crypto_stable);
 
         const canvas_stable = document.getElementById('chart-stable').getContext('2d');
         new Chart(canvas_stable, {

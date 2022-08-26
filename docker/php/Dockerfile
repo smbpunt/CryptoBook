@@ -14,8 +14,7 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN  apk add --no-cache bash && curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash &&  apk add symfony-cli
 
 # bonus
-RUN  apk add --no-cache git openssh
-
+RUN  apk add --no-cache git openssh acl
 
 # Copy the application code
 COPY . /app

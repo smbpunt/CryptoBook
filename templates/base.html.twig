@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}SMB{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ asset('build/images/favicon.png') }}"/>
     {{ encore_entry_link_tags('app') }}
@@ -13,47 +15,35 @@
     {% endblock %}
 </head>
 <body>
-<header class="p-3 bg-dark text-white border-bottom">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-            </a>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="{{ path('home') }}" class="nav-link px-2 text-secondary">Accueil</a></li>
-                <li><a href="{{ path('app_position_index') }}" class="nav-link px-2 text-white">Positions</a></li>
-                <li><a href="{{ path('app_strategy_farming_index') }}" class="nav-link px-2 text-white">Farming</a></li>
-                <li><a href="{{ path('app_loan_index') }}" class="nav-link px-2 text-white">Emprunts</a></li>
-                <li><a href="{{ path('app_strategy_dca_index') }}" class="nav-link px-2 text-white">DCA</a></li>
-                <li><a href="{{ path('app_deposit_index') }}" class="nav-link px-2 text-white">Dépôts €</a></li>
-                <li><a href="{{ path('app_nft_index') }}" class="nav-link px-2 text-white">NFT</a></li>
-                <li><a href="{{ path('app_project_monitoring_index') }}" class="nav-link px-2 text-white">Projets</a></li>
-            </ul>
-
-            <div class="text-end">
-                {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('admin') }}" class="btn btn-outline-light me-2">Admin</a>
-                    {% endif %}
-                    <a href="{{ path('app_logout') }}" class="btn btn-secondary">Logout</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-secondary">Register</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</header>
-<div class="bg-dark text-white p-3">
+<nav class="p-3 border-bottom navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        {% block full_screen %}
-            <div class="container">
-                {% block body %}{% endblock %}
-            </div>
-        {% endblock %}
+        <a class="navbar-brand" href="{{ path('home') }}">Cryptobook</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {{ knp_menu_render('main', {'currentClass': 'active'}) }}
+        </div>
+        {# <div class="text-end"> #}
+        {# {% if app.user %} #}
+        {# {% if is_granted('ROLE_ADMIN') %} #}
+        {# <a href="{{ path('admin') }}" class="btn btn-outline-light me-2">Admin</a> #}
+        {# {% endif %} #}
+        {# <a href="{{ path('app_logout') }}" class="btn btn-secondary">Logout</a> #}
+        {# {% else %} #}
+        {# <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Login</a> #}
+        {# <a href="{{ path('app_register') }}" class="btn btn-secondary">Register</a> #}
+        {# {% endif %} #}
+        {# </div> #}
+    </div>
+</nav>
+
+
+<div class="bg-dark text-white p-3">
+    <div class="container">
+        {% block body %}{% endblock %}
     </div>
 </div>
 </body>
