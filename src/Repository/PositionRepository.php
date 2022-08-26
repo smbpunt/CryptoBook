@@ -56,6 +56,13 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery()->getArrayResult();
     }
 
+    /**
+     * @param UserInterface $user
+     * @param bool $isStable
+     * @param bool $isOpen
+     * @param Cryptocurrency|null $cryptocurrency
+     * @return Position[]
+     */
     public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true, Cryptocurrency $cryptocurrency = null): array
     {
         $qb = $this->createQueryBuilder('p')

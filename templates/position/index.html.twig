@@ -45,8 +45,9 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Nombre actuel</th>
+                    <th>Coût moyen du coin</th>
+                    <th>Valeur actuelle</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,11 +65,19 @@
                             <img src="{{ position['grouped']['coin'].urlImgThumb }}" alt="Logo {{ position['grouped']['coin'].libelle }}">
                         </td>
                         <td class="text-white align-middle text-end">{{ position['grouped'].totalsum|round(8) }} {{ position['grouped']['coin'].symbol|upper }}</td>
+                        <td class="align-middle text-end
+                                        {% if position['coutMoyen'] < position['grouped']['coin'].priceUsd %}
+                                            text-success
+                                        {% else %}
+                                            text-warning
+                                        {% endif %}">
+                            ~ {{ position['coutMoyen']|round(2) }} $
+                        </td>
                         <td class="text-white align-middle text-end">
                             ~ {{ (position['grouped'].totalsum * position['grouped']['coin'].priceUsd)|round(2) }} $
                         </td>
                     </tr>
-                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="5">
+                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="6">
                         <table class="table table-bordered table-striped table-responsive-md table-dark">
                             <thead>
                             <tr>

@@ -17,14 +17,33 @@ class PositionController extends AbstractController
     #[Route('/', name: 'app_position_index', methods: ['GET'])]
     public function index(PositionRepository $positionRepository, CryptocurrencyRepository $cryptocurrencyRepository): Response
     {
+        // Liste des positions avec calcul de la somme
         $positions_sum = $cryptocurrencyRepository->getSumCoinByUser($this->getUser()) ?? [];
 
         $map = [];
+
         foreach ($positions_sum as $byCoin) {
+            // coin en cours
             $coin = $byCoin['coin'];
+
+            // On récupére la liste des positions pour ce coin
             $positionsByCoin = $positionRepository->getPositions($this->getUser(), false, true, $coin);
+
+            // J'initialise à 0
+            $coutMoyen = 0;
+
+            //Je boucle sur les positions du coin en cours
+            foreach ($positionsByCoin as $position) {
+                // % d'allocation sur le coin, par rapport au nombre total
+                $percent = $position->getNbCoins() / $byCoin['totalsum'];
+
+                // J'incrémente les cout moyen, en fonction du % d'allocation
+                $coutMoyen += $position->getEntryCoinValue() * $percent;
+            }
+
             $map[] = [
                 'grouped' => $byCoin,
+                'coutMoyen' => $coutMoyen,
                 'splitted' => $positionsByCoin
             ];
         }
