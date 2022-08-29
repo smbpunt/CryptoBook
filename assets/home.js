@@ -50,7 +50,11 @@ if (json_positions.length > 1) {
     const canvas = document.getElementById('chart-pos').getContext('2d');
     new Chart(canvas, {
         type: 'doughnut',
-        data: data_crypto
+        data: data_crypto,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
     });
 }
 

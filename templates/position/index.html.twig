@@ -47,6 +47,7 @@
                     <th></th>
                     <th>Nombre actuel</th>
                     <th>Coût moyen du coin</th>
+                    <th>% moyen</th>
                     <th>Valeur actuelle</th>
                 </tr>
                 </thead>
@@ -73,11 +74,19 @@
                                         {% endif %}">
                             ~ {{ position['coutMoyen']|round(2) }} $
                         </td>
+                        <td class="align-middle text-end
+                                        {% if ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)>0 %}
+                                            text-success
+                                        {% else %}
+                                            text-warning
+                                        {% endif %}">
+                            {{ ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)|round(2) }} %
+                        </td>
                         <td class="text-white align-middle text-end">
                             ~ {{ (position['grouped'].totalsum * position['grouped']['coin'].priceUsd)|round(2) }} $
                         </td>
                     </tr>
-                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="6">
+                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="7">
                         <table class="table table-bordered table-striped table-responsive-md table-dark">
                             <thead>
                             <tr>
