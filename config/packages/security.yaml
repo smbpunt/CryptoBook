@@ -1,4 +1,7 @@
 security:
+  role_hierarchy:
+    ROLE_ADMIN: ROLE_USER
+    ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
   password_hashers:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -36,8 +39,7 @@ security:
       custom_authenticator: App\Security\UserAuthenticator
       logout:
         path: app_logout
-        # where to redirect after logout
-        # target: app_any_route
+      switch_user: true
 
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
@@ -48,11 +50,6 @@ security:
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/, roles: ROLE_USER }
-
-    #TODO décommenter au dessus
-
-
-    # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
   security:
