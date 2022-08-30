@@ -25,7 +25,7 @@ class CryptobookController extends AbstractController
         $totalUsdStable = 0;
         $totalEurStable = 0;
 
-        $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'jarvis-synthetic-euro']);
+        $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'tether-eurt']);
         $ratioUsdEur = ($jeur !== null && $jeur->getPriceUsd() !== null) ? $jeur->getPriceUsd() : 1.04;
 
         foreach ($positions as $key => $value) {
