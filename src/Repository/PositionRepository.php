@@ -48,11 +48,11 @@ class PositionRepository extends ServiceEntityRepository
             ->join('p.coin', 'c')
             ->andWhere('p.owner = :user')
             ->andWhere('c.isStable = :isStable')
-            ->andWhere('p.isOpened = 1')
+            ->andWhere('p.isOpened = TRUE')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
             ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
-            ->groupBy('p.coin')
+            ->groupBy('c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
             ->getQuery()->getArrayResult();
     }
 
@@ -81,6 +81,7 @@ class PositionRepository extends ServiceEntityRepository
             $qb->andWhere('p.coin = :coin')
                 ->setParameter('coin', $cryptocurrency);
         }
+
 
         return $qb->getQuery()->getResult();
     }

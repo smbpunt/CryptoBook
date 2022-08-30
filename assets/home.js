@@ -53,7 +53,12 @@ if (json_positions.length > 1) {
         data: data_crypto,
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    onClick: (e) => e.stopPropagation()
+                }
+            }
         }
     });
 }

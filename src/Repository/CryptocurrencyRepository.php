@@ -46,11 +46,11 @@ class CryptocurrencyRepository extends ServiceEntityRepository
             ->join('c.positions', 'p')
             ->andWhere('p.owner = :user')
             ->andWhere('c.isStable = :isStable')
-            ->andWhere('p.isOpened = 1')
+            ->andWhere('p.isOpened = true')
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
             ->select('SUM(p.remainingCoins) as totalsum', 'c as coin')
-            ->groupBy('p.coin')
+            ->groupBy('coin')
             ->getQuery()->getResult();
     }
 

@@ -75,12 +75,16 @@
                             ~ {{ position['coutMoyen']|round(2) }} $
                         </td>
                         <td class="align-middle text-end
-                                        {% if ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)>0 %}
+                                        {% if position['coutMoyen'] == 0 or ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)>0 %}
                                             text-success
                                         {% else %}
                                             text-warning
                                         {% endif %}">
-                            {{ ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)|round(2) }} %
+                            {% if position['coutMoyen'] == 0 %}
+                                + ∞
+                            {% else %}
+                                {{ ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)|round(2) }} %
+                            {% endif %}
                         </td>
                         <td class="text-white align-middle text-end">
                             ~ {{ (position['grouped'].totalsum * position['grouped']['coin'].priceUsd)|round(2) }} $
