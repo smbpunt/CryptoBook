@@ -33,7 +33,7 @@ security:
     main:
       remember_me:
         secret: '%kernel.secret%'
-        lifetime: 2419200 # 1 week in seconds
+        lifetime: 2419200
       lazy: true
       provider: app_user_provider
       custom_authenticator: App\Security\UserAuthenticator
