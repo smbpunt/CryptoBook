@@ -55,6 +55,7 @@ class NftType extends AbstractType
                 'class' => Cryptocurrency::class,
                 'required' => true,
                 'attr' => ['class' => 'js-select2'],
+                'placeholder' => 'Choisir une crypto',
             ]);
     }
 

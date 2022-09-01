@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Blockchain;
+use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
 use App\Entity\StrategyFarming;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -34,7 +35,11 @@ class StrategyFarmingType extends AbstractType
                 'empty_data' => ''
             ])
             ->add('apr')
-            ->add('coin')
+            ->add('coin', EntityType::class, [
+                'required' => true,
+                'placeholder' => 'Choisir une crypto',
+                'class' => Cryptocurrency::class
+            ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,
                 'class' => Blockchain::class,

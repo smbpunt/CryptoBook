@@ -39,7 +39,7 @@ class ProjectMonitoringType extends AbstractType
                 'class' => Cryptocurrency::class,
                 'required' => false,
                 'attr' => ['class' => 'js-select2'],
-                'placeholder' => ''
+                'placeholder' => 'Choisir une crypto',
             ])
             ->add('type', EntityType::class, [
                 'class' => TypeProject::class,

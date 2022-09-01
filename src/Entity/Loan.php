@@ -40,7 +40,7 @@ class Loan
     #[Groups(['loan:list', 'loan:item'])]
     private $dapp;
 
-    private Blockchain $blockchain;
+    private $blockchain;
 
     #[ORM\Column(type: 'text')]
     #[Groups(['loan:list', 'loan:item'])]

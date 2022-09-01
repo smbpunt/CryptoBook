@@ -49,6 +49,7 @@ class PositionType extends AbstractType
             ])
             ->add('coin', EntityType::class, [
                 'class' => Cryptocurrency::class,
+                'placeholder' => 'Choisir une crypto',
                 'required' => true,
                 'attr' => ['class' => 'js-select2'],
             ])

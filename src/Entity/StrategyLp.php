@@ -37,7 +37,7 @@ class StrategyLp
     #[Groups(['lp:list', 'lp:item'])]
     private $dapp;
 
-    private Blockchain $blockchain;
+    private $blockchain;
 
     /**
      * @param $owner

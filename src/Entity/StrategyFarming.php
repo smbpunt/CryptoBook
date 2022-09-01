@@ -35,7 +35,7 @@ class StrategyFarming
     #[Groups(['farming:list', 'farming:item'])]
     private $dapp;
 
-    private Blockchain $blockchain;
+    private $blockchain;
 
     #[ORM\Column(type: 'float')]
     #[Groups(['farming:list', 'farming:item'])]
