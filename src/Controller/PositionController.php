@@ -35,7 +35,7 @@ class PositionController extends AbstractController
             //Je boucle sur les positions du coin en cours
             foreach ($positionsByCoin as $position) {
                 // % d'allocation sur le coin, par rapport au nombre total
-                $percent = $position->getNbCoins() / $byCoin['totalsum'];
+                $percent = $position->getRemainingCoins() / $byCoin['totalsum'];
 
                 // J'incrémente les cout moyen, en fonction du % d'allocation
                 $coutMoyen += $position->getEntryCoinValue() * $percent;
