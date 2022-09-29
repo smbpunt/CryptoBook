@@ -4,6 +4,7 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('dca_index') }}
+    {{ encore_entry_script_tags('select2') }}
 {% endblock %}
 
 {% block body %}
@@ -14,6 +15,7 @@
             </div>
             <div class="col text-end">
                 <a id="show-modal" class="btn btn-primary m-2">Génerer mes positions</a>
+                <a id="show-modal-dcaauto" class="btn btn-primary m-2">DCA Auto</a>
                 <a href="{{ path('app_strategy_dca_edit') }}" class="btn btn-secondary m-2">Modifier mon DCA</a>
             </div>
         </div>
@@ -94,6 +96,53 @@
                                 class="btn btn-light mt-3">
                             Valider
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal_dca_auto" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="modal-dcaauto-title-id" class="modal-title">DCA Auto</h5>
+                        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div id="modal-dcaauto-body-id" class="modal-body p-3">
+
+
+                        {{ form_start(form) }}
+
+                        {{ form_label(form.coin, 'Crypto') }}
+                        {{ form_widget(form.coin) }}
+
+                        {{ form_label(form.value, "Investi au total") }}
+                        <div class="input-group mb-3">
+                            {{ form_widget(form.value, { 'attr': {'placeholder': 'ex: 200$'} }) }}
+                            <span class="input-group-text">$</span>
+                        </div>
+
+                        {{ form_row(form.type_recurr, {
+                            label: 'Type de récurrence'
+                        }) }}
+
+                        {{ form_row(form.nb_recurr, {
+                            label: 'Nombre de récurrence',
+                            'attr': {'placeholder': 'ex: 31'}
+                        }) }}
+                        
+                        {{ form_row(form.date_first, {
+                            label: 'Date du premier achat'
+                        }) }}
+
+
+                        <button data-path="{{ absolute_url(path('app_strategy_dca_dcaauto')) }}"
+                                id="btn-generate-dcaauto"
+                                class="btn btn-light mt-3">
+                            Valider
+                        </button>
+
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>

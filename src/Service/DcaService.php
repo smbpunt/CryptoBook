@@ -5,11 +5,27 @@ namespace App\Service;
 use App\Entity\Position;
 use App\Entity\StrategyDca;
 use App\Entity\User;
+use App\Form\DcaAutoType;
+use App\Repository\CryptocurrencyRepository;
+use DateTime;
 use DateTimeImmutable;
+use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class DcaService
 {
+
+    private CryptocurrencyRepository $cryptocurrencyRepository;
+
+    /**
+     * @param CryptocurrencyRepository $cryptocurrencyRepository
+     */
+    public function __construct(CryptocurrencyRepository $cryptocurrencyRepository)
+    {
+        $this->cryptocurrencyRepository = $cryptocurrencyRepository;
+    }
+
+
     /**
      * @param StrategyDca $dca
      * @param UserInterface $user
@@ -34,6 +50,55 @@ class DcaService
                 ->setIsOpened(true)
                 ->setIsDca(true)
                 ->setDescription("DCA " . $part->getPercent() . "%");
+            $positions[] = $position;
+        }
+
+        return $positions;
+    }
+
+    /**
+     * @return Position[]
+     */
+    public function generateDcaAutoPositions(UserInterface $user, string $idCrypto, string $recurr, string $nbRecurr, string $total, string $stringFirstDate): array
+    {
+        $coin = $this->cryptocurrencyRepository->find((int)$idCrypto);
+        if ($coin === null) {
+            return [];
+        }
+
+        try {
+            $firstDate = new DateTime($stringFirstDate);
+        } catch (Exception $e) {
+            return [];
+        }
+
+
+        $modify = match ($recurr) {
+            DcaAutoType::$HOURLY => '+4 hours',
+            DcaAutoType::$DAILY => '+1 day',
+            DcaAutoType::$WEEKLY => '+1 week',
+            DcaAutoType::$MONTHLY => '+1 month',
+            default => null
+        };
+
+        if ($modify === null) {
+            return [];
+        }
+
+        $positions = [];
+        for ($i = 0; $i < (int)$nbRecurr; $i++) {
+            if ($i > 0) {
+                $firstDate->modify($modify);
+            }
+
+            $position = new Position($user);
+            $position->setOpenedAt(DateTimeImmutable::createFromMutable($firstDate))
+                ->setCoin($coin)
+                ->setEntryCost((float)$total / (float)$nbRecurr)
+                ->setIsOpened(true)
+                ->setIsDca(true)
+                ->setDescription("DCA Auto");
+
             $positions[] = $position;
         }
 

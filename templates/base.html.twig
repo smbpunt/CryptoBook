@@ -15,7 +15,6 @@
     {% endblock %}
 </head>
 <body>
-
 <nav class="p-3 border-bottom navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ path('home') }}">Cryptobook</a>
@@ -26,20 +25,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             {{ knp_menu_render('main', {'currentClass': 'active'}) }}
         </div>
-        {# <div class="text-end"> #}
-        {# {% if app.user %} #}
-        {# {% if is_granted('ROLE_ADMIN') %} #}
-        {# <a href="{{ path('admin') }}" class="btn btn-outline-light me-2">Admin</a> #}
-        {# {% endif %} #}
-        {# <a href="{{ path('app_logout') }}" class="btn btn-secondary">Logout</a> #}
-        {# {% else %} #}
-        {# <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Login</a> #}
-        {# <a href="{{ path('app_register') }}" class="btn btn-secondary">Register</a> #}
-        {# {% endif %} #}
-        {# </div> #}
     </div>
 </nav>
-
 
 <div class="bg-dark text-white p-3">
     <div class="container">

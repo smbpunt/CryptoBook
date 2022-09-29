@@ -116,7 +116,8 @@
                                             <i class="bi bi-info"></i>
                                         </button>
                                     </td>
-                                    <td class="text-white align-middle text-center">{{ detail.openedAt ? detail.openedAt|date('d/m/Y') : '' }}</td>
+                                    <td class="text-white align-middle text-center"
+                                        title="toto">{{ detail.openedAt ? detail.openedAt|date('d/m/Y') : '' }}</td>
                                     <td class="text-white align-middle text-end">{{ detail.remainingCoins }}
                                         /{{ detail.nbCoins }}</td>
                                     <td class="text-white align-middle text-end">{{ detail.entryCost|number_format(2, '.', ' ') }} $</td>

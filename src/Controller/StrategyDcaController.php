@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\StrategyDca;
+use App\Form\DcaAutoType;
 use App\Form\DcaToPositionType;
 use App\Form\StrategyDcaType;
 use App\Repository\CryptocurrencyRepository;
@@ -27,9 +28,12 @@ class StrategyDcaController extends AbstractController
         $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'jarvis-synthetic-euro']);
         $ratioUsdEur = ($jeur !== null && $jeur->getPriceUsd() !== null) ? $jeur->getPriceUsd() : 1.04;
 
+        $form = $this->createForm(DcaAutoType::class);
+
         return $this->render('strategy_dca/index.html.twig', [
             'dca' => $dcaUser,
             'ratioUsdEur' => $ratioUsdEur,
+            'form' => $form->createView()
         ]);
     }
 
@@ -96,6 +100,36 @@ class StrategyDcaController extends AbstractController
 
     }
 
+
+    #[Route('/dcaAuto', name: 'app_strategy_dca_dcaauto', methods: ['GET', 'POST'])]
+    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService): Response
+    {
+        if ($request->get('crypto') === null || $request->get('t') === null || $request->get('nb') === null || $request->get('total') === null || $request->get('d') === null) {
+            //todo erreur
+            return $this->redirectToRoute('app_strategy_dca_index');
+        }
+
+        $positions = $dcaService->generateDcaAutoPositions($this->getUser(), $request->get('crypto'), $request->get('t'), $request->get('nb'), $request->get('total'), $request->get('d'));
+
+        $form = $this->createForm(DcaToPositionType::class, null, [
+            'positions' => $positions
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($positions as $position) {
+                $positionRepository->add($position, true);
+            }
+
+            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('strategy_dca/generatePositions.html.twig', [
+            'form_dca' => $form,
+        ]);
+    }
+
     #[Route('/edit', name: 'app_strategy_dca_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, StrategyDcaRepository $strategyDcaRepository): Response
     {
@@ -129,7 +163,7 @@ class StrategyDcaController extends AbstractController
             $this->redirectToRoute('app_strategy_dca_index');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$strategyDca->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $strategyDca->getId(), $request->request->get('_token'))) {
             $strategyDcaRepository->remove($strategyDca, true);
         }
 
