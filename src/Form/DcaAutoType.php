@@ -48,7 +48,6 @@ class DcaAutoType extends AbstractType
             ->add('date_first', DateTimeType::class, [
                 'required' => true,
                 'widget' => 'single_text',
-
             ]);
     }
 

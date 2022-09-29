@@ -35,7 +35,7 @@ class DcaService
     public function generatePositions(StrategyDca $dca, UserInterface $user, float $value): array
     {
         $positions = [];
-        $today = new DateTimeImmutable();
+        $today = DateTimeImmutable::createFromFormat('Y-m-d H:i', date('Y-m-d H:i'));
 
         foreach ($dca->getParts() as $part) {
             $dollarInvested = $value * $part->getPercent() / 100;
