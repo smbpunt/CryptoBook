@@ -1,0 +1,10 @@
+<h1>Bonjour !</h1>
+
+<p>Veuillez suivre ce lien pour changer votre mot de passe : </p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Le lien expire dans : {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} (Oh ça va, la
+    traduction viendra plus tard :p).</p>
+
+<p>À très vite sur le cryptobook !</p>

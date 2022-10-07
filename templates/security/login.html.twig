@@ -53,6 +53,7 @@
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <button class="w-100 btn btn-lg btn-warning" type="submit">Se connecter</button>
                 <p class="mt-5 mb-3 text-muted">© SMB Corporation</p>
+                <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
             </form>
         </main>
     </div>
