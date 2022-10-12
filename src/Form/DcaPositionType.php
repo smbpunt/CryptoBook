@@ -17,6 +17,7 @@ class DcaPositionType extends AbstractType
     {
         $builder
             ->add('openedAt', DateTimeType::class, [
+                'input' => 'datetime_immutable',
                 'widget' => 'single_text',
                 'required' => false,
             ])
