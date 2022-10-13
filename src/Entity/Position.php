@@ -270,7 +270,7 @@ class Position
 
     public function getPercentEvolution(): float
     {
-        return $this->entryCost > 0
+        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) //Pour la division par 0
             ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
             : 9999;
     }
@@ -294,6 +294,10 @@ class Position
         $ventes = $this->getVentesSortedByDate();
         foreach ($ventes as $vente) {
             $this->remainingCoins *= (1 - ($vente->getPercent() / 100));
+        }
+
+        if ($this->remainingCoins === 0.0) {
+            $this->setIsOpened(false);
         }
     }
 }
