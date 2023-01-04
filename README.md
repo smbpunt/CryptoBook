@@ -2,3 +2,10 @@
 
 En cours de développement.
 Cet outil permettra, à terme, d'avoir un visuel sur toutes ses positions en cryptomonnaies, d'avoir un recap de l'argent investi, de l'argent gagné, de calculer où farmer, d'avoir un recap de ses gains en NFT, et plein d'autres trucs super cool...
+
+TODO:
+- [ ] Nettoyer les controllers via les services
+- [ ] Internationaliser l'application pour les currencies
+- [ ] Changer le design des Positions - à réfléchir
+- [ ] Ajouter un système de dépenses dans les projets (qui serait comptabilisé dans le recap)
+- [ ] Internationaliser l'application pour les langues
