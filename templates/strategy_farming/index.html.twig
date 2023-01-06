@@ -201,7 +201,7 @@
                             <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
                             <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
                             <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar'] }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar']|round(2) }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
                             <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
