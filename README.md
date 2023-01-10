@@ -5,9 +5,9 @@ Cet outil permettra, à terme, d'avoir un visuel sur toutes ses positions en cry
 
 TODO:
 - [x] Upgrade vers Symfony 6.2
+- [ ] Utiliser les Traits PHP
 - [ ] Internationaliser l'application pour les currencies
 - [ ] Nettoyer les controllers via les services
-- [ ] Utiliser les Traits PHP
 - [ ] Changer le design des Positions - à réfléchir
 - [ ] Ajouter un système de dépenses dans les projets (qui serait comptabilisé dans le recap)
 - [ ] Internationaliser l'application pour les langues

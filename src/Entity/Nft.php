@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 class Nft
 {
+    use OwnedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -56,10 +59,6 @@ class Nft
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'nfts')]
     #[ORM\JoinColumn(nullable: false)]
     private $cryptocurrency;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'nfts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
 
     /**
      * @param $owner
@@ -239,18 +238,6 @@ class Nft
     public function setCryptocurrency(?Cryptocurrency $cryptocurrency): self
     {
         $this->cryptocurrency = $cryptocurrency;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

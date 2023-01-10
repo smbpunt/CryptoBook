@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,6 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class StrategyFarming
 {
+    use OwnedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -48,10 +51,6 @@ class StrategyFarming
     #[ORM\Column(type: 'text')]
     #[Groups(['farming:list', 'farming:item'])]
     private $description;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'farmingStrategies')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
 
     /**
      * @param $owner
@@ -134,18 +133,6 @@ class StrategyFarming
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

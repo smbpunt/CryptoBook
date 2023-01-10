@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\DepositRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,6 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Deposit
 {
+    use OwnedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -30,10 +33,6 @@ class Deposit
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['deposit:list', 'deposit:item'])]
     private $type;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'deposits')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
 
     #[ORM\Column(type: 'float')]
     #[Groups(['deposit:list', 'deposit:item'])]
@@ -77,18 +76,6 @@ class Deposit
     public function setType(?DepositType $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

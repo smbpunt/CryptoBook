@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyDcaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -37,18 +38,6 @@ class StrategyDca
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,15 +17,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Loan
 {
+    use OwnedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups(['loan:list', 'loan:item'])]
     private $id;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'loans')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'loans')]
     #[ORM\JoinColumn(nullable: false)]
@@ -61,18 +60,6 @@ class Loan
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     public function getCoin(): ?Cryptocurrency

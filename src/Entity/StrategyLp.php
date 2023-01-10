@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,6 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class StrategyLp
 {
+    use OwnedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -38,14 +41,6 @@ class StrategyLp
     private $dapp;
 
     private $blockchain;
-
-    /**
-     * @param $owner
-     */
-    public function __construct($owner)
-    {
-        $this->owner = $owner;
-    }
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups(['lp:list', 'lp:item'])]
@@ -79,9 +74,13 @@ class StrategyLp
     #[Groups(['lp:list', 'lp:item'])]
     private $description;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'strategyLps')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
+    /**
+     * @param $owner
+     */
+    public function __construct($owner)
+    {
+        $this->owner = $owner;
+    }
 
     public function getId(): ?int
     {
