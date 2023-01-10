@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnedTrait;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,7 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Position
 {
-    use OwnedTrait;
     use DescriptionTrait;
 
     #[ORM\Id]
@@ -39,6 +37,10 @@ class Position
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['position:list', 'position:item'])]
     private $coin;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'positions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups(['position:list', 'position:item'])]
@@ -101,6 +103,18 @@ class Position
     public function setCoin(?Cryptocurrency $coin): self
     {
         $this->coin = $coin;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

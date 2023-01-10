@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnedTrait;
 use App\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectMonitoringRepository::class)]
 class ProjectMonitoring
 {
-    use OwnedTrait;
     use DescriptionTrait;
 
     #[ORM\Id]
@@ -26,6 +24,10 @@ class ProjectMonitoring
 
     #[ORM\Column(type: 'text')]
     private $note;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectMonitorings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
     #[ORM\Column(type: 'array')]
     private $links = [];
@@ -82,6 +84,19 @@ class ProjectMonitoring
 
         return $this;
     }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
     public function getLinks(): ?array
     {
         return $this->links;

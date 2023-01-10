@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class StrategyLp
 {
-    use OwnedTrait;
     use DescriptionTrait;
 
     #[ORM\Id]
@@ -71,6 +69,10 @@ class StrategyLp
     #[ORM\Column(type: 'float')]
     #[Groups(['lp:list', 'lp:item'])]
     private $apr;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'strategyLps')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owner;
 
     /**
      * @param $owner
