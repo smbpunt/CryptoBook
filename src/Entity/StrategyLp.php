@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class StrategyLp
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -69,10 +71,6 @@ class StrategyLp
     #[ORM\Column(type: 'float')]
     #[Groups(['lp:list', 'lp:item'])]
     private $apr;
-
-    #[ORM\Column(type: 'text')]
-    #[Groups(['lp:list', 'lp:item'])]
-    private $description;
 
     /**
      * @param $owner
@@ -218,18 +216,6 @@ class StrategyLp
     public function setApr(float $apr): self
     {
         $this->apr = $apr;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

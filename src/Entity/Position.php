@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Position
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -53,10 +55,6 @@ class Position
     #[ORM\Column(type: 'float')]
     #[Groups(['position:list', 'position:item'])]
     private $remainingCoins;
-
-    #[ORM\Column(type: 'text')]
-    #[Groups(['position:list', 'position:item'])]
-    private $description;
 
     #[ORM\Column(type: 'boolean')]
     private $isDca;
@@ -151,18 +149,6 @@ class Position
     public function setRemainingCoins(float $remainingCoins): self
     {
         $this->remainingCoins = $remainingCoins;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

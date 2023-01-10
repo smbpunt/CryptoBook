@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class StrategyFarming
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -47,10 +49,6 @@ class StrategyFarming
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups(['farming:list', 'farming:item'])]
     private $enteredAt;
-
-    #[ORM\Column(type: 'text')]
-    #[Groups(['farming:list', 'farming:item'])]
-    private $description;
 
     /**
      * @param $owner
@@ -121,18 +119,6 @@ class StrategyFarming
     public function setEnteredAt(?\DateTimeImmutable $enteredAt): self
     {
         $this->enteredAt = $enteredAt;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

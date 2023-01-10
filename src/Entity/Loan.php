@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Loan
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,10 +42,6 @@ class Loan
     private $dapp;
 
     private $blockchain;
-
-    #[ORM\Column(type: 'text')]
-    #[Groups(['loan:list', 'loan:item'])]
-    private $description;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups(['loan:list', 'loan:item'])]
@@ -94,18 +92,6 @@ class Loan
     public function setDapp(?Dapp $dapp): self
     {
         $this->dapp = $dapp;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

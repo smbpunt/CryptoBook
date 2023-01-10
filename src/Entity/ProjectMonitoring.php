@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProjectMonitoring
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,9 +23,6 @@ class ProjectMonitoring
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'projectMonitorings')]
     private $coin;
-
-    #[ORM\Column(type: 'text')]
-    private $description;
 
     #[ORM\Column(type: 'text')]
     private $note;
@@ -68,18 +67,6 @@ class ProjectMonitoring
     public function setCoin(?Cryptocurrency $coin): self
     {
         $this->coin = $coin;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

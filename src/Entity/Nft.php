@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnedTrait;
 use App\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Nft
 {
     use OwnedTrait;
+    use DescriptionTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,9 +44,6 @@ class Nft
 
     #[ORM\Column(type: 'float', nullable: true)]
     private $percentSaleFees;
-
-    #[ORM\Column(type: 'text')]
-    private $description;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $purchasedOn;
@@ -178,18 +177,6 @@ class Nft
     public function setPercentSaleFees(?float $percentSaleFees): self
     {
         $this->percentSaleFees = $percentSaleFees;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
