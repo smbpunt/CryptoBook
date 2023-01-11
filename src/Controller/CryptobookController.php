@@ -8,6 +8,7 @@ use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
+use App\Service\DepositService;
 use App\Service\FiatExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,16 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService,PositionRepository $positionRepository, DepositRepository $depositRepository, StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, LoanRepository $loanRepository): Response
+    public function index(FiatExchangeRatesService $fiatExchangeRatesService,PositionRepository $positionRepository, DepositService $depositService, StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, LoanRepository $loanRepository): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
-        $deposits = $depositRepository->findBy(['owner' => $this->getUser()]);
 
-        $totalDepositUsd = 0;
-        foreach ($deposits as $deposit) {
-            $totalDepositUsd += $deposit->getAmountUsd();
-        }
+        $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
+
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {

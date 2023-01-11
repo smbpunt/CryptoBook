@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Deposit;
 use App\Form\DepositType;
 use App\Repository\DepositRepository;
+use App\Service\DepositService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DepositController extends AbstractController
 {
     #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
-    public function index(DepositRepository $depositRepository): Response
+    public function index(DepositService $depositService, DepositRepository $depositRepository): Response
     {
         $deposits =  $depositRepository->findBy([
             'owner' => $this->getUser()
@@ -22,10 +23,7 @@ class DepositController extends AbstractController
             'depositedAt' => 'ASC'
         ]);
 
-        $totalUsd = 0;
-        foreach ($deposits as $deposit) {
-            $totalUsd += $deposit->getAmountUsd();
-        }
+        $totalUsd = $depositService->getTotalDepositUsdCurrentUser();
 
         return $this->render('deposit/index.html.twig', [
             'deposits' => $deposits,
