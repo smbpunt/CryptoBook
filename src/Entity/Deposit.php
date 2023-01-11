@@ -37,12 +37,17 @@ class Deposit
 
     #[ORM\Column(type: 'float')]
     #[Groups(['deposit:list', 'deposit:item'])]
-    private $valueEur;
+    private $amount;
 
     #[ORM\ManyToOne(targetEntity: Exchange::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['deposit:list', 'deposit:item'])]
     private $exchange;
+
+    #[ORM\ManyToOne(inversedBy: 'deposits')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deposit:list', 'deposit:item'])]
+    private ?FiatCurrency $fiatCurrency = null;
 
     /**
      * @param $owner
@@ -93,14 +98,18 @@ class Deposit
         return $this;
     }
 
-    public function getValueEur(): ?float
+    public function getAmount(): ?float
     {
-        return $this->valueEur;
+        return $this->amount;
     }
 
-    public function setValueEur(float $valueEur): self
+    public function getAmountUsd(): ?float {
+        return $this->fiatCurrency->getFixerKey() == FiatCurrency::$KEY_USD ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::$KEY_USD];
+    }
+
+    public function setAmount(float $amount): self
     {
-        $this->valueEur = $valueEur;
+        $this->amount = $amount;
 
         return $this;
     }
@@ -113,6 +122,18 @@ class Deposit
     public function setExchange(?Exchange $exchange): self
     {
         $this->exchange = $exchange;
+
+        return $this;
+    }
+
+    public function getFiatCurrency(): ?FiatCurrency
+    {
+        return $this->fiatCurrency;
+    }
+
+    public function setFiatCurrency(?FiatCurrency $fiatCurrency): self
+    {
+        $this->fiatCurrency = $fiatCurrency;
 
         return $this;
     }

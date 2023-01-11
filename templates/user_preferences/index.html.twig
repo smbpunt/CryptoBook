@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Préférences{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>Préférences</h1>
+
+    {{ form_start(form) }}
+        <div class="row mb-2">
+            {{ form_label(form.favoriteFiatCurrency, 'Monnaie FIAT préférée') }}
+            {{ form_widget(form.favoriteFiatCurrency) }}
+        </div>
+    <button class="btn btn-light">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+{% endblock %}

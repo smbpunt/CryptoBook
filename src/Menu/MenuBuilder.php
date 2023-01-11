@@ -36,6 +36,7 @@ class MenuBuilder
             $menu->addChild('Dépôts €', ['route' => 'app_deposit_index']);
             $menu->addChild('NFT', ['route' => 'app_nft_index']);
             $menu->addChild('Projets', ['route' => 'app_project_monitoring_index']);
+            $menu->addChild('Préférences', ['route' => 'app_user_preferences']);
 
             if ($this->security->isGranted('ROLE_ADMIN')) {
                 $menu->addChild('Admin', ['route' => 'admin']);

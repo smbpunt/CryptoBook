@@ -56,6 +56,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $lastConnectedAt;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?FiatCurrency $favoriteFiatCurrency = null;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -385,5 +389,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return $this->email;
+    }
+
+    public function getFavoriteFiatCurrency(): ?FiatCurrency
+    {
+        return $this->favoriteFiatCurrency;
+    }
+
+    public function setFavoriteFiatCurrency(?FiatCurrency $favoriteFiatCurrency): self
+    {
+        $this->favoriteFiatCurrency = $favoriteFiatCurrency;
+
+        return $this;
     }
 }

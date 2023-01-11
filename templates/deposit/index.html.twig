@@ -12,7 +12,8 @@
         </div>
     </div>
 
-    <p>Total : {{ totalEur|number_format(0, '.', ' ') }} €</p>
+    <p>Total : {{ totalUsd|number_format(0, '.', ' ') }} $</p>
+    <p>Total : {{ fiatRates.toFavoriteCurrency(totalUsd)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</p>
     <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>
@@ -26,11 +27,11 @@
         <tbody>
         {% for deposit in deposits %}
             <tr>
-                <td class="text-white align-middle text-end">{{ deposit.valueEur|round|number_format(0, '.', ' ') }} €</td>
+                <td class="text-white align-middle text-end">{{ deposit.amount|round|number_format(0, '.', ' ') }} {{ deposit.fiatCurrency.symbol }}</td>
                 <td class="text-white align-middle text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
                 <td class="text-white align-middle">
                     {% if deposit.exchange is not null and deposit.exchange.url is not null and deposit.exchange.url is not empty %}
-                        <a href="{{ deposit.exchange.url }}">{{ deposit.exchange }}</a>
+                        <a target="_blank" href="{{ deposit.exchange.url }}">{{ deposit.exchange }}</a>
                     {% else %}
                         {{ deposit.exchange }}
                     {% endif %}

@@ -6,9 +6,9 @@ use App\Entity\Blockchain;
 use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
 use App\Entity\Exchange;
+use App\Entity\FiatCurrency;
 use App\Entity\TypeProject;
 use App\Entity\User;
-use App\Form\DepositType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -53,5 +53,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoCrud('Blockchain', 'fa fa-link', Blockchain::class);
         yield MenuItem::linktoCrud('Dapps', 'fa fa-cloud', Dapp::class);
         yield MenuItem::linktoCrud('Type de projet', 'fa fa-file-text', TypeProject::class);
+        yield MenuItem::linktoCrud('FIAT Currencies', 'fa fa-dollar-sign ', FiatCurrency::class);
     }
 }

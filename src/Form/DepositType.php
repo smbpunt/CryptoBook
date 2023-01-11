@@ -22,7 +22,8 @@ class DepositType extends AbstractType
                 'input' => 'datetime_immutable',
             ])
             ->add('exchange')
-            ->add('valueEur')
+            ->add('amount')
+            ->add('fiatCurrency')
             ->add('type');
     }
 

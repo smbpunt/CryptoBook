@@ -44,7 +44,7 @@ class DepositRepository extends ServiceEntityRepository
     public function getTotal(UserInterface $user): float
     {
         $qb = $this->createQueryBuilder('d')
-            ->select('SUM(d.valueEur) as totalsum')
+            ->select('SUM(d.amount) as totalsum')
             ->where('d.owner = :user')
             ->groupBy('d.owner')
             ->setParameter('user', $user);

@@ -14,66 +14,51 @@
                         <thead>
                         <tr>
                             <th>Bilan</th>
-                            <th class="text-end">{{ ratioUsdEur|round(4) }} $</th>
-                            <th class="text-end">1 €</th>
+                            <th class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency|round(4) }} $</th>
+                            <th class="text-end">1 {{ app.user.favoriteFiatCurrency.symbol }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td class="text-white">Investi</td>
-                            {% set totalDepositUsd = totalDepositEur*ratioUsdEur %}
                             <td class="text-white text-end">{{ totalDepositUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalDepositEur|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalDepositUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
                             <td class="text-white">Wallet crypto</td>
                             <td class="text-white text-end">{{ totalUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalEur|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
                             <td class="text-white">Wallet stable</td>
-                            <td class="text-white text-end">{{ totalUsdStable|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalEurStable|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ totalStableUsd|round|number_format(0, '.', ' ') }} $</td>
+                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalStableUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
                             <td class="text-white">Total</td>
-                            {% set totalWalletUsd = totalUsd+totalUsdStable %}
-                            {% set totalWalletEur = totalEur+totalEurStable %}
+                            {% set totalWalletUsd = totalUsd+totalStableUsd %}
                             <td class="text-white text-end">{{ totalWalletUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalWalletEur|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalWalletUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
+                            {% set resultatUsd = totalWalletUsd-totalDepositUsd %}
+                            {% set classSuccess = resultatUsd > 0 ? 'text-success' : 'text-warning' %}
+
                             <td class="text-white">Résultat</td>
-                            <td class="text-end
-                        {% if (totalWalletUsd-totalDepositUsd) > 0 %}
-                            text-success
-                        {% else %}
-                            text-warning
-                        {% endif %}"
-                            >
-                                {{ (totalWalletUsd-totalDepositUsd)|round|number_format(0, '.', ' ') }}$
+                            <td class="text-end {{ classSuccess }}">
+                                {{ resultatUsd|round|number_format(0, '.', ' ') }} $
                             </td>
-                            <td class="text-end
-                        {% if (totalWalletEur-totalDepositEur) > 0 %}
-                            text-success
-                        {% else %}
-                            text-warning
-                        {% endif %}"
-                            >
-                                {{ (totalWalletEur-totalDepositEur)|round|number_format(0, '.', ' ') }} €
+                            <td class="text-end {{ classSuccess }}">
+                                {{ fiatRates.toFavoriteCurrency(resultatUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}
                             </td>
                         </tr>
 
                         <tr>
                             {% set percent = totalDepositUsd > 0 ? totalWalletUsd*100/totalDepositUsd-100 : 0 %}
+                            {% set percentClassSuccess = percent > 0 ? 'text-success' : 'text-warning' %}
+
                             <td class="text-white">Résultat %</td>
-                            <td colspan="2" class="text-end
-                        {% if percent > 0 %}
-                            text-success
-                        {% else %}
-                            text-warning
-                        {% endif %}"
-                            >
+                            <td colspan="2" class="text-end {{ percentClassSuccess }}">
                                 {{ (percent)|round|number_format(0, '.', ' ') }} %
                             </td>
                         </tr>
@@ -82,10 +67,10 @@
                         <tr>
                             <td class="text-white">Total emprunt</td>
                             <td class="text-end">
-                                {{ totalLoan|round|number_format(0, '.', ' ') }}$
+                                {{ totalLoanUsd|round|number_format(0, '.', ' ') }}$
                             </td>
                             <td class="text-end">
-                                {{ (totalLoan/ratioUsdEur)|round|number_format(0, '.', ' ') }} €
+                                {{ fiatRates.toFavoriteCurrency(totalLoanUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}
                             </td>
                         </tr>
 
@@ -93,36 +78,35 @@
                     </table>
                 </div>
                 <div class="col-md">
-                    {% set totalYearFarmingEur = totalYearFarmingUsd/ratioUsdEur %}
+                    {% set totalYearFarmingEur = fiatRates.toFavoriteCurrency(totalYearFarmingUsd) %}
                     <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
                         <thead>
                         <tr>
                             <th>Farming</th>
-                            <th class="text-end">{{ ratioUsdEur|round(4) }} $</th>
-                            <th class="text-end">1 €</th>
+                            <th class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency|round(4) }} $</th>
+                            <th class="text-end">1 {{ app.user.favoriteFiatCurrency.symbol }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td class="text-white">Jour</td>
                             <td class="text-white text-end">{{ (totalYearFarmingUsd/356)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
                             <td class="text-white">Semaine</td>
                             <td class="text-white text-end">{{ (totalYearFarmingUsd/52)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
-                            {% set totalYearFarmingEur = totalYearFarmingUsd/ratioUsdEur %}
                             <td class="text-white">Mois</td>
                             <td class="text-white text-end">{{ (totalYearFarmingUsd/12)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         <tr>
                             <td class="text-white">Année</td>
                             <td class="text-white text-end">{{ totalYearFarmingUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalYearFarmingEur|round|number_format(0, '.', ' ') }} €</td>
+                            <td class="text-white text-end">{{ totalYearFarmingEur|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -135,7 +119,6 @@
                         <tbody>
                         {% for position in positions %}
                             <tr>
-
                                 <td class="text-white text-center align-middle">
                                     <img src="{{ position.urlImgThumb }}" alt="Logo {{ position.libelle }}"/>
                                 </td>
@@ -144,7 +127,7 @@
                                 </td>
                                 <td class="text-white align-middle">{{ position.symbol|upper }}
                                 </td>
-                                <td class="text-white text-end align-middle">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }}$
+                                <td class="text-white text-end align-middle">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }} $
                                 </td>
                             </tr>
                         {% endfor %}
@@ -182,6 +165,6 @@
          data-pie="{{ positions|json_encode }}"
          data-piestable="{{ positions_stable|json_encode }}"
          data-crypto="{{ totalUsd }}"
-         data-stable="{{ totalUsdStable }}">
+         data-stable="{{ totalStableUsd }}">
     </div>
 {% endblock %}

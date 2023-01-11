@@ -296,13 +296,13 @@ class AppFixtures extends Fixture
                 $deposit1 = new Deposit($user);
                 $deposit1->setDepositedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($binance)
-                    ->setValueEur($faker->randomFloat(0, 50, 200))
+                    ->setAmount($faker->randomFloat(0, 50, 200))
                     ->setType($cb);
                 $manager->persist($deposit1);
                 $deposit2 = new Deposit($user);
                 $deposit2->setDepositedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($ftx)
-                    ->setValueEur($faker->randomFloat(0, 50, 200))
+                    ->setAmount($faker->randomFloat(0, 50, 200))
                     ->setType($vir);
                 $manager->persist($deposit2);
             }

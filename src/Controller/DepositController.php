@@ -16,17 +16,20 @@ class DepositController extends AbstractController
     #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
     public function index(DepositRepository $depositRepository): Response
     {
-        $deposits = $this->getUser() ? $depositRepository->findBy([
+        $deposits =  $depositRepository->findBy([
             'owner' => $this->getUser()
         ], [
             'depositedAt' => 'ASC'
-        ]) : [];
+        ]);
 
-        $totalEur = $this->getUser() ? $depositRepository->getTotal($this->getUser()) : 0;
+        $totalUsd = 0;
+        foreach ($deposits as $deposit) {
+            $totalUsd += $deposit->getAmountUsd();
+        }
 
         return $this->render('deposit/index.html.twig', [
             'deposits' => $deposits,
-            'totalEur' => $totalEur,
+            'totalUsd' => $totalUsd,
         ]);
     }
 
