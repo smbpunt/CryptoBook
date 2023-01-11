@@ -152,13 +152,13 @@ class StrategyFarming
         return $this;
     }
 
-    public function getValue(): float
+    public function getValueUsd(): float
     {
         return $this->nbCoins * $this->coin->getPriceUsd();
     }
 
-    public function getAnnualRewards(): float
+    public function getAnnualRewardsUsd(): float
     {
-        return $this->apr * $this->getValue() / 100;
+        return $this->apr * $this->getValueUsd() / 100;
     }
 }

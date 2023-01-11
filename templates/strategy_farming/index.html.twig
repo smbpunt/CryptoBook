@@ -85,42 +85,42 @@
                     <tbody>
 
                     {% for strategy_farming in strategy_farmings %}
-                        {% set gain_day = strategy_farming['gain_year'] / 365 %}
-                        {% set gain_month = strategy_farming['gain_year'] / 12 %}
+                        {% set gain_day = strategy_farming.annualRewardsUsd/ 365 %}
+                        {% set gain_month = strategy_farming.annualRewardsUsd / 12 %}
 
                         <tr>
                             <td class="text-center align-middle">
                                 <button type="button"
                                         class="btn btn-sm btn-light rounded-circle button-infos"
-                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-id="{{ strategy_farming.id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming.id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming['strategy'].coin.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming['strategy'].coin.libelle }}">
+                                <img src="{{ strategy_farming.coin.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming.coin.libelle }}">
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain|capitalize }}
+                                {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain %}
+                                    {{ strategy_farming.dapp.blockchain|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
-                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp|capitalize }}</a>
-                                {% elseif strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp|capitalize }}
+                                {% if strategy_farming.dapp is not null and (strategy_farming.dapp.url is not null or strategy_farming.dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming.dapp.url }}">{{ strategy_farming.dapp|capitalize }}</a>
+                                {% elseif strategy_farming.dapp is not null %}
+                                    {{ strategy_farming.dapp|capitalize }}
                                 {% endif %}
                             </td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar']|round(2) }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.nbCoins }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming.coin.symbol|upper }}</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.apr }} %</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.valueUsd|round(2) }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                            <td class="text-white align-middle text-end">{{ strategy_farming.annualRewardsUsd|round(2)|number_format(2, '.', ' ') }}
                                 $
                             </td>
                             <td class="text-white align-middle text-center">
@@ -169,42 +169,42 @@
                     <tbody>
 
                     {% for strategy_farming in strategy_farmings_stable %}
-                        {% set gain_day = strategy_farming['gain_year'] / 365 %}
-                        {% set gain_month = strategy_farming['gain_year'] / 12 %}
+                        {% set gain_day = strategy_farming.annualRewardsUsd / 365 %}
+                        {% set gain_month = strategy_farming.annualRewardsUsd / 12 %}
 
                         <tr>
                             <td class="text-center align-middle">
                                 <button type="button"
                                         class="btn btn-sm btn-light rounded-circle button-infos"
-                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-id="{{ strategy_farming.id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_farming_ajax_infos', {'id': strategy_farming.id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming['strategy'].coin.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming['strategy'].coin.libelle }}">
+                                <img src="{{ strategy_farming.coin.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming.coin.libelle }}">
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain|capitalize }}
+                                {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain is not null %}
+                                    {{ strategy_farming.dapp.blockchain|capitalize }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
-                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp|capitalize }}</a>
-                                {% elseif strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp|capitalize }}
+                                {% if strategy_farming.dapp is not null and (strategy_farming.dapp.url is not null or strategy_farming.dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming.dapp.url }}">{{ strategy_farming.dapp|capitalize }}</a>
+                                {% elseif strategy_farming.dapp is not null %}
+                                    {{ strategy_farming.dapp|capitalize }}
                                 {% endif %}
                             </td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].nbCoins }}</td>
-                            <td class="text-white align-middle">{{ strategy_farming['strategy'].coin.symbol|upper }}</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar']|round(2) }} $</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.nbCoins }}</td>
+                            <td class="text-white align-middle">{{ strategy_farming.coin.symbol|upper }}</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.apr }} %</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.valueUsd|round(2) }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                            <td class="text-white align-middle text-end">{{ strategy_farming.annualRewardsUsd|round(2)|number_format(2, '.', ' ') }}
                                 $
                             </td>
                             <td class="text-white align-middle text-center">
@@ -253,54 +253,54 @@
                     <tbody>
 
                     {% for strategy_farming in strategy_farmings_lp %}
-                        {% set gain_day = strategy_farming['gain_year'] / 365 %}
-                        {% set gain_month = strategy_farming['gain_year'] / 12 %}
+                        {% set gain_day = strategy_farming.annualRewardsUsd/ 365 %}
+                        {% set gain_month = strategy_farming.annualRewardsUsd / 12 %}
 
                         <tr>
                             <td class="text-center align-middle">
                                 <button type="button"
                                         class="btn btn-sm btn-light rounded-circle button-infos"
-                                        data-id="{{ strategy_farming['strategy'].id }}"
+                                        data-id="{{ strategy_farming.id }}"
                                         data-titlemodal=""
-                                        data-url="{{ path('app_strategy_lp_ajax_infos', {'id': strategy_farming['strategy'].id}) }}">
+                                        data-url="{{ path('app_strategy_lp_ajax_infos', {'id': strategy_farming.id}) }}">
                                     <i class="bi bi-info"></i>
                                 </button>
                             </td>
 
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming['strategy'].coin1.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming['strategy'].coin1.libelle }}">
-                                <img src="{{ strategy_farming['strategy'].coin2.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming['strategy'].coin2.libelle }}">
+                                <img src="{{ strategy_farming.coin1.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming.coin1.libelle }}">
+                                <img src="{{ strategy_farming.coin2.urlImgThumb }}"
+                                     alt="Logo {{ strategy_farming.coin2.libelle }}">
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and strategy_farming['strategy'].dapp.blockchain is not null %}
-                                    {{ strategy_farming['strategy'].dapp.blockchain }}
+                                {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain is not null %}
+                                    {{ strategy_farming.dapp.blockchain }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {% if strategy_farming['strategy'].dapp is not null and (strategy_farming['strategy'].dapp.url is not null or strategy_farming['strategy'].dapp.url is not empty) %}
-                                    <a href="{{ strategy_farming['strategy'].dapp.url }}">{{ strategy_farming['strategy'].dapp }}</a>
-                                {% elseif strategy_farming['strategy'].dapp is not null %}
-                                    {{ strategy_farming['strategy'].dapp }}
+                                {% if strategy_farming.dapp is not null and (strategy_farming.dapp.url is not null or strategy_farming.dapp.url is not empty) %}
+                                    <a href="{{ strategy_farming.dapp.url }}">{{ strategy_farming.dapp }}</a>
+                                {% elseif strategy_farming.dapp is not null %}
+                                    {{ strategy_farming.dapp }}
                                 {% endif %}
                             </td>
                             <td class="text-white align-middle">
-                                {{ strategy_farming['strategy'].coin1.symbol|upper }}/{{ strategy_farming['strategy'].coin2.symbol|upper }}
+                                {{ strategy_farming.coin1.symbol|upper }}/{{ strategy_farming.coin2.symbol|upper }}
                             </td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['strategy'].apr }} %</td>
+                            <td class="text-white align-middle text-end">{{ strategy_farming.apr }} %</td>
                             <td class="text-white align-middle text-end">
-                                {{ (strategy_farming['strategy'].priceCoin1*strategy_farming['strategy'].nbCoin1
+                                {{ (strategy_farming.priceCoin1*strategy_farming.nbCoin1
                                 +
-                                strategy_farming['strategy'].priceCoin2*strategy_farming['strategy'].nbCoin2)|number_format(2, '.', ' ') }}
+                                strategy_farming.priceCoin2*strategy_farming.nbCoin2)|number_format(2, '.', ' ') }}
                                 $
                             </td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['value_dollar']|number_format(2, '.', ' ') }}
+                            <td class="text-white align-middle text-end">{{ strategy_farming.valueUsd|number_format(2, '.', ' ') }}
                                 $
                             </td>
                             <td class="text-white align-middle text-end">{{ gain_day|round(2)|number_format(2, '.', ' ') }} $</td>
                             <td class="text-white align-middle text-end">{{ gain_month|round(2)|number_format(2, '.', ' ') }} $</td>
-                            <td class="text-white align-middle text-end">{{ strategy_farming['gain_year']|round(2)|number_format(2, '.', ' ') }}
+                            <td class="text-white align-middle text-end">{{ strategy_farming.annualRewardsUsd|round(2)|number_format(2, '.', ' ') }}
                                 $
                             </td>
                             <td class="text-white align-middle text-center">

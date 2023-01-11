@@ -9,6 +9,7 @@ use App\Repository\PositionRepository;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
 use App\Service\DepositService;
+use App\Service\FarmingService;
 use App\Service\FiatExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,13 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService,PositionRepository $positionRepository, DepositService $depositService, StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, LoanRepository $loanRepository): Response
+    public function index(FiatExchangeRatesService $fiatExchangeRatesService,PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
 
         $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
-
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
@@ -57,23 +57,7 @@ class CryptobookController extends AbstractController
 
         array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
 
-        $strategies = $strategyFarmingRepository->findBy([
-            'owner' => $this->getUser()
-        ]);
-        $strategies_lp = $strategyLpRepository->findBy([
-            'owner' => $this->getUser()
-        ]);
-
-        $totalYearFarmingUsd = 0;
-        foreach ($strategies as $strategy) {
-            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
-            $totalYearFarmingUsd += $strategy->getApr() * $value_dollar / 100;
-        }
-
-        foreach ($strategies_lp as $strategy) {
-            $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
-            $totalYearFarmingUsd += $strategy->getApr() * $value_dollar / 100;
-        }
+        $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd();
 
         $totalLoan = $loanRepository->getTotal($this->getUser());
 

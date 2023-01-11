@@ -6,6 +6,7 @@ use App\Entity\StrategyFarming;
 use App\Form\StrategyFarmingType;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
+use App\Service\FarmingService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StrategyFarmingController extends AbstractController
 {
     #[Route('/', name: 'app_strategy_farming_index', methods: ['GET'])]
-    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository): Response
+    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, FarmingService $farmingService): Response
     {
         $strategies = $strategyFarmingRepository->findByStable($this->getUser(), false);
         $strategies_stable = $strategyFarmingRepository->findByStable($this->getUser(), true);
@@ -23,54 +24,18 @@ class StrategyFarmingController extends AbstractController
             'owner' => $this->getUser()
         ]);
 
-        $total_year = 0;
-        $total_year_stable = 0;
-        $total_year_lp = 0;
-
-        $return_array = [];
-        foreach ($strategies as $strategy) {
-            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
-            $gain_year = $strategy->getApr() * $value_dollar / 100;
-            $total_year += $gain_year;
-            $return_array[] = [
-                'strategy' => $strategy,
-                'gain_year' => $gain_year,
-                'value_dollar' => $value_dollar
-            ];
-        }
-
-        $return_array_stable = [];
-        foreach ($strategies_stable as $strategy) {
-            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
-            $gain_year = $strategy->getApr() * $value_dollar / 100;
-            $total_year_stable += $gain_year;
-            $return_array_stable[] = [
-                'strategy' => $strategy,
-                'gain_year' => $gain_year,
-                'value_dollar' => $value_dollar
-            ];
-        }
-
-        $return_array_lp = [];
-        foreach ($strategies_lp as $strategy) {
-            $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
-            $gain_year = $strategy->getApr() * $value_dollar / 100;
-            $total_year_lp += $gain_year;
-            $return_array_lp[] = [
-                'strategy' => $strategy,
-                'gain_year' => $gain_year,
-                'value_dollar' => $value_dollar
-            ];
-        }
+        $total_year_singleasset = $farmingService->getTotalFarmingSimpleByYearUsd(checkBooleanIsStable: true, isStable: false);
+        $total_year_stable = $farmingService->getTotalFarmingSimpleByYearUsd(checkBooleanIsStable: true, isStable: true);
+        $total_year_lp = $farmingService->getTotalFarmingLpByYearUsd();
 
         return $this->render('strategy_farming/index.html.twig', [
-            'strategy_farmings' => $return_array,
-            'strategy_farmings_stable' => $return_array_stable,
-            'strategy_farmings_lp' => $return_array_lp,
-            'total_year' => $total_year,
+            'strategy_farmings' => $strategies,
+            'strategy_farmings_stable' => $strategies_stable,
+            'strategy_farmings_lp' => $strategies_lp,
+            'total_year' => $total_year_singleasset,
             'total_year_stable' => $total_year_stable,
             'total_year_lp' => $total_year_lp,
-            'total_total_year' => $total_year + $total_year_stable + $total_year_lp
+            'total_total_year' => $total_year_singleasset + $total_year_stable + $total_year_lp
         ]);
     }
 

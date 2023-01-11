@@ -233,4 +233,14 @@ class StrategyLp
 
         return $this;
     }
+
+    public function getValueUsd(): float
+    {
+        return $this->getPriceCoin1() * $this->getNbCoin1() + $this->getPriceCoin2() * $this->getNbCoin2();
+    }
+
+    public function getAnnualRewardsUsd(): float
+    {
+        return $this->getApr() * $this->getValueUsd() / 100;
+    }
 }
