@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        {% set totaltousd = dca.fiatToDcaEur * ratioUsdEur + dca.farmingToDcaUsd %}
+        {% set totalFarmingUsd = fiatRates.toUsd(dca.fiatToDcaEur) + dca.farmingToDcaUsd %}
 
         <div class="row">
             <div class="col-4">
@@ -29,7 +29,7 @@
                     <tbody>
                     <tr>
                         <td class="text-white">FIAT</td>
-                        <td class="text-white text-end">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</td>
+                        <td class="text-white text-end">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                     </tr>
                     <tr>
                         <td class="text-white">Farming</td>
@@ -37,7 +37,8 @@
                     </tr>
                     <tr>
                         <td class="text-white">Total</td>
-                        <td class="text-white text-end">~ {{ totaltousd|round(2)|number_format(2, '.', ' ') }} $</td>
+                        <td class="text-white text-end">~ {{ totalFarmingUsd|round(2)|number_format(2, '.', ' ') }}$
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -60,8 +61,10 @@
                 <tr>
                     <td class="text-white">{{ part.coin.symbol|upper }}</td>
                     <td class="text-white text-end">{{ part.percent }} %</td>
-                    <td class="text-white text-end">{{ (totaltousd * part.percent /100)|round(2)|number_format(2, '.', ' ') }} $</td>
-                    <td class="text-white text-end">{{ ((totaltousd * part.percent /100)/part.coin.priceUsd)|round(6) }}</td>
+                    <td class="text-white text-end">{{ (totalFarmingUsd * part.percent /100)|round(2)|number_format(2, '.', ' ') }}
+                        $
+                    </td>
+                    <td class="text-white text-end">{{ ((totalFarmingUsd * part.percent /100)/part.coin.priceUsd)|round(6) }}</td>
                 </tr>
             {% else %}
                 <tr>
@@ -86,7 +89,7 @@
                                    id="dca_value"
                                    required="required"
                                    placeholder="ex: 100"
-                                   value="{{ totaltousd|round(2) }}"
+                                   value="{{ totalFarmingUsd|round(2) }}"
                                    class="form-control">
                             <span class="input-group-text">$</span>
                         </div>
@@ -130,7 +133,7 @@
                             label: 'Nombre de récurrence',
                             'attr': {'placeholder': 'ex: 31'}
                         }) }}
-                        
+
                         {{ form_row(form.date_first, {
                             label: 'Date du premier achat'
                         }) }}

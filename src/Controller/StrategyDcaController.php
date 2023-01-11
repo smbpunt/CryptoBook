@@ -21,18 +21,14 @@ class StrategyDcaController extends AbstractController
     #[Route('/', name: 'app_strategy_dca_index', methods: ['GET'])]
     public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository): Response
     {
-        $dcaUser = $this->getUser() ? $strategyDcaRepository->findOneBy([
+        $dcaUser = $strategyDcaRepository->findOneBy([
             'owner' => $this->getUser()
-        ]) : null;
-
-        $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'jarvis-synthetic-euro']);
-        $ratioUsdEur = ($jeur !== null && $jeur->getPriceUsd() !== null) ? $jeur->getPriceUsd() : 1.04;
+        ]);
 
         $form = $this->createForm(DcaAutoType::class);
 
         return $this->render('strategy_dca/index.html.twig', [
             'dca' => $dcaUser,
-            'ratioUsdEur' => $ratioUsdEur,
             'form' => $form->createView()
         ]);
     }

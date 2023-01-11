@@ -84,7 +84,7 @@ class FiatExchangeRatesService
 
     public function toUsd(float $amount, FiatCurrency $from = null): float
     {
-        return $amount * $from->getRates()[FiatCurrency::$KEY_USD];
+        return $amount * ($from == null ? $this->getUserFiatCurrency()->getRates()[FiatCurrency::$KEY_USD] : $from->getRates()[FiatCurrency::$KEY_USD]);
     }
 
     public function toUsdByKey(float $amount, string $keyFrom = null): float
