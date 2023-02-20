@@ -2,12 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\FiatCurrency;
-use App\Repository\DepositRepository;
 use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
-use App\Repository\StrategyFarmingRepository;
-use App\Repository\StrategyLpRepository;
 use App\Service\DepositService;
 use App\Service\FarmingService;
 use App\Service\FiatExchangeRatesService;
@@ -18,17 +14,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService,PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
+    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
-
         $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
+
+        $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
+        $isFavoriteUsd = $userFavoriteCurrency->getFixerKey() === 'USD';
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
@@ -38,7 +36,7 @@ class CryptobookController extends AbstractController
         $totalUsdStable = 0;
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;

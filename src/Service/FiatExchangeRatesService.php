@@ -72,6 +72,7 @@ class FiatExchangeRatesService
 
     public function getUsdRateFromFavoriteCurrency(): float
     {
+        if ($this->getUserFiatCurrency()->getFixerKey() === FiatCurrency::$KEY_USD) return 1.0;
         $userFiatCurrency = $this->getUserFiatCurrency();
         return $userFiatCurrency->getRates()[FiatCurrency::$KEY_USD];
     }
@@ -95,6 +96,7 @@ class FiatExchangeRatesService
 
     public function toFavoriteCurrency(float $amount): float
     {
+        if ($this->getUserFiatCurrency()->getFixerKey() === FiatCurrency::$KEY_USD) return $amount;
         $usd = $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
         return $amount * $usd->getRates()[$this->getUserFiatCurrency()->getFixerKey()];
     }
