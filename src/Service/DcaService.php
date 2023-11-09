@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Position;
 use App\Entity\StrategyDca;
-use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Repository\CryptocurrencyRepository;
 use DateTime;
@@ -14,17 +13,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DcaService
 {
-
-    private CryptocurrencyRepository $cryptocurrencyRepository;
-
     /**
      * @param CryptocurrencyRepository $cryptocurrencyRepository
      */
-    public function __construct(CryptocurrencyRepository $cryptocurrencyRepository)
+    public function __construct(
+        private readonly CryptocurrencyRepository $cryptocurrencyRepository
+    )
     {
-        $this->cryptocurrencyRepository = $cryptocurrencyRepository;
     }
-
 
     /**
      * @param StrategyDca $dca

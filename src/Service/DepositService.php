@@ -9,14 +9,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 class DepositService
 {
 
-    private DepositRepository $depositRepository;
-
-    private Security $security;
-
-    public function __construct(DepositRepository $depositRepository, Security $security)
+    public function __construct(
+        private readonly DepositRepository $depositRepository,
+        private readonly Security $security
+    )
     {
-        $this->depositRepository = $depositRepository;
-        $this->security = $security;
     }
 
     /**
@@ -44,7 +41,4 @@ class DepositService
     {
         return $this->getTotalDepositUsd($this->security->getUser());
     }
-
-
-
 }

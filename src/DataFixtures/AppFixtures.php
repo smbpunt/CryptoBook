@@ -27,13 +27,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private CryptocurrencyService $cryptocurrencyService;
-    private UserPasswordHasherInterface $hasher;
-
-    public function __construct(CryptocurrencyService $cryptocurrencyService, UserPasswordHasherInterface $hasher)
+    public function __construct(
+        private readonly UserPasswordHasherInterface $hasher
+    )
     {
-        $this->cryptocurrencyService = $cryptocurrencyService;
-        $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager): void

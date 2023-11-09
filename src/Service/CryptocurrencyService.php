@@ -11,26 +11,20 @@ use Psr\Log\LoggerInterface;
 
 class CryptocurrencyService
 {
-
-    private CoinGeckoClient $client;
-    private CryptocurrencyRepository $repoCryptocurrency;
-    private EntityManagerInterface $entityManager;
-    private LoggerInterface $logger;
-
     /**
      * @param CoinGeckoClient $client
      * @param CryptocurrencyRepository $repoCryptocurrency
      * @param EntityManagerInterface $entityManager
      * @param LoggerInterface $logger
      */
-    public function __construct(CoinGeckoClient $client, CryptocurrencyRepository $repoCryptocurrency, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(
+        private readonly CoinGeckoClient $client,
+        private readonly CryptocurrencyRepository $repoCryptocurrency,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LoggerInterface $logger
+    )
     {
-        $this->client = $client;
-        $this->repoCryptocurrency = $repoCryptocurrency;
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
     }
-
 
     public function updateAllCryptos(): void
     {
@@ -53,7 +47,7 @@ class CryptocurrencyService
 
         try {
             $datas = $this->client->coins()->getCoin($libelleCG);
-            if (is_array($datas) && array_key_exists('market_data', $datas)) {
+            if (array_key_exists('market_data', $datas)) {
                 //Mets à jour les prix
                 if (array_key_exists('current_price', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['current_price'])) {
                     $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
@@ -124,6 +118,4 @@ class CryptocurrencyService
             $this->logger->critical('Erreur lors de la récupération des prix pour ' . $libelles . '. Exception : ' . $e->getMessage());
         }
     }
-
-
 }

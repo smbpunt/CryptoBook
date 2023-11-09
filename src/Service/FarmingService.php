@@ -9,11 +9,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class FarmingService
 {
-
-    private StrategyFarmingRepository $strategyFarmingRepository;
-
-    private StrategyLpRepository $strategyLpRepository;
-
     private User $user;
 
     /**
@@ -21,10 +16,12 @@ class FarmingService
      * @param StrategyLpRepository $strategyLpRepository
      * @param Security $security
      */
-    public function __construct(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, Security $security)
+    public function __construct(
+        private readonly StrategyFarmingRepository $strategyFarmingRepository,
+        private readonly StrategyLpRepository $strategyLpRepository,
+        Security $security
+    )
     {
-        $this->strategyFarmingRepository = $strategyFarmingRepository;
-        $this->strategyLpRepository = $strategyLpRepository;
         $this->user = $security->getUser();
     }
 

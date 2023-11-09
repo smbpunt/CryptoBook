@@ -5,29 +5,28 @@ namespace App\Service;
 use App\Entity\FiatCurrency;
 use App\Repository\FiatCurrencyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FiatExchangeRatesService
 {
-    /**
-     * @var HttpClientInterface
-     */
-    private HttpClientInterface $client;
 
-    private FiatCurrencyRepository $fiatCurrencyRepository;
-
-    private Security $security;
 
     /**
      * @param HttpClientInterface $client
      * @param FiatCurrencyRepository $fiatCurrencyRepository
      * @param Security $security
      */
-    public function __construct(HttpClientInterface $client, FiatCurrencyRepository $fiatCurrencyRepository, Security $security)
+    public function __construct(
+        private readonly HttpClientInterface $client,
+        private readonly FiatCurrencyRepository $fiatCurrencyRepository,
+        private readonly Security $security
+    )
     {
-        $this->client = $client;
-        $this->fiatCurrencyRepository = $fiatCurrencyRepository;
-        $this->security = $security;
     }
 
     /**
