@@ -3,7 +3,7 @@
     <p>Depuis le : {{ farming.enteredAt|date('d/m/Y') }}</p>
 {% endif %}
 <p>{{ farming.nbCoins }} {{ farming.coin.symbol|upper }}
-    (~{{ farming.currentValue|round(2)|number_format(2, '.', ' ') }} $)</p>
+    (~{{ farming.valueUsd|round(2)|number_format(2, '.', ' ') }} $)</p>
 <p>APR : {{ farming.apr }} %</p>
 
 {% if farming.description is not empty %}
@@ -13,7 +13,7 @@
 <p><a href="{{ farming.dapp.url }}">{{ farming.dapp }}</a> sur {{ farming.dapp.blockchain }}</p>
 
 <h2 class="h4">Gains</h2>
-<p>Annuel : ~{{ farming.farmingYear|round(2)|number_format(2, '.', ' ') }} $</p>
-<p>Mensuel : ~{{ farming.farmingMonthly|round(2)|number_format(2, '.', ' ') }} $</p>
-<p>Hebdomadaire : ~{{ farming.farmingWeekly|round(2)|number_format(2, '.', ' ') }} $</p>
-<p>Journalier : ~{{ farming.farmingDaily|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Annuel : ~{{ farming.annualRewardsUsd|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Mensuel : ~{{ (farming.annualRewardsUsd/12)|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Hebdomadaire : ~{{ (farming.annualRewardsUsd/52)|round(2)|number_format(2, '.', ' ') }} $</p>
+<p>Journalier : ~{{ (farming.annualRewardsUsd/365)|round(2)|number_format(2, '.', ' ') }} $</p>

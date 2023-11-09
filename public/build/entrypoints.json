@@ -2,123 +2,135 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/138.d6a68401.js",
-        "/build/27.da1cae70.js",
-        "/build/app.95ca6776.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/138.f810dc9e.js",
+        "/build/796.addf5b6b.js",
+        "/build/app.1cfd5bd6.js"
       ],
       "css": [
-        "/build/27.6a98bdee.css",
-        "/build/app.34b70da0.css"
+        "/build/796.8a4c4dfc.css",
+        "/build/app.bf883ab5.css"
       ]
     },
     "tab": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/138.d6a68401.js",
-        "/build/tab.d2fe47a4.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/138.f810dc9e.js",
+        "/build/tab.6d59b3fa.js"
       ]
     },
     "modal": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/138.d6a68401.js",
-        "/build/modal.dba65a2f.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/138.f810dc9e.js",
+        "/build/modal.bbf0e078.js"
       ]
     },
     "tooltip": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/138.d6a68401.js",
-        "/build/tooltip.d3c750ce.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/138.f810dc9e.js",
+        "/build/tooltip.0aa81606.js"
       ]
     },
     "select2": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/529.8620df13.js",
-        "/build/select2.1a9116fa.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/529.565db804.js",
+        "/build/select2.d4acfbe7.js"
       ]
     },
     "datepicker": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/527.15c6904c.js",
+        "/build/runtime.188fa053.js",
+        "/build/527.d067c57a.js",
         "/build/datepicker.f6645a49.js"
       ]
     },
     "home": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/834.f6d5a259.js",
-        "/build/home.52c2d552.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/79.c35c267a.js",
+        "/build/home.18bfc873.js"
       ]
     },
     "position_form": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/position_form.3ceb48b8.js"
+        "/build/runtime.188fa053.js",
+        "/build/position_form.46bc4c59.js"
       ]
     },
     "position_index": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/position_index.2d07bbe3.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/position_index.9586e02e.js"
       ]
     },
     "loan_index": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/loan_index.6bbe8348.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/loan_index.031b6c92.js"
       ]
     },
     "farming_form": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/529.8620df13.js",
-        "/build/farming_form.3437b675.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/529.565db804.js",
+        "/build/farming_form.86483cf0.js"
       ]
     },
     "loan_form": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/529.8620df13.js",
-        "/build/loan_form.d571a1e5.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/529.565db804.js",
+        "/build/loan_form.c0967062.js"
       ]
     },
     "lp_form": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/529.8620df13.js",
-        "/build/lp_form.df9d13f8.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/529.565db804.js",
+        "/build/lp_form.7af04f1e.js"
       ]
     },
     "dca_form": {
       "js": [
-        "/build/runtime.53a95366.js",
+        "/build/runtime.188fa053.js",
         "/build/dca_form.15572dde.js"
       ]
     },
     "dca_index": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/138.d6a68401.js",
+        "/build/runtime.188fa053.js",
+        "/build/138.f810dc9e.js",
         "/build/dca_index.1804ab5c.js"
       ]
     },
     "collection": {
       "js": [
-        "/build/runtime.53a95366.js",
-        "/build/773.ee7f34f1.js",
-        "/build/collection.89aa6c7e.js"
+        "/build/runtime.188fa053.js",
+        "/build/702.32fd7e43.js",
+        "/build/401.fb92f474.js",
+        "/build/collection.735481f3.js"
       ]
     }
   }
