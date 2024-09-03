@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CoinPercentDca
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     private $id;
 

@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Cryptocurrency
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;

@@ -24,7 +24,7 @@ class Position
     use DescriptionTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['position:list', 'position:item'])]
     private $id;

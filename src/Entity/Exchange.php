@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Exchange
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['deposit:list', 'deposit:item'])]
     private $id;

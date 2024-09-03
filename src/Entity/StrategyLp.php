@@ -20,7 +20,7 @@ class StrategyLp
     use DescriptionTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['lp:list', 'lp:item'])]
     private $id;

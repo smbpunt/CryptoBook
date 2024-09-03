@@ -15,7 +15,7 @@ class FiatCurrency
     public static $KEY_USD = 'USD';
     public static $KEY_EUR = 'EUR';
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column]
     private ?int $id = null;
 

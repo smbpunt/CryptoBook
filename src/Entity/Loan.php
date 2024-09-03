@@ -20,7 +20,7 @@ class Loan
     use DescriptionTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['loan:list', 'loan:item'])]
     private $id;

@@ -20,7 +20,7 @@ class StrategyFarming
     use DescriptionTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['farming:list', 'farming:item'])]
     private $id;

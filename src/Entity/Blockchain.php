@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Blockchain
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: 'integer')]
     #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
