@@ -9,6 +9,7 @@ use App\Entity\Dapp;
 use App\Entity\Deposit;
 use App\Entity\DepositType;
 use App\Entity\Exchange;
+use App\Entity\FiatCurrency;
 use App\Entity\Loan;
 use App\Entity\Nft;
 use App\Entity\Position;
@@ -35,8 +36,15 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-
         $faker = Factory::create('fr_FR');
+
+        $usd = new FiatCurrency();
+        $usd->setFixerKey(FiatCurrency::$KEY_USD)
+            ->setLibelle('Dollar')
+            ->setSymbol('$')
+            ->setRates([1.599181, 0.95881]);
+        $manager->persist($usd);
+
 
         $btc = new Cryptocurrency();
         $btc->setLibelleCoingecko('bitcoin');
@@ -45,34 +53,34 @@ class AppFixtures extends Fixture
         $eth = new Cryptocurrency();
         $eth->setLibelleCoingecko('ethereum');
         $manager->persist($eth);
-
-        $a = new Cryptocurrency();
-        $a->setLibelleCoingecko('binancecoin');
-        $manager->persist($a);
-
-        $b = new Cryptocurrency();
-        $b->setLibelleCoingecko('aave');
-        $manager->persist($b);
-
-        $c = new Cryptocurrency();
-        $c->setLibelleCoingecko('avalanche-2');
-        $manager->persist($c);
-
-        $d = new Cryptocurrency();
-        $d->setLibelleCoingecko('ripple');
-        $manager->persist($d);
-
-        $e = new Cryptocurrency();
-        $e->setLibelleCoingecko('solana');
-        $manager->persist($e);
-
-        $f = new Cryptocurrency();
-        $f->setLibelleCoingecko('polkadot');
-        $manager->persist($f);
-
-        $g = new Cryptocurrency();
-        $g->setLibelleCoingecko('cardano');
-        $manager->persist($g);
+//
+//        $a = new Cryptocurrency();
+//        $a->setLibelleCoingecko('binancecoin');
+//        $manager->persist($a);
+//
+//        $b = new Cryptocurrency();
+//        $b->setLibelleCoingecko('aave');
+//        $manager->persist($b);
+//
+//        $c = new Cryptocurrency();
+//        $c->setLibelleCoingecko('avalanche-2');
+//        $manager->persist($c);
+//
+//        $d = new Cryptocurrency();
+//        $d->setLibelleCoingecko('ripple');
+//        $manager->persist($d);
+//
+//        $e = new Cryptocurrency();
+//        $e->setLibelleCoingecko('solana');
+//        $manager->persist($e);
+//
+//        $f = new Cryptocurrency();
+//        $f->setLibelleCoingecko('polkadot');
+//        $manager->persist($f);
+//
+//        $g = new Cryptocurrency();
+//        $g->setLibelleCoingecko('cardano');
+//        $manager->persist($g);
 
         $stable = new Cryptocurrency();
         $stable->setLibelleCoingecko('usd-coin')->setIsStable(true);
@@ -117,7 +125,8 @@ class AppFixtures extends Fixture
         for ($u = 0; $u < 10; $u++) {
             $user = new User();
             $user->setEmail($faker->email)
-                ->setPassword($this->hasher->hashPassword($user, 'password'));
+                ->setPassword($this->hasher->hashPassword($user, 'password'))
+                ->setFavoriteFiatCurrency($usd);
 
             for ($p = 0; $p < random_int(2, 4); $p++) {
                 $position = new Position($user);
@@ -142,89 +151,89 @@ class AppFixtures extends Fixture
                 $manager->persist($position);
             }
 
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($a)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($b)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($c)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($d)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($e)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($f)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
-
-
-            for ($p = 0; $p < random_int(2, 6); $p++) {
-                $position = new Position($user);
-                $nbCoins = $faker->randomFloat(2, 0.1, 1);
-                $position->setCoin($g)
-                    ->setNbCoins($nbCoins)
-                    ->setRemainingCoins($nbCoins)
-                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
-                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
-                $manager->persist($position);
-            }
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($a)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($b)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($c)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($d)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($e)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($f)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
+//
+//
+//            for ($p = 0; $p < random_int(2, 6); $p++) {
+//                $position = new Position($user);
+//                $nbCoins = $faker->randomFloat(2, 0.1, 1);
+//                $position->setCoin($g)
+//                    ->setNbCoins($nbCoins)
+//                    ->setRemainingCoins($nbCoins)
+//                    ->setEntryCost($faker->randomFloat(2, 100, 1000))
+//                    ->setOpenedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')));
+//                $manager->persist($position);
+//            }
 
 
             for ($p = 0; $p < random_int(1, 2); $p++) {
@@ -293,12 +302,14 @@ class AppFixtures extends Fixture
                 $deposit1 = new Deposit($user);
                 $deposit1->setDepositedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($binance)
+                    ->setFiatCurrency($usd)
                     ->setAmount($faker->randomFloat(0, 50, 200))
                     ->setType($cb);
                 $manager->persist($deposit1);
                 $deposit2 = new Deposit($user);
                 $deposit2->setDepositedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($ftx)
+                    ->setFiatCurrency($usd)
                     ->setAmount($faker->randomFloat(0, 50, 200))
                     ->setType($vir);
                 $manager->persist($deposit2);

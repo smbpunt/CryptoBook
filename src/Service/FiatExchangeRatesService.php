@@ -49,6 +49,7 @@ class FiatExchangeRatesService
             $response = $this->client->withOptions([
                 'base_uri' => 'https://api.apilayer.com/fixer/',
                 'headers' => [
+                    // @todo pas bien
                     'apikey' => 'wBhE54673wmOYLv8esarT6o4UhkDvpsh'
                 ]
             ])->request('GET', 'latest?base=' . $currency->getFixerKey() . "&symbols=$stringtos");
