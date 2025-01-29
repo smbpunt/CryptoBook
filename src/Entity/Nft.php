@@ -61,6 +61,9 @@ class Nft
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $currentUsdValue = null;
+
     /**
      * @param $owner
      */
@@ -246,5 +249,17 @@ class Nft
     public function getBenefice(): float
     {
         return null === $this->soldOn ? 0 : $this->priceSoldUsd * (1 - ($this->percentSaleFees ?? 0.) / 100) - $this->priceUsd;
+    }
+
+    public function getCurrentUsdValue(): ?float
+    {
+        return $this->currentUsdValue;
+    }
+
+    public function setCurrentUsdValue(?float $currentUsdValue): static
+    {
+        $this->currentUsdValue = $currentUsdValue;
+
+        return $this;
     }
 }

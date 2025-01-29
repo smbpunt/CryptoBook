@@ -48,9 +48,9 @@
                     <th>Acheté le</th>
                     <th>Collection</th>
                     <th>ID</th>
-                    <th>Prix Crypto</th>
-                    <th>Crypto</th>
-                    <th>Prix Dollar</th>
+                    <th>Coût</th>
+                    <th>Coût $</th>
+                    <th>Valeur</th>
                     <th class="th-actions">actions</th>
                 </tr>
                 </thead>
@@ -69,9 +69,13 @@
                         <td class="align-middle text-white text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') : '' }}</td>
                         <td class="align-middle text-white">{{ nft.collection }}</td>
                         <td class="align-middle text-white">{{ nft.num }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceCrypto }}</td>
-                        <td class="align-middle text-white">{{ nft.cryptocurrency.symbol|upper }}</td>
+                        <td class="align-middle text-white text-end">{{ nft.priceCrypto }} {{ nft.cryptocurrency.symbol|upper }}</td>
                         <td class="align-middle text-white text-end">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</td>
+                        <td class="align-middle text-white text-end">
+                            {% if nft.currentUsdValue is not null %}
+                                {{ nft.currentUsdValue|number_format(0, '.', ' ') }} $
+                            {% endif %}
+                        </td>
                         <td class="text-white text-center align-middle">
                             {{ include('nft/_indexactions_form.html.twig') }}
                         </td>

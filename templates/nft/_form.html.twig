@@ -5,10 +5,16 @@
             {{ form_label(form.blockchain, 'Blockchain') }}
             {{ form_widget(form.blockchain) }}
         </div>
-
         <div class="col-md-3 align-self-end">
             {{ form_label(form.cryptocurrency, 'Payé en') }}
             {{ form_widget(form.cryptocurrency) }}
+        </div>
+        <div class="col-md-3 align-self-end">
+            {{ form_label(form.currentUsdValue, 'Valeur actuelle') }}
+            <div class="input-group">
+                {{ form_widget(form.currentUsdValue, { 'attr': {'placeholder': 'ex: 250'} }) }}
+                <span class="input-group-text">$</span>
+            </div>
         </div>
     </div>
 

@@ -34,9 +34,16 @@
                             <td class="text-white text-end">{{ totalStableUsd|round|number_format(0, '.', ' ') }} $</td>
                             <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalStableUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>
+                        {% if totalNftUsd > 0 %}
+                            <tr>
+                                <td class="text-white">NFT</td>
+                                <td class="text-white text-end">{{ totalNftUsd|round|number_format(0, '.', ' ') }} $</td>
+                                <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalNftUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
+                            </tr>
+                        {% endif %}
                         <tr>
                             <td class="text-white">Total</td>
-                            {% set totalWalletUsd = totalUsd+totalStableUsd %}
+                            {% set totalWalletUsd = totalUsd+totalStableUsd+totalNftUsd %}
                             <td class="text-white text-end">{{ totalWalletUsd|round|number_format(0, '.', ' ') }} $</td>
                             <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalWalletUsd)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
                         </tr>

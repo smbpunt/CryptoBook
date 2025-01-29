@@ -50,6 +50,18 @@ class NftRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    // Return the sum of the current value of all NFTs that are not sold
+    public function findCurrentValue(UserInterface $user): float
+    {
+        return $this->createQueryBuilder('n')
+            ->select('SUM(n.currentUsdValue)')
+            ->where('n.owner = :user')
+            ->andWhere('n.soldOn IS NULL')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
+    }
+
 //    /**
 //     * @return Nft[] Returns an array of Nft objects
 //     */

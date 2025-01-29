@@ -23,6 +23,7 @@ class NftType extends AbstractType
             ->add('supply')
             ->add('priceCrypto')
             ->add('priceUsd')
+            ->add('currentUsdValue')
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'empty_data' => ''

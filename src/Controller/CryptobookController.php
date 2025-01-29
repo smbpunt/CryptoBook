@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\LoanRepository;
+use App\Repository\NftRepository;
 use App\Repository\PositionRepository;
 use App\Service\DepositService;
 use App\Service\FarmingService;
@@ -14,11 +15,19 @@ use Symfony\Component\Routing\Attribute\Route;
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
+    public function index(
+        FiatExchangeRatesService $fiatExchangeRatesService,
+        PositionRepository       $positionRepository,
+        DepositService           $depositService,
+        LoanRepository           $loanRepository,
+        FarmingService           $farmingService,
+        NftRepository            $nftRepository,
+    ): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
         $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
+        $nftsValue = $nftRepository->findCurrentValue($this->getUser());
 
         $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
         $isFavoriteUsd = $userFavoriteCurrency->getFixerKey() === 'USD';
@@ -67,6 +76,7 @@ class CryptobookController extends AbstractController
             'totalStableUsd' => $totalUsdStable,
             'totalYearFarmingUsd' => $totalYearFarmingUsd,
             'totalLoanUsd' => $totalLoan,
+            'totalNftUsd' => $nftsValue,
         ]);
     }
 }
