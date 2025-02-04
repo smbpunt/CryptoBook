@@ -60,6 +60,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?FiatCurrency $favoriteFiatCurrency = null;
 
+    /**
+     * @var Collection<int, Withdraw>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Withdraw::class, orphanRemoval: true)]
+    private Collection $withdraws;
+
     public function __construct()
     {
         $this->positions = new ArrayCollection();
@@ -70,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nfts = new ArrayCollection();
         $this->projectMonitorings = new ArrayCollection();
         $this->roles[] = 'ROLE_USER';
+        $this->withdraws = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -399,6 +406,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFavoriteFiatCurrency(?FiatCurrency $favoriteFiatCurrency): self
     {
         $this->favoriteFiatCurrency = $favoriteFiatCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Withdraw>
+     */
+    public function getWithdraws(): Collection
+    {
+        return $this->withdraws;
+    }
+
+    public function addWithdraw(Withdraw $withdraw): static
+    {
+        if (!$this->withdraws->contains($withdraw)) {
+            $this->withdraws->add($withdraw);
+            $withdraw->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWithdraw(Withdraw $withdraw): static
+    {
+        if ($this->withdraws->removeElement($withdraw)) {
+            // set the owning side to null (unless already changed)
+            if ($withdraw->getOwner() === $this) {
+                $withdraw->setOwner(null);
+            }
+        }
 
         return $this;
     }

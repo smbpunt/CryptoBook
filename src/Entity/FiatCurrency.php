@@ -40,10 +40,17 @@ class FiatCurrency
     #[ORM\OneToMany(mappedBy: 'favoriteFiatCurrency', targetEntity: User::class)]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Withdraw>
+     */
+    #[ORM\OneToMany(mappedBy: 'fiatCurrency', targetEntity: Withdraw::class)]
+    private Collection $withdraws;
+
     public function __construct()
     {
         $this->deposits = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->withdraws = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +183,36 @@ class FiatCurrency
             // set the owning side to null (unless already changed)
             if ($user->getFavoriteFiatCurrency() === $this) {
                 $user->setFavoriteFiatCurrency(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Withdraw>
+     */
+    public function getWithdraws(): Collection
+    {
+        return $this->withdraws;
+    }
+
+    public function addWithdraw(Withdraw $withdraw): static
+    {
+        if (!$this->withdraws->contains($withdraw)) {
+            $this->withdraws->add($withdraw);
+            $withdraw->setFiatCurrency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWithdraw(Withdraw $withdraw): static
+    {
+        if ($this->withdraws->removeElement($withdraw)) {
+            // set the owning side to null (unless already changed)
+            if ($withdraw->getFiatCurrency() === $this) {
+                $withdraw->setFiatCurrency(null);
             }
         }
 
