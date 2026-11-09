@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Code, comments, commit messages, MR descriptions: English. The existing history is in French — don't copy it.
 - `doc/` stays in French.
+- Commit messages follow Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`, `build:`…).
 
 ## Checking changes
 
