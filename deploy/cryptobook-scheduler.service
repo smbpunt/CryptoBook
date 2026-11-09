@@ -1,0 +1,27 @@
+# Symfony Scheduler worker: runs every recurring task of App\Shared\Schedule\MainSchedule
+# (prices, wallet snapshots, CoinGecko data, fiat rates). Replaces the crons.
+#
+# Install on the VPS (adapt User and the app path first):
+#   sudo cp deploy/cryptobook-scheduler.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now cryptobook-scheduler
+# After each deploy: sudo systemctl restart cryptobook-scheduler
+# Logs: journalctl -u cryptobook-scheduler -f
+
+[Unit]
+Description=CryptoBook scheduler worker
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/cryptobook
+Environment=APP_ENV=prod
+# The worker quits every hour to release memory, systemd starts it again.
+ExecStart=/usr/bin/php bin/console messenger:consume scheduler_default --time-limit=3600 --memory-limit=256M --no-interaction
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
