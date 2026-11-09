@@ -45,16 +45,10 @@ class DcaService
     /**
      * @return Position[]
      */
-    public function generateDcaAutoPositions(User $user, int $coinId, string $recurrence, int $count, float $total, string $firstDate): array
+    public function generateDcaAutoPositions(User $user, int $coinId, string $recurrence, int $count, float $total, \DateTimeImmutable $firstDate): array
     {
         $coin = $this->cryptocurrencyRepository->find($coinId);
         if (null === $coin) {
-            return [];
-        }
-
-        try {
-            $date = new \DateTime($firstDate);
-        } catch (\Exception) {
             return [];
         }
 
@@ -71,13 +65,14 @@ class DcaService
         }
 
         $positions = [];
+        $date = $firstDate;
         for ($i = 0; $i < $count; ++$i) {
             if ($i > 0) {
-                $date->modify($modify);
+                $date = $date->modify($modify);
             }
 
             $position = new Position($user);
-            $position->setOpenedAt(\DateTimeImmutable::createFromMutable($date))
+            $position->setOpenedAt($date)
                 ->setCoin($coin)
                 ->setEntryCost($total / $count)
                 ->setIsOpened(true)

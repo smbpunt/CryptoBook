@@ -4,7 +4,9 @@ namespace App\Dto;
 
 use App\Form\DcaAutoType;
 use Symfony\Component\DependencyInjection\Attribute\Exclude;
+use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,9 +30,10 @@ final readonly class DcaAutoQuery
         #[SerializedName('total')]
         #[Assert\Positive]
         public float $total,
+        // Value of an <input type="datetime-local">.
         #[SerializedName('d')]
-        #[Assert\NotBlank]
-        public string $firstDate,
+        #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d\TH:i'])]
+        public \DateTimeImmutable $firstDate,
     ) {
     }
 }

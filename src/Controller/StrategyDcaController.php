@@ -100,7 +100,7 @@ class StrategyDcaController extends AbstractController
     }
 
     #[Route('/dcaAuto', name: 'app_strategy_dca_dcaauto', methods: ['GET', 'POST'])]
-    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService, #[CurrentUser] User $user, #[MapQueryString] ?DcaAutoQuery $query = null): Response
+    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService, #[CurrentUser] User $user, #[MapQueryString(validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY)] ?DcaAutoQuery $query = null): Response
     {
         if (null === $query) {
             return $this->redirectToRoute('app_strategy_dca_index');

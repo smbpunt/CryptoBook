@@ -28,7 +28,7 @@ class CryptobookController extends AbstractController
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd, $user);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
@@ -38,7 +38,7 @@ class CryptobookController extends AbstractController
         $totalUsdStable = 0;
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd, $user);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;

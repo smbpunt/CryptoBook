@@ -13,7 +13,7 @@
     </div>
 
     <p>Total : {{ totalUsd|number_format(0, '.', ' ') }} $</p>
-    <p>Total : {{ fiatRates.toFavoriteCurrency(totalUsd)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</p>
+    <p>Total : {{ fiatRates.toFavoriteCurrency(totalUsd, app.user)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</p>
     <table class="table table-bordered table-striped table-responsive-md table-dark">
         <thead>
         <tr>

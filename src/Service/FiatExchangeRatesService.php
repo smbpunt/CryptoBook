@@ -7,14 +7,12 @@ use App\Entity\User;
 use App\Fixer\Client\FixerClient;
 use App\Fixer\Exception\FixerUnavailableException;
 use App\Repository\FiatCurrencyRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 
-class FiatExchangeRatesService
+final readonly class FiatExchangeRatesService
 {
     public function __construct(
-        private readonly FixerClient $fixerClient,
-        private readonly FiatCurrencyRepository $fiatCurrencyRepository,
-        private readonly Security $security,
+        private FixerClient $fixerClient,
+        private FiatCurrencyRepository $fiatCurrencyRepository,
     ) {
     }
 
@@ -38,37 +36,20 @@ class FiatExchangeRatesService
         }
     }
 
-    private function getUserFiatCurrency(): FiatCurrency
+    /**
+     * Value of one unit of the user's favorite currency in USD.
+     */
+    public function getUsdRateFromFavoriteCurrency(User $user): float
     {
-        // No logged-in user (command, worker): fall back to USD.
-        $user = $this->security->getUser();
-        if ($user instanceof User && null !== $user->getFavoriteFiatCurrency()) {
-            return $user->getFavoriteFiatCurrency();
-        }
-
-        return $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
+        return $this->toUsd(1.0, $user);
     }
 
-    public function getUsdRateFromFavoriteCurrency(): float
+    /**
+     * Converts an amount in the user's favorite currency to USD.
+     */
+    public function toUsd(float $amount, User $user): float
     {
-        if ($this->getUserFiatCurrency()->getFixerKey() === FiatCurrency::$KEY_USD) {
-            return 1.0;
-        }
-        $userFiatCurrency = $this->getUserFiatCurrency();
-
-        return $userFiatCurrency->getRates()[FiatCurrency::$KEY_USD];
-    }
-
-    public function getFavoriteCurrencyRateFromUsd(): float
-    {
-        $usd = $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
-
-        return $usd->getRates()[$this->getUserFiatCurrency()->getFixerKey()];
-    }
-
-    public function toUsd(float $amount, ?FiatCurrency $from = null): float
-    {
-        $from ??= $this->getUserFiatCurrency();
+        $from = $this->getFavoriteCurrency($user);
         if ($from->getFixerKey() === FiatCurrency::$KEY_USD) {
             return $amount;
         }
@@ -76,20 +57,23 @@ class FiatExchangeRatesService
         return $amount * $from->getRates()[FiatCurrency::$KEY_USD];
     }
 
-    public function toUsdByKey(float $amount, ?string $keyFrom = null): float
+    /**
+     * Converts an amount in USD to the user's favorite currency.
+     */
+    public function toFavoriteCurrency(float $amountUsd, User $user): float
     {
-        $from = $this->fiatCurrencyRepository->findOneBy(['fixerKey' => $keyFrom ?? $this->getUserFiatCurrency()->getFixerKey()]);
-
-        return $this->toUsd($amount, $from);
-    }
-
-    public function toFavoriteCurrency(float $amount): float
-    {
-        if ($this->getUserFiatCurrency()->getFixerKey() === FiatCurrency::$KEY_USD) {
-            return $amount;
+        $to = $this->getFavoriteCurrency($user);
+        if ($to->getFixerKey() === FiatCurrency::$KEY_USD) {
+            return $amountUsd;
         }
         $usd = $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
 
-        return $amount * $usd->getRates()[$this->getUserFiatCurrency()->getFixerKey()];
+        return $amountUsd * $usd->getRates()[$to->getFixerKey()];
+    }
+
+    private function getFavoriteCurrency(User $user): FiatCurrency
+    {
+        return $user->getFavoriteFiatCurrency()
+            ?? $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
     }
 }
