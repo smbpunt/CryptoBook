@@ -14,7 +14,7 @@ security:
         property: email
   firewalls:
     dev:
-      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      pattern: ^/(_profiler(/|$)|(_wdt|css|images|js)/)
       security: false
     main:
       remember_me:
