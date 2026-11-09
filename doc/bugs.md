@@ -25,5 +25,5 @@ Bugs repérés au fil des phases, hors du périmètre de la phase en cours. Ils 
 
 | Bug | Fichiers | État |
 |---|---|---|
-| Les images, la market cap et le libellé d'une crypto ne sont remplis qu'à sa création (listener `prePersist`) : aucune commande ne les met à jour, `updateAllCryptos()` n'est appelée nulle part et ne fait pas de `flush()` | `src/Service/CryptocurrencyService.php`, `src/EventListener/CryptocurrencyListener.php` | ⬜ |
-| Les fixtures ne renseignent pas les URLs d'images des cryptos, et les templates affichent un `<img src="">` cassé quand l'URL est vide | `src/DataFixtures/AppFixtures.php`, `templates/cryptobook/index.html.twig`, `templates/position/index.html.twig`, `templates/strategy_farming/index.html.twig` | ⬜ |
+| Les images, la market cap et le libellé d'une crypto ne sont remplis qu'à sa création (listener `prePersist`) : aucune commande ne les met à jour, `updateAllCryptos()` n'est appelée nulle part et ne fait pas de `flush()` ; corrigé par la commande `crypto:updateDatas` (une requête par crypto : rate limit CoinGecko au-delà de ~5, à traiter avec le client maison en phase 6) | `src/Service/CryptocurrencyService.php`, `src/Command/CryptoUpdateDatasCommand.php` | ✅ |
+| Les fixtures ne renseignent pas les URLs d'images des cryptos, et les templates affichent un `<img src="">` cassé quand l'URL est vide | `src/DataFixtures/AppFixtures.php`, `templates/cryptobook/index.html.twig`, `templates/position/index.html.twig`, `templates/strategy_farming/index.html.twig` | ✅ |
