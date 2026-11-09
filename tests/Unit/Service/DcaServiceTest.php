@@ -17,11 +17,11 @@ final class DcaServiceTest extends TestCase
     public function testGeneratePositionsSplitsAmountByPercent(): void
     {
         $user = new User();
-        $btc = (new Cryptocurrency())->setPriceUsd(50000);
-        $eth = (new Cryptocurrency())->setPriceUsd(3000);
-        $dca = (new StrategyDca($user))
-            ->addPart((new CoinPercentDca())->setCoin($btc)->setPercent(60))
-            ->addPart((new CoinPercentDca())->setCoin($eth)->setPercent(40));
+        $btc = new Cryptocurrency()->setPriceUsd(50000);
+        $eth = new Cryptocurrency()->setPriceUsd(3000);
+        $dca = new StrategyDca($user)
+            ->addPart(new CoinPercentDca()->setCoin($btc)->setPercent(60))
+            ->addPart(new CoinPercentDca()->setCoin($eth)->setPercent(40));
 
         $positions = $this->service()->generatePositions($dca, $user, 1000);
 

@@ -71,14 +71,14 @@ final class PositionTest extends TestCase
 
     private function position(float $nbCoins, float $entryCost, float $priceUsd = 1): Position
     {
-        return (new Position(new User()))
-            ->setCoin((new Cryptocurrency())->setPriceUsd($priceUsd))
+        return new Position(new User())
+            ->setCoin(new Cryptocurrency()->setPriceUsd($priceUsd))
             ->setNbCoins($nbCoins)
             ->setEntryCost($entryCost);
     }
 
     private function vente(string $date, float $percent): Vente
     {
-        return (new Vente())->setSoldAt(new \DateTimeImmutable($date))->setPercent($percent)->setPriceSold(0);
+        return new Vente()->setSoldAt(new \DateTimeImmutable($date))->setPercent($percent)->setPriceSold(0);
     }
 }

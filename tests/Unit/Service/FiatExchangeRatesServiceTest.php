@@ -17,8 +17,8 @@ final class FiatExchangeRatesServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->usd = (new FiatCurrency())->setFixerKey('USD')->setRates(['EUR' => 0.9]);
-        $this->eur = (new FiatCurrency())->setFixerKey('EUR')->setRates(['USD' => 1.1]);
+        $this->usd = new FiatCurrency()->setFixerKey('USD')->setRates(['EUR' => 0.9]);
+        $this->eur = new FiatCurrency()->setFixerKey('EUR')->setRates(['USD' => 1.1]);
     }
 
     public function testConversionsForEuroUser(): void
@@ -47,7 +47,7 @@ final class FiatExchangeRatesServiceTest extends TestCase
             fn (array $criteria) => ['USD' => $this->usd, 'EUR' => $this->eur][$criteria['fixerKey']],
         );
         $security = $this->createStub(Security::class);
-        $security->method('getUser')->willReturn((new User())->setFavoriteFiatCurrency($favorite));
+        $security->method('getUser')->willReturn(new User()->setFavoriteFiatCurrency($favorite));
 
         return new FiatExchangeRatesService(new MockHttpClient(), $repository, $security, 'test-key');
     }

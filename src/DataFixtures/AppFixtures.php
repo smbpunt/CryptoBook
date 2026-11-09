@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
             ['Dollar', 'USD', '$', ['EUR' => 0.930795, 'AUD' => 1.450125]],
             ['Dollar Australien', 'AUD', '$A', ['EUR' => 0.641872, 'USD' => 0.689596]],
         ] as [$libelle, $key, $symbol, $rates]) {
-            $currency = (new FiatCurrency())->setLibelle($libelle)->setFixerKey($key)->setSymbol($symbol)
+            $currency = new FiatCurrency()->setLibelle($libelle)->setFixerKey($key)->setSymbol($symbol)
                 ->setRates($rates)->setUpdatedAt(new \DateTimeImmutable());
             $manager->persist($currency);
             $currencies[] = $currency;

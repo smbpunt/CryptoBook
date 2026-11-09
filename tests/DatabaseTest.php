@@ -16,7 +16,7 @@ final class DatabaseTest extends KernelTestCase
     {
         $em = self::getContainer()->get(EntityManagerInterface::class);
 
-        $em->persist((new FiatCurrency())->setLibelle('Test')->setFixerKey('TST')->setSymbol('T'));
+        $em->persist(new FiatCurrency()->setLibelle('Test')->setFixerKey('TST')->setSymbol('T'));
         $em->flush();
 
         self::assertSame(1, $this->countTestCurrencies());

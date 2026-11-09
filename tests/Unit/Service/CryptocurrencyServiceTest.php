@@ -28,7 +28,7 @@ final class CryptocurrencyServiceTest extends TestCase
             'market_data' => ['current_price' => ['usd' => 65000], 'market_cap' => ['usd' => 1_200_000_000]],
         ]);
         $http = new MockHttpClient($response, 'https://api.coingecko.com/api/v3/');
-        $coin = (new Cryptocurrency())->setLibelleCoingecko('bitcoin');
+        $coin = new Cryptocurrency()->setLibelleCoingecko('bitcoin');
 
         $this->service($http)->updateDatas($coin);
 
@@ -56,7 +56,7 @@ final class CryptocurrencyServiceTest extends TestCase
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects(self::once())->method('critical');
-        $coin = (new Cryptocurrency())->setLibelleCoingecko('bitcoin');
+        $coin = new Cryptocurrency()->setLibelleCoingecko('bitcoin');
 
         $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger)->updateDatas($coin);
 
@@ -70,8 +70,8 @@ final class CryptocurrencyServiceTest extends TestCase
             ->with(self::stringContains('bitcoin,ethereum'));
         $repository = $this->createStub(CryptocurrencyRepository::class);
         $repository->method('findAll')->willReturn([
-            (new Cryptocurrency())->setLibelleCoingecko('bitcoin'),
-            (new Cryptocurrency())->setLibelleCoingecko('ethereum'),
+            new Cryptocurrency()->setLibelleCoingecko('bitcoin'),
+            new Cryptocurrency()->setLibelleCoingecko('ethereum'),
         ]);
 
         $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger, $repository)->updatePrices();
