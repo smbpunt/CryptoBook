@@ -9,7 +9,7 @@ use App\Repository\PositionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/position')]
 class PositionController extends AbstractController
@@ -32,7 +32,7 @@ class PositionController extends AbstractController
             // J'initialise à 0
             $coutMoyen = 0;
 
-            //Je boucle sur les positions du coin en cours
+            // Je boucle sur les positions du coin en cours
             foreach ($positionsByCoin as $position) {
                 // % d'allocation sur le coin, par rapport au nombre total
                 $percent = $position->getRemainingCoins() / $byCoin['totalsum'];
@@ -44,17 +44,16 @@ class PositionController extends AbstractController
             $map[] = [
                 'grouped' => $byCoin,
                 'coutMoyen' => $coutMoyen,
-                'splitted' => $positionsByCoin
+                'splitted' => $positionsByCoin,
             ];
         }
 
         return $this->render('position/index.html.twig', [
             'positions' => $map,
             'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
-            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false)
+            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false),
         ]);
     }
-
 
     #[Route('/{id}/infos', name: 'app_position_ajax_infos', methods: ['POST'])]
     public function ajax(Position $position): Response
@@ -78,11 +77,11 @@ class PositionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $positionRepository->add($position, true);
 
-            //TODO submit & next
+            // TODO submit & next
             return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('position/new.html.twig', [
+        return $this->render('position/new.html.twig', [
             'position' => $position,
             'form' => $form,
         ]);
@@ -92,7 +91,7 @@ class PositionController extends AbstractController
     public function edit(Request $request, Position $position, PositionRepository $positionRepository): Response
     {
         if ($position->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_position_index');
+            return $this->redirectToRoute('app_position_index');
         }
 
         $form = $this->createForm(PositionType::class, $position);
@@ -104,7 +103,7 @@ class PositionController extends AbstractController
             return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('position/edit.html.twig', [
+        return $this->render('position/edit.html.twig', [
             'position' => $position,
             'form' => $form,
         ]);
@@ -114,10 +113,10 @@ class PositionController extends AbstractController
     public function delete(Request $request, Position $position, PositionRepository $positionRepository): Response
     {
         if ($position->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_position_index');
+            return $this->redirectToRoute('app_position_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $position->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$position->getId(), $request->request->get('_token'))) {
             $positionRepository->remove($position, true);
         }
 

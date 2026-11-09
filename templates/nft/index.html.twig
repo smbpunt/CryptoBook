@@ -2,10 +2,7 @@
 
 {% block title %}NFT{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('tab') }}
-    {{ encore_entry_script_tags('modal') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'tab', 'modal']) }}{% endblock %}
 
 {% block body %}
 

@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FiatCurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FiatCurrencyRepository::class)]
-#[ApiResource]
-class FiatCurrency
+class FiatCurrency implements \Stringable
 {
     public static $KEY_USD = 'USD';
     public static $KEY_EUR = 'EUR';
@@ -149,7 +147,7 @@ class FiatCurrency
 
     public function __toString(): string
     {
-        return $this->symbol;
+        return (string) $this->symbol;
     }
 
     /**

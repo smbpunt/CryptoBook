@@ -41,7 +41,6 @@ class PositionRepository extends ServiceEntityRepository
         }
     }
 
-
     public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
     {
         return $this->createQueryBuilder('p')
@@ -57,13 +56,9 @@ class PositionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param UserInterface $user
-     * @param bool $isStable
-     * @param bool $isOpen
-     * @param Cryptocurrency|null $cryptocurrency
      * @return Position[]
      */
-    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true, Cryptocurrency $cryptocurrency = null): array
+    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true, ?Cryptocurrency $cryptocurrency = null): array
     {
         $qb = $this->createQueryBuilder('p')
             ->join('p.coin', 'c')
@@ -73,41 +68,40 @@ class PositionRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
             ->setParameter('isOpen', $isOpen)
-            ->addOrderBy('c.mcapUsd', 'DESC')
-            ->addOrderBy('p.openedAt', 'ASC')
-            ->addOrderBy('p.entryCost', 'DESC');
+            ->addOrderBy('c.mcapUsd', \SortDirection::Descending)
+            ->addOrderBy('p.openedAt', \SortDirection::Ascending)
+            ->addOrderBy('p.entryCost', \SortDirection::Descending);
 
         if ($cryptocurrency) {
             $qb->andWhere('p.coin = :coin')
                 ->setParameter('coin', $cryptocurrency);
         }
 
-
         return $qb->getQuery()->getResult();
     }
 
-//    /**
-//     * @return Position[] Returns an array of Position objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Position[] Returns an array of Position objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Position
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Position
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

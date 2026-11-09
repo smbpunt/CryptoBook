@@ -2,29 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BlockchainRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BlockchainRepository::class)]
-#[ApiResource(
-    collectionOperations: ['GET'],
-    itemOperations: ['GET'],
-    normalizationContext: ['groups' => ['loan:list', 'loan:item']]
-)]
-class Blockchain
+class Blockchain implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'blockchains')]
@@ -134,6 +125,6 @@ class Blockchain
 
     public function __toString(): string
     {
-        return $this->libelle;
+        return (string) $this->libelle;
     }
 }

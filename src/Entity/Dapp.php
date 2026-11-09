@@ -2,38 +2,27 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DappRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DappRepository::class)]
-#[ApiResource(
-    collectionOperations: ['GET'],
-    itemOperations: ['GET'],
-    normalizationContext: ['groups' => ['loan:list', 'loan:item']]
-)]
-class Dapp
+class Dapp implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $url;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $blockchain;
 
     #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: Loan::class)]
@@ -151,6 +140,6 @@ class Dapp
 
     public function __toString(): string
     {
-        return $this->libelle;
+        return (string) $this->libelle;
     }
 }

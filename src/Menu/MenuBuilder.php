@@ -8,17 +8,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class MenuBuilder
 {
-    private $factory;
-
-    private Security $security;
-
     /**
      * Add any other dependency you need...
      */
-    public function __construct(FactoryInterface $factory, Security $security)
+    public function __construct(private readonly FactoryInterface $factory, private readonly Security $security)
     {
-        $this->factory = $factory;
-        $this->security = $security;
     }
 
     public function createMainMenu(array $options): ItemInterface
@@ -46,9 +40,7 @@ class MenuBuilder
         } else {
             $menu->addChild('Login', ['route' => 'app_login']);
             $menu->addChild('Register', ['route' => 'app_register']);
-
         }
-
 
         foreach ($menu as $child) {
             $child->setLinkAttribute('class', 'nav-link')

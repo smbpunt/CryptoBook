@@ -8,7 +8,7 @@ use App\Repository\StrategyLpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/strategy/lp')]
 class StrategyLpController extends AbstractController
@@ -38,7 +38,7 @@ class StrategyLpController extends AbstractController
             return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('strategy_lp/new.html.twig', [
+        return $this->render('strategy_lp/new.html.twig', [
             'strategy_lp' => $strategyLp,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class StrategyLpController extends AbstractController
             return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('strategy_lp/edit.html.twig', [
+        return $this->render('strategy_lp/edit.html.twig', [
             'strategy_lp' => $strategyLp,
             'form' => $form,
         ]);

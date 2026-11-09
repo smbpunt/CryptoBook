@@ -2,28 +2,21 @@
 
 namespace App\Service;
 
+use App\Coingecko\Client\CoingeckoClient;
+use App\Coingecko\Exception\CoingeckoUnavailableException;
 use App\Entity\Cryptocurrency;
 use App\Repository\CryptocurrencyRepository;
-use Codenixsv\CoinGeckoApi\CoinGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 
 class CryptocurrencyService
 {
-    /**
-     * @param CoinGeckoClient $client
-     * @param CryptocurrencyRepository $repoCryptocurrency
-     * @param EntityManagerInterface $entityManager
-     * @param LoggerInterface $logger
-     */
     public function __construct(
-        private readonly CoinGeckoClient $client,
+        private readonly CoingeckoClient $client,
         private readonly CryptocurrencyRepository $repoCryptocurrency,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoggerInterface $logger
-    )
-    {
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function updateAllCryptos(): void
@@ -32,59 +25,47 @@ class CryptocurrencyService
         foreach ($cryptos as $cryptocurrency) {
             $this->updateDatas($cryptocurrency);
         }
+        $this->entityManager->flush();
     }
 
     /**
-     * Mets à jour toutes les infos de $cryptocurrency
-     * @param Cryptocurrency $cryptocurrency
+     * Mets à jour toutes les infos de $cryptocurrency.
      */
     public function updateDatas(Cryptocurrency $cryptocurrency): void
     {
         $libelleCG = $cryptocurrency->getLibelleCoingecko();
-        if (is_null($libelleCG)) {
+        if (null === $libelleCG) {
             return;
         }
 
         try {
-            $datas = $this->client->coins()->getCoin($libelleCG);
-            if (array_key_exists('market_data', $datas)) {
-                //Mets à jour les prix
-                if (array_key_exists('current_price', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['current_price'])) {
-                    $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
-                }
+            $coin = $this->client->getCoin($libelleCG);
+        } catch (CoingeckoUnavailableException $e) {
+            $this->logger->critical('Erreur lors de la récupération des données pour le coin '.$libelleCG.'. Exception : '.$e->getMessage());
 
-                //Mets à jour le libelle
-                if (array_key_exists('name', $datas)) {
-                    $cryptocurrency->setLibelle($datas['name']);
-                }
+            return;
+        }
 
-                //Mets à jour le symbol
-                if (array_key_exists('symbol', $datas)) {
-                    $cryptocurrency->setSymbol($datas['symbol']);
-                }
-
-                //Mets à jour les images
-                if (array_key_exists('image', $datas)) {
-                    if (array_key_exists('thumb', $datas['image'])) {
-                        $cryptocurrency->setUrlImgThumb($datas['image']['thumb']);
-                    }
-                    if (array_key_exists('small', $datas['image'])) {
-                        $cryptocurrency->setUrlImgSmall($datas['image']['small']);
-                    }
-                    if (array_key_exists('large', $datas['image'])) {
-                        $cryptocurrency->setUrlImgLarge($datas['image']['large']);
-                    }
-                }
-
-                //Mets à jour les market cap
-                if (array_key_exists('market_cap', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['market_cap'])) {
-                    $cryptocurrency->setMcapUsd($datas['market_data']['market_cap']['usd']);
-                }
-            }
-         //   $this->entityManager->persist($cryptocurrency);
-         //   $this->entityManager->flush();
-        } catch (Exception $e) {
-            $this->logger->critical('Erreur lors de la récupération des données pour le coin ' . $cryptocurrency->getLibelleCoingecko() . '. Exception : ' . $e->getMessage());
+        if (null !== $coin->priceUsd) {
+            $cryptocurrency->setPriceUsd($coin->priceUsd);
+        }
+        if (null !== $coin->name) {
+            $cryptocurrency->setLibelle($coin->name);
+        }
+        if (null !== $coin->symbol) {
+            $cryptocurrency->setSymbol($coin->symbol);
+        }
+        if (null !== $coin->imageThumb) {
+            $cryptocurrency->setUrlImgThumb($coin->imageThumb);
+        }
+        if (null !== $coin->imageSmall) {
+            $cryptocurrency->setUrlImgSmall($coin->imageSmall);
+        }
+        if (null !== $coin->imageLarge) {
+            $cryptocurrency->setUrlImgLarge($coin->imageLarge);
+        }
+        if (null !== $coin->marketCapUsd) {
+            $cryptocurrency->setMcapUsd($coin->marketCapUsd);
         }
     }
 
@@ -94,28 +75,23 @@ class CryptocurrencyService
     public function updatePrices(): void
     {
         $cryptos = $this->repoCryptocurrency->findAll();
-        $libelles = array_map(static function ($crypto) {
-            return $crypto->getLibelleCoingecko();
-        }, $cryptos);
-        $string = implode(',', $libelles);
+        $libelles = array_values(array_filter(array_map(static fn ($crypto) => $crypto->getLibelleCoingecko(), $cryptos)));
         try {
-            $prices = $this->client->simple()->getPrice($string, 'usd');
-            foreach ($cryptos as $crypto) {
-                $libelleCg = $crypto->getLibelleCoingecko();
-                if (array_key_exists($libelleCg, $prices)) {
-                    if (array_key_exists('usd', $prices[$libelleCg])) {
-                        $crypto->setPriceUsd($prices[$libelleCg]['usd']);
-                    } else {
-                        $this->logger->warning('Erreur lors de la récupération des prix EN DOLLAR pour ' . $crypto->getLibelleCoingecko());
-                    }
-                    $this->entityManager->persist($crypto);
-                } else {
-                    $this->logger->warning('Erreur lors de la récupération des prix pour ' . $crypto->getLibelleCoingecko());
-                }
-            }
-            $this->entityManager->flush();
-        } catch (Exception $e) {
-            $this->logger->critical('Erreur lors de la récupération des prix pour ' . $libelles . '. Exception : ' . $e->getMessage());
+            $prices = $this->client->getUsdPrices($libelles);
+        } catch (CoingeckoUnavailableException $e) {
+            $this->logger->critical('Erreur lors de la récupération des prix pour '.implode(',', $libelles).'. Exception : '.$e->getMessage());
+
+            return;
         }
+
+        foreach ($cryptos as $crypto) {
+            $libelleCg = $crypto->getLibelleCoingecko();
+            if (null !== $libelleCg && \array_key_exists($libelleCg, $prices)) {
+                $crypto->setPriceUsd($prices[$libelleCg]);
+            } else {
+                $this->logger->warning('Erreur lors de la récupération des prix pour '.$libelleCg);
+            }
+        }
+        $this->entityManager->flush();
     }
 }

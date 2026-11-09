@@ -25,7 +25,7 @@ class NftType extends AbstractType
             ->add('priceUsd')
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
             ->add('purchasedOn', DateTimeType::class, [
                 'widget' => 'single_text',

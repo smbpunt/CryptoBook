@@ -9,7 +9,7 @@ use App\Service\FarmingService;
 use App\Service\FiatExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CryptobookController extends AbstractController
 {
@@ -21,7 +21,7 @@ class CryptobookController extends AbstractController
         $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
 
         $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
-        $isFavoriteUsd = $userFavoriteCurrency->getFixerKey() === 'USD';
+        $isFavoriteUsd = 'USD' === $userFavoriteCurrency->getFixerKey();
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
@@ -53,7 +53,7 @@ class CryptobookController extends AbstractController
             $positions_stable[$key] = $value;
         }
 
-        array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
+        array_multisort(array_column($positions, 'valueUsd'), \SORT_DESC, $positions);
 
         $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd();
 

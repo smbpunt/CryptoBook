@@ -9,7 +9,7 @@ use App\Service\DepositService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/deposit')]
 class DepositController extends AbstractController
@@ -17,10 +17,10 @@ class DepositController extends AbstractController
     #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
     public function index(DepositService $depositService, DepositRepository $depositRepository): Response
     {
-        $deposits =  $depositRepository->findBy([
-            'owner' => $this->getUser()
+        $deposits = $depositRepository->findBy([
+            'owner' => $this->getUser(),
         ], [
-            'depositedAt' => 'ASC'
+            'depositedAt' => 'ASC',
         ]);
 
         $totalUsd = $depositService->getTotalDepositUsdCurrentUser();
@@ -44,7 +44,7 @@ class DepositController extends AbstractController
             return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('deposit/new.html.twig', [
+        return $this->render('deposit/new.html.twig', [
             'deposit' => $deposit,
             'form' => $form,
         ]);
@@ -54,7 +54,7 @@ class DepositController extends AbstractController
     public function edit(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
         if ($deposit->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_deposit_index');
+            return $this->redirectToRoute('app_deposit_index');
         }
 
         $form = $this->createForm(DepositType::class, $deposit);
@@ -66,7 +66,7 @@ class DepositController extends AbstractController
             return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('deposit/edit.html.twig', [
+        return $this->render('deposit/edit.html.twig', [
             'deposit' => $deposit,
             'form' => $form,
         ]);
@@ -76,7 +76,7 @@ class DepositController extends AbstractController
     public function delete(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
         if ($deposit->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_deposit_index');
+            return $this->redirectToRoute('app_deposit_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$deposit->getId(), $request->request->get('_token'))) {

@@ -15,24 +15,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class FiatUpdateRatesCommand extends Command
 {
-
-    private FiatExchangeRatesService $fiatExchangeRatesService;
-
-    /**
-     * @param FiatExchangeRatesService $fiatExchangeRatesService
-     */
-    public function __construct(FiatExchangeRatesService $fiatExchangeRatesService)
+    public function __construct(private readonly FiatExchangeRatesService $fiatExchangeRatesService)
     {
-        $this->fiatExchangeRatesService = $fiatExchangeRatesService;
         parent::__construct();
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $this->fiatExchangeRatesService->updateFiatRates();
         $io->success('Execution de fiat:updateRates terminé.');
+
         return Command::SUCCESS;
     }
 }

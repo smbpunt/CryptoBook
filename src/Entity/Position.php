@@ -2,23 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trait\DescriptionTrait;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    collectionOperations: ['GET', 'POST'],
-    itemOperations: ['GET', 'PUT', 'DELETE'],
-    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['position:write']],
-    normalizationContext: ['groups' => ['position:list', 'position:item']]
-)]
 class Position
 {
     use DescriptionTrait;
@@ -26,16 +18,13 @@ class Position
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['position:list', 'position:item'])]
     private $id;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['position:list', 'position:item'])]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'positions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['position:list', 'position:item'])]
     private $coin;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'positions')]
@@ -43,19 +32,15 @@ class Position
     private $owner;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['position:list', 'position:item'])]
     private $isOpened;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['position:list', 'position:item'])]
     private $entryCost;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['position:list', 'position:item'])]
     private $openedAt;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['position:list', 'position:item'])]
     private $remainingCoins;
 
     #[ORM\Column(type: 'boolean')]
@@ -75,7 +60,7 @@ class Position
         $this->isOpened = true;
         $this->isDca = false;
         $this->remainingCoins = 0;
-        $this->description = "";
+        $this->description = '';
     }
 
     public function getId(): ?int
@@ -241,10 +226,9 @@ class Position
 
     public function getEntryCoinValue(): ?float
     {
-        return round(($this->getEntryCost() / $this->getNbCoins()), 2);
+        return round($this->getEntryCost() / $this->getNbCoins(), 2);
     }
 
-    #[Groups(['position:item', 'position:list'])]
     public function getCurrentValue(): float
     {
         return $this->remainingCoins * $this->coin->getPriceUsd();
@@ -257,17 +241,14 @@ class Position
 
     public function getPercentEvolution(): float
     {
-        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) //Pour la division par 0
+        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) // Pour la division par 0
             ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
             : 9999;
     }
 
-    /**
-     * @return Collection
-     */
     public function getVentesSortedByDate(): Collection
     {
-        return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
+        return $this->ventes->matching(new Criteria(orderings: ['soldAt' => \SortDirection::Ascending]));
     }
 
     #[ORM\PreFlush]
@@ -283,7 +264,7 @@ class Position
             $this->remainingCoins *= (1 - ($vente->getPercent() / 100));
         }
 
-        if ($this->remainingCoins === 0.0) {
+        if (0.0 === $this->remainingCoins) {
             $this->setIsOpened(false);
         }
     }

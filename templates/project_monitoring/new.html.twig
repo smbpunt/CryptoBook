@@ -2,10 +2,7 @@
 
 {% block title %}{{ parent() }} - Suivi Projet{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('select2') }}
-    {{ encore_entry_script_tags('collection') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'select2', 'collection']) }}{% endblock %}
 
 {% block body %}
     <h1>Ajout d'un projet</h1>

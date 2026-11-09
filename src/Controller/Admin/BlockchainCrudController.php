@@ -7,13 +7,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @extends AbstractCrudController<Blockchain>
+ */
 class BlockchainCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Blockchain::class;
     }
-
 
     public function configureFields(string $pageName): iterable
     {

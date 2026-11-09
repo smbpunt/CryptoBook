@@ -8,7 +8,7 @@ use App\Repository\ProjectMonitoringRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/project/monitoring')]
 class ProjectMonitoringController extends AbstractController
@@ -34,7 +34,7 @@ class ProjectMonitoringController extends AbstractController
             return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('project_monitoring/new.html.twig', [
+        return $this->render('project_monitoring/new.html.twig', [
             'project_monitoring' => $projectMonitoring,
             'form' => $form,
         ]);
@@ -44,7 +44,7 @@ class ProjectMonitoringController extends AbstractController
     public function edit(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_project_monitoring_index');
+            return $this->redirectToRoute('app_project_monitoring_index');
         }
 
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
@@ -56,7 +56,7 @@ class ProjectMonitoringController extends AbstractController
             return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('project_monitoring/edit.html.twig', [
+        return $this->render('project_monitoring/edit.html.twig', [
             'project_monitoring' => $projectMonitoring,
             'form' => $form,
         ]);
@@ -66,7 +66,7 @@ class ProjectMonitoringController extends AbstractController
     public function delete(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_project_monitoring_index');
+            return $this->redirectToRoute('app_project_monitoring_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$projectMonitoring->getId(), $request->request->get('_token'))) {

@@ -11,6 +11,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @extends AbstractCrudController<Cryptocurrency>
+ */
 class CryptocurrencyCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -26,7 +29,6 @@ class CryptocurrencyCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Cryptocurrencies')
             ->setSearchFields(['libelle']);
     }
-
 
     public function configureFields(string $pageName): iterable
     {

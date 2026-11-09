@@ -8,7 +8,7 @@ use App\Repository\LoanRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/loan')]
 class LoanController extends AbstractController
@@ -17,14 +17,14 @@ class LoanController extends AbstractController
     public function index(LoanRepository $loanRepository): Response
     {
         $loans = $loanRepository->findBy([
-            'owner' => $this->getUser()
+            'owner' => $this->getUser(),
         ]);
 
         $total = $loanRepository->getTotal($this->getUser());
 
         return $this->render('loan/index.html.twig', [
             'loans' => $loans,
-            'total' => $total
+            'total' => $total,
         ]);
     }
 
@@ -53,7 +53,7 @@ class LoanController extends AbstractController
             return $this->redirectToRoute('app_loan_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('loan/new.html.twig', [
+        return $this->render('loan/new.html.twig', [
             'loan' => $loan,
             'form' => $form,
         ]);
@@ -63,7 +63,7 @@ class LoanController extends AbstractController
     public function edit(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
         if ($loan->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_loan_index');
+            return $this->redirectToRoute('app_loan_index');
         }
 
         $form = $this->createForm(LoanType::class, $loan);
@@ -75,7 +75,7 @@ class LoanController extends AbstractController
             return $this->redirectToRoute('app_loan_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('loan/edit.html.twig', [
+        return $this->render('loan/edit.html.twig', [
             'loan' => $loan,
             'form' => $form,
         ]);
@@ -85,7 +85,7 @@ class LoanController extends AbstractController
     public function delete(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
         if ($loan->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_loan_index');
+            return $this->redirectToRoute('app_loan_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$loan->getId(), $request->request->get('_token'))) {

@@ -2,19 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trait\DescriptionTrait;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
-#[ApiResource(
-    collectionOperations: ['GET', 'POST'],
-    itemOperations: ['GET', 'PUT', 'DELETE'],
-    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['farming:write']],
-    normalizationContext: ['groups' => ['farming:list', 'farming:item']]
-)]
 class StrategyFarming
 {
     use DescriptionTrait;
@@ -22,39 +14,30 @@ class StrategyFarming
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['farming:list', 'farming:item'])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'farmingStrategies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['farming:list', 'farming:item'])]
     private $coin;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['farming:list', 'farming:item'])]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'farmingStrategies')]
-    #[Groups(['farming:list', 'farming:item'])]
     private $dapp;
 
     private $blockchain;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['farming:list', 'farming:item'])]
     private $apr;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['farming:list', 'farming:item'])]
     private $enteredAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'farmingStrategies')]
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;
@@ -139,9 +122,10 @@ class StrategyFarming
 
     public function getBlockchain(): ?Blockchain
     {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+        if (null === $this->blockchain && null !== $this->dapp && $this->dapp->getBlockchain() !== $this->blockchain) {
             $this->blockchain = $this->dapp->getBlockchain();
         }
+
         return $this->blockchain;
     }
 

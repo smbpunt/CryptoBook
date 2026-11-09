@@ -8,22 +8,15 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class CryptocurrencyListener
 {
-    private CryptocurrencyService $cryptocurrencyService;
-
-    /**
-     * @param CryptocurrencyService $cryptocurrencyService
-     */
-    public function __construct(CryptocurrencyService $cryptocurrencyService)
+    public function __construct(private readonly CryptocurrencyService $cryptocurrencyService)
     {
-        $this->cryptocurrencyService = $cryptocurrencyService;
     }
-
 
     public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
 
-        if(!$entity instanceof Cryptocurrency || $entity->getLibelle() !== null) {
+        if (!$entity instanceof Cryptocurrency || null !== $entity->getLibelle()) {
             return;
         }
 

@@ -2,46 +2,34 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CryptocurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
 #[UniqueEntity('libelleCoingecko', message: 'Cette cryptomonnaie existe déjà.')]
-#[ApiResource(
-    collectionOperations: ['GET', 'POST'],
-    itemOperations: ['GET', 'PUT', 'DELETE', 'PATCH'],
-    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['crypto:write']],
-    normalizationContext: ['groups' => ['crypto:item', 'crypto:list']]
-)]
-class Cryptocurrency
+class Cryptocurrency implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $libelleCoingecko;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $libelle;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $priceUsd;
 
     #[ORM\Column(type: 'float')]
     private $mcapUsd;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $urlImgThumb;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -51,15 +39,12 @@ class Cryptocurrency
     private $urlImgLarge;
 
     #[ORM\Column(type: 'string', length: 8)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $symbol;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    #[Groups(['crypto:item', 'crypto:list', 'position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $color;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['crypto:item', 'crypto:list','position:item', 'position:list', 'loan:list', 'loan:item', 'farming:list', 'farming:item', 'lp:list', 'lp:item'])]
     private $isStable;
 
     #[ORM\OneToMany(mappedBy: 'coin', targetEntity: Blockchain::class)]
@@ -92,7 +77,6 @@ class Cryptocurrency
         $this->priceUsd = 0;
         $this->mcapUsd = 0;
     }
-
 
     public function getId(): ?int
     {
@@ -401,6 +385,6 @@ class Cryptocurrency
 
     public function __toString(): string
     {
-        return $this->symbol ? strtoupper($this->symbol) : "Non défini";
+        return $this->symbol ? strtoupper($this->symbol) : 'Non défini';
     }
 }

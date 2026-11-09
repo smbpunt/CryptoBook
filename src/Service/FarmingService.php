@@ -9,31 +9,24 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class FarmingService
 {
-    private User $user;
+    private readonly User $user;
 
-    /**
-     * @param StrategyFarmingRepository $strategyFarmingRepository
-     * @param StrategyLpRepository $strategyLpRepository
-     * @param Security $security
-     */
     public function __construct(
         private readonly StrategyFarmingRepository $strategyFarmingRepository,
         private readonly StrategyLpRepository $strategyLpRepository,
-        Security $security
-    )
-    {
+        Security $security,
+    ) {
         $this->user = $security->getUser();
     }
 
-
     /**
      * @return float
-     * Retourne le total du farming (single asset) à l'année en USD
+     *               Retourne le total du farming (single asset) à l'année en USD
      */
     public function getTotalFarmingSimpleByYearUsd(bool $checkBooleanIsStable = false, bool $isStable = false): float
     {
         $strategies = $checkBooleanIsStable ? $this->strategyFarmingRepository->findByStable($this->user, $isStable) : $this->strategyFarmingRepository->findBy([
-            'owner' => $this->user
+            'owner' => $this->user,
         ]);
 
         $totalYearFarmingUsd = 0;
@@ -45,15 +38,14 @@ class FarmingService
         return $totalYearFarmingUsd;
     }
 
-
     /**
      * @return float
-     * Retourne le total du farming (LP) à l'année en USD
+     *               Retourne le total du farming (LP) à l'année en USD
      */
     public function getTotalFarmingLpByYearUsd(): float
     {
         $strategies = $this->strategyLpRepository->findBy([
-            'owner' => $this->user
+            'owner' => $this->user,
         ]);
 
         $totalYearFarmingUsd = 0;
@@ -67,7 +59,7 @@ class FarmingService
 
     /**
      * @return float
-     * Retourne le total du farming (Single asset + LP) à l'année en USD
+     *               Retourne le total du farming (Single asset + LP) à l'année en USD
      */
     public function getTotalFarmingByYearUsd(): float
     {

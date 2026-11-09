@@ -2,10 +2,7 @@
 
 {% block title %}{{ parent() }} - Farming{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('farming_form') }}
-    {{ encore_entry_script_tags('datepicker') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'farming_form', 'datepicker']) }}{% endblock %}
 
 {% block body %}
     <h1>Modifier la stratégie de farming</h1>

@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
@@ -25,14 +25,14 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
 
             $usd = $fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
-            if(!$usd) {
+            if (!$usd) {
                 throw new \Exception('USD not found');
             }
             $user->setFavoriteFiatCurrency($usd);

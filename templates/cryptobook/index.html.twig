@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'home']) }}{% endblock %}
 
 {% block body %}
 
@@ -120,7 +118,7 @@
                         {% for position in positions %}
                             <tr>
                                 <td class="text-white text-center align-middle">
-                                    <img src="{{ position.urlImgThumb }}" alt="Logo {{ position.libelle }}"/>
+                                    {{ include('_coin_logo.html.twig', {url: position.urlImgThumb, name: position.libelle}) }}
                                 </td>
                                 <td class="text-white text-end align-middle">
                                     {{ position.totalsum|round(2)|number_format(2, '.', ' ') }}

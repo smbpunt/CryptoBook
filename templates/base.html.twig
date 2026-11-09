@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}SMB{% endblock %}</title>
-    <link rel="icon" type="image/png" href="{{ asset('build/images/favicon.png') }}"/>
-    {{ encore_entry_link_tags('app') }}
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
     {% block stylesheets %}
     {% endblock %}
 
-    {{ encore_entry_script_tags('app') }}
     {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body>

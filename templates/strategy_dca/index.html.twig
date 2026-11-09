@@ -2,10 +2,7 @@
 
 {% block title %}{{ parent() }} - DCA{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('dca_index') }}
-    {{ encore_entry_script_tags('select2') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'dca_index', 'select2']) }}{% endblock %}
 
 {% block body %}
     {% if dca is not null %}

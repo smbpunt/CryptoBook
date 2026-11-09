@@ -7,13 +7,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @extends AbstractCrudController<Dapp>
+ */
 class DappCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Dapp::class;
     }
-
 
     public function configureFields(string $pageName): iterable
     {

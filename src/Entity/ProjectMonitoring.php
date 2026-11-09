@@ -29,16 +29,13 @@ class ProjectMonitoring
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     private $links = [];
 
     #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
     #[ORM\JoinColumn(nullable: false)]
     private $type;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;
@@ -111,7 +108,7 @@ class ProjectMonitoring
 
     public function addLink(string $link): self
     {
-        if (!in_array($link, $this->links, true)) {
+        if (!\in_array($link, $this->links, true)) {
             $this->links[] = $link;
         }
 
