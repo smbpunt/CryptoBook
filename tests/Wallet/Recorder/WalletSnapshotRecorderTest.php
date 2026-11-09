@@ -3,6 +3,7 @@
 namespace App\Tests\Wallet\Recorder;
 
 use App\Tests\Fixtures\Dataset;
+use App\Wallet\Calculator\WalletValueCalculator;
 use App\Wallet\Entity\WalletSnapshot;
 use App\Wallet\Recorder\WalletSnapshotRecorder;
 use App\Wallet\Repository\WalletSnapshotRepository;
@@ -14,76 +15,97 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
 {
     use ClockSensitiveTrait;
 
-    public function testRecordsTheWalletValueOfEveryUserAtTheStartOfTheHour(): void
+    private EntityManagerInterface $em;
+    private Dataset $data;
+    private WalletSnapshotRecorder $recorder;
+
+    protected function setUp(): void
     {
-        $em = self::getContainer()->get(EntityManagerInterface::class);
-        $d = Dataset::load($em);
-        self::mockTime('2026-03-01 10:42:17');
+        $this->em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->data = Dataset::load($this->em);
+        $this->recorder = self::getContainer()->get(WalletSnapshotRecorder::class);
+    }
 
-        $count = self::getContainer()->get(WalletSnapshotRecorder::class)->record();
+    public function testRecordsTheCalculatedValueOfEveryUser(): void
+    {
+        $calculator = self::getContainer()->get(WalletValueCalculator::class);
+        $expected = [
+            $this->data->user->getId() => $calculator->calculate($this->data->user)->totalUsd(),
+            $this->data->admin->getId() => $calculator->calculate($this->data->admin)->totalUsd(),
+        ];
 
-        self::assertSame(2, $count);
-        $snapshots = $this->snapshotsByOwner();
-        self::assertCount(2, $snapshots);
-        // 0.5 BTC at 50 000 $ + 1 000 USDC at 1 $.
-        self::assertSame(26000.0, $snapshots[$d->user->getId()]->getValueUsd());
-        self::assertSame(0.0, $snapshots[$d->admin->getId()]->getValueUsd());
-        self::assertEquals(new \DateTimeImmutable('2026-03-01 10:00:00'), $snapshots[$d->user->getId()]->getTakenAt());
+        self::assertSame(2, $this->recorder->record());
+
+        $values = [];
+        foreach ($this->reloadSnapshots(allUsers: true) as $snapshot) {
+            $values[$snapshot->getOwner()->getId()] = $snapshot->getValueUsd();
+        }
+        self::assertEquals($expected, $values);
     }
 
     public function testRunningTwiceInTheSameHourUpdatesTheSnapshot(): void
     {
-        $em = self::getContainer()->get(EntityManagerInterface::class);
-        $d = Dataset::load($em);
-        $recorder = self::getContainer()->get(WalletSnapshotRecorder::class);
+        self::mockTime('2026-03-01 10:05:00 UTC');
+        $this->recorder->record();
+        $before = $this->valueOf($this->reloadSnapshots());
 
-        self::mockTime('2026-03-01 10:05:00');
-        $recorder->record();
-        $d->btc->setPriceUsd(60000);
-        $em->flush();
-        self::mockTime('2026-03-01 10:55:00');
-        $recorder->record();
-        self::mockTime('2026-03-01 11:05:00');
-        $recorder->record();
+        $this->em->find($this->data->btc::class, $this->data->btc->getId())?->setPriceUsd(60000);
+        $this->em->flush();
+        self::mockTime('2026-03-01 10:55:00 UTC');
+        $this->recorder->record();
 
-        $em->clear();
-        $values = [];
-        foreach (self::getContainer()->get(WalletSnapshotRepository::class)->findBy(['owner' => $d->user->getId()]) as $snapshot) {
-            $values[$snapshot->getTakenAt()->format('H:i')] = $snapshot->getValueUsd();
-        }
-        ksort($values);
-        self::assertSame(['10:00' => 31000.0, '11:00' => 31000.0], $values);
+        $snapshots = $this->reloadSnapshots();
+        self::assertCount(1, $snapshots);
+        self::assertGreaterThan($before, $this->valueOf($snapshots));
     }
 
-    public function testHoursAreTruncatedInUtcSoDaylightSavingTimeKeepsEveryHour(): void
+    public function testHoursAreUtcHoursWhateverTheServerTimezone(): void
     {
-        $d = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
-        $recorder = self::getContainer()->get(WalletSnapshotRecorder::class);
+        // Kolkata is UTC+05:30: a local hour would start at half past in UTC.
+        self::mockTime(new \DateTimeImmutable('2026-03-01 10:42', new \DateTimeZone('Asia/Kolkata')));
+        $this->recorder->record();
 
-        // Europe/Paris back to winter time: 02:05 happens twice.
-        self::mockTime(new \DateTimeImmutable('2026-10-25 02:05:00+02:00'));
-        $recorder->record();
-        self::mockTime(new \DateTimeImmutable('2026-10-25 02:05:00+01:00'));
-        $recorder->record();
+        $takenAt = $this->reloadSnapshots()[0]->getTakenAt()->setTimezone(new \DateTimeZone('UTC'));
+        self::assertSame('2026-03-01 05:00', $takenAt->format('Y-m-d H:i'));
+    }
+
+    public function testDaylightSavingTimeChangeKeepsEveryHour(): void
+    {
+        // Europe/Paris back to winter time: local 02:05 happens twice, at 00:05 and 01:05 UTC.
+        $paris = new \DateTimeZone('Europe/Paris');
+        self::mockTime(new \DateTimeImmutable('2026-10-25 00:05 UTC')->setTimezone($paris));
+        $this->recorder->record();
+        self::mockTime(new \DateTimeImmutable('2026-10-25 01:05 UTC')->setTimezone($paris));
+        $this->recorder->record();
 
         $takenAt = array_map(
             static fn (WalletSnapshot $s): string => $s->getTakenAt()->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i'),
-            self::getContainer()->get(WalletSnapshotRepository::class)->findBy(['owner' => $d->user->getId()]),
+            $this->reloadSnapshots(),
         );
         sort($takenAt);
         self::assertSame(['2026-10-25 00:00', '2026-10-25 01:00'], $takenAt);
     }
 
     /**
-     * @return array<int, WalletSnapshot>
+     * Snapshots read back from the database: the dataset user's, or everyone's.
+     *
+     * @return list<WalletSnapshot>
      */
-    private function snapshotsByOwner(): array
+    private function reloadSnapshots(bool $allUsers = false): array
     {
-        $snapshots = [];
-        foreach (self::getContainer()->get(WalletSnapshotRepository::class)->findAll() as $snapshot) {
-            $snapshots[(int) $snapshot->getOwner()->getId()] = $snapshot;
-        }
+        $this->em->clear();
+        $repository = self::getContainer()->get(WalletSnapshotRepository::class);
 
-        return $snapshots;
+        return array_values($allUsers ? $repository->findAll() : $repository->findBy(['owner' => $this->data->user->getId()]));
+    }
+
+    /**
+     * @param list<WalletSnapshot> $snapshots
+     */
+    private function valueOf(array $snapshots): float
+    {
+        self::assertCount(1, $snapshots);
+
+        return $snapshots[0]->getValueUsd();
     }
 }

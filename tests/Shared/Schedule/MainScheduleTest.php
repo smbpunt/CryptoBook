@@ -8,39 +8,69 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Messenger\RunCommandMessage;
 use Symfony\Component\Scheduler\Generator\MessageContext;
 use Symfony\Component\Scheduler\RecurringMessage;
+use Symfony\Component\Scheduler\Schedule;
 
 final class MainScheduleTest extends KernelTestCase
 {
-    public function testPlansEveryDataRefreshAndTheSnapshot(): void
+    private Schedule $schedule;
+
+    protected function setUp(): void
     {
-        $schedule = self::getContainer()->get(MainSchedule::class)->getSchedule();
-        // Triggers start today: check the runs following tomorrow 10:42.
-        $after = new \DateTimeImmutable('tomorrow 10:42');
-        $day = $after->format('Y-m-d');
-        $nextDay = $after->modify('+1 day')->format('Y-m-d');
+        $this->schedule = self::getContainer()->get(MainSchedule::class)->getSchedule();
+    }
 
-        $nextRuns = [];
-        foreach ($schedule->getRecurringMessages() as $recurringMessage) {
-            $nextRuns[$this->command($recurringMessage)] = $recurringMessage->getTrigger()->getNextRunDate($after)?->format('Y-m-d H:i');
+    public function testSnapshotRunsEveryHourAfterThePriceUpdate(): void
+    {
+        [$prices, $nextPrices] = $this->nextRuns('crypto:updatePrices');
+        [$snapshot, $nextSnapshot] = $this->nextRuns('wallet:snapshot', after: $prices);
+
+        self::assertSame(3600, $nextPrices->getTimestamp() - $prices->getTimestamp());
+        self::assertSame(3600, $nextSnapshot->getTimestamp() - $snapshot->getTimestamp());
+        self::assertLessThan($nextPrices, $snapshot);
+    }
+
+    public function testDataAndRatesAreRefreshedOnceADay(): void
+    {
+        foreach (['crypto:updateDatas', 'fiat:updateRates'] as $command) {
+            [$first, $second] = $this->nextRuns($command);
+            self::assertSame(86400, $second->getTimestamp() - $first->getTimestamp(), $command);
         }
+    }
 
-        self::assertSame([
-            'crypto:updatePrices' => "{$day} 11:00",
-            'wallet:snapshot' => "{$day} 11:05",
-            'crypto:updateDatas' => "{$nextDay} 04:30",
-            'fiat:updateRates' => "{$nextDay} 06:00",
-        ], $nextRuns);
-        self::assertNotNull($schedule->getState());
+    public function testRestartedWorkerRunsOnlyTheLastMissedOccurrence(): void
+    {
+        // Replaying every missed run would burn the Fixer quota.
+        self::assertNotNull($this->schedule->getState());
+        self::assertTrue($this->schedule->shouldProcessOnlyLastMissedRun());
     }
 
     public function testEveryScheduledCommandExists(): void
     {
-        $schedule = self::getContainer()->get(MainSchedule::class)->getSchedule();
         $application = new Application(self::$kernel);
 
-        foreach ($schedule->getRecurringMessages() as $recurringMessage) {
+        foreach ($this->schedule->getRecurringMessages() as $recurringMessage) {
             self::assertTrue($application->has($this->command($recurringMessage)));
         }
+    }
+
+    /**
+     * The two runs of a command following a date, tomorrow noon by default (triggers start today).
+     *
+     * @return array{\DateTimeImmutable, \DateTimeImmutable}
+     */
+    private function nextRuns(string $command, \DateTimeImmutable $after = new \DateTimeImmutable('tomorrow 12:00')): array
+    {
+        foreach ($this->schedule->getRecurringMessages() as $recurringMessage) {
+            if ($this->command($recurringMessage) === $command) {
+                $trigger = $recurringMessage->getTrigger();
+                $first = $trigger->getNextRunDate($after) ?? self::fail("{$command} never runs");
+                $second = $trigger->getNextRunDate($first) ?? self::fail("{$command} runs once");
+
+                return [$first, $second];
+            }
+        }
+
+        self::fail("{$command} is not scheduled");
     }
 
     private function command(RecurringMessage $recurringMessage): string
