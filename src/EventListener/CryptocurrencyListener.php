@@ -4,22 +4,25 @@ namespace App\EventListener;
 
 use App\Entity\Cryptocurrency;
 use App\Service\CryptocurrencyService;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
+use Doctrine\ORM\Events;
 
-class CryptocurrencyListener
+/**
+ * Fills a new coin with its CoinGecko data when it is created without a name.
+ */
+#[AsEntityListener(event: Events::prePersist, entity: Cryptocurrency::class)]
+final readonly class CryptocurrencyListener
 {
-    public function __construct(private readonly CryptocurrencyService $cryptocurrencyService)
+    public function __construct(private CryptocurrencyService $cryptocurrencyService)
     {
     }
 
-    public function prePersist(LifecycleEventArgs $args): void
+    public function prePersist(Cryptocurrency $cryptocurrency): void
     {
-        $entity = $args->getObject();
-
-        if (!$entity instanceof Cryptocurrency || null !== $entity->getLibelle()) {
+        if (null !== $cryptocurrency->getLibelle()) {
             return;
         }
 
-        $this->cryptocurrencyService->updateDatas($entity);
+        $this->cryptocurrencyService->updateDatas($cryptocurrency);
     }
 }

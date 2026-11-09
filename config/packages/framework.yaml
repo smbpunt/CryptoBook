@@ -16,6 +16,11 @@ framework:
                     max_retries: 3
                     delay: 60000
                     multiplier: 1
+            fixer.client:
+                base_uri: 'https://api.apilayer.com/fixer/'
+                timeout: 10
+                headers:
+                    apikey: '%env(FIXER_API_KEY)%'
 
     #esi: true
     #fragments: true

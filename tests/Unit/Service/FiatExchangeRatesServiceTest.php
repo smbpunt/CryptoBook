@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Service;
 
 use App\Entity\FiatCurrency;
 use App\Entity\User;
+use App\Fixer\Client\FixerClient;
 use App\Repository\FiatCurrencyRepository;
 use App\Service\FiatExchangeRatesService;
 use PHPUnit\Framework\TestCase;
@@ -49,6 +50,6 @@ final class FiatExchangeRatesServiceTest extends TestCase
         $security = $this->createStub(Security::class);
         $security->method('getUser')->willReturn(new User()->setFavoriteFiatCurrency($favorite));
 
-        return new FiatExchangeRatesService(new MockHttpClient(), $repository, $security, 'test-key');
+        return new FiatExchangeRatesService(new FixerClient(new MockHttpClient()), $repository, $security);
     }
 }

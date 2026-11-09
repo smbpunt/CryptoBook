@@ -3,43 +3,34 @@
 namespace App\Service;
 
 use App\Entity\FiatCurrency;
+use App\Fixer\Client\FixerClient;
+use App\Fixer\Exception\FixerUnavailableException;
 use App\Repository\FiatCurrencyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FiatExchangeRatesService
 {
     public function __construct(
-        private readonly HttpClientInterface $client,
+        private readonly FixerClient $fixerClient,
         private readonly FiatCurrencyRepository $fiatCurrencyRepository,
         private readonly Security $security,
-        #[Autowire(env: 'FIXER_API_KEY')]
-        private readonly string $fixerApiKey,
     ) {
     }
 
     /**
-     * @return void
-     *              Mets à jour les taux de change des devises
+     * Updates the rates of every currency against the other ones.
+     *
+     * @throws FixerUnavailableException
      */
     public function updateFiatRates(): void
     {
         $currencies = $this->fiatCurrencyRepository->findAll();
 
         foreach ($currencies as $currency) {
-            $tos = array_filter($currencies, static fn ($c) => $c->getId() !== $currency->getId());
+            $others = array_filter($currencies, static fn (FiatCurrency $c): bool => $c->getId() !== $currency->getId());
+            $symbols = array_values(array_map(static fn (FiatCurrency $c): string => (string) $c->getFixerKey(), $others));
 
-            $stringtos = implode(',', array_map(static fn ($c) => $c->getFixerKey(), $tos));
-
-            $response = $this->client->withOptions([
-                'base_uri' => 'https://api.apilayer.com/fixer/',
-                'headers' => [
-                    'apikey' => $this->fixerApiKey,
-                ],
-            ])->request('GET', 'latest?base='.$currency->getFixerKey()."&symbols=$stringtos");
-            $content = $response->toArray();
-            $currency->setRates($content['rates']);
+            $currency->setRates($this->fixerClient->getLatestRates((string) $currency->getFixerKey(), $symbols));
             $currency->setUpdatedAt(new \DateTimeImmutable());
 
             $this->fiatCurrencyRepository->save($currency, true);

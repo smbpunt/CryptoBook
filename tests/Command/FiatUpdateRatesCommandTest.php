@@ -3,6 +3,7 @@
 namespace App\Tests\Command;
 
 use App\Command\FiatUpdateRatesCommand;
+use App\Fixer\Client\FixerClient;
 use App\Repository\FiatCurrencyRepository;
 use App\Service\FiatExchangeRatesService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,14 +24,13 @@ final class FiatUpdateRatesCommandTest extends KernelTestCase
         $requestedUrls = [];
         $http = new MockHttpClient(static function (string $method, string $url, array $options) use (&$requestedUrls): MockResponse {
             $requestedUrls[] = $url;
-            self::assertContains('apikey: test-key', $options['headers']);
             parse_str((string) parse_url($url, \PHP_URL_QUERY), $query);
             $symbols = explode(',', $query['symbols']);
 
             return new JsonMockResponse(['rates' => array_fill_keys($symbols, 1.5)]);
-        });
+        }, 'https://api.apilayer.com/fixer/');
         $repository = self::getContainer()->get(FiatCurrencyRepository::class);
-        $service = new FiatExchangeRatesService($http, $repository, $this->createStub(Security::class), 'test-key');
+        $service = new FiatExchangeRatesService(new FixerClient($http), $repository, $this->createStub(Security::class));
 
         $tester = new CommandTester(new FiatUpdateRatesCommand($service));
         $tester->execute([]);
