@@ -3,12 +3,6 @@ parameters:
 		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
-			count: 2
-			path: src/Controller/CryptobookController.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
 			count: 1
 			path: src/Controller/PositionController.php
 
