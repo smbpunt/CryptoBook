@@ -21,11 +21,11 @@ class ProjectMonitoringType extends AbstractType
             ->add('libelle')
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
             ->add('note', TextareaType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
             ->add('links', CollectionType::class, [
                 'entry_type' => TextType::class,

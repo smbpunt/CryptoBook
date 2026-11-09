@@ -19,7 +19,6 @@ class VenteType extends AbstractType
                 'attr' => ['class' => 'js-datetimepicker'],
                 'required' => false,
 
-
                 'format' => 'dd/MM/yyyy',
                 'input' => 'datetime_immutable',
             ])

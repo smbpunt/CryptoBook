@@ -56,8 +56,7 @@ class StrategyLpType extends AbstractType
                 'placeholder' => 'Veuillez choisir une blockchain',
             ]);
 
-
-        $formModifier = static function (FormInterface $form, Blockchain $blockchain = null) {
+        $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null) {
             $dapps = null === $blockchain ? [] : $blockchain->getDapps();
             $form->add('dapp', EntityType::class, [
                 'class' => Dapp::class,

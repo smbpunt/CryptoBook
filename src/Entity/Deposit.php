@@ -35,9 +35,6 @@ class Deposit
     #[ORM\JoinColumn(nullable: false)]
     private ?FiatCurrency $fiatCurrency = null;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;
@@ -89,7 +86,8 @@ class Deposit
         return $this->amount;
     }
 
-    public function getAmountUsd(): ?float {
+    public function getAmountUsd(): ?float
+    {
         return $this->fiatCurrency->getFixerKey() == FiatCurrency::$KEY_USD ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::$KEY_USD];
     }
 

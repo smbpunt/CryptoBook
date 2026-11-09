@@ -14,14 +14,14 @@ class DcaToPositionType extends AbstractType
         $builder
             ->add('positions', CollectionType::class, [
                 'entry_type' => DcaPositionType::class,
-                'data' => $options['positions']
+                'data' => $options['positions'],
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'positions' => []
+            'positions' => [],
         ]);
     }
 }

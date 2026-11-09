@@ -17,14 +17,14 @@ class LoanController extends AbstractController
     public function index(LoanRepository $loanRepository): Response
     {
         $loans = $loanRepository->findBy([
-            'owner' => $this->getUser()
+            'owner' => $this->getUser(),
         ]);
 
         $total = $loanRepository->getTotal($this->getUser());
 
         return $this->render('loan/index.html.twig', [
             'loans' => $loans,
-            'total' => $total
+            'total' => $total,
         ]);
     }
 

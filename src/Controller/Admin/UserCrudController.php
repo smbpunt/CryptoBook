@@ -18,7 +18,6 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -38,7 +37,7 @@ class UserCrudController extends AbstractCrudController
             ->hideOnIndex()
             ->setChoices([
                 'User' => 'ROLE_USER',
-                'Admin' => 'ROLE_ADMIN'
+                'Admin' => 'ROLE_ADMIN',
             ]);
     }
 

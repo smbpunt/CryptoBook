@@ -32,7 +32,7 @@ class PositionController extends AbstractController
             // J'initialise à 0
             $coutMoyen = 0;
 
-            //Je boucle sur les positions du coin en cours
+            // Je boucle sur les positions du coin en cours
             foreach ($positionsByCoin as $position) {
                 // % d'allocation sur le coin, par rapport au nombre total
                 $percent = $position->getRemainingCoins() / $byCoin['totalsum'];
@@ -44,17 +44,16 @@ class PositionController extends AbstractController
             $map[] = [
                 'grouped' => $byCoin,
                 'coutMoyen' => $coutMoyen,
-                'splitted' => $positionsByCoin
+                'splitted' => $positionsByCoin,
             ];
         }
 
         return $this->render('position/index.html.twig', [
             'positions' => $map,
             'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
-            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false)
+            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false),
         ]);
     }
-
 
     #[Route('/{id}/infos', name: 'app_position_ajax_infos', methods: ['POST'])]
     public function ajax(Position $position): Response
@@ -78,7 +77,7 @@ class PositionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $positionRepository->add($position, true);
 
-            //TODO submit & next
+            // TODO submit & next
             return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -117,7 +116,7 @@ class PositionController extends AbstractController
             $this->redirectToRoute('app_position_index');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $position->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$position->getId(), $request->request->get('_token'))) {
             $positionRepository->remove($position, true);
         }
 

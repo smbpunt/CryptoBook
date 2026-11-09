@@ -27,7 +27,6 @@ class CryptocurrencyCrudController extends AbstractCrudController
             ->setSearchFields(['libelle']);
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         yield ImageField::new('urlImgThumb')->hideOnForm();

@@ -14,7 +14,6 @@ class BlockchainCrudController extends AbstractCrudController
         return Blockchain::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle');

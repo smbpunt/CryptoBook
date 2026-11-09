@@ -1051,12 +1051,6 @@ parameters:
 			path: src/EventListener/CryptocurrencyListener.php
 
 		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 1
-			path: src/EventSubscriber/AuthenticationSubscriber.php
-
-		-
 			message: '#^Class App\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1

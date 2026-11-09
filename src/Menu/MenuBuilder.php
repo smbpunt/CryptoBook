@@ -46,9 +46,7 @@ class MenuBuilder
         } else {
             $menu->addChild('Login', ['route' => 'app_login']);
             $menu->addChild('Register', ['route' => 'app_register']);
-
         }
-
 
         foreach ($menu as $child) {
             $child->setLinkAttribute('class', 'nav-link')

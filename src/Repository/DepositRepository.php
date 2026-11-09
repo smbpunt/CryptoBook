@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Deposit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -50,33 +49,34 @@ class DepositRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
         try {
             return $qb->getQuery()->getSingleScalarResult();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
+
         return 0;
     }
 
-//    /**
-//     * @return Deposit[] Returns an array of Deposit objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Deposit[] Returns an array of Deposit objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('d.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Deposit
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Deposit
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

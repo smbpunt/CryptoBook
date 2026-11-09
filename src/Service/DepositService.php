@@ -8,18 +8,15 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class DepositService
 {
-
     public function __construct(
         private readonly DepositRepository $depositRepository,
-        private readonly Security $security
-    )
-    {
+        private readonly Security $security,
+    ) {
     }
 
     /**
-     * @param User $user
      * @return float
-     * Retourne le solde total d'argent investi pour le User
+     *               Retourne le solde total d'argent investi pour le User
      */
     public function getTotalDepositUsd(User $user): float
     {
@@ -35,7 +32,7 @@ class DepositService
 
     /**
      * @return float
-     * Retourne le solde total d'argent investi pour l'utilisateur connecté
+     *               Retourne le solde total d'argent investi pour l'utilisateur connecté
      */
     public function getTotalDepositUsdCurrentUser(): float
     {

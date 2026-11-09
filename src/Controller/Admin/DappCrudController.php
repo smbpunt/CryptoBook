@@ -14,7 +14,6 @@ class DappCrudController extends AbstractCrudController
         return Dapp::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle');

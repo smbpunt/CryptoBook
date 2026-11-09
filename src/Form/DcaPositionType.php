@@ -23,10 +23,10 @@ class DcaPositionType extends AbstractType
             ])
             ->add('nbCoins', NumberType::class, [
                 'required' => true,
-                'scale' => 8
+                'scale' => 8,
             ])
             ->add('entryCost', NumberType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('coin', EntityType::class, [
                 'class' => Cryptocurrency::class,

@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DcaAutoType extends AbstractType
 {
-
     public static string $HOURLY = 'h';
     public static string $DAILY = 'd';
     public static string $WEEKLY = 'w';
@@ -38,7 +37,7 @@ class DcaAutoType extends AbstractType
                     '4 Heures' => self::$HOURLY,
                     'Journalier' => self::$DAILY,
                     'Hebdomadaire' => self::$WEEKLY,
-                    'Mensuel' => self::$MONTHLY
+                    'Mensuel' => self::$MONTHLY,
                 ],
                 'required' => true,
             ])

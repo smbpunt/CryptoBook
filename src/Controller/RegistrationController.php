@@ -25,14 +25,14 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
 
             $usd = $fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
-            if(!$usd) {
+            if (!$usd) {
                 throw new \Exception('USD not found');
             }
             $user->setFavoriteFiatCurrency($usd);

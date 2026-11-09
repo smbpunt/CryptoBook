@@ -61,9 +61,6 @@ class Nft
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;

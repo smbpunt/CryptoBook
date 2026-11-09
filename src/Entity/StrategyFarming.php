@@ -38,9 +38,6 @@ class StrategyFarming
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;
@@ -125,9 +122,10 @@ class StrategyFarming
 
     public function getBlockchain(): ?Blockchain
     {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+        if (null === $this->blockchain && null !== $this->dapp && $this->dapp->getBlockchain() !== $this->blockchain) {
             $this->blockchain = $this->dapp->getBlockchain();
         }
+
         return $this->blockchain;
     }
 

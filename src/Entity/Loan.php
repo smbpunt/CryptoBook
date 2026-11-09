@@ -36,9 +36,6 @@ class Loan
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $loanedAt;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;
@@ -116,9 +113,10 @@ class Loan
 
     public function getBlockchain(): ?Blockchain
     {
-        if ($this->blockchain === null && $this->dapp !== null && $this->dapp->getBlockchain() !== $this->blockchain) {
+        if (null === $this->blockchain && null !== $this->dapp && $this->dapp->getBlockchain() !== $this->blockchain) {
             $this->blockchain = $this->dapp->getBlockchain();
         }
+
         return $this->blockchain;
     }
 

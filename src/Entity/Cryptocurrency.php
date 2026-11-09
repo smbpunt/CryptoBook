@@ -78,7 +78,6 @@ class Cryptocurrency
         $this->mcapUsd = 0;
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -386,6 +385,6 @@ class Cryptocurrency
 
     public function __toString(): string
     {
-        return $this->symbol ? strtoupper($this->symbol) : "Non défini";
+        return $this->symbol ? strtoupper($this->symbol) : 'Non défini';
     }
 }

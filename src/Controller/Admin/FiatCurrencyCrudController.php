@@ -15,7 +15,6 @@ class FiatCurrencyCrudController extends AbstractCrudController
         return FiatCurrency::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle');

@@ -60,7 +60,7 @@ class Position
         $this->isOpened = true;
         $this->isDca = false;
         $this->remainingCoins = 0;
-        $this->description = "";
+        $this->description = '';
     }
 
     public function getId(): ?int
@@ -226,7 +226,7 @@ class Position
 
     public function getEntryCoinValue(): ?float
     {
-        return round(($this->getEntryCost() / $this->getNbCoins()), 2);
+        return round($this->getEntryCost() / $this->getNbCoins(), 2);
     }
 
     public function getCurrentValue(): float
@@ -241,14 +241,11 @@ class Position
 
     public function getPercentEvolution(): float
     {
-        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) //Pour la division par 0
+        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) // Pour la division par 0
             ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
             : 9999;
     }
 
-    /**
-     * @return Collection
-     */
     public function getVentesSortedByDate(): Collection
     {
         return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
@@ -267,7 +264,7 @@ class Position
             $this->remainingCoins *= (1 - ($vente->getPercent() / 100));
         }
 
-        if ($this->remainingCoins === 0.0) {
+        if (0.0 === $this->remainingCoins) {
             $this->setIsOpened(false);
         }
     }

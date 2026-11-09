@@ -21,7 +21,7 @@ class StrategyFarmingController extends AbstractController
         $strategies = $strategyFarmingRepository->findByStable($this->getUser(), false);
         $strategies_stable = $strategyFarmingRepository->findByStable($this->getUser(), true);
         $strategies_lp = $strategyLpRepository->findBy([
-            'owner' => $this->getUser()
+            'owner' => $this->getUser(),
         ]);
 
         $total_year_singleasset = $farmingService->getTotalFarmingSimpleByYearUsd(checkBooleanIsStable: true, isStable: false);
@@ -35,7 +35,7 @@ class StrategyFarmingController extends AbstractController
             'total_year' => $total_year_singleasset,
             'total_year_stable' => $total_year_stable,
             'total_year_lp' => $total_year_lp,
-            'total_total_year' => $total_year_singleasset + $total_year_stable + $total_year_lp
+            'total_total_year' => $total_year_singleasset + $total_year_stable + $total_year_lp,
         ]);
     }
 

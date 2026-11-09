@@ -32,13 +32,13 @@ class StrategyFarmingType extends AbstractType
             ->add('nbCoins')
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
             ->add('apr')
             ->add('coin', EntityType::class, [
                 'required' => true,
                 'placeholder' => 'Choisir une crypto',
-                'class' => Cryptocurrency::class
+                'class' => Cryptocurrency::class,
             ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,
@@ -46,7 +46,7 @@ class StrategyFarmingType extends AbstractType
                 'attr' => ['class' => 'js-select2'],
             ]);
 
-        $formModifier = static function (FormInterface $form, Blockchain $blockchain = null) {
+        $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null) {
             $dapps = null === $blockchain ? [] : $blockchain->getDapps();
             $form->add('dapp', EntityType::class, [
                 'class' => Dapp::class,

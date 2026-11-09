@@ -36,9 +36,6 @@ class ProjectMonitoring
     #[ORM\JoinColumn(nullable: false)]
     private $type;
 
-    /**
-     * @param $owner
-     */
     public function __construct($owner)
     {
         $this->owner = $owner;

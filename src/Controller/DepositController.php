@@ -17,10 +17,10 @@ class DepositController extends AbstractController
     #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
     public function index(DepositService $depositService, DepositRepository $depositRepository): Response
     {
-        $deposits =  $depositRepository->findBy([
-            'owner' => $this->getUser()
+        $deposits = $depositRepository->findBy([
+            'owner' => $this->getUser(),
         ], [
-            'depositedAt' => 'ASC'
+            'depositedAt' => 'ASC',
         ]);
 
         $totalUsd = $depositService->getTotalDepositUsdCurrentUser();

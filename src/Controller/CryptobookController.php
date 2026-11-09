@@ -21,7 +21,7 @@ class CryptobookController extends AbstractController
         $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
 
         $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
-        $isFavoriteUsd = $userFavoriteCurrency->getFixerKey() === 'USD';
+        $isFavoriteUsd = 'USD' === $userFavoriteCurrency->getFixerKey();
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
