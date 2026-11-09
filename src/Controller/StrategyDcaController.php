@@ -98,12 +98,13 @@ class StrategyDcaController extends AbstractController
     #[Route('/dcaAuto', name: 'app_strategy_dca_dcaauto', methods: ['GET', 'POST'])]
     public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService): Response
     {
-        if (null === $request->get('crypto') || null === $request->get('t') || null === $request->get('nb') || null === $request->get('total') || null === $request->get('d')) {
+        $query = $request->query;
+        if (null === $query->get('crypto') || null === $query->get('t') || null === $query->get('nb') || null === $query->get('total') || null === $query->get('d')) {
             // todo erreur
             return $this->redirectToRoute('app_strategy_dca_index');
         }
 
-        $positions = $dcaService->generateDcaAutoPositions($this->getUser(), $request->get('crypto'), $request->get('t'), $request->get('nb'), $request->get('total'), $request->get('d'));
+        $positions = $dcaService->generateDcaAutoPositions($this->getUser(), $query->get('crypto'), $query->get('t'), $query->get('nb'), $query->get('total'), $query->get('d'));
 
         $form = $this->createForm(DcaToPositionType::class, null, [
             'positions' => $positions,
