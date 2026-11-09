@@ -35,6 +35,8 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
+        // Coins are filled here so that the prePersist listener does not call CoinGecko
+
         // The purger empties the currencies seeded by the migrations: recreate them
         $currencies = [];
         foreach ([
@@ -49,43 +51,43 @@ class AppFixtures extends Fixture
         }
 
         $btc = new Cryptocurrency();
-        $btc->setLibelleCoingecko('bitcoin');
+        $btc->setLibelleCoingecko('bitcoin')->setLibelle('Bitcoin')->setSymbol('BTC')->setPriceUsd(60000);
         $manager->persist($btc);
 
         $eth = new Cryptocurrency();
-        $eth->setLibelleCoingecko('ethereum');
+        $eth->setLibelleCoingecko('ethereum')->setLibelle('Ethereum')->setSymbol('ETH')->setPriceUsd(3000);
         $manager->persist($eth);
 
         $a = new Cryptocurrency();
-        $a->setLibelleCoingecko('binancecoin');
+        $a->setLibelleCoingecko('binancecoin')->setLibelle('BNB')->setSymbol('BNB')->setPriceUsd(550);
         $manager->persist($a);
 
         $b = new Cryptocurrency();
-        $b->setLibelleCoingecko('aave');
+        $b->setLibelleCoingecko('aave')->setLibelle('Aave')->setSymbol('AAVE')->setPriceUsd(100);
         $manager->persist($b);
 
         $c = new Cryptocurrency();
-        $c->setLibelleCoingecko('avalanche-2');
+        $c->setLibelleCoingecko('avalanche-2')->setLibelle('Avalanche')->setSymbol('AVAX')->setPriceUsd(30);
         $manager->persist($c);
 
         $d = new Cryptocurrency();
-        $d->setLibelleCoingecko('ripple');
+        $d->setLibelleCoingecko('ripple')->setLibelle('XRP')->setSymbol('XRP')->setPriceUsd(0.5);
         $manager->persist($d);
 
         $e = new Cryptocurrency();
-        $e->setLibelleCoingecko('solana');
+        $e->setLibelleCoingecko('solana')->setLibelle('Solana')->setSymbol('SOL')->setPriceUsd(150);
         $manager->persist($e);
 
         $f = new Cryptocurrency();
-        $f->setLibelleCoingecko('polkadot');
+        $f->setLibelleCoingecko('polkadot')->setLibelle('Polkadot')->setSymbol('DOT')->setPriceUsd(7);
         $manager->persist($f);
 
         $g = new Cryptocurrency();
-        $g->setLibelleCoingecko('cardano');
+        $g->setLibelleCoingecko('cardano')->setLibelle('Cardano')->setSymbol('ADA')->setPriceUsd(0.45);
         $manager->persist($g);
 
         $stable = new Cryptocurrency();
-        $stable->setLibelleCoingecko('usd-coin')->setIsStable(true);
+        $stable->setLibelleCoingecko('usd-coin')->setLibelle('USDC')->setSymbol('USDC')->setPriceUsd(1)->setIsStable(true);
         $manager->persist($stable);
 
         $btc_chain = new Blockchain();
