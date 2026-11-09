@@ -1,12 +1,10 @@
 includes:
-    - vendor/phpstan/phpstan-symfony/extension.neon
-    - vendor/phpstan/phpstan-symfony/rules.neon
-    - vendor/phpstan/phpstan-doctrine/extension.neon
-    - vendor/phpstan/phpstan-doctrine/rules.neon
     - phpstan-baseline.neon
 
 parameters:
     level: 6
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: true
     paths:
         - bin/
         - config/
@@ -15,4 +13,4 @@ parameters:
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
     doctrine:
-        objectManagerLoader: config/phpstan/object-manager.php
+        allowNullablePropertyForRequiredField: true

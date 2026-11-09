@@ -13,10 +13,82 @@ parameters:
 			path: src/Controller/CryptobookController.php
 
 		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/DepositController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/LoanController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/NftController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/PositionController.php
+
+		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 1
 			path: src/Controller/PositionController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/ProjectMonitoringController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: src/Controller/StrategyDcaController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/StrategyFarmingController.php
+
+		-
+			message: '''
+				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
+				since Symfony 6\.2, use render\(\) instead$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/Controller/StrategyLpController.php
 
 		-
 			message: '#^Parameter \#1 \$entity of method App\\Repository\\UserRepository\:\:add\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
@@ -241,12 +313,6 @@ parameters:
 			path: src/Entity/Deposit.php
 
 		-
-			message: '#^Property App\\Entity\\Deposit\:\:\$fiatCurrency type mapping mismatch\: property can contain App\\Entity\\FiatCurrency\|null but database expects App\\Entity\\FiatCurrency\.$#'
-			identifier: doctrine.associationType
-			count: 1
-			path: src/Entity/Deposit.php
-
-		-
 			message: '#^Property App\\Entity\\Deposit\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -343,18 +409,6 @@ parameters:
 			path: src/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$fixerKey type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/FiatCurrency.php
-
-		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$libelle type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/FiatCurrency.php
-
-		-
 			message: '#^Property App\\Entity\\FiatCurrency\:\:\$rates type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -362,12 +416,6 @@ parameters:
 
 		-
 			message: '#^Property App\\Entity\\FiatCurrency\:\:\$rates type mapping mismatch\: database can contain null but property expects array\.$#'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/FiatCurrency.php
-
-		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$symbol type mapping mismatch\: property can contain string\|null but database expects string\.$#'
 			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/FiatCurrency.php
@@ -405,12 +453,6 @@ parameters:
 		-
 			message: '#^Property App\\Entity\\Loan\:\:\$dapp has no type specified\.$#'
 			identifier: missingType.property
-			count: 1
-			path: src/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Entity\\Loan\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/Loan.php
 
@@ -459,12 +501,6 @@ parameters:
 		-
 			message: '#^Property App\\Entity\\Nft\:\:\$cryptocurrency has no type specified\.$#'
 			identifier: missingType.property
-			count: 1
-			path: src/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Entity\\Nft\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/Nft.php
 
@@ -541,6 +577,15 @@ parameters:
 			path: src/Entity/Nft.php
 
 		-
+			message: '''
+				#^Fetching deprecated class constant ASC of class Doctrine\\Common\\Collections\\Criteria\:
+				use Order\:\:Ascending instead$#
+			'''
+			identifier: classConstant.deprecated
+			count: 1
+			path: src/Entity/Position.php
+
+		-
 			message: '#^Method App\\Entity\\Position\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
@@ -555,12 +600,6 @@ parameters:
 		-
 			message: '#^Property App\\Entity\\Position\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
-			count: 1
-			path: src/Entity/Position.php
-
-		-
-			message: '#^Property App\\Entity\\Position\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/Position.php
 
@@ -649,12 +688,6 @@ parameters:
 			path: src/Entity/ProjectMonitoring.php
 
 		-
-			message: '#^Property App\\Entity\\ProjectMonitoring\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/ProjectMonitoring.php
-
-		-
 			message: '#^Property App\\Entity\\ProjectMonitoring\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -689,12 +722,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\Entity\\ResetPasswordRequest\:\:\$user type mapping mismatch\: property can contain App\\Entity\\User\|null but database expects App\\Entity\\User\.$#'
-			identifier: doctrine.associationType
-			count: 1
-			path: src/Entity/ResetPasswordRequest.php
 
 		-
 			message: '#^Method App\\Entity\\StrategyDca\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
@@ -763,12 +790,6 @@ parameters:
 			path: src/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/StrategyFarming.php
-
-		-
 			message: '#^Property App\\Entity\\StrategyFarming\:\:\$enteredAt has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -825,12 +846,6 @@ parameters:
 		-
 			message: '#^Property App\\Entity\\StrategyLp\:\:\$dapp has no type specified\.$#'
 			identifier: missingType.property
-			count: 1
-			path: src/Entity/StrategyLp.php
-
-		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
-			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/StrategyLp.php
 
@@ -945,12 +960,6 @@ parameters:
 		-
 			message: '#^Property App\\Entity\\User\:\:\$farmingStrategies has no type specified\.$#'
 			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$favoriteFiatCurrency type mapping mismatch\: property can contain App\\Entity\\FiatCurrency\|null but database expects App\\Entity\\FiatCurrency\.$#'
-			identifier: doctrine.associationType
 			count: 1
 			path: src/Entity/User.php
 
@@ -1157,6 +1166,24 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: src/Form/VenteType.php
+
+		-
+			message: '''
+				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: src/Menu/MenuBuilder.php
+
+		-
+			message: '''
+				#^Call to method isGranted\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: src/Menu/MenuBuilder.php
 
 		-
 			message: '#^Method App\\Menu\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
@@ -1675,16 +1702,43 @@ parameters:
 			path: src/Repository/VenteRepository.php
 
 		-
+			message: '''
+				#^Fetching deprecated class constant LAST_USERNAME of class Symfony\\Bundle\\SecurityBundle\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security\:\:LAST_USERNAME instead$#
+			'''
+			identifier: classConstant.deprecated
+			count: 1
+			path: src/Security/UserAuthenticator.php
+
+		-
 			message: '#^Binary operation "\." between ''Erreur lors de la…'' and array\<string\|null\> results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
 			path: src/Service/CryptocurrencyService.php
 
 		-
+			message: '''
+				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: src/Service/DepositService.php
+
+		-
 			message: '#^Parameter \#1 \$user of method App\\Service\\DepositService\:\:getTotalDepositUsd\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Service/DepositService.php
+
+		-
+			message: '''
+				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: src/Service/FarmingService.php
 
 		-
 			message: '#^Property App\\Service\\FarmingService\:\:\$user \(App\\Entity\\User\) does not accept Symfony\\Component\\Security\\Core\\User\\UserInterface\|null\.$#'
@@ -1696,4 +1750,13 @@ parameters:
 			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:getFavoriteFiatCurrency\(\)\.$#'
 			identifier: method.notFound
 			count: 2
+			path: src/Service/FiatExchangeRatesService.php
+
+		-
+			message: '''
+				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
+				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
 			path: src/Service/FiatExchangeRatesService.php

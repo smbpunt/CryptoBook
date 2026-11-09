@@ -1,20 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withPaths([
         __DIR__.'/config',
-        __DIR__.'/public',
         __DIR__.'/src',
     ])
     ->withSkip([
         __DIR__.'/config/bundles.php',
+        __DIR__.'/config/reference.php',
     ])
-    ->withSymfonyContainerXml(__DIR__.'/var/cache/dev/App_KernelDevDebugContainer.xml')
     ->withPhpSets()
+    ->withPreparedSets(symfonyCodeQuality: true)
     ->withComposerBased(twig: true, doctrine: true, symfony: true)
-    ->withAttributesSets()
-;
+    ->withAttributesSets(all: true)
+    ->withTypeCoverageLevel(0)
+    ->withDeadCodeLevel(0)
+    ->withImportNames(importShortClasses: false, removeUnusedImports: true)
+    ->withCodeQualityLevel(0);
