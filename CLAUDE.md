@@ -83,10 +83,6 @@ Tests fonctionnels : `WebTestCase` (`tests/Functional/`, dont un smoke test de t
 - Les tests tournent sur `app_test` (DAMA annule chaque test). Après une nouvelle migration : `bin/console doctrine:migrations:migrate --env=test -n`.
 - Toute dépréciation, notice ou warning fait échouer les tests, y compris celles venant des vendors ou des templates.
 
-## Données
-
-Ne jamais mettre de vraies données (emails, hashs de mots de passe) dans les fixtures, les tests ou la doc : utiliser `src/DataFixtures` avec Faker.
-
 ## Vérifier plutôt que deviner
 
 Les API du framework évoluent : consulter le projet plutôt que sa mémoire.
