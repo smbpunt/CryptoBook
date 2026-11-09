@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c1e86288c4f5d00cf3036fe5d0b3960",
+    "content-hash": "872427984bfc2889c3019cbd8bf079a1",
     "packages": [
         {
             "name": "codenix-sv/coingecko-api",
