@@ -55,7 +55,7 @@ setup-worktree: worktree-guard ## Prepare a worktree: local files from the main 
 	@$(DOCKER_COMP) up --detach --no-build --wait
 	@# Aligns the cloned vendor/ with the worktree composer.lock (fast if up to date) + importmap:install.
 	@$(COMPOSER) install --prefer-dist --no-progress --no-interaction
-	@$(MAKE) --no-print-directory migrate fixtures url
+	@$(MAKE) --no-print-directory migrate fixtures users:show url
 
 teardown-worktree: worktree-guard ## Run before deleting a worktree: removes containers, volumes (database included) and images
 	@$(DOCKER_COMP) down --volumes --remove-orphans

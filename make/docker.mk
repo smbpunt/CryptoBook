@@ -1,4 +1,4 @@
-.PHONY: build up down logs bash url test migrate fixtures
+.PHONY: build up down logs bash url test migrate fixtures users\:show
 
 ## ---- Docker ----
 
@@ -33,3 +33,6 @@ migrate: ## Run migrations on the dev and test databases
 
 fixtures: ## Load fixtures into the dev database (purges it)
 	@$(SYMFONY) doctrine:fixtures:load --no-interaction
+
+users\:show: ## List 5 users (admins first), fixtures password: "password"
+	@$(SYMFONY) dbal:run-sql "SELECT id, email, roles FROM \"user\" ORDER BY roles::text LIKE '%ROLE_ADMIN%' DESC, id LIMIT 5"

@@ -140,6 +140,10 @@ class AppFixtures extends Fixture
             $user->setEmail($faker->email)
                 ->setFavoriteFiatCurrency($faker->randomElement($currencies))
                 ->setPassword($this->hasher->hashPassword($user, 'password'));
+            // First user is an admin with a known email, to log into the back-office
+            if (0 === $u) {
+                $user->setEmail('admin@example.com')->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+            }
 
             for ($p = 0; $p < random_int(2, 4); ++$p) {
                 $position = new Position($user);

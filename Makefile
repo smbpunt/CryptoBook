@@ -23,5 +23,6 @@ include make/dx.mk
 .PHONY: help
 help: ## Show this help
 	@echo ""
-	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -hE '^[a-zA-Z_\\:-]+:.*?## .*$$' $(MAKEFILE_LIST) | sed 's/\\:/@/g' | sort \
+		| awk 'BEGIN {FS = ":.*?## "}; {gsub("@", ":", $$1); printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
