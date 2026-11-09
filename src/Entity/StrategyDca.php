@@ -15,9 +15,9 @@ class StrategyDca implements OwnedInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\OneToOne(inversedBy: 'strategyDca', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $owner;
+    private User $owner;
 
     #[ORM\OneToMany(mappedBy: 'strategyDca', targetEntity: CoinPercentDca::class, cascade: ['persist'], orphanRemoval: true)]
     private $parts;
@@ -28,7 +28,7 @@ class StrategyDca implements OwnedInterface
     #[ORM\Column(type: 'float')]
     private $farmingToDcaUsd;
 
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->owner = $owner;
         $this->parts = new ArrayCollection();
@@ -39,16 +39,9 @@ class StrategyDca implements OwnedInterface
         return $this->id;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
-    }
-
-    public function setOwner(User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     /**

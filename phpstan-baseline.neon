@@ -205,12 +205,6 @@ parameters:
 			path: src/Entity/Dapp.php
 
 		-
-			message: '#^Method App\\Entity\\Deposit\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/Deposit.php
-
-		-
 			message: '#^Property App\\Entity\\Deposit\:\:\$amount has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -230,12 +224,6 @@ parameters:
 
 		-
 			message: '#^Property App\\Entity\\Deposit\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Entity\\Deposit\:\:\$owner has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/Deposit.php
@@ -349,12 +337,6 @@ parameters:
 			path: src/Entity/FiatCurrency.php
 
 		-
-			message: '#^Method App\\Entity\\Loan\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/Loan.php
-
-		-
 			message: '#^Property App\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -391,18 +373,6 @@ parameters:
 			path: src/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$owner has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/Loan.php
-
-		-
-			message: '#^Method App\\Entity\\Nft\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/Nft.php
-
-		-
 			message: '#^Property App\\Entity\\Nft\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -428,12 +398,6 @@ parameters:
 
 		-
 			message: '#^Property App\\Entity\\Nft\:\:\$num has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Entity\\Nft\:\:\$owner has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/Nft.php
@@ -493,12 +457,6 @@ parameters:
 			path: src/Entity/Nft.php
 
 		-
-			message: '#^Method App\\Entity\\Position\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/Position.php
-
-		-
 			message: '#^Method App\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
 			identifier: missingType.generics
 			count: 1
@@ -547,12 +505,6 @@ parameters:
 			path: src/Entity/Position.php
 
 		-
-			message: '#^Property App\\Entity\\Position\:\:\$owner has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/Position.php
-
-		-
 			message: '#^Property App\\Entity\\Position\:\:\$remainingCoins has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -569,12 +521,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/Position.php
-
-		-
-			message: '#^Method App\\Entity\\ProjectMonitoring\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/ProjectMonitoring.php
 
 		-
 			message: '#^Method App\\Entity\\ProjectMonitoring\:\:getLinks\(\) return type has no value type specified in iterable type array\.$#'
@@ -619,22 +565,10 @@ parameters:
 			path: src/Entity/ProjectMonitoring.php
 
 		-
-			message: '#^Property App\\Entity\\ProjectMonitoring\:\:\$owner has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/ProjectMonitoring.php
-
-		-
 			message: '#^Property App\\Entity\\ProjectMonitoring\:\:\$type has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Method App\\Entity\\StrategyDca\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/StrategyDca.php
 
 		-
 			message: '#^Property App\\Entity\\StrategyDca\:\:\$farmingToDcaUsd has no type specified\.$#'
@@ -655,22 +589,10 @@ parameters:
 			path: src/Entity/StrategyDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyDca\:\:\$owner has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/StrategyDca.php
-
-		-
 			message: '#^Property App\\Entity\\StrategyDca\:\:\$parts has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/StrategyDca.php
-
-		-
-			message: '#^Method App\\Entity\\StrategyFarming\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/StrategyFarming.php
 
 		-
 			message: '#^Property App\\Entity\\StrategyFarming\:\:\$apr has no type specified\.$#'
@@ -713,18 +635,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/StrategyFarming.php
-
-		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$owner has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/StrategyFarming.php
-
-		-
-			message: '#^Method App\\Entity\\StrategyLp\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Entity/StrategyLp.php
 
 		-
 			message: '#^Property App\\Entity\\StrategyLp\:\:\$apr has no type specified\.$#'
@@ -776,12 +686,6 @@ parameters:
 
 		-
 			message: '#^Property App\\Entity\\StrategyLp\:\:\$nbCoin2 has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/StrategyLp.php
-
-		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$owner has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/StrategyLp.php
@@ -853,19 +757,7 @@ parameters:
 			path: src/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$deposits has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
 			message: '#^Property App\\Entity\\User\:\:\$email has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$farmingStrategies has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/User.php
@@ -883,49 +775,13 @@ parameters:
 			path: src/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$loans has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$nfts has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
 			message: '#^Property App\\Entity\\User\:\:\$password has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$positions has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$projectMonitorings has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
 			message: '#^Property App\\Entity\\User\:\:\$roles has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$strategyDca has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			message: '#^Property App\\Entity\\User\:\:\$strategyLps has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/User.php

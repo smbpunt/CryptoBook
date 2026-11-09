@@ -25,8 +25,7 @@ final class OwnerVoter extends Voter
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
-        $owner = $subject->getOwner();
-        if (!$user instanceof User || null === $owner || $owner->getId() !== $user->getId()) {
+        if (!$user instanceof User || $subject->getOwner()->getId() !== $user->getId()) {
             $vote?->addReason('The user does not own this data.');
 
             return false;

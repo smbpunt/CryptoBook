@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Trait\DescriptionTrait;
+use App\Entity\Trait\OwnerTrait;
 use App\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Nft implements OwnedInterface
 {
     use DescriptionTrait;
+    use OwnerTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -57,11 +59,7 @@ class Nft implements OwnedInterface
     #[ORM\JoinColumn(nullable: false)]
     private $cryptocurrency;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'nfts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
-
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->owner = $owner;
         $this->description = '';
@@ -224,18 +222,6 @@ class Nft implements OwnedInterface
     public function setCryptocurrency(?Cryptocurrency $cryptocurrency): self
     {
         $this->cryptocurrency = $cryptocurrency;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Trait\DescriptionTrait;
+use App\Entity\Trait\OwnerTrait;
 use App\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProjectMonitoring implements OwnedInterface
 {
     use DescriptionTrait;
+    use OwnerTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,10 +27,6 @@ class ProjectMonitoring implements OwnedInterface
     #[ORM\Column(type: 'text')]
     private $note;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectMonitorings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
-
     #[ORM\Column(type: 'json')]
     private $links = [];
 
@@ -36,7 +34,7 @@ class ProjectMonitoring implements OwnedInterface
     #[ORM\JoinColumn(nullable: false)]
     private $type;
 
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->owner = $owner;
     }
@@ -78,18 +76,6 @@ class ProjectMonitoring implements OwnedInterface
     public function setNote(string $note): self
     {
         $this->note = $note;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

@@ -2,9 +2,13 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\OwnedInterface;
+use App\Entity\User;
 use App\Repository\DepositRepository;
+use App\Repository\StrategyDcaRepository;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -12,36 +16,46 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 final class OwnershipTest extends WebTestCase
 {
-    public function testCannotEditDataOfAnotherUser(): void
+    /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function ownedRoutes(): iterable
     {
-        $client = self::createClient();
-        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
-        $client->loginUser($data->admin);
-
         foreach ([
-            "/deposit/{$data->deposit->getId()}/edit",
-            "/loan/{$data->loan->getId()}/edit",
-            "/nft/{$data->nft->getId()}/edit",
-            "/position/{$data->position->getId()}/edit",
-            "/project/monitoring/{$data->project->getId()}/edit",
-            "/strategy/farming/{$data->farming->getId()}/edit",
-            "/strategy/lp/{$data->lp->getId()}/edit",
-        ] as $url) {
-            $client->request('GET', $url);
-            self::assertResponseStatusCodeSame(403, $url);
+            'deposit' => ['/deposit', 'deposit'],
+            'loan' => ['/loan', 'loan'],
+            'nft' => ['/nft', 'nft'],
+            'position' => ['/position', 'position'],
+            'project' => ['/project/monitoring', 'project'],
+            'farming' => ['/strategy/farming', 'farming'],
+            'lp' => ['/strategy/lp', 'lp'],
+        ] as $name => [$prefix, $property]) {
+            yield "$name edit" => ['GET', "$prefix/{id}/edit", $property];
+            yield "$name delete" => ['POST', "$prefix/{id}", $property];
         }
+
+        foreach (['loan' => '/loan', 'nft' => '/nft', 'position' => '/position', 'farming' => '/strategy/farming', 'lp' => '/strategy/lp'] as $property => $prefix) {
+            yield "$property infos" => ['POST', "$prefix/{id}/infos", $property];
+        }
+
+        yield 'dca delete' => ['POST', '/strategy/dca/{id}', 'dca'];
     }
 
-    public function testCannotDeleteDataOfAnotherUser(): void
+    #[DataProvider('ownedRoutes')]
+    public function testCannotAccessDataOfAnotherUser(string $method, string $path, string $property): void
     {
         $client = self::createClient();
-        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $data = Dataset::load($em);
+        $entity = $data->{$property};
+        \assert($entity instanceof OwnedInterface && method_exists($entity, 'getId'));
         $client->loginUser($data->admin);
 
-        $client->request('POST', "/deposit/{$data->deposit->getId()}", ['_token' => 'whatever']);
+        $client->request($method, str_replace('{id}', (string) $entity->getId(), $path), ['_token' => 'whatever']);
 
         self::assertResponseStatusCodeSame(403);
-        self::assertNotNull(self::getContainer()->get(DepositRepository::class)->find($data->deposit->getId()));
+        $em->clear();
+        self::assertNotNull($em->find($entity::class, $entity->getId()));
     }
 
     public function testOwnerDeletesWithAValidCsrfToken(): void
@@ -61,5 +75,21 @@ final class OwnershipTest extends WebTestCase
 
         self::assertResponseRedirects('/deposit/');
         self::assertNull(self::getContainer()->get(DepositRepository::class)->find($id));
+    }
+
+    public function testDeletingTheDcaStrategyKeepsItsOwner(): void
+    {
+        self::bootKernel();
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $data = Dataset::load($em);
+        $userId = $data->user->getId();
+        $em->clear();
+
+        $repository = self::getContainer()->get(StrategyDcaRepository::class);
+        $repository->remove($repository->findOneBy(['owner' => $userId]), true);
+        $em->clear();
+
+        self::assertNull($repository->findOneBy(['owner' => $userId]));
+        self::assertNotNull($em->find(User::class, $userId));
     }
 }

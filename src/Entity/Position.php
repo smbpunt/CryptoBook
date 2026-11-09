@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Trait\DescriptionTrait;
+use App\Entity\Trait\OwnerTrait;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Position implements OwnedInterface
 {
     use DescriptionTrait;
+    use OwnerTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,10 +28,6 @@ class Position implements OwnedInterface
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'positions')]
     #[ORM\JoinColumn(nullable: false)]
     private $coin;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'positions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
 
     #[ORM\Column(type: 'boolean')]
     private $isOpened;
@@ -52,7 +50,7 @@ class Position implements OwnedInterface
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: StrategyPosition::class, cascade: ['persist'], orphanRemoval: true)]
     private $strategies;
 
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->ventes = new ArrayCollection();
         $this->strategies = new ArrayCollection();
@@ -88,18 +86,6 @@ class Position implements OwnedInterface
     public function setCoin(?Cryptocurrency $coin): self
     {
         $this->coin = $coin;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

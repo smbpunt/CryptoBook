@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\OwnerTrait;
 use App\Repository\DepositRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepositRepository::class)]
 class Deposit implements OwnedInterface
 {
+    use OwnerTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -20,10 +23,6 @@ class Deposit implements OwnedInterface
     #[ORM\JoinColumn(nullable: false)]
     private $type;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'deposits')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
-
     #[ORM\Column(type: 'float')]
     private $amount;
 
@@ -35,7 +34,7 @@ class Deposit implements OwnedInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?FiatCurrency $fiatCurrency = null;
 
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->owner = $owner;
     }
@@ -65,18 +64,6 @@ class Deposit implements OwnedInterface
     public function setType(?DepositType $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

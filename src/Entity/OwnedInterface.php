@@ -7,5 +7,5 @@ namespace App\Entity;
  */
 interface OwnedInterface
 {
-    public function getOwner(): ?User;
+    public function getOwner(): User;
 }

@@ -4,9 +4,9 @@ namespace App\Service;
 
 use App\Entity\Position;
 use App\Entity\StrategyDca;
+use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Repository\CryptocurrencyRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class DcaService
 {
@@ -18,7 +18,7 @@ class DcaService
     /**
      * @return Position[]
      */
-    public function generatePositions(StrategyDca $dca, UserInterface $user, float $value): array
+    public function generatePositions(StrategyDca $dca, User $user, float $value): array
     {
         $positions = [];
         $today = \DateTimeImmutable::createFromFormat('Y-m-d H:i', date('Y-m-d H:i'));
@@ -45,7 +45,7 @@ class DcaService
     /**
      * @return Position[]
      */
-    public function generateDcaAutoPositions(UserInterface $user, int $coinId, string $recurrence, int $count, float $total, string $firstDate): array
+    public function generateDcaAutoPositions(User $user, int $coinId, string $recurrence, int $count, float $total, string $firstDate): array
     {
         $coin = $this->cryptocurrencyRepository->find($coinId);
         if (null === $coin) {
