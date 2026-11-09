@@ -55,7 +55,7 @@ final class CryptocurrencyServiceTest extends TestCase
 
         $this->service($mock)->updateDatas(new Cryptocurrency());
 
-        self::assertSame(0, $mock->count());
+        self::assertCount(0, $mock);
     }
 
     public function testUpdateDatasLogsApiErrors(): void

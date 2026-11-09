@@ -8,6 +8,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @extends AbstractCrudController<FiatCurrency>
+ */
 class FiatCurrencyCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string

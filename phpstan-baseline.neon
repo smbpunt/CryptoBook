@@ -13,82 +13,10 @@ parameters:
 			path: src/Controller/CryptobookController.php
 
 		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/DepositController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/LoanController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/NftController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/PositionController.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 1
 			path: src/Controller/PositionController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/ProjectMonitoringController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 4
-			path: src/Controller/StrategyDcaController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/StrategyFarmingController.php
-
-		-
-			message: '''
-				#^Call to deprecated method renderForm\(\) of class Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:
-				since Symfony 6\.2, use render\(\) instead$#
-			'''
-			identifier: method.deprecated
-			count: 2
-			path: src/Controller/StrategyLpController.php
 
 		-
 			message: '#^Parameter \#1 \$entity of method App\\Repository\\UserRepository\:\:add\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
@@ -575,15 +503,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/Nft.php
-
-		-
-			message: '''
-				#^Fetching deprecated class constant ASC of class Doctrine\\Common\\Collections\\Criteria\:
-				use Order\:\:Ascending instead$#
-			'''
-			identifier: classConstant.deprecated
-			count: 1
-			path: src/Entity/Position.php
 
 		-
 			message: '#^Method App\\Entity\\Position\:\:__construct\(\) has parameter \$owner with no type specified\.$#'
@@ -1168,32 +1087,8 @@ parameters:
 			path: src/Form/VenteType.php
 
 		-
-			message: '''
-				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
-			'''
-			identifier: method.deprecatedClass
-			count: 1
-			path: src/Menu/MenuBuilder.php
-
-		-
-			message: '''
-				#^Call to method isGranted\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
-			'''
-			identifier: method.deprecatedClass
-			count: 1
-			path: src/Menu/MenuBuilder.php
-
-		-
 			message: '#^Method App\\Menu\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Menu/MenuBuilder.php
-
-		-
-			message: '#^Property App\\Menu\\MenuBuilder\:\:\$factory has no type specified\.$#'
-			identifier: missingType.property
 			count: 1
 			path: src/Menu/MenuBuilder.php
 
@@ -1672,12 +1567,6 @@ parameters:
 			path: src/Repository/UserRepository.php
 
 		-
-			message: '#^Class App\\Repository\\UserRepository implements generic interface Symfony\\Component\\Security\\Core\\User\\PasswordUpgraderInterface but does not specify its types\: TUser$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Repository/UserRepository.php
-
-		-
 			message: '#^Class App\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1702,43 +1591,16 @@ parameters:
 			path: src/Repository/VenteRepository.php
 
 		-
-			message: '''
-				#^Fetching deprecated class constant LAST_USERNAME of class Symfony\\Bundle\\SecurityBundle\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security\:\:LAST_USERNAME instead$#
-			'''
-			identifier: classConstant.deprecated
-			count: 1
-			path: src/Security/UserAuthenticator.php
-
-		-
 			message: '#^Binary operation "\." between ''Erreur lors de la…'' and array\<string\|null\> results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
 			path: src/Service/CryptocurrencyService.php
 
 		-
-			message: '''
-				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
-			'''
-			identifier: method.deprecatedClass
-			count: 1
-			path: src/Service/DepositService.php
-
-		-
 			message: '#^Parameter \#1 \$user of method App\\Service\\DepositService\:\:getTotalDepositUsd\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Service/DepositService.php
-
-		-
-			message: '''
-				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
-			'''
-			identifier: method.deprecatedClass
-			count: 1
-			path: src/Service/FarmingService.php
 
 		-
 			message: '#^Property App\\Service\\FarmingService\:\:\$user \(App\\Entity\\User\) does not accept Symfony\\Component\\Security\\Core\\User\\UserInterface\|null\.$#'
@@ -1750,13 +1612,4 @@ parameters:
 			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:getFavoriteFiatCurrency\(\)\.$#'
 			identifier: method.notFound
 			count: 2
-			path: src/Service/FiatExchangeRatesService.php
-
-		-
-			message: '''
-				#^Call to method getUser\(\) of deprecated class Symfony\\Component\\Security\\Core\\Security\:
-				since Symfony 6\.2, use \\Symfony\\Bundle\\SecurityBundle\\Security instead$#
-			'''
-			identifier: method.deprecatedClass
-			count: 1
 			path: src/Service/FiatExchangeRatesService.php

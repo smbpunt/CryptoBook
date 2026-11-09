@@ -5,6 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\DepositType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
+/**
+ * @extends AbstractCrudController<DepositType>
+ */
 class DepositTypeCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
