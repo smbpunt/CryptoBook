@@ -10,7 +10,7 @@ Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée d
 |---|---|---|---|---|
 | 0 | Docker avec version PHP paramétrable | 8.3 | 6.3 | ✅ |
 | 1 | Suppression de l'API | 8.3 | 6.3 | ✅ |
-| 2 | Outillage qualité | 8.3 | 6.3 | 🟡 |
+| 2 | Outillage qualité | 8.3 | 6.3 | ✅ |
 | 3 | Tests de non-régression | 8.3 | 6.3 | ⬜ |
 | 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ⬜ |
 | 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ⬜ |
@@ -34,10 +34,11 @@ Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée d
 - Entité `RefreshToken`, firewalls `login` / `api`, `#[ApiResource]`, `CurrentUserExtension`
 
 ### 2. Outillage
-- PHPUnit + `dama/doctrine-test-bundle`
-- PHP CS Fixer (`@Symfony`)
-- Rector
-- PHPStan avec baseline
+- PHPUnit 11 + `dama/doctrine-test-bundle`
+- PHP CS Fixer (`@Symfony`, `@Symfony:risky`, `@PHP81Migration`)
+- Rector (configuré, appliqué en phase 4)
+- PHPStan niveau 6 avec baseline
+- Symfony 6.3 étant EOL avec des failles non corrigées, les commandes Composer qui résolvent des dépendances passent par `--no-security-blocking` jusqu'à la phase 4
 
 ### 3. Tests de non-régression
 - Smoke test de toutes les routes GET (user + admin)
@@ -49,6 +50,7 @@ Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée d
 - Retrait de `sensio/framework-extra-bundle`, `doctrine/annotations`, `symfony/proxy-manager-bridge`, `symfony/webapp-meta`
 - Rector + `recipes:update`
 - Zéro dépréciation
+- Plus besoin de `--no-security-blocking` ; vérifier que les tests « risky » (handlers d'erreurs non restaurés) disparaissent
 
 ### 5. Asset Mapper
 - Encore → importmap + `stimulus-bundle`
@@ -59,6 +61,7 @@ Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée d
 - Passage direct 6.4 → 7.4 (possible grâce à l'étape 4)
 - Bundles tiers à jour (EasyAdmin, knp-menu, reset-password)
 - Client CoinGecko maison en remplacement de `codenix-sv/coingecko-api`
+- `symfony/phpunit-bridge` + `SymfonyExtension` (comme gaia), absent jusque-là car la 6.x ne gère que PHPUnit 9
 - Zéro dépréciation
 
 ### 7. Doctrine ORM 3

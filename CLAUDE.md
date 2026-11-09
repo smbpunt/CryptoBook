@@ -18,20 +18,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Checking changes
 
-No tests, PHPStan or CS Fixer yet (they arrive in phase 2). Until then, check with (inside the `php` container):
+Inside the `php` container:
 
 ```
+bin/phpunit
+vendor/bin/phpstan analyse
+vendor/bin/php-cs-fixer fix --dry-run
+vendor/bin/rector process --dry-run
 bin/console lint:container
 bin/console lint:twig templates
 bin/console lint:yaml config
 bin/console doctrine:schema:validate
 ```
 
+- PHPStan uses a baseline (`phpstan-baseline.neon`): don't add new errors to it, fix them. Regenerate it only when errors are removed.
+- Rector is configured but not applied before phase 4.
+- Tests run on `app_test` (DAMA rolls back each test). After a new migration: `bin/console doctrine:migrations:migrate --env=test -n`.
+
 ## Local setup gotchas
 
 - Run everything in Docker: `docker compose up -d`, then `docker compose exec php composer install` / `bin/console …`. App on http://localhost:8888. PHP version is a build arg: `PHP_VERSION=8.4 docker compose build php`.
 - The `php` service overrides `DATABASE_URL` to the `database` service (Postgres 16); `app_test` is created on first start. `.env` still points to `127.0.0.1` for host use.
 - Host PHP is 8.5, the project targets 8.1 (then 8.3/8.4). Don't run `composer update` on the host: it resolves dependencies for the wrong PHP version.
+- Symfony 6.3 is EOL with unpatched advisories, so Composer's security blocking rejects any resolution. Until phase 4, `composer require` / `update` / `remove` need `--no-security-blocking` (`composer install` from the lock is fine).
 - Frontend is Webpack Encore (`npm run dev` / `watch` / `build`) until phase 5.
 
 ## Data
