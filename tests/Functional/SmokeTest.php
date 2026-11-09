@@ -79,6 +79,45 @@ final class SmokeTest extends WebTestCase
         }
     }
 
+    public function testAjaxInfos(): void
+    {
+        $d = $this->data;
+        $this->client->loginUser($d->user);
+
+        foreach ([
+            "/loan/{$d->loan->getId()}/infos",
+            "/nft/{$d->nft->getId()}/infos",
+            "/position/{$d->position->getId()}/infos",
+            "/strategy/farming/{$d->farming->getId()}/infos",
+            "/strategy/lp/{$d->lp->getId()}/infos",
+        ] as $url) {
+            $this->client->request('POST', $url);
+            self::assertResponseIsSuccessful("POST $url");
+        }
+    }
+
+    public function testAjaxInfosOfAnotherUserIsForbidden(): void
+    {
+        $this->client->loginUser($this->data->admin);
+        $this->client->request('POST', "/position/{$this->data->position->getId()}/infos");
+
+        self::assertResponseStatusCodeSame(403);
+    }
+
+    public function testDcaAuto(): void
+    {
+        $this->client->loginUser($this->data->user);
+
+        $this->client->request('GET', '/strategy/dca/dcaAuto?'.http_build_query([
+            'crypto' => $this->data->btc->getId(), 't' => 'w', 'nb' => 3, 'total' => 300, 'd' => '2024-01-01',
+        ]));
+        self::assertResponseIsSuccessful();
+        self::assertSelectorCount(3, 'input[name$="[entryCost]"]');
+
+        $this->client->request('GET', '/strategy/dca/dcaAuto');
+        self::assertResponseRedirects('/strategy/dca/');
+    }
+
     public function testDcaNewRedirectsToEditWhenStrategyExists(): void
     {
         $this->client->loginUser($this->data->user);

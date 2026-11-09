@@ -20,11 +20,11 @@ final class FarmingServiceTest extends TestCase
         $eth = (new Cryptocurrency())->setPriceUsd(2000);
         $usdc = (new Cryptocurrency())->setPriceUsd(1);
 
-        $farmingRepository = $this->createStub(StrategyFarmingRepository::class);
+        $farmingRepository = $this->createMock(StrategyFarmingRepository::class);
         $farmingRepository->method('findBy')->willReturn([
             (new StrategyFarming($user))->setCoin($eth)->setNbCoins(2)->setApr(5),
         ]);
-        $farmingRepository->method('findByStable')->willReturn([
+        $farmingRepository->expects(self::once())->method('findByStable')->with($user, true)->willReturn([
             (new StrategyFarming($user))->setCoin($usdc)->setNbCoins(1000)->setApr(10),
         ]);
         $lpRepository = $this->createStub(StrategyLpRepository::class);

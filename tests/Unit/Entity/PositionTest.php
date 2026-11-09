@@ -20,7 +20,7 @@ final class PositionTest extends TestCase
         self::assertTrue($position->isIsOpened());
     }
 
-    public function testSalesApplyInDateOrderOnRemainingCoins(): void
+    public function testSalesCompoundOnRemainingCoins(): void
     {
         $position = $this->position(nbCoins: 2, entryCost: 100);
         $position->addVente($this->vente('2024-02-01', 50));
@@ -54,6 +54,11 @@ final class PositionTest extends TestCase
         self::assertSame(600.0, $position->getCurrentValue());
         // Remaining half cost 500, now worth 600.
         self::assertEqualsWithDelta(20.0, $position->getPercentEvolution(), 1e-9);
+    }
+
+    public function testEntryCoinValueIsRoundedToCents(): void
+    {
+        self::assertSame(333.33, $this->position(nbCoins: 3, entryCost: 1000)->getEntryCoinValue());
     }
 
     public function testPercentEvolutionFallbackWhenEntryCostIsZero(): void

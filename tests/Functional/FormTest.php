@@ -98,7 +98,9 @@ final class FormTest extends WebTestCase
         self::assertResponseRedirects('/deposit/');
         $deposits = $this->em()->getRepository(Deposit::class)->findBy(['owner' => $this->data->user, 'amount' => 250]);
         self::assertCount(1, $deposits);
-        self::assertSame(250.0, $deposits[0]->getAmountUsd());
+        self::assertSame($this->data->usd->getId(), $deposits[0]->getFiatCurrency()->getId());
+        self::assertSame($this->data->exchange->getId(), $deposits[0]->getExchange()->getId());
+        self::assertSame($this->data->depositType->getId(), $deposits[0]->getType()->getId());
     }
 
     public function testUpdatePreferences(): void

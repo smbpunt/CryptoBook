@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Repository\CryptocurrencyRepository;
 use App\Service\DcaService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class DcaServiceTest extends TestCase
@@ -39,20 +40,32 @@ final class DcaServiceTest extends TestCase
         }
     }
 
-    public function testGenerateDcaAutoPositionsSpreadsTotalOverDates(): void
+    /**
+     * @return iterable<string, array{string, list<string>}>
+     */
+    public static function recurrences(): iterable
+    {
+        yield 'hourly' => [DcaAutoType::$HOURLY, ['2024-01-31 10:00', '2024-01-31 14:00', '2024-01-31 18:00']];
+        yield 'daily' => [DcaAutoType::$DAILY, ['2024-01-31 10:00', '2024-02-01 10:00', '2024-02-02 10:00']];
+        yield 'weekly' => [DcaAutoType::$WEEKLY, ['2024-01-31 10:00', '2024-02-07 10:00', '2024-02-14 10:00']];
+        // PHP date arithmetic: Jan 31 + 1 month overflows to March.
+        yield 'monthly' => [DcaAutoType::$MONTHLY, ['2024-01-31 10:00', '2024-03-02 10:00', '2024-04-02 10:00']];
+    }
+
+    /**
+     * @param list<string> $expectedDates
+     */
+    #[DataProvider('recurrences')]
+    public function testGenerateDcaAutoPositionsSpreadsTotalOverDates(string $recurrence, array $expectedDates): void
     {
         $coin = new Cryptocurrency();
         $repository = $this->createStub(CryptocurrencyRepository::class);
         $repository->method('find')->willReturn($coin);
 
         $positions = $this->service($repository)
-            ->generateDcaAutoPositions(new User(), '1', DcaAutoType::$WEEKLY, '3', '300', '2024-01-01 10:00');
+            ->generateDcaAutoPositions(new User(), '1', $recurrence, '3', '300', '2024-01-31 10:00');
 
-        self::assertCount(3, $positions);
-        self::assertSame(
-            ['2024-01-01 10:00', '2024-01-08 10:00', '2024-01-15 10:00'],
-            array_map(static fn ($p) => $p->getOpenedAt()->format('Y-m-d H:i'), $positions),
-        );
+        self::assertSame($expectedDates, array_map(static fn ($p) => $p->getOpenedAt()->format('Y-m-d H:i'), $positions));
         foreach ($positions as $position) {
             self::assertSame($coin, $position->getCoin());
             self::assertSame(100.0, $position->getEntryCost());
