@@ -9,6 +9,7 @@ use App\Entity\Dapp;
 use App\Entity\Deposit;
 use App\Entity\DepositType;
 use App\Entity\Exchange;
+use App\Entity\FiatCurrency;
 use App\Entity\Loan;
 use App\Entity\Nft;
 use App\Entity\Position;
@@ -33,6 +34,19 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+
+        // The purger empties the currencies seeded by the migrations: recreate them
+        $currencies = [];
+        foreach ([
+            ['Euro', 'EUR', '€', ['USD' => 1.073941, 'AUD' => 1.556436]],
+            ['Dollar', 'USD', '$', ['EUR' => 0.930795, 'AUD' => 1.450125]],
+            ['Dollar Australien', 'AUD', '$A', ['EUR' => 0.641872, 'USD' => 0.689596]],
+        ] as [$libelle, $key, $symbol, $rates]) {
+            $currency = (new FiatCurrency())->setLibelle($libelle)->setFixerKey($key)->setSymbol($symbol)
+                ->setRates($rates)->setUpdatedAt(new \DateTimeImmutable());
+            $manager->persist($currency);
+            $currencies[] = $currency;
+        }
 
         $btc = new Cryptocurrency();
         $btc->setLibelleCoingecko('bitcoin');
@@ -112,6 +126,7 @@ class AppFixtures extends Fixture
         for ($u = 0; $u < 10; ++$u) {
             $user = new User();
             $user->setEmail($faker->email)
+                ->setFavoriteFiatCurrency($faker->randomElement($currencies))
                 ->setPassword($this->hasher->hashPassword($user, 'password'));
 
             for ($p = 0; $p < random_int(2, 4); ++$p) {
@@ -279,13 +294,15 @@ class AppFixtures extends Fixture
                 $deposit1->setDepositedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($binance)
                     ->setAmount($faker->randomFloat(0, 50, 200))
-                    ->setType($cb);
+                    ->setType($cb)
+                    ->setFiatCurrency($user->getFavoriteFiatCurrency());
                 $manager->persist($deposit1);
                 $deposit2 = new Deposit($user);
                 $deposit2->setDepositedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setExchange($ftx)
                     ->setAmount($faker->randomFloat(0, 50, 200))
-                    ->setType($vir);
+                    ->setType($vir)
+                    ->setFiatCurrency($user->getFavoriteFiatCurrency());
                 $manager->persist($deposit2);
             }
 
