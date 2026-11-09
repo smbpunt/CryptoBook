@@ -16,7 +16,21 @@ Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.l
 
 - Authentification par formulaire (`App\Security\UserAuthenticator`), mot de passe oublié via `symfonycasts/reset-password-bundle`
 - Doctrine ORM 3 + PostgreSQL, Twig + Bootstrap v5.3, AssetMapper, Stimulus, EasyAdmin 5, KnpMenu
-- Code rangé par type technique (`Controller/`, `Entity/`, `Service/`…), une application externe par dossier (client, DTO, exception, sans logique métier)
+
+## Organisation du code par feature
+
+Cible : ranger le code par sujet métier, pas par type technique. Inspiré du DDD, sans ses couches. L'existant est encore rangé par type : le nouveau code suit cette organisation, l'ancien migre quand on le modifie.
+
+- Une feature = un dossier dans `src/`, au singulier, nommé avec le vocabulaire métier du projet (`Position/`, `Deposit/`, `Loan/`, `Nft/`, `Strategy/`…).
+- Dans une feature, chaque classe va dans un dossier de type, même seule. Nom Symfony quand il existe (`Controller/`, `Entity/`, `Repository/`, `Form/`, `Voter/`, `Command/`, `EventSubscriber/`, `Twig/`), sinon le suffixe de la classe (`Builder/MenuBuilder`, `Calculator/DcaCalculator`). DTO dans `Dto/`, enums dans `Enum/`, value objects dans `ValueObject/`.
+- Le nom d'une classe dit ce qu'elle fait (`Builder`, `Finder`, `Resolver`, `Calculator`, `Factory`…). Éviter si possible `Service`, `Manager`, `Helper` ou `Utils`.
+- Une feature peut contenir des sous-features : `src/Strategy/Dca/`. Une simple page n'en est pas une. Deux niveaux maximum.
+- Chaque application externe appelée (CoinGecko, Fixer…) a son propre dossier : le client, ses DTO et ses exceptions, sans logique métier.
+- Le code commun va dans `src/Shared/`.
+- Les features peuvent s'utiliser entre elles, sans dépendance circulaire.
+- Templates dans `templates/<feature>/`, à plat, avec un sous-dossier par sous-feature. Tests dans `tests/<Feature>/`, même arborescence que `src/`. Les tests transverses (`SmokeTest`, `OwnershipTest`…) restent dans `tests/Functional/`.
+- Ne bougent pas : `src/Kernel.php`, `src/DataFixtures/`, `templates/base.html.twig`, `templates/bundles/`, `translations/`.
+- Maker ne suit pas toujours ce rangement : donner le nom complet de la classe (`make:entity '\App\<Feature>\Entity\<Classe>'`) et déplacer ensuite ce qui est mal placé.
 
 ## Langue
 
