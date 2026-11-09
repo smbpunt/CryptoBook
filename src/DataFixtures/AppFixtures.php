@@ -52,42 +52,52 @@ class AppFixtures extends Fixture
 
         $btc = new Cryptocurrency();
         $btc->setLibelleCoingecko('bitcoin')->setLibelle('Bitcoin')->setSymbol('BTC')->setPriceUsd(60000);
+        self::setLogos($btc, '1/%s/bitcoin.png?1696501400');
         $manager->persist($btc);
 
         $eth = new Cryptocurrency();
         $eth->setLibelleCoingecko('ethereum')->setLibelle('Ethereum')->setSymbol('ETH')->setPriceUsd(3000);
+        self::setLogos($eth, '279/%s/ethereum.png?1696501628');
         $manager->persist($eth);
 
         $a = new Cryptocurrency();
         $a->setLibelleCoingecko('binancecoin')->setLibelle('BNB')->setSymbol('BNB')->setPriceUsd(550);
+        self::setLogos($a, '825/%s/bnb-icon2_2x.png?1696501970');
         $manager->persist($a);
 
         $b = new Cryptocurrency();
         $b->setLibelleCoingecko('aave')->setLibelle('Aave')->setSymbol('AAVE')->setPriceUsd(100);
+        self::setLogos($b, '12645/%s/aave-token-round.png?1720472354');
         $manager->persist($b);
 
         $c = new Cryptocurrency();
         $c->setLibelleCoingecko('avalanche-2')->setLibelle('Avalanche')->setSymbol('AVAX')->setPriceUsd(30);
+        self::setLogos($c, '12559/%s/Avalanche_Circle_RedWhite_Trans.png?1696512369');
         $manager->persist($c);
 
         $d = new Cryptocurrency();
         $d->setLibelleCoingecko('ripple')->setLibelle('XRP')->setSymbol('XRP')->setPriceUsd(0.5);
+        self::setLogos($d, '44/%s/xrp-symbol-white-128.png?1696501442');
         $manager->persist($d);
 
         $e = new Cryptocurrency();
         $e->setLibelleCoingecko('solana')->setLibelle('Solana')->setSymbol('SOL')->setPriceUsd(150);
+        self::setLogos($e, '4128/%s/solana.png?1718769756');
         $manager->persist($e);
 
         $f = new Cryptocurrency();
         $f->setLibelleCoingecko('polkadot')->setLibelle('Polkadot')->setSymbol('DOT')->setPriceUsd(7);
+        self::setLogos($f, '12171/%s/polkadot.jpg?1766533446');
         $manager->persist($f);
 
         $g = new Cryptocurrency();
         $g->setLibelleCoingecko('cardano')->setLibelle('Cardano')->setSymbol('ADA')->setPriceUsd(0.45);
+        self::setLogos($g, '975/%s/cardano.png?1696502090');
         $manager->persist($g);
 
         $stable = new Cryptocurrency();
         $stable->setLibelleCoingecko('usd-coin')->setLibelle('USDC')->setSymbol('USDC')->setPriceUsd(1)->setIsStable(true);
+        self::setLogos($stable, '6319/%s/USDC.png?1769615602');
         $manager->persist($stable);
 
         $btc_chain = new Blockchain();
@@ -343,6 +353,16 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         $manager->flush();
-        // $this->cryptocurrencyService->updateAllCryptos();
+    }
+
+    /**
+     * CoinGecko logo URLs, "%s" being the size (thumb, small, large).
+     */
+    private static function setLogos(Cryptocurrency $coin, string $path): void
+    {
+        $url = 'https://coin-images.coingecko.com/coins/images/'.$path;
+        $coin->setUrlImgThumb(\sprintf($url, 'thumb'))
+            ->setUrlImgSmall(\sprintf($url, 'small'))
+            ->setUrlImgLarge(\sprintf($url, 'large'));
     }
 }
