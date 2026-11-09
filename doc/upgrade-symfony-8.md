@@ -10,7 +10,7 @@ Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée d
 |---|---|---|---|---|
 | 0 | Docker avec version PHP paramétrable | 8.3 | 6.3 | ✅ |
 | 1 | Suppression de l'API | 8.3 | 6.3 | ✅ |
-| 2 | Outillage qualité | 8.3 | 6.3 | ⬜ |
+| 2 | Outillage qualité | 8.3 | 6.3 | 🟡 |
 | 3 | Tests de non-régression | 8.3 | 6.3 | ⬜ |
 | 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ⬜ |
 | 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ⬜ |
