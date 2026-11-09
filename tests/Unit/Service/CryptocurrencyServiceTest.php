@@ -2,19 +2,17 @@
 
 namespace App\Tests\Unit\Service;
 
+use App\Coingecko\Client\CoingeckoClient;
 use App\Entity\Cryptocurrency;
 use App\Repository\CryptocurrencyRepository;
 use App\Service\CryptocurrencyService;
-use Codenixsv\CoinGeckoApi\CoinGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
  * updateDatas() fills a new coin from CoinGecko (called by the prePersist listener).
@@ -23,23 +21,19 @@ final class CryptocurrencyServiceTest extends TestCase
 {
     public function testUpdateDatasFillsCoinFromCoinGecko(): void
     {
-        $requests = [];
-        $mock = new MockHandler([static function (Request $request) use (&$requests): Response {
-            $requests[] = $request;
-
-            return new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'name' => 'Bitcoin',
-                'symbol' => 'btc',
-                'image' => ['thumb' => 'https://img/thumb.png', 'small' => 'https://img/small.png', 'large' => 'https://img/large.png'],
-                'market_data' => ['current_price' => ['usd' => 65000], 'market_cap' => ['usd' => 1_200_000_000]],
-            ], \JSON_THROW_ON_ERROR));
-        }]);
+        $response = new JsonMockResponse([
+            'name' => 'Bitcoin',
+            'symbol' => 'btc',
+            'image' => ['thumb' => 'https://img/thumb.png', 'small' => 'https://img/small.png', 'large' => 'https://img/large.png'],
+            'market_data' => ['current_price' => ['usd' => 65000], 'market_cap' => ['usd' => 1_200_000_000]],
+        ]);
+        $http = new MockHttpClient($response, 'https://api.coingecko.com/api/v3/');
         $coin = (new Cryptocurrency())->setLibelleCoingecko('bitcoin');
 
-        $this->service($mock)->updateDatas($coin);
+        $this->service($http)->updateDatas($coin);
 
-        self::assertCount(1, $requests);
-        self::assertSame('/api/v3/coins/bitcoin', $requests[0]->getUri()->getPath());
+        self::assertSame(1, $http->getRequestsCount());
+        self::assertSame('/api/v3/coins/bitcoin', parse_url($response->getRequestUrl(), \PHP_URL_PATH));
         self::assertSame('Bitcoin', $coin->getLibelle());
         self::assertSame('btc', $coin->getSymbol());
         self::assertSame(65000.0, $coin->getPriceUsd());
@@ -51,11 +45,11 @@ final class CryptocurrencyServiceTest extends TestCase
 
     public function testUpdateDatasSkipsCoinWithoutCoinGeckoId(): void
     {
-        $mock = new MockHandler([]);
+        $http = new MockHttpClient([]);
 
-        $this->service($mock)->updateDatas(new Cryptocurrency());
+        $this->service($http)->updateDatas(new Cryptocurrency());
 
-        self::assertCount(0, $mock);
+        self::assertSame(0, $http->getRequestsCount());
     }
 
     public function testUpdateDatasLogsApiErrors(): void
@@ -64,7 +58,7 @@ final class CryptocurrencyServiceTest extends TestCase
         $logger->expects(self::once())->method('critical');
         $coin = (new Cryptocurrency())->setLibelleCoingecko('bitcoin');
 
-        $this->service(new MockHandler([new Response(500)]), $logger)->updateDatas($coin);
+        $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger)->updateDatas($coin);
 
         self::assertNull($coin->getLibelle());
     }
@@ -80,15 +74,13 @@ final class CryptocurrencyServiceTest extends TestCase
             (new Cryptocurrency())->setLibelleCoingecko('ethereum'),
         ]);
 
-        $this->service(new MockHandler([new Response(500)]), $logger, $repository)->updatePrices();
+        $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger, $repository)->updatePrices();
     }
 
-    private function service(MockHandler $mock, ?LoggerInterface $logger = null, ?CryptocurrencyRepository $repository = null): CryptocurrencyService
+    private function service(MockHttpClient $http, ?LoggerInterface $logger = null, ?CryptocurrencyRepository $repository = null): CryptocurrencyService
     {
-        $client = new CoinGeckoClient(new Client(['base_uri' => 'https://api.coingecko.com', 'handler' => HandlerStack::create($mock)]));
-
         return new CryptocurrencyService(
-            $client,
+            new CoingeckoClient($http),
             $repository ?? $this->createStub(CryptocurrencyRepository::class),
             $this->createStub(EntityManagerInterface::class),
             $logger ?? new NullLogger(),

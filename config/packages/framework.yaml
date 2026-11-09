@@ -14,6 +14,18 @@ framework:
     cookie_samesite: lax
     storage_factory_id: session.storage.factory.native
 
+  http_client:
+    scoped_clients:
+      coingecko.client:
+        base_uri: 'https://api.coingecko.com/api/v3/'
+        timeout: 10
+        # The free API is rate limited per minute: wait and retry instead of failing
+        retry_failed:
+          http_codes: [429]
+          max_retries: 3
+          delay: 60000
+          multiplier: 1
+
   #esi: true
   #fragments: true
   php_errors:

@@ -7,7 +7,6 @@
     "php": ">=8.3",
     "ext-ctype": "*",
     "ext-iconv": "*",
-    "codenix-sv/coingecko-api": "^1.0",
     "doctrine/doctrine-bundle": "^2.6",
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "^2.12",

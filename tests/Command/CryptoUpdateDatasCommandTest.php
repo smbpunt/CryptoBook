@@ -2,20 +2,18 @@
 
 namespace App\Tests\Command;
 
+use App\Coingecko\Client\CoingeckoClient;
 use App\Command\CryptoUpdateDatasCommand;
 use App\Repository\CryptocurrencyRepository;
 use App\Service\CryptocurrencyService;
 use App\Tests\Fixtures\Dataset;
-use Codenixsv\CoinGeckoApi\CoinGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class CryptoUpdateDatasCommandTest extends KernelTestCase
 {
@@ -25,24 +23,24 @@ final class CryptoUpdateDatasCommandTest extends KernelTestCase
         $data = Dataset::load($em);
 
         $paths = [];
-        $answer = static function (Request $request) use (&$paths): Response {
-            $id = basename($request->getUri()->getPath());
-            $paths[] = $request->getUri()->getPath();
+        $http = new MockHttpClient(static function (string $method, string $url) use (&$paths): MockResponse {
+            $path = (string) parse_url($url, \PHP_URL_PATH);
+            $id = basename($path);
+            $paths[] = $path;
 
             // ethereum fails: it must keep its data and not stop the other coins.
             if ('ethereum' === $id) {
-                return new Response(500);
+                return new MockResponse('', ['http_code' => 500]);
             }
 
-            return new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            return new JsonMockResponse([
                 'name' => ucfirst($id),
                 'symbol' => $id,
                 'image' => ['thumb' => "https://img/$id/thumb.png", 'small' => "https://img/$id/small.png", 'large' => "https://img/$id/large.png"],
                 'market_data' => ['current_price' => ['usd' => 42], 'market_cap' => ['usd' => 1000]],
-            ], \JSON_THROW_ON_ERROR));
-        };
-        $mock = new MockHandler([$answer, $answer, $answer]);
-        $client = new CoinGeckoClient(new Client(['base_uri' => 'https://api.coingecko.com', 'handler' => HandlerStack::create($mock)]));
+            ]);
+        }, 'https://api.coingecko.com/api/v3/');
+        $client = new CoingeckoClient($http);
         $service = new CryptocurrencyService($client, self::getContainer()->get(CryptocurrencyRepository::class), $em, new NullLogger());
 
         $tester = new CommandTester(new CryptoUpdateDatasCommand($service));
