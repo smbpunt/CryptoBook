@@ -2,9 +2,7 @@
 
 {% block title %}{{ parent() }} - DCA{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('collection') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'collection']) }}{% endblock %}
 
 {% block body %}
     <h1>Génerer vos positions DCA</h1>

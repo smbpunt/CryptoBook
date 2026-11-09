@@ -1,0 +1,99 @@
+/*
+ * Bootstrap theme overrides, replacing the former Sass variables:
+ * $primary: #fff, $modal-content-bg: #212529, $modal-header-border-color: #000,
+ * $form-check-input-checked-color: #ffc107, $list-group-*.
+ */
+:root {
+  --bs-primary: #fff;
+  --bs-primary-rgb: 255, 255, 255;
+  --bs-primary-text-emphasis: #666;
+  --bs-primary-bg-subtle: #fff;
+  --bs-primary-border-subtle: #fff;
+  --bs-link-color: #fff;
+  --bs-link-color-rgb: 255, 255, 255;
+  --bs-link-hover-color: #ccc;
+  --bs-link-hover-color-rgb: 204, 204, 204;
+  --bs-focus-ring-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary {
+  --bs-btn-color: #000;
+  --bs-btn-bg: #fff;
+  --bs-btn-border-color: #fff;
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: #fff;
+  --bs-btn-hover-border-color: #fff;
+  --bs-btn-focus-shadow-rgb: 217, 217, 217;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #fff;
+  --bs-btn-active-border-color: #fff;
+  --bs-btn-disabled-color: #000;
+  --bs-btn-disabled-bg: #fff;
+  --bs-btn-disabled-border-color: #fff;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+.form-check-input:checked,
+.form-check-input[type="checkbox"]:indeterminate {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.form-check-input:checked[type="checkbox"] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffc107' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.form-check-input:checked[type="radio"] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ffc107'/%3e%3c/svg%3e");
+}
+
+.modal {
+  --bs-modal-bg: #212529;
+  --bs-modal-header-border-color: #000;
+}
+
+.list-group {
+  --bs-list-group-bg: #212529;
+  --bs-list-group-color: #fff;
+  --bs-list-group-border-color: grey;
+}
+
+html {
+  background-color: #212529;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-reset {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  margin: auto;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.choices__item--selectable {
+  color: #000000;
+}
+
+.th-actions {
+  width: 250px;
+}
+
+.th-remove-collection {
+  width: 65px;
+}

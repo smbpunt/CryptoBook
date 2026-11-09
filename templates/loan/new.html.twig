@@ -2,11 +2,7 @@
 
 {% block title %}{{ parent() }} - Emprunts{% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('select2') }}
-    {{ encore_entry_script_tags('loan_form') }}
-    {{ encore_entry_script_tags('datepicker') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'select2', 'loan_form', 'datepicker']) }}{% endblock %}
 
 {% block body %}
     <h1>Ajout d'un emprunt</h1>

@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
-{% endblock %}
+{% block importmap %}{{ importmap(['app', 'home']) }}{% endblock %}
 
 {% block body %}
 
