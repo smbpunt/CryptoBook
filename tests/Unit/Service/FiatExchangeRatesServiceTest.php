@@ -36,6 +36,8 @@ final class FiatExchangeRatesServiceTest extends TestCase
 
         self::assertSame(1.0, $service->getUsdRateFromFavoriteCurrency());
         self::assertSame(100.0, $service->toFavoriteCurrency(100));
+        self::assertSame(100.0, $service->toUsd(100));
+        self::assertSame(100.0, $service->toUsd(100, $this->usd));
     }
 
     private function service(FiatCurrency $favorite): FiatExchangeRatesService
