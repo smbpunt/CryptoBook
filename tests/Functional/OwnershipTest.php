@@ -10,6 +10,7 @@ use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * A user cannot read, edit or delete the data of another user.
@@ -49,7 +50,12 @@ final class OwnershipTest extends WebTestCase
         \assert($entity instanceof OwnedInterface && method_exists($entity, 'getId'));
         $client->loginUser($data->admin);
 
-        $client->request($method, str_replace('{id}', (string) $entity->getId(), $path), ['_token' => 'whatever']);
+        // Accept any CSRF token, so the 403 can only come from the owner voter.
+        $csrf = $this->createStub(CsrfTokenManagerInterface::class);
+        $csrf->method('isTokenValid')->willReturn(true);
+        self::getContainer()->set('security.csrf.token_manager', $csrf);
+
+        $client->request($method, str_replace('{id}', (string) $entity->getId(), $path), ['_token' => 'any']);
 
         self::assertResponseStatusCodeSame(403);
         $em->clear();
