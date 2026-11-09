@@ -13,7 +13,7 @@ Bugs repérés au fil des phases, hors du périmètre de la phase en cours. Ils 
 | Tableau concaténé dans une chaîne dans le `catch` de `updatePrices()` : warning « Array to string conversion » si l'appel échoue | `src/Service/CryptocurrencyService.php` | ✅ |
 | `favoriteFiatCurrency` et `Deposit::fiatCurrency` (non nullables) jamais renseignés : `doctrine:fixtures:load` échoue | `src/DataFixtures/AppFixtures.php` | ✅ |
 | `toUsd()` lit `rates['USD']` de la devise favorite, absent pour un utilisateur en USD : `/strategy/dca/` plante dès qu'il a une stratégie DCA | `src/Service/FiatExchangeRatesService.php`, `templates/strategy_dca/index.html.twig` | ✅ |
-| `codenix-sv/coingecko-api` lève une classe d'exception inexistante si la réponse n'est pas du JSON (résolu par le client maison en phase 6) | `vendor/codenix-sv/coingecko-api` | ⬜ |
+| `codenix-sv/coingecko-api` lève une classe d'exception inexistante si la réponse n'est pas du JSON (résolu par le client maison en phase 6) | `vendor/codenix-sv/coingecko-api` | ✅ |
 
 ## Phase 4
 

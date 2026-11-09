@@ -16,7 +16,7 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 | 3 | Tests de non-régression | 8.3 | 6.3 | ✅ |
 | 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ✅ |
 | 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ✅ |
-| 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ⬜ |
+| 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ✅ |
 | 7 | Doctrine ORM 3 / DBAL 4 | 8.3 | 7.4 | ⬜ |
 | — | ⚠️ VPS de prod en PHP 8.4 | 8.4 | 7.4 | ⬜ |
 | 8 | Symfony 8.1 | 8.4 | 8.1 | ⬜ |
@@ -64,11 +64,12 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 - En prod, `bin/console asset-map:compile` à chaque déploiement (`importmap:install` passe par `composer install`)
 
 ### 6. Symfony 7.4
-- Passage direct 6.4 → 7.4 (possible grâce à l'étape 4)
-- Bundles tiers à jour (EasyAdmin, knp-menu, reset-password)
-- Client CoinGecko maison en remplacement de `codenix-sv/coingecko-api`
+- Passage direct 6.4 → 7.4 (possible grâce à l'étape 4), contrainte PHP relevée à `>=8.3`
+- Bundles tiers à jour (EasyAdmin 4.x, knp-menu, reset-password, monolog-bundle 4)
+- Client CoinGecko maison dans `src/Coingecko/` (client, DTO, exception) en remplacement de `codenix-sv/coingecko-api` ; client HTTP scopé `coingecko.client` qui attend et réessaie sur un 429 (rate limit)
 - `symfony/phpunit-bridge` + `SymfonyExtension` (comme gaia), absent jusque-là car la 6.x ne gère que PHPUnit 9
-- Zéro dépréciation
+- `recipes:update` : `APP_SECRET` sort de `.env` (à définir en prod dans `.env.local`), routes via `routing.controllers`
+- Zéro dépréciation, y compris indirecte dans les tests ; reste celle du template EasyAdmin 4 au warmup (phase 8)
 
 ### 7. Doctrine ORM 3
 - ORM 3 + DBAL 4, isolé dans ses propres commits
