@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\FiatCurrency;
 use App\Repository\FiatCurrencyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FiatExchangeRatesService
@@ -13,6 +14,8 @@ class FiatExchangeRatesService
         private readonly HttpClientInterface $client,
         private readonly FiatCurrencyRepository $fiatCurrencyRepository,
         private readonly Security $security,
+        #[Autowire(env: 'FIXER_API_KEY')]
+        private readonly string $fixerApiKey,
     ) {
     }
 
@@ -32,7 +35,7 @@ class FiatExchangeRatesService
             $response = $this->client->withOptions([
                 'base_uri' => 'https://api.apilayer.com/fixer/',
                 'headers' => [
-                    'apikey' => 'wBhE54673wmOYLv8esarT6o4UhkDvpsh',
+                    'apikey' => $this->fixerApiKey,
                 ],
             ])->request('GET', 'latest?base='.$currency->getFixerKey()."&symbols=$stringtos");
             $content = $response->toArray();

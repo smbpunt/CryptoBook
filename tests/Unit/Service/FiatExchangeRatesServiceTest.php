@@ -47,6 +47,6 @@ final class FiatExchangeRatesServiceTest extends TestCase
         $security = $this->createStub(Security::class);
         $security->method('getUser')->willReturn((new User())->setFavoriteFiatCurrency($favorite));
 
-        return new FiatExchangeRatesService(new MockHttpClient(), $repository, $security);
+        return new FiatExchangeRatesService(new MockHttpClient(), $repository, $security, 'test-key');
     }
 }
