@@ -51,7 +51,7 @@ class CryptocurrencyRepository extends ServiceEntityRepository
             ->setParameter('isStable', $isStable)
             ->select('SUM(p.remainingCoins) as totalsum', 'c as coin')
             ->groupBy('coin')
-            ->addOrderBy('c.mcapUsd', 'DESC')
+            ->addOrderBy('c.mcapUsd', \SortDirection::Descending)
             ->getQuery()->getResult();
     }
 

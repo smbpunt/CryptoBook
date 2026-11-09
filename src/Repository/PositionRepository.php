@@ -68,9 +68,9 @@ class PositionRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('isStable', $isStable)
             ->setParameter('isOpen', $isOpen)
-            ->addOrderBy('c.mcapUsd', 'DESC')
-            ->addOrderBy('p.openedAt', 'ASC')
-            ->addOrderBy('p.entryCost', 'DESC');
+            ->addOrderBy('c.mcapUsd', \SortDirection::Descending)
+            ->addOrderBy('p.openedAt', \SortDirection::Ascending)
+            ->addOrderBy('p.entryCost', \SortDirection::Descending);
 
         if ($cryptocurrency) {
             $qb->andWhere('p.coin = :coin')

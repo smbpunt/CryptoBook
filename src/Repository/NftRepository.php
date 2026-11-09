@@ -46,7 +46,7 @@ class NftRepository extends ServiceEntityRepository
             ->where('n.owner = :user')
             ->andWhere('n.soldOn IS '.($isSold ? 'NOT' : '').' NULL')
             ->setParameter('user', $user)
-            ->orderBy('n.purchasedOn', 'ASC')
+            ->orderBy('n.purchasedOn', \SortDirection::Ascending)
             ->getQuery()->getResult();
     }
 
