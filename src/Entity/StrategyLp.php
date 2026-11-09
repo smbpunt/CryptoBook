@@ -2,19 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trait\DescriptionTrait;
 use App\Repository\StrategyLpRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StrategyLpRepository::class)]
-#[ApiResource(
-    collectionOperations: ['GET', 'POST'],
-    itemOperations: ['GET', 'PUT', 'DELETE'],
-    denormalizationContext: ['disable_type_enforcement' => true, 'groups' => ['lp:write']],
-    normalizationContext: ['groups' => ['lp:list', 'lp:item']]
-)]
 class StrategyLp
 {
     use DescriptionTrait;
@@ -22,52 +14,41 @@ class StrategyLp
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['lp:list', 'lp:item'])]
     private $coin1;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['lp:list', 'lp:item'])]
     private $coin2;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['lp:list', 'lp:item'])]
     private $dapp;
 
     private $blockchain;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['lp:list', 'lp:item'])]
     private $startAt;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $priceCoin1;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $priceCoin2;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $nbCoin1;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $nbCoin2;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(['lp:list', 'lp:item'])]
     private $lpDeposit;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['lp:list', 'lp:item'])]
     private $apr;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'strategyLps')]
