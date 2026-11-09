@@ -85,7 +85,7 @@ Tests fonctionnels : `WebTestCase` (`tests/Functional/`, dont un smoke test de t
 
 ## Données
 
-`init_bdd.sql` contient de vrais emails et hashs de mots de passe. Ne jamais en copier quoi que ce soit dans les fixtures, les tests ou la doc : utiliser `src/DataFixtures` avec Faker.
+Ne jamais mettre de vraies données (emails, hashs de mots de passe) dans les fixtures, les tests ou la doc : utiliser `src/DataFixtures` avec Faker.
 
 ## Vérifier plutôt que deviner
 
