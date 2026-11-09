@@ -2,14 +2,6 @@
 
 namespace App\Tests\Functional;
 
-use App\Controller\Admin\BlockchainCrudController;
-use App\Controller\Admin\CryptocurrencyCrudController;
-use App\Controller\Admin\DappCrudController;
-use App\Controller\Admin\DepositTypeCrudController;
-use App\Controller\Admin\ExchangeCrudController;
-use App\Controller\Admin\FiatCurrencyCrudController;
-use App\Controller\Admin\TypeProjectCrudController;
-use App\Controller\Admin\UserCrudController;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -141,22 +133,21 @@ final class SmokeTest extends WebTestCase
         $this->client->request('GET', '/admin');
         self::assertResponseRedirects();
 
-        $cruds = [
-            BlockchainCrudController::class => $this->data->ethereum->getId(),
-            CryptocurrencyCrudController::class => $this->data->btc->getId(),
-            DappCrudController::class => $this->data->aave->getId(),
-            DepositTypeCrudController::class => $this->data->depositType->getId(),
-            ExchangeCrudController::class => $this->data->exchange->getId(),
-            FiatCurrencyCrudController::class => $this->data->usd->getId(),
-            TypeProjectCrudController::class => $this->data->typeProject->getId(),
-            UserCrudController::class => $this->data->user->getId(),
+        $entities = [
+            'blockchain' => $this->data->ethereum->getId(),
+            'cryptocurrency' => $this->data->btc->getId(),
+            'dapp' => $this->data->aave->getId(),
+            'deposit-type' => $this->data->depositType->getId(),
+            'exchange' => $this->data->exchange->getId(),
+            'fiat-currency' => $this->data->usd->getId(),
+            'type-project' => $this->data->typeProject->getId(),
+            'user' => $this->data->user->getId(),
         ];
 
-        foreach ($cruds as $crud => $id) {
-            foreach (['index' => [], 'new' => [], 'edit' => ['entityId' => $id]] as $action => $params) {
-                $url = '/admin?'.http_build_query(['crudAction' => $action, 'crudControllerFqcn' => $crud] + $params);
+        foreach ($entities as $entity => $id) {
+            foreach (["/admin/$entity", "/admin/$entity/new", "/admin/$entity/$id/edit"] as $url) {
                 $this->client->request('GET', $url);
-                self::assertResponseIsSuccessful("$crud::$action");
+                self::assertResponseIsSuccessful($url);
             }
         }
     }
