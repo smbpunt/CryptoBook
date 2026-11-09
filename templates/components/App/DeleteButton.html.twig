@@ -1,0 +1,12 @@
+{%- props
+    ## string URL of the delete action (POST).
+    url,
+    ## string CSRF token id for the delete action.
+    tokenId
+-%}
+<form method="post" action="{{ url }}" onsubmit="return confirm('Supprimer cet élément ?');" {{ attributes.defaults({class: 'inline-flex'}) }}>
+    <input type="hidden" name="_token" value="{{ csrf_token(tokenId) }}">
+    <twig:Button type="submit" variant="destructive">
+        <twig:ux:icon name="lucide:trash-2" data-icon="inline-start"/> Supprimer
+    </twig:Button>
+</form>

@@ -5,7 +5,8 @@
 {% block importmap %}{{ importmap(['app', 'select2', 'collection']) }}{% endblock %}
 
 {% block body %}
-    <h1>Edition d'un projet</h1>
-
-    {{ include('project_monitoring/_form.html.twig', {'button_label': 'Modifier'}) }}
+    <twig:App:PageHeader title="Edition d'un projet"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('project_monitoring/_form.html.twig', {button_label: 'Modifier'}) }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

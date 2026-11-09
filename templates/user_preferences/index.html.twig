@@ -3,14 +3,14 @@
 {% block title %}{{ parent() }} - Préférences{% endblock %}
 
 {% block body %}
-    <h1>Préférences</h1>
+    <twig:App:PageHeader title="Préférences"/>
 
-    {{ form_start(form) }}
-        <div class="row mb-2">
-            {{ form_label(form.favoriteFiatCurrency, 'Monnaie FIAT préférée') }}
-            {{ form_widget(form.favoriteFiatCurrency) }}
-        </div>
-    <button class="btn btn-light">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
-
+    <twig:Card class="max-w-md">
+        <twig:Card:Content>
+            {{ form_start(form) }}
+                {{ form_row(form.favoriteFiatCurrency, {label: 'Monnaie FIAT préférée'}) }}
+                <twig:Button type="submit">{{ button_label|default('Enregistrer') }}</twig:Button>
+            {{ form_end(form) }}
+        </twig:Card:Content>
+    </twig:Card>
 {% endblock %}

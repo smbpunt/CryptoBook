@@ -1,13 +1,7 @@
-{% if nft.rank %}
-    <p>Rank : {{ nft.rank }}</p>
-{% endif %}
-<p>Supply : {{ nft.supply }}</p>
-{% if nft.purchasedOn %}
-    <p>Acheté le : {{ nft.purchasedOn|date('d/m/Y') }}</p>
-{% endif %}
-{% if nft.soldOn %}
-    <p>Vendu le : {{ nft.soldOn|date('d/m/Y') }}</p>
-{% endif %}
-{% if nft.description is not empty %}
-    <p>Description : {{ nft.description }}</p>
-{% endif %}
+<div class="grid gap-1 text-sm">
+    {% if nft.rank %}<p>Rank : {{ nft.rank }}</p>{% endif %}
+    <p>Supply : {{ nft.supply }}</p>
+    {% if nft.purchasedOn %}<p>Acheté le : {{ nft.purchasedOn|date('d/m/Y') }}</p>{% endif %}
+    {% if nft.soldOn %}<p>Vendu le : {{ nft.soldOn|date('d/m/Y') }}</p>{% endif %}
+    {% if nft.description is not empty %}<p>Description : {{ nft.description }}</p>{% endif %}
+</div>

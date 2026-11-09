@@ -1,0 +1,17 @@
+{%- props
+    ## string URL returning the HTML fragment to display.
+    url,
+    ## string Dialog title.
+    title = 'Informations'
+-%}
+<twig:Button
+    variant="ghost"
+    size="icon-sm"
+    aria-label="{{ title }}"
+    data-action="dialog#open remote-dialog#load"
+    data-remote-dialog-url-param="{{ url }}"
+    data-remote-dialog-title-param="{{ title }}"
+    {{ ...attributes }}
+>
+    <twig:ux:icon name="lucide:info"/>
+</twig:Button>

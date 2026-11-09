@@ -18,8 +18,6 @@ class MenuBuilder
     {
         $menu = $this->factory->createItem('root');
 
-        $menu->setChildrenAttribute('class', 'navbar-nav');
-
         if ($this->security->getUser()) {
             $menu->addChild('Accueil', ['route' => 'home']);
             $menu->addChild('Position', ['route' => 'app_position_index']);
@@ -39,11 +37,6 @@ class MenuBuilder
         } else {
             $menu->addChild('Login', ['route' => 'app_login']);
             $menu->addChild('Register', ['route' => 'app_register']);
-        }
-
-        foreach ($menu as $child) {
-            $child->setLinkAttribute('class', 'nav-link')
-                ->setAttribute('class', 'nav-item');
         }
 
         return $menu;

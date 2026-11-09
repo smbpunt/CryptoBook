@@ -1,34 +1,19 @@
-<div class="container">
-    {{ form_start(form) }}
-
-
-    <div class="row mb-2">
-        <div class="col-md-3 align-self-end">
-            {{ form_label(form.depositedAt, 'Déposé le') }}
-            {{ form_widget(form.depositedAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
-        </div>
-        <div class="col-md-3 align-self-end">
-            {{ form_label(form.exchange, 'Sur') }}
-            {{ form_widget(form.exchange) }}
-        </div>
+{{ form_start(form) }}
+    <div class="grid gap-x-4 md:grid-cols-2">
+        {{ form_row(form.depositedAt, {label: 'Déposé le'}) }}
+        {{ form_row(form.exchange, {label: 'Sur'}) }}
     </div>
-
-
-    <div class="row mb-2">
-        <div class="col-md-3 align-self-end">
+    <div class="grid gap-x-4 md:grid-cols-2">
+        <twig:Form:Item class="mb-4">
             {{ form_label(form.amount, 'Montant') }}
-            <div class="input-group">
-                {{ form_widget(form.amount, { 'attr': {'placeholder': 'ex: 150'} }) }}
-                {{ form_widget(form.fiatCurrency) }}
+            <div class="flex gap-2">
+                {{ form_widget(form.amount, {attr: {placeholder: 'ex: 150'}}) }}
+                {{ form_widget(form.fiatCurrency, {attr: {class: 'w-28 shrink-0'}}) }}
             </div>
-        </div>
-        <div class="col-md-3 align-self-end">
-            {{ form_label(form.type, 'Type') }}
-            {{ form_widget(form.type) }}
-        </div>
+            {{ form_errors(form.amount) }}
+            {{ form_errors(form.fiatCurrency) }}
+        </twig:Form:Item>
+        {{ form_row(form.type, {label: 'Type'}) }}
     </div>
-
-
-    <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
-</div>
+    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
+{{ form_end(form) }}

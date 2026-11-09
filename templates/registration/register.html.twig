@@ -1,48 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    <twig:App:AuthCard title="Veuillez vous inscrire">
+        {% for flashError in app.flashes('verify_email_error') %}
+            <twig:Alert variant="destructive" class="mb-4">
+                <twig:Alert:Description>{{ flashError }}</twig:Alert:Description>
+            </twig:Alert>
+        {% endfor %}
 
-    <h1>Register</h1>
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {label: 'Mot de passe'}) }}
+            {{ form_row(registrationForm.agreeTerms) }}
 
-    <div class="text-center">
-        <main class="form-signin">
-            {{ form_start(registrationForm) }}
+            <twig:Alert class="mb-4">
+                <twig:ux:icon name="lucide:mail-warning"/>
+                <twig:Alert:Description>
+                    Vous allez recevoir un mail d'une adresse gmail pour vérifier votre adresse : pensez à regarder dans vos indésirables.
+                </twig:Alert:Description>
+            </twig:Alert>
 
-            <img class="mb-4" src="{{ asset('images/btc.png') }}" alt="">
-            <h1 class="h3 mb-3 fw-normal">Veuillez vous inscrire</h1>
-
-            <div class="form-floating">
-                {{ form_row(registrationForm.email) }}
-            </div>
-
-            <div class="form-floating">
-                {{ form_row(registrationForm.plainPassword, {
-                    label: 'Password'
-                }) }}
-            </div>
-
-            <div class=" text-start text-white">
-                {{ form_row(registrationForm.agreeTerms) }}
-            </div>
-
-            <div class="form-floating text-warning">
-                <p>Attention, vous allez recevoir un mail d'une adresse gmail pour vérifier votre mail. à terme, ça
-                    devrait changer. Mais du
-                    coup, vérifiez vos indésirables.</p>
-            </div>
-
-
-            <button type="submit" class="btn btn-warning">Register</button>
-            {{ form_end(registrationForm) }}
-        </main>
-    </div>
-
-
-
-
+            <twig:Button type="submit" class="w-full">Register</twig:Button>
+        {{ form_end(registrationForm) }}
+    </twig:App:AuthCard>
 {% endblock %}

@@ -3,50 +3,53 @@
 {% block title %}{{ parent() }} - Dépôts{% endblock %}
 
 {% block body %}
-    <div class="row mb-2">
-        <div class="col">
-            <h1>Mes dépôts</h1>
-        </div>
-        <div class="col text-end">
-            <a href="{{ path('app_deposit_new') }}" class="btn btn-warning m-2">Ajouter un dépôt</a>
-        </div>
+    <twig:App:PageHeader title="Mes dépôts">
+        <twig:Button as="a" href="{{ path('app_deposit_new') }}">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter un dépôt
+        </twig:Button>
+    </twig:App:PageHeader>
+
+    <div class="mb-6 grid grid-cols-2 gap-4 md:max-w-md">
+        <twig:App:Stat label="Total USD">{{ totalUsd|number_format(0, '.', ' ') }} $</twig:App:Stat>
+        <twig:App:Stat label="Total {{ app.user.favoriteFiatCurrency.symbol }}">{{ fiatRates.toFavoriteCurrency(totalUsd, app.user)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</twig:App:Stat>
     </div>
 
-    <p>Total : {{ totalUsd|number_format(0, '.', ' ') }} $</p>
-    <p>Total : {{ fiatRates.toFavoriteCurrency(totalUsd, app.user)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</p>
-    <table class="table table-bordered table-striped table-responsive-md table-dark">
-        <thead>
-        <tr>
-            <th>Montant</th>
-            <th>Déposer le</th>
-            <th>Sur</th>
-            <th>Par</th>
-            <th class="th-actions">actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for deposit in deposits %}
-            <tr>
-                <td class="text-white align-middle text-end">{{ deposit.amount|round|number_format(0, '.', ' ') }} {{ deposit.fiatCurrency.symbol }}</td>
-                <td class="text-white align-middle text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') : '' }}</td>
-                <td class="text-white align-middle">
-                    {% if deposit.exchange is not null and deposit.exchange.url is not null and deposit.exchange.url is not empty %}
-                        <a target="_blank" href="{{ deposit.exchange.url }}">{{ deposit.exchange }}</a>
-                    {% else %}
-                        {{ deposit.exchange }}
-                    {% endif %}
-                </td>
-                <td class="text-white align-middle">{{ deposit.type }}</td>
-                <td class="text-white align-middle text-center">
-                    {{ include('deposit/_indexactions_form.html.twig') }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+    <twig:Table>
+        <twig:Table:Header>
+            <twig:Table:Row>
+                <twig:Table:Head class="text-end">Montant</twig:Table:Head>
+                <twig:Table:Head class="text-end">Déposé le</twig:Table:Head>
+                <twig:Table:Head>Sur</twig:Table:Head>
+                <twig:Table:Head>Par</twig:Table:Head>
+                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+            </twig:Table:Row>
+        </twig:Table:Header>
+        <twig:Table:Body>
+            {% for deposit in deposits %}
+                <twig:Table:Row>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ deposit.amount|round|number_format(0, '.', ' ') }} {{ deposit.fiatCurrency.symbol }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ deposit.depositedAt ? deposit.depositedAt|date('d/m/Y') }}</twig:Table:Cell>
+                    <twig:Table:Cell>
+                        {% if deposit.exchange is not null and deposit.exchange.url is not empty %}
+                            <a class="underline-offset-4 hover:underline" target="_blank" href="{{ deposit.exchange.url }}">{{ deposit.exchange }}</a>
+                        {% else %}
+                            {{ deposit.exchange }}
+                        {% endif %}
+                    </twig:Table:Cell>
+                    <twig:Table:Cell>{{ deposit.type }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">
+                        <twig:App:RowActions
+                            editUrl="{{ path('app_deposit_edit', {id: deposit.id}) }}"
+                            deleteUrl="{{ path('app_deposit_delete', {id: deposit.id}) }}"
+                            tokenId="delete{{ deposit.id }}"
+                        />
+                    </twig:Table:Cell>
+                </twig:Table:Row>
+            {% else %}
+                <twig:Table:Row>
+                    <twig:Table:Cell colspan="5" class="py-6 text-center text-muted-foreground">Aucun dépôt.</twig:Table:Cell>
+                </twig:Table:Row>
+            {% endfor %}
+        </twig:Table:Body>
+    </twig:Table>
 {% endblock %}

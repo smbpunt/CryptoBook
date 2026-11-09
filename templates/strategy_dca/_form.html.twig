@@ -1,49 +1,29 @@
 {% import _self as formMacros %}
 
 {% macro part_prototype(part) %}
-    <tr class="js-item">
-        <td class="text-center align-middle">
-            <button type="button" class="js-remove btn btn-secondary">-</button>
-        </td>
-        <td class="text-white align-middle">{{ form_widget(part.percent) }}</td>
-        <td class="text-white align-middle">{{ form_widget(part.coin) }}</td>
+    <tr class="js-item border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+        <td class="p-2">{{ form_widget(part.percent) }}</td>
+        <td class="p-2">{{ form_widget(part.coin) }}</td>
     </tr>
 {% endmacro %}
 
-<div class="container">
-    {{ form_start(form) }}
-    <div class="row mb-2">
-        <div class="col-md-2 align-self-end">
-            {{ form_label(form.fiatToDcaEur, "Provenance FIAT") }}
-
-            <div class="input-group">
-                {{ form_widget(form.fiatToDcaEur) }}
-                <span class="input-group-text">€</span>
-            </div>
-        </div>
-        <div class="col-md-2 align-self-end">
-            {{ form_label(form.farmingToDcaUsd, "Provenance Stable") }}
-
-            <div class="input-group">
-                {{ form_widget(form.farmingToDcaUsd) }}
-                <span class="input-group-text">$</span>
-            </div>
-        </div>
+{{ form_start(form) }}
+    <div class="grid gap-x-4 md:grid-cols-4">
+        {{ form_row(form.fiatToDcaEur, {label: 'Provenance FIAT', addon: '€'}) }}
+        {{ form_row(form.farmingToDcaUsd, {label: 'Provenance Stable', addon: '$'}) }}
     </div>
 
-
-    <div class="m-3">
-        <button type="button" class="add_item_link btn btn-secondary" data-wrapper="parts-wrapper">
-            Ajouter une allocation
-        </button>
-    </div>
-    <table class="table table-bordered table-striped table-responsive-md table-dark">
-        <thead>
-        <tr>
-            <th class="th-remove-collection" scope="col"></th>
-            <th scope="col">%</th>
-            <th scope="col">coin</th>
-        </tr>
+    <twig:Button variant="outline" class="add_item_link mb-2" data-wrapper="parts-wrapper">
+        <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une allocation
+    </twig:Button>
+    <table class="mb-4 w-full max-w-2xl text-sm">
+        <thead class="border-b">
+            <tr>
+                <th class="w-12"></th>
+                <th class="h-10 px-2 text-start font-medium">%</th>
+                <th class="h-10 px-2 text-start font-medium">Coin</th>
+            </tr>
         </thead>
         <tbody class="parts-wrapper"
                data-index="{{ form.parts|length }}"
@@ -54,7 +34,5 @@
         </tbody>
     </table>
 
-    <button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
-
-    {{ form_end(form) }}
-</div>
+    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
+{{ form_end(form) }}

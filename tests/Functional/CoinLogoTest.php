@@ -33,7 +33,7 @@ final class CoinLogoTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertCount(0, $crawler->filter('img[alt^="Logo"]'));
-        self::assertGreaterThan(0, $crawler->filter('i.bi-coin')->count());
+        self::assertGreaterThan(0, $crawler->filter('svg[data-slot="coin-fallback"]')->count());
     }
 
     public function testRendersLogoWithUrl(): void

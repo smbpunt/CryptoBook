@@ -2,131 +2,91 @@
 
 {% block title %}NFT{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'tab', 'modal']) }}{% endblock %}
-
 {% block body %}
+    <twig:App:PageHeader title="Mes NFT" description="{{ nfts_sold|length > 0 ? 'Résultat : ' ~ total_benef|round(2) ~ ' $' }}">
+        <twig:Button as="a" href="{{ path('app_nft_new') }}">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter
+        </twig:Button>
+    </twig:App:PageHeader>
 
-    {{ include('modal_informations.html.twig') }}
+    <twig:App:InfoDialog>
+        <twig:Tabs defaultValue="live">
+            <twig:Tabs:List>
+                <twig:Tabs:Trigger value="live">Live ({{ nfts|length }})</twig:Tabs:Trigger>
+                <twig:Tabs:Trigger value="sold">Vendu ({{ nfts_sold|length }})</twig:Tabs:Trigger>
+            </twig:Tabs:List>
 
-    <div class="row mb-2">
-        <div class="col">
-            <h1>Mes NFT</h1>
-        </div>
-        <div class="col text-end">
-            <a href="{{ path('app_nft_new') }}" class="btn btn-warning m-2">Ajouter</a>
-        </div>
-    </div>
+            <twig:Tabs:Content value="live">
+                <twig:Table>
+                    <twig:Table:Header>
+                        <twig:Table:Row>
+                            <twig:Table:Head class="w-10"/>
+                            <twig:Table:Head class="text-end">Acheté le</twig:Table:Head>
+                            <twig:Table:Head>Collection</twig:Table:Head>
+                            <twig:Table:Head>ID</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Prix crypto</twig:Table:Head>
+                            <twig:Table:Head>Crypto</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Prix dollar</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                        </twig:Table:Row>
+                    </twig:Table:Header>
+                    <twig:Table:Body>
+                        {% for nft in nfts %}
+                            <twig:Table:Row>
+                                <twig:Table:Cell><twig:App:InfoButton url="{{ path('app_nft_ajax_infos', {id: nft.id}) }}" title="{{ nft.collection }} #{{ nft.num }}"/></twig:Table:Cell>
+                                <twig:Table:Cell class="text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') }}</twig:Table:Cell>
+                                <twig:Table:Cell>{{ nft.collection }}</twig:Table:Cell>
+                                <twig:Table:Cell>{{ nft.num }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ nft.priceCrypto }}</twig:Table:Cell>
+                                <twig:Table:Cell>{{ nft.cryptocurrency.symbol|upper }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end">
+                                    <twig:App:RowActions editUrl="{{ path('app_nft_edit', {id: nft.id}) }}" deleteUrl="{{ path('app_nft_delete', {id: nft.id}) }}" tokenId="delete{{ nft.id }}"/>
+                                </twig:Table:Cell>
+                            </twig:Table:Row>
+                        {% else %}
+                            <twig:Table:Row><twig:Table:Cell colspan="8" class="py-6 text-center text-muted-foreground">Aucun NFT.</twig:Table:Cell></twig:Table:Row>
+                        {% endfor %}
+                    </twig:Table:Body>
+                </twig:Table>
+            </twig:Tabs:Content>
 
-    {% if nfts_sold|length > 0 %}
-        <div class="row mb-3">
-            <div class="col">Résultat : {{ total_benef|round(2) }} $</div>
-        </div>
-    {% endif %}
-
-    <ul class="nav nav-tabs navbar-dark" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="live-tab" data-bs-toggle="tab" data-bs-target="#live"
-                    type="button"
-                    role="tab" aria-controls="live" aria-selected="true">Live ({{ nfts|length }})
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="sold-tab" data-bs-toggle="tab" data-bs-target="#sold" type="button"
-                    role="tab" aria-controls="sold" aria-selected="false">Vendu ({{ nfts_sold|length }})
-            </button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="live" role="tabpanel" aria-labelledby="live-tab">
-            <table class="table table-bordered table-striped table-responsive-md table-dark">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Acheté le</th>
-                    <th>Collection</th>
-                    <th>ID</th>
-                    <th>Prix Crypto</th>
-                    <th>Crypto</th>
-                    <th>Prix Dollar</th>
-                    <th class="th-actions">actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for nft in nfts %}
-                    <tr>
-                        <td class="text-center align-middle">
-                            <button type="button"
-                                    class="btn btn-sm btn-light rounded-circle button-infos"
-                                    data-id="{{ nft.id }}"
-                                    data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
-                                    data-url="{{ path('app_nft_ajax_infos', {'id': nft.id}) }}">
-                                <i class="bi bi-info"></i>
-                            </button>
-                        </td>
-                        <td class="align-middle text-white text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white">{{ nft.collection }}</td>
-                        <td class="align-middle text-white">{{ nft.num }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceCrypto }}</td>
-                        <td class="align-middle text-white">{{ nft.cryptocurrency.symbol|upper }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</td>
-                        <td class="text-white text-center align-middle">
-                            {{ include('nft/_indexactions_form.html.twig') }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="13">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="sold-tab">
-            <table class="table table-bordered table-striped table-responsive-md table-dark">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Acheté le</th>
-                    <th>Collection</th>
-                    <th>Prix d'achat</th>
-                    <th>SoldOn</th>
-                    <th>PriceSoldUsd</th>
-                    <th>PercentSaleFees</th>
-                    <th>Gains/Pertes</th>
-                    <th class="th-actions">actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for nft in nfts_sold %}
-                    <tr>
-                        <td class="text-center align-middle">
-                            <button type="button"
-                                    class="btn btn-sm btn-light rounded-circle button-infos"
-                                    data-id="{{ nft.id }}"
-                                    data-titlemodal="{{ nft.collection }} #{{ nft.num }}"
-                                    data-url="{{ path('app_nft_ajax_infos', {'id': nft.id}) }}">
-                                <i class="bi bi-info"></i>
-                            </button>
-                        </td>
-                        <td class="align-middle text-white text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white">{{ nft.collection }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</td>
-                        <td class="align-middle text-white text-end">{{ nft.soldOn ? nft.soldOn|date('d/m/Y') : '' }}</td>
-                        <td class="align-middle text-white text-end">{{ nft.priceSoldUsd|number_format(0, '.', ' ') }} $</td>
-                        <td class="align-middle text-white text-end">{{ nft.percentSaleFees }} %</td>
-                        <td class="align-middle text-white text-end">{{ nft.benefice|number_format(0, '.', ' ') }} $</td>
-                        <td class="text-white text-center align-middle">
-                            {{ include('nft/_indexactions_form.html.twig') }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="13">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+            <twig:Tabs:Content value="sold">
+                <twig:Table>
+                    <twig:Table:Header>
+                        <twig:Table:Row>
+                            <twig:Table:Head class="w-10"/>
+                            <twig:Table:Head class="text-end">Acheté le</twig:Table:Head>
+                            <twig:Table:Head>Collection</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Prix d'achat</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Vendu le</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Prix de vente</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Frais</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Gains/Pertes</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                        </twig:Table:Row>
+                    </twig:Table:Header>
+                    <twig:Table:Body>
+                        {% for nft in nfts_sold %}
+                            <twig:Table:Row>
+                                <twig:Table:Cell><twig:App:InfoButton url="{{ path('app_nft_ajax_infos', {id: nft.id}) }}" title="{{ nft.collection }} #{{ nft.num }}"/></twig:Table:Cell>
+                                <twig:Table:Cell class="text-end">{{ nft.purchasedOn ? nft.purchasedOn|date('d/m/Y') }}</twig:Table:Cell>
+                                <twig:Table:Cell>{{ nft.collection }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ nft.priceUsd|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end">{{ nft.soldOn ? nft.soldOn|date('d/m/Y') }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ nft.priceSoldUsd|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ nft.percentSaleFees }} %</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums {{ nft.benefice > 0 ? 'text-positive' : 'text-negative' }}">{{ nft.benefice|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end">
+                                    <twig:App:RowActions editUrl="{{ path('app_nft_edit', {id: nft.id}) }}" deleteUrl="{{ path('app_nft_delete', {id: nft.id}) }}" tokenId="delete{{ nft.id }}"/>
+                                </twig:Table:Cell>
+                            </twig:Table:Row>
+                        {% else %}
+                            <twig:Table:Row><twig:Table:Cell colspan="9" class="py-6 text-center text-muted-foreground">Aucun NFT vendu.</twig:Table:Cell></twig:Table:Row>
+                        {% endfor %}
+                    </twig:Table:Body>
+                </twig:Table>
+            </twig:Tabs:Content>
+        </twig:Tabs>
+    </twig:App:InfoDialog>
 {% endblock %}

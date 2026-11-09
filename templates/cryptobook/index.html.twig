@@ -3,163 +3,122 @@
 {% block importmap %}{{ importmap(['app', 'home']) }}{% endblock %}
 
 {% block body %}
+    {% set fiat = app.user.favoriteFiatCurrency.symbol %}
+    {% set totalWalletUsd = totalUsd + totalStableUsd %}
+    {% set resultatUsd = totalWalletUsd - totalDepositUsd %}
+    {% set percent = totalDepositUsd > 0 ? totalWalletUsd * 100 / totalDepositUsd - 100 : 0 %}
+    {% set totalYearFarmingEur = fiatRates.toFavoriteCurrency(totalYearFarmingUsd, app.user) %}
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md">
-                    <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-                        <thead>
-                        <tr>
-                            <th>Bilan</th>
-                            <th class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</th>
-                            <th class="text-end">1 {{ app.user.favoriteFiatCurrency.symbol }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="text-white">Investi</td>
-                            <td class="text-white text-end">{{ totalDepositUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalDepositUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Wallet crypto</td>
-                            <td class="text-white text-end">{{ totalUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Wallet stable</td>
-                            <td class="text-white text-end">{{ totalStableUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalStableUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Total</td>
-                            {% set totalWalletUsd = totalUsd+totalStableUsd %}
-                            <td class="text-white text-end">{{ totalWalletUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ fiatRates.toFavoriteCurrency(totalWalletUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            {% set resultatUsd = totalWalletUsd-totalDepositUsd %}
-                            {% set classSuccess = resultatUsd > 0 ? 'text-success' : 'text-warning' %}
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="grid content-start gap-6 md:grid-cols-2">
+            <twig:Card>
+                <twig:Card:Header><twig:Card:Title>Bilan</twig:Card:Title></twig:Card:Header>
+                <twig:Card:Content>
+                    <twig:Table>
+                        <twig:Table:Header>
+                            <twig:Table:Row>
+                                <twig:Table:Head/>
+                                <twig:Table:Head class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</twig:Table:Head>
+                                <twig:Table:Head class="text-end">1 {{ fiat }}</twig:Table:Head>
+                            </twig:Table:Row>
+                        </twig:Table:Header>
+                        <twig:Table:Body>
+                            {% for label, usd in {'Investi': totalDepositUsd, 'Wallet crypto': totalUsd, 'Wallet stable': totalStableUsd, 'Total': totalWalletUsd} %}
+                                <twig:Table:Row>
+                                    <twig:Table:Cell class="text-muted-foreground">{{ label }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ usd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(usd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                </twig:Table:Row>
+                            {% endfor %}
+                            <twig:Table:Row class="{{ resultatUsd > 0 ? 'text-positive' : 'text-negative' }}">
+                                <twig:Table:Cell class="text-muted-foreground">Résultat</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ resultatUsd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(resultatUsd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                            </twig:Table:Row>
+                            <twig:Table:Row>
+                                <twig:Table:Cell class="text-muted-foreground">Résultat %</twig:Table:Cell>
+                                <twig:Table:Cell colspan="2" class="text-end tabular-nums {{ percent > 0 ? 'text-positive' : 'text-negative' }}">{{ percent|round|number_format(0, '.', ' ') }} %</twig:Table:Cell>
+                            </twig:Table:Row>
+                            <twig:Table:Row>
+                                <twig:Table:Cell class="text-muted-foreground">Total emprunt</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ totalLoanUsd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(totalLoanUsd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                            </twig:Table:Row>
+                        </twig:Table:Body>
+                    </twig:Table>
+                </twig:Card:Content>
+            </twig:Card>
 
-                            <td class="text-white">Résultat</td>
-                            <td class="text-end {{ classSuccess }}">
-                                {{ resultatUsd|round|number_format(0, '.', ' ') }} $
-                            </td>
-                            <td class="text-end {{ classSuccess }}">
-                                {{ fiatRates.toFavoriteCurrency(resultatUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}
-                            </td>
-                        </tr>
+            <div class="grid content-start gap-6">
+                <twig:Card>
+                    <twig:Card:Header><twig:Card:Title>Farming</twig:Card:Title></twig:Card:Header>
+                    <twig:Card:Content>
+                        <twig:Table>
+                            <twig:Table:Header>
+                                <twig:Table:Row>
+                                    <twig:Table:Head/>
+                                    <twig:Table:Head class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">1 {{ fiat }}</twig:Table:Head>
+                                </twig:Table:Row>
+                            </twig:Table:Header>
+                            <twig:Table:Body>
+                                {% for label, divisor in {'Jour': 365, 'Semaine': 52, 'Mois': 12, 'Année': 1} %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell class="text-muted-foreground">{{ label }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (totalYearFarmingUsd / divisor)|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (totalYearFarmingEur / divisor)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% endfor %}
+                            </twig:Table:Body>
+                        </twig:Table>
+                    </twig:Card:Content>
+                </twig:Card>
 
-                        <tr>
-                            {% set percent = totalDepositUsd > 0 ? totalWalletUsd*100/totalDepositUsd-100 : 0 %}
-                            {% set percentClassSuccess = percent > 0 ? 'text-success' : 'text-warning' %}
-
-                            <td class="text-white">Résultat %</td>
-                            <td colspan="2" class="text-end {{ percentClassSuccess }}">
-                                {{ (percent)|round|number_format(0, '.', ' ') }} %
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td class="text-white">Total emprunt</td>
-                            <td class="text-end">
-                                {{ totalLoanUsd|round|number_format(0, '.', ' ') }}$
-                            </td>
-                            <td class="text-end">
-                                {{ fiatRates.toFavoriteCurrency(totalLoanUsd, app.user)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md">
-                    {% set totalYearFarmingEur = fiatRates.toFavoriteCurrency(totalYearFarmingUsd, app.user) %}
-                    <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-                        <thead>
-                        <tr>
-                            <th>Farming</th>
-                            <th class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</th>
-                            <th class="text-end">1 {{ app.user.favoriteFiatCurrency.symbol }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="text-white">Jour</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingUsd/356)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/356)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Semaine</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingUsd/52)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/52)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Mois</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingUsd/12)|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ (totalYearFarmingEur/12)|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-white">Année</td>
-                            <td class="text-white text-end">{{ totalYearFarmingUsd|round|number_format(0, '.', ' ') }} $</td>
-                            <td class="text-white text-end">{{ totalYearFarmingEur|round|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-                        <thead>
-                        <tr>
-                            <th colspan="4">Wallet Crypto</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for position in positions %}
-                            <tr>
-                                <td class="text-white text-center align-middle">
-                                    {{ include('_coin_logo.html.twig', {url: position.urlImgThumb, name: position.libelle}) }}
-                                </td>
-                                <td class="text-white text-end align-middle">
-                                    {{ position.totalsum|round(2)|number_format(2, '.', ' ') }}
-                                </td>
-                                <td class="text-white align-middle">{{ position.symbol|upper }}
-                                </td>
-                                <td class="text-white text-end align-middle">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }} $
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                <twig:Card>
+                    <twig:Card:Header><twig:Card:Title>Wallet crypto</twig:Card:Title></twig:Card:Header>
+                    <twig:Card:Content>
+                        <twig:Table>
+                            <twig:Table:Body>
+                                {% for position in positions %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell class="w-8 text-center"><twig:App:CoinLogo url="{{ position.urlImgThumb }}" name="{{ position.libelle }}"/></twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ position.totalsum|round(2)|number_format(2, '.', ' ') }}</twig:Table:Cell>
+                                        <twig:Table:Cell>{{ position.symbol|upper }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% endfor %}
+                            </twig:Table:Body>
+                        </twig:Table>
+                    </twig:Card:Content>
+                </twig:Card>
             </div>
         </div>
-        <div class="col-md-6">
+
+        <div class="grid content-start gap-6">
             {% if positions|length > 0 %}
-                <p>Mes positions</p>
-                <div class="chart-container" style="height: 500px;">
-                    <canvas id="chart-pos"></canvas>
-                </div>
+                <twig:Card>
+                    <twig:Card:Header><twig:Card:Title>Mes positions</twig:Card:Title></twig:Card:Header>
+                    <twig:Card:Content>
+                        <div class="relative h-[500px]"><canvas id="chart-pos"></canvas></div>
+                    </twig:Card:Content>
+                </twig:Card>
             {% endif %}
-            <div class="row mt-2">
-                <div class="col">
-                    <p>Ratio Crypto/Stable</p>
-                    <canvas id="chart-ratio"></canvas>
-                </div>
-                <div class="col">
-                    {% if positions_stable|length > 1 %}
-                        <p>Mes positions stable</p>
-                        <canvas id="chart-stable"></canvas>
-                    {% endif %}
-                </div>
+            <div class="grid gap-6 sm:grid-cols-2">
+                <twig:Card>
+                    <twig:Card:Header><twig:Card:Title>Ratio Crypto/Stable</twig:Card:Title></twig:Card:Header>
+                    <twig:Card:Content><canvas id="chart-ratio"></canvas></twig:Card:Content>
+                </twig:Card>
+                {% if positions_stable|length > 1 %}
+                    <twig:Card>
+                        <twig:Card:Header><twig:Card:Title>Mes positions stable</twig:Card:Title></twig:Card:Header>
+                        <twig:Card:Content><canvas id="chart-stable"></canvas></twig:Card:Content>
+                    </twig:Card>
+                {% endif %}
             </div>
         </div>
     </div>
 
-
-
-
-    <div id="id-array-positions" class="visually-hidden"
+    <div id="id-array-positions" hidden
          data-pie="{{ positions|json_encode }}"
          data-piestable="{{ positions_stable|json_encode }}"
          data-crypto="{{ totalUsd }}"

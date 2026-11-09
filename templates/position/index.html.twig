@@ -2,251 +2,159 @@
 
 {% block title %}{{ parent() }} - Positions{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'position_index', 'tab', 'tooltip', 'modal']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app', 'position_index']) }}{% endblock %}
 
 {% block body %}
-    <div class="row mb-2">
-        <div class="col">
-            <h1>Mes positions</h1>
-        </div>
-        <div class="col text-end">
-            <a href="{{ path('app_position_new') }}" class="btn btn-warning m-2">Ajouter une position</a>
-        </div>
-    </div>
+    <twig:App:PageHeader title="Mes positions">
+        <twig:Button as="a" href="{{ path('app_position_new') }}">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une position
+        </twig:Button>
+    </twig:App:PageHeader>
 
-    <ul class="nav nav-tabs navbar-dark" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto"
-                    type="button"
-                    role="tab" aria-controls="crypto" aria-selected="true">Crypto ({{ positions|length }})
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="stable-tab" data-bs-toggle="tab" data-bs-target="#stable" type="button"
-                    role="tab" aria-controls="stable" aria-selected="false">Stable ({{ positions_stable|length }})
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="closed-tab" data-bs-toggle="tab" data-bs-target="#closed" type="button"
-                    role="tab" aria-controls="closed" aria-selected="false">Fermée ({{ positions_closed|length }})
-            </button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="crypto" role="tabpanel" aria-labelledby="crypto-tab">
-            <table class="table table-bordered table-striped table-responsive-md table-dark">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Nombre actuel</th>
-                    <th>Coût moyen du coin</th>
-                    <th>% moyen</th>
-                    <th>Valeur actuelle</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for position in positions %}
-                    <tr>
-                        <td class="text-white align-middle text-center" style="width: 30px;">({{ position['splitted']|length }})</td>
-                        <td class="text-center" style="width: 53px;">
-                            <button type="button"
-                                    class="btn btn-xs btn-light btn-split"
-                                    data-id="{{ position['grouped']['coin'].id }}">
-                                <i class="bi bi-arrows-expand"></i>
-                            </button>
-                        </td>
-                        <td class="text-white text-center align-middle" style="width: 53px;">
-                            {{ include('_coin_logo.html.twig', {url: position['grouped']['coin'].urlImgThumb, name: position['grouped']['coin'].libelle}) }}
-                        </td>
-                        <td class="text-white align-middle text-end">{{ position['grouped'].totalsum|round(8) }} {{ position['grouped']['coin'].symbol|upper }}</td>
-                        <td class="align-middle text-end
-                                        {% if position['coutMoyen'] < position['grouped']['coin'].priceUsd %}
-                                            text-success
-                                        {% else %}
-                                            text-warning
-                                        {% endif %}">
-                            ~ {{ position['coutMoyen']|round(2) }} $
-                        </td>
-                        <td class="align-middle text-end
-                                        {% if position['coutMoyen'] == 0 or ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)>0 %}
-                                            text-success
-                                        {% else %}
-                                            text-warning
-                                        {% endif %}">
-                            {% if position['coutMoyen'] == 0 %}
-                                + ∞
-                            {% else %}
-                                {{ ((position['grouped']['coin'].priceUsd*100/position['coutMoyen'])-100)|round(2) }} %
-                            {% endif %}
-                        </td>
-                        <td class="text-white align-middle text-end">
-                            ~ {{ (position['grouped'].totalsum * position['grouped']['coin'].priceUsd)|round(2) }} $
-                        </td>
-                    </tr>
-                    <td id="detail-{{ position['grouped']['coin'].id }}" class="d-none" colspan="7">
-                        <table class="table table-bordered table-striped table-responsive-md table-dark">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Ouvert le</th>
-                                <th>Nombre actuel/départ</th>
-                                <th>Coût d'entrée</th>
-                                <th>Prix d'entrée</th>
-                                <th>Valeur actuelle</th>
-                                <th>Évolution %</th>
-                                <th class="th-actions">actions</th>
+    <twig:App:InfoDialog>
+        <twig:Tabs defaultValue="crypto">
+            <twig:Tabs:List>
+                <twig:Tabs:Trigger value="crypto">Crypto ({{ positions|length }})</twig:Tabs:Trigger>
+                <twig:Tabs:Trigger value="stable">Stable ({{ positions_stable|length }})</twig:Tabs:Trigger>
+                <twig:Tabs:Trigger value="closed">Fermée ({{ positions_closed|length }})</twig:Tabs:Trigger>
+            </twig:Tabs:List>
+
+            <twig:Tabs:Content value="crypto">
+                <twig:Table>
+                    <twig:Table:Header>
+                        <twig:Table:Row>
+                            <twig:Table:Head class="w-8"/>
+                            <twig:Table:Head class="w-10"/>
+                            <twig:Table:Head class="w-10"/>
+                            <twig:Table:Head class="text-end">Nombre actuel</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Coût moyen du coin</twig:Table:Head>
+                            <twig:Table:Head class="text-end">% moyen</twig:Table:Head>
+                            <twig:Table:Head class="text-end">Valeur actuelle</twig:Table:Head>
+                        </twig:Table:Row>
+                    </twig:Table:Header>
+                    <twig:Table:Body>
+                        {% for position in positions %}
+                            {% set coin = position['grouped']['coin'] %}
+                            {% set coutMoyen = position['coutMoyen'] %}
+                            {% set percent = coutMoyen == 0 ? null : (coin.priceUsd * 100 / coutMoyen) - 100 %}
+                            <twig:Table:Row>
+                                <twig:Table:Cell class="text-center text-muted-foreground">({{ position['splitted']|length }})</twig:Table:Cell>
+                                <twig:Table:Cell>
+                                    <twig:Button variant="ghost" size="icon-sm" class="btn-split" data-id="{{ coin.id }}" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Détail des positions">
+                                        <twig:ux:icon name="lucide:chevrons-up-down"/>
+                                    </twig:Button>
+                                </twig:Table:Cell>
+                                <twig:Table:Cell class="text-center">
+                                    <twig:App:CoinLogo url="{{ coin.urlImgThumb }}" name="{{ coin.libelle }}"/>
+                                </twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ position['grouped'].totalsum|round(8) }} {{ coin.symbol|upper }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums {{ coutMoyen < coin.priceUsd ? 'text-positive' : 'text-negative' }}">
+                                    ~ {{ coutMoyen|round(2) }} $
+                                </twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums {{ percent is null or percent > 0 ? 'text-positive' : 'text-negative' }}">
+                                    {{ percent is null ? '+ ∞' : percent|round(2) ~ ' %' }}
+                                </twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">~ {{ (position['grouped'].totalsum * coin.priceUsd)|round(2) }} $</twig:Table:Cell>
+                            </twig:Table:Row>
+                            <tr id="detail-{{ coin.id }}" class="hidden bg-muted/30">
+                                <td colspan="7" class="p-2">
+                                    <twig:Table>
+                                        <twig:Table:Header>
+                                            <twig:Table:Row>
+                                                <twig:Table:Head class="w-10"/>
+                                                <twig:Table:Head class="text-center">Ouvert le</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Nombre actuel/départ</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Coût d'entrée</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Prix d'entrée</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Valeur actuelle</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Évolution %</twig:Table:Head>
+                                                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                                            </twig:Table:Row>
+                                        </twig:Table:Header>
+                                        <twig:Table:Body>
+                                            {% for detail in position['splitted'] %}
+                                                <twig:Table:Row>
+                                                    <twig:Table:Cell>
+                                                        <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: detail.id}) }}"/>
+                                                    </twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-center" title="{{ detail.openedAt ? detail.openedAt|date('d/m/Y H:i') : 'Date d\'ouverture' }}">
+                                                        {{ detail.openedAt ? detail.openedAt|date('d/m/Y') }}
+                                                    </twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.remainingCoins }}/{{ detail.nbCoins }}</twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end tabular-nums {{ detail.percentEvolution > 0 ? 'text-positive' : 'text-negative' }}">
+                                                        {{ detail.percentEvolution <= -99.9 ? 'LUNA SPOTTED' : detail.percentEvolution|number_format(0, '.', ' ') ~ ' %' }}
+                                                    </twig:Table:Cell>
+                                                    <twig:Table:Cell class="text-end">
+                                                        <twig:App:RowActions
+                                                            editUrl="{{ path('app_position_edit', {id: detail.id}) }}"
+                                                            deleteUrl="{{ path('app_position_delete', {id: detail.id}) }}"
+                                                            tokenId="delete{{ detail.id }}"
+                                                        />
+                                                    </twig:Table:Cell>
+                                                </twig:Table:Row>
+                                            {% endfor %}
+                                        </twig:Table:Body>
+                                    </twig:Table>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for detail in position['splitted'] %}
-                                <tr>
-                                    <td class="text-center align-middle">
-                                        <button type="button"
-                                                class="btn btn-sm btn-light rounded-circle button-infos"
-                                                data-id="{{ detail.id }}"
-                                                data-titlemodal=""
-                                                data-url="{{ path('app_position_ajax_infos', {'id': detail.id}) }}">
-                                            <i class="bi bi-info"></i>
-                                        </button>
-                                    </td>
-                                    <td class="text-white align-middle text-center"
-                                        title="{{ detail.openedAt ? detail.openedAt|date('d/m/Y H:i') : 'Date d\'ouverture' }}">
-                                        {{ detail.openedAt ? detail.openedAt|date('d/m/Y') : '' }}
-                                    </td>
-                                    <td class="text-white align-middle text-end">{{ detail.remainingCoins }}
-                                        /{{ detail.nbCoins }}</td>
-                                    <td class="text-white align-middle text-end">{{ detail.entryCost|number_format(2, '.', ' ') }} $</td>
-                                    <td class="text-white align-middle text-end">{{ detail.entryCoinValue|number_format(2, '.', ' ') }}
-                                        $
-                                    </td>
-                                    <td class="text-white align-middle text-end">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }}
-                                        $
-                                    </td>
-                                    <td class="align-middle text-end
-                                        {% if detail.percentEvolution > 0 %}
-                                            text-success
-                                        {% else %}
-                                            text-warning
-                                        {% endif %}">
-                                        {% if detail.percentEvolution <= -99.9 %}
-                                            LUNA SPOTTED
-                                        {% else %}
-                                            {{ detail.percentEvolution|number_format(0, '.', ' ') }} %
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-white text-center align-middle">
-                                        {{ include('position/_indexactions_form.html.twig') }}
-                                    </td>
-                                </tr>
+                        {% else %}
+                            <twig:Table:Row>
+                                <twig:Table:Cell colspan="7" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
+                            </twig:Table:Row>
+                        {% endfor %}
+                    </twig:Table:Body>
+                </twig:Table>
+            </twig:Tabs:Content>
+
+            {% for tab, list in {stable: positions_stable, closed: positions_closed} %}
+                <twig:Tabs:Content value="{{ tab }}">
+                    <twig:Table>
+                        <twig:Table:Header>
+                            <twig:Table:Row>
+                                <twig:Table:Head class="w-10"/>
+                                <twig:Table:Head class="w-10"/>
+                                <twig:Table:Head>Coin</twig:Table:Head>
+                                <twig:Table:Head class="text-center">Ouvert le</twig:Table:Head>
+                                <twig:Table:Head class="text-end">{{ tab == 'stable' ? 'Nombre achetés' : 'Nombre' }}</twig:Table:Head>
+                                <twig:Table:Head class="text-end">{{ tab == 'stable' ? 'Coût' : 'Coût d\'entrée' }}</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Prix d'entrée</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                            </twig:Table:Row>
+                        </twig:Table:Header>
+                        <twig:Table:Body>
+                            {% for position in list %}
+                                <twig:Table:Row>
+                                    <twig:Table:Cell>
+                                        <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: position.id}) }}"/>
+                                    </twig:Table:Cell>
+                                    <twig:Table:Cell class="text-center">
+                                        <twig:App:CoinLogo url="{{ position.coin.urlImgThumb }}" name="{{ position.coin.libelle }}"/>
+                                    </twig:Table:Cell>
+                                    <twig:Table:Cell>{{ position.coin.symbol|upper }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.nbCoins|number_format(2, '.', ' ') }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end">
+                                        <twig:App:RowActions
+                                            editUrl="{{ path('app_position_edit', {id: position.id}) }}"
+                                            deleteUrl="{{ path('app_position_delete', {id: position.id}) }}"
+                                            tokenId="delete{{ position.id }}"
+                                        />
+                                    </twig:Table:Cell>
+                                </twig:Table:Row>
+                            {% else %}
+                                <twig:Table:Row>
+                                    <twig:Table:Cell colspan="8" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
+                                </twig:Table:Row>
                             {% endfor %}
-                            </tbody>
-                        </table>
-                    </td>
-                {% else %}
-                    <tr>
-                        <td colspan="8">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-
-        <div class="tab-pane fade" id="stable" role="tabpanel" aria-labelledby="stable-tab">
-            <table class="table table-bordered table-striped table-responsive-md table-dark">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Ouvert le</th>
-                    <th>Nombre achetés</th>
-                    <th>Coût</th>
-                    <th>Prix d'entrée</th>
-                    <th class="th-actions">actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for position in positions_stable %}
-                    <tr>
-                        <td class="text-center align-middle">
-                            <button type="button"
-                                    class="btn btn-sm btn-light rounded-circle button-infos"
-                                    data-id="{{ position.id }}"
-                                    data-titlemodal=""
-                                    data-url="{{ path('app_position_ajax_infos', {'id': position.id}) }}">
-                                <i class="bi bi-info"></i>
-                            </button>
-                        </td>
-                        <td class="text-white align-middle text-center">{{ include('_coin_logo.html.twig', {url: position.coin.urlImgThumb, name: position.coin.libelle}) }}</td>
-                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
-                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(2, '.', ' ') }}</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
-                        <td class="text-white text-center align-middle">
-                            {{ include('position/_indexactions_form_position.html.twig') }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
-            <table class="table table-bordered table-striped table-responsive-md table-dark">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Ouvert le</th>
-                    <th>Nombre</th>
-                    <th>Coût d'entrée</th>
-                    <th>Prix d'entrée</th>
-                    <th class="th-actions">actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for position in positions_closed %}
-                    <tr>
-                        <td class="text-center align-middle">
-                            <button type="button"
-                                    class="btn btn-sm btn-light rounded-circle button-infos"
-                                    data-id="{{ position.id }}"
-                                    data-titlemodal=""
-                                    data-url="{{ path('app_position_ajax_infos', {'id': position.id}) }}">
-                                <i class="bi bi-info"></i>
-                            </button>
-                        </td>
-                        <td class="text-white text-center align-middle">
-                            {{ include('_coin_logo.html.twig', {url: position.coin.urlImgThumb, name: position.coin.libelle}) }}
-                        </td>
-                        <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
-                        <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
-                        <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(2, '.', ' ') }}</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCost|number_format(2, '.', ' ') }} $</td>
-                        <td class="text-white align-middle text-end">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</td>
-                        <td class="text-white text-center align-middle">
-                            {{ include('position/_indexactions_form_position.html.twig') }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    {{ include('modal_informations.html.twig') }}
-
+                        </twig:Table:Body>
+                    </twig:Table>
+                </twig:Tabs:Content>
+            {% endfor %}
+        </twig:Tabs>
+    </twig:App:InfoDialog>
 {% endblock %}

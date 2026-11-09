@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}Réinitialiser le mot de passe{% endblock %}
 
 {% block body %}
-    <h1>Reset your password</h1>
-
-    {{ form_start(resetForm) }}
-    {{ form_row(resetForm.plainPassword) }}
-    <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
+    <twig:App:AuthCard title="Nouveau mot de passe">
+        {{ form_start(resetForm) }}
+            {{ form_row(resetForm.plainPassword) }}
+            <twig:Button type="submit" class="w-full">Reset password</twig:Button>
+        {{ form_end(resetForm) }}
+    </twig:App:AuthCard>
 {% endblock %}

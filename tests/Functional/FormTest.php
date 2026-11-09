@@ -40,7 +40,7 @@ final class FormTest extends WebTestCase
 
         self::assertResponseRedirects('/login');
         $this->client->followRedirect();
-        self::assertSelectorExists('.alert-danger');
+        self::assertSelectorExists('[data-slot="alert"]');
     }
 
     public function testRegistration(): void
@@ -59,6 +59,18 @@ final class FormTest extends WebTestCase
         self::assertNotSame('secret123', $user->getPassword());
     }
 
+    public function testPositionFormTabsDoNotSubmit(): void
+    {
+        $this->client->loginUser($this->data->user);
+        $crawler = $this->client->request('GET', '/position/new');
+
+        $tabs = $crawler->filter('form[name="position"] [role="tab"]');
+        self::assertCount(2, $tabs);
+        self::assertSame(['button', 'button'], $tabs->each(static fn ($tab): ?string => $tab->attr('type')), 'A tab inside the form must not submit it.');
+        // Enter submits through the first submit button of the form.
+        self::assertSame('position[submit]', $crawler->filter('form[name="position"] button[type="submit"]')->first()->attr('name'));
+    }
+
     public function testCreatePositionWithSale(): void
     {
         $this->client->loginUser($this->data->user);
@@ -69,10 +81,10 @@ final class FormTest extends WebTestCase
             'position[coin]' => (string) $this->data->eth->getId(),
             'position[nbCoins]' => '4',
             'position[entryCost]' => '1000',
-            'position[openedAt]' => '01/01/2024',
+            'position[openedAt]' => '2024-01-01',
         ]);
         $values = $form->getPhpValues();
-        $values['position']['ventes'][0] = ['soldAt' => '01/02/2024', 'percent' => '25', 'priceSold' => '3000'];
+        $values['position']['ventes'][0] = ['soldAt' => '2024-02-01', 'percent' => '25', 'priceSold' => '3000'];
         $this->client->request('POST', '/position/new', $values);
 
         self::assertResponseRedirects('/position/');
@@ -81,6 +93,8 @@ final class FormTest extends WebTestCase
         self::assertSame(1000.0, $position->getEntryCost());
         self::assertSame(3.0, $position->getRemainingCoins());
         self::assertCount(1, $position->getVentes());
+        self::assertSame('2024-01-01', $position->getOpenedAt()?->format('Y-m-d'));
+        self::assertSame('2024-02-01', $position->getVentes()->first()->getSoldAt()?->format('Y-m-d'));
         self::assertTrue($position->isIsOpened());
     }
 
@@ -107,7 +121,7 @@ final class FormTest extends WebTestCase
     {
         $this->client->loginUser($this->data->user);
         $this->client->request('GET', '/user/preferences');
-        $this->client->submitForm('Save', ['user_preferences[favoriteFiatCurrency]' => (string) $this->data->usd->getId()]);
+        $this->client->submitForm('Enregistrer', ['user_preferences[favoriteFiatCurrency]' => (string) $this->data->usd->getId()]);
 
         self::assertResponseRedirects('/user/preferences');
         $this->em()->clear();

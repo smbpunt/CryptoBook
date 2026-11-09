@@ -1,0 +1,215 @@
+{#
+ # Symfony form theme rendering widgets through the shadcn UX Toolkit components
+ # (templates/components). Styles live in the components, not here.
+ #}
+{% use 'form_div_layout.html.twig' %}
+
+{#
+ # The `_attrs` expression is repeated in each widget on purpose: a variable set in a block
+ # rendered through block() does not flow back to the caller, so it cannot be shared that way.
+ #}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'hidden' -%}
+        {{- parent() -}}
+    {%- else -%}
+        {%- set _attrs = attr|merge({id: id, name: full_name})|merge(disabled ? {disabled: true} : {})|merge(required ? {required: true} : {})|merge(valid ? {} : {'aria-invalid': 'true'})|merge(help is not empty ? {'aria-describedby': id ~ '_help'} : {}) -%}
+        {%- set _attrs = _attrs|merge({type: type}) -%}
+        {%- if value is not empty -%}{%- set _attrs = _attrs|merge({value: value}) -%}{%- endif -%}
+        {%- if addon|default(null) -%}
+            {#- Suffix such as "$" or "%": form_row(form.x, {addon: '$'}) -#}
+            <twig:InputGroup>
+                <twig:InputGroup:Input {{ ..._attrs }} />
+                <twig:InputGroup:Addon align="inline-end">{{ addon }}</twig:InputGroup:Addon>
+            </twig:InputGroup>
+        {%- else -%}
+            <twig:Input {{ ..._attrs }} />
+        {%- endif -%}
+    {%- endif -%}
+{%- endblock -%}
+
+{#- Single-text dates (DateType, Y-m-d): shadcn DatePicker + Calendar, the Calendar submits a hidden input. -#}
+{%- block date_widget -%}
+    {%- if widget != 'single_text' -%}
+        {{- parent() -}}
+    {%- else -%}
+        {%- set _selected = value is not empty ? value : null -%}
+        <twig:DatePicker :selected="_selected" locale="fr" dateStyle="long" class="w-full">
+            <twig:DatePicker:Trigger>
+                <twig:Button
+                    id="{{ id }}"
+                    variant="outline"
+                    class="w-full justify-between font-normal data-[empty=true]:text-muted-foreground"
+                    :aria-invalid="valid ? false : 'true'"
+                    :aria-describedby="help is not empty ? id ~ '_help' : false"
+                    :disabled="disabled"
+                    {{ ...date_picker_trigger_attrs }}
+                >
+                    <twig:DatePicker:Value placeholder="Choisir une date"/>
+                    <twig:ux:icon name="lucide:calendar" data-icon="inline-end"/>
+                </twig:Button>
+            </twig:DatePicker:Trigger>
+            <twig:DatePicker:Content>
+                <twig:Calendar mode="single" name="{{ full_name }}" :selected="_selected" locale="fr" :weekStartsOn="1" captionLayout="dropdown" startMonth="2009-01-01" :endMonth="'+1 year'|date('Y-12-01')" label="{{ label|default(name|humanize) }}"/>
+            </twig:DatePicker:Content>
+        </twig:DatePicker>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block textarea_widget -%}
+    {%- set _attrs = attr|merge({id: id, name: full_name})|merge(disabled ? {disabled: true} : {})|merge(required ? {required: true} : {})|merge(valid ? {} : {'aria-invalid': 'true'})|merge(help is not empty ? {'aria-describedby': id ~ '_help'} : {}) -%}
+    <twig:Textarea {{ ..._attrs }}>{{ value }}</twig:Textarea>
+{%- endblock -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- if 'js-select2' in (attr.class|default('')) -%}
+        {# Enhanced by Choices.js, which replaces the element and is styled in app.css. #}
+        {{- parent() -}}
+    {%- else -%}
+        {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+            {%- set required = false -%}
+        {%- endif -%}
+        {%- set _attrs = attr|merge({id: id, name: full_name})|merge(disabled ? {disabled: true} : {})|merge(required ? {required: true} : {})|merge(valid ? {} : {'aria-invalid': 'true'})|merge(help is not empty ? {'aria-describedby': id ~ '_help'} : {}) -%}
+        {%- if multiple -%}
+            {%- set _attrs = _attrs|merge({multiple: true}) -%}
+        {%- endif -%}
+        {#- Rendered outside the component: inside it, block() resolves against the component template. -#}
+        {%- set _options -%}{{- block('choice_widget_options_all') -}}{%- endset -%}
+        <twig:NativeSelect {{ ..._attrs|merge({class: 'w-full ' ~ attr.class|default('')}) }}>
+            {{- _options -}}
+        </twig:NativeSelect>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block choice_widget_options_all -%}
+    {%- if placeholder is not none -%}
+        <option value=""{% if placeholder_attr|default({}) %}{% with { attr: placeholder_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+    {%- endif -%}
+    {%- if preferred_choices|length > 0 -%}
+        {%- set options = preferred_choices -%}
+        {%- set render_preferred_choices = true -%}
+        {{- block('choice_widget_options') -}}
+        {%- if choices|length > 0 and separator is not none -%}
+            <option disabled="disabled">{{ separator }}</option>
+        {%- endif -%}
+    {%- endif -%}
+    {%- set options = choices -%}
+    {%- set render_preferred_choices = false -%}
+    {{- block('choice_widget_options') -}}
+{%- endblock -%}
+
+{%- block checkbox_widget -%}
+    {%- set _attrs = attr|merge({id: id, name: full_name})|merge(disabled ? {disabled: true} : {})|merge(required ? {required: true} : {})|merge(valid ? {} : {'aria-invalid': 'true'})|merge(help is not empty ? {'aria-describedby': id ~ '_help'} : {}) -%}
+    {%- if value is defined -%}{%- set _attrs = _attrs|merge({value: value}) -%}{%- endif -%}
+    {%- if checked -%}{%- set _attrs = _attrs|merge({checked: true}) -%}{%- endif -%}
+    <twig:Checkbox {{ ..._attrs }} />
+{%- endblock -%}
+
+{%- block radio_widget -%}
+    {%- set attr = attr|merge({class: ('size-4 accent-primary ' ~ attr.class|default(''))|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }} class="flex flex-wrap gap-4">
+        {%- for child in form %}
+            <div class="flex items-center gap-2">
+                {{- form_widget(child) -}}
+                {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+            </div>
+        {% endfor -%}
+    </div>
+{%- endblock -%}
+
+{%- block button_widget -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {%- set label = label_format|replace({'%name%': name, '%id%': id}) -%}
+        {%- elseif label is not same as(false) -%}
+            {%- set label = name|humanize -%}
+        {%- endif -%}
+    {%- endif -%}
+    {%- set _attrs = attr|merge({id: id, name: full_name, type: type|default('button')}) -%}
+    {%- if disabled -%}{%- set _attrs = _attrs|merge({disabled: true}) -%}{%- endif -%}
+    <twig:Button {{ ..._attrs }}>
+        {{- translation_domain is same as(false) or label is same as(false) ? label : label|trans(label_translation_parameters, translation_domain) -}}
+    </twig:Button>
+{%- endblock -%}
+
+{%- block submit_widget -%}
+    {%- set type = type|default('submit') -%}
+    {{- block('button_widget') -}}
+{%- endblock -%}
+
+{%- block form_label -%}
+    {%- if label is not same as(false) -%}
+        {%- if not compound -%}
+            {%- set label_attr = label_attr|merge({for: id}) -%}
+        {%- endif -%}
+        {%- if required -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}
+        {%- endif -%}
+        {%- if label is empty -%}
+            {%- if label_format is not empty -%}
+                {%- set label = label_format|replace({'%name%': name, '%id%': id}) -%}
+            {%- else -%}
+                {%- set label = name|humanize -%}
+            {%- endif -%}
+        {%- endif -%}
+        <twig:Form:Label {{ ...label_attr }}>
+            {%- if translation_domain is same as(false) -%}
+                {%- if label_html is same as(false) -%}{{ label }}{%- else -%}{{ label|raw }}{%- endif -%}
+            {%- else -%}
+                {%- if label_html is same as(false) -%}{{ label|trans(label_translation_parameters, translation_domain) }}{%- else -%}{{ label|trans(label_translation_parameters, translation_domain)|raw }}{%- endif -%}
+            {%- endif -%}
+        </twig:Form:Label>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_help -%}
+    {%- if help is not empty -%}
+        <twig:Form:Description id="{{ id }}_help">
+            {%- if translation_domain is same as(false) -%}
+                {%- if help_html is same as(false) -%}{{ help }}{%- else -%}{{ help|raw }}{%- endif -%}
+            {%- else -%}
+                {%- if help_html is same as(false) -%}{{ help|trans(help_translation_parameters, translation_domain) }}{%- else -%}{{ help|trans(help_translation_parameters, translation_domain)|raw }}{%- endif -%}
+            {%- endif -%}
+        </twig:Form:Description>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_errors -%}
+    {%- for error in errors -%}
+        {%- if compound -%}
+            <twig:Alert variant="destructive" class="mb-4">
+                <twig:Alert:Description>{{ error.message }}</twig:Alert:Description>
+            </twig:Alert>
+        {%- else -%}
+            <twig:Form:Message>{{ error.message }}</twig:Form:Message>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock -%}
+
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({class: ('mb-4 ' ~ row_attr.class|default(''))|trim}) -%}
+    <twig:Form:Item {{ ...row_attr }}>
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </twig:Form:Item>
+{%- endblock -%}
+
+{%- block checkbox_row -%}
+    <div class="mb-4 flex items-center gap-2 group/form-item">
+        {{- form_widget(form) -}}
+        {{- form_label(form) -}}
+    </div>
+    {{- form_help(form) -}}
+    {{- form_errors(form) -}}
+{%- endblock -%}
+
+{%- block button_row -%}
+    <div class="mb-4">{{ form_widget(form) }}</div>
+{%- endblock -%}

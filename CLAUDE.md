@@ -15,7 +15,9 @@ Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.l
 ## Architecture
 
 - Authentification par formulaire (`App\Security\UserAuthenticator`), mot de passe oublié via `symfonycasts/reset-password-bundle`
-- Doctrine ORM 3 + PostgreSQL, Twig + Bootstrap v5.3, AssetMapper, Stimulus, EasyAdmin 5, KnpMenu
+- Doctrine ORM 3 + PostgreSQL, Twig, AssetMapper, Stimulus, EasyAdmin 5, KnpMenu
+- UI : Tailwind CSS 4 (`symfonycasts/tailwind-bundle`) + kit shadcn du UX Toolkit. Composants du kit dans `templates/components/` (installés via `bin/console ux:install <nom> --kit shadcn`, modifiables, pas de mise à jour automatique), composants applicatifs dans `templates/components/App/`. Thème de formulaire : `templates/form/shadcn_layout.html.twig` (option `addon` pour un suffixe `$`/`%` ; les `DateType` en `single_text` s'affichent avec le `DatePicker` du kit, qui envoie une date `Y-m-d`). Icônes : `<twig:ux:icon name="lucide:…"/>`, puis `bin/console ux:icons:lock`.
+- Piège TwigComponent : le contenu passé à un composant a sa propre portée (variables `set` dans une boucle, imports de macros, `block()` ne traversent pas). `outerBlocks` ne remonte que d'un niveau : capturer le contenu en haut du composant (`{% set _content %}{% block content %}{% endblock %}{% endset %}`).
 
 ## Organisation du code par feature
 
@@ -41,6 +43,7 @@ Cible : ranger le code par sujet métier, pas par type technique. Inspiré du DD
 
 - Tout tourne dans Docker : `docker compose up -d`, puis `docker compose exec php composer install` / `bin/console …`. Application sur http://localhost:8888. Version de PHP en argument de build : `PHP_VERSION=8.4 docker compose build php`.
 - Raccourcis via le `Makefile` (`make help` pour la liste) : `make up`, `make url`, `make migrate`, `make test`…
+- CSS : `make tailwind` (ou `make tailwind c=--watch`) compile `assets/styles/app.css` vers `var/tailwind/`, requis avant d'afficher l'application.
 - Le service `php` remplace `DATABASE_URL` par le service `database` (Postgres 16) ; la base `app_test` est créée au premier démarrage. `.env` pointe toujours sur `127.0.0.1` pour un usage depuis l'hôte.
 - PHP de l'hôte en 8.5, projet en 8.4 : ne pas lancer `composer update` sur l'hôte, il résout les dépendances pour la mauvaise version.
 - Front en AssetMapper + importmap (pas de Node) : paquets JS via `bin/console importmap:require`, scripts de page déclarés comme entrypoints dans `importmap.php`.

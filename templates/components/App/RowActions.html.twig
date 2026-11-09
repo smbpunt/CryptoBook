@@ -1,0 +1,19 @@
+{%- props
+    ## string URL of the edit page.
+    editUrl,
+    ## string URL of the delete action (POST).
+    deleteUrl,
+    ## string CSRF token id for the delete action.
+    tokenId
+-%}
+<form method="post" action="{{ deleteUrl }}" onsubmit="return confirm('Supprimer cet élément ?');" {{ attributes.defaults({class: 'inline-flex'}) }}>
+    <input type="hidden" name="_token" value="{{ csrf_token(tokenId) }}">
+    <twig:ButtonGroup>
+        <twig:Button as="a" variant="outline" size="sm" href="{{ editUrl }}">
+            <twig:ux:icon name="lucide:pencil" data-icon="inline-start"/> Modifier
+        </twig:Button>
+        <twig:Button type="submit" variant="outline" size="sm" class="text-destructive">
+            <twig:ux:icon name="lucide:trash-2" data-icon="inline-start"/> Supprimer
+        </twig:Button>
+    </twig:ButtonGroup>
+</form>

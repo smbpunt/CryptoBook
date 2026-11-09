@@ -1,90 +1,81 @@
-<h1 class="h3">Information de la position</h1>
-{% if position.openedAt %}
-    <p>Ouverte le : {{ position.openedAt|date('d/m/Y') }}</p>
-{% endif %}
-<p>Nombre de coins acheté : {{ position.nbCoins }} {{ position.coin.symbol|upper }}</p>
-{% if position.remainingCoins != position.nbCoins %}
-    <p>Nombre de coins restant : {{ position.remainingCoins }} {{ position.coin.symbol|upper }}</p>
-{% endif %}
-<p>Valeur actuelle : {{ position.currentValue|round(2)|number_format(2, '.', ' ') }} $</p>
-{% if position.description is not empty %}
-    <p>Description : {{ position.description }}</p>
-{% endif %}
-
+<div class="grid gap-1 text-sm">
+    {% if position.openedAt %}<p>Ouverte le : {{ position.openedAt|date('d/m/Y') }}</p>{% endif %}
+    <p>Nombre de coins acheté : {{ position.nbCoins }} {{ position.coin.symbol|upper }}</p>
+    {% if position.remainingCoins != position.nbCoins %}
+        <p>Nombre de coins restant : {{ position.remainingCoins }} {{ position.coin.symbol|upper }}</p>
+    {% endif %}
+    <p>Valeur actuelle : {{ position.currentValue|round(2)|number_format(2, '.', ' ') }} $</p>
+    {% if position.description is not empty %}<p>Description : {{ position.description }}</p>{% endif %}
+</div>
 
 {% if position.ventesSortedByDate|length > 0 %}
-    <h1 class="h3">Ventes</h1>
-    {% set counter_ventes = 1 %}
-    <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-        <thead>
-        <tr>
-            <th class="text-end">Ventes</th>
-            <th class="text-end">Date</th>
-            <th class="text-end">%</th>
-            <th class="text-end">Prix</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for ventes in position.ventesSortedByDate %}
-            <tr>
-                <td class="text-white text-end">{{ counter_ventes }}</td>
-                <td class="text-white text-end">{{ ventes.soldAt ? ventes.soldAt|date('d/m/Y') : '' }}</td>
-                <td class="text-white text-end">{{ ventes.percent }} %</td>
-                <td class="text-white text-end">{{ ventes.priceSold }} $</td>
-            </tr>
-            {% set counter_ventes = counter_ventes + 1 %}
-        {% endfor %}
-
-        </tbody>
-    </table>
+    <h3 class="mt-2 font-medium">Ventes</h3>
+    <twig:Table>
+        <twig:Table:Header>
+            <twig:Table:Row>
+                <twig:Table:Head class="text-end">Vente</twig:Table:Head>
+                <twig:Table:Head class="text-end">Date</twig:Table:Head>
+                <twig:Table:Head class="text-end">%</twig:Table:Head>
+                <twig:Table:Head class="text-end">Prix</twig:Table:Head>
+            </twig:Table:Row>
+        </twig:Table:Header>
+        <twig:Table:Body>
+            {% for vente in position.ventesSortedByDate %}
+                <twig:Table:Row>
+                    <twig:Table:Cell class="text-end">{{ loop.index }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ vente.soldAt ? vente.soldAt|date('d/m/Y') }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ vente.percent }} %</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ vente.priceSold }} $</twig:Table:Cell>
+                </twig:Table:Row>
+            {% endfor %}
+        </twig:Table:Body>
+    </twig:Table>
 {% endif %}
 
+{% if position.strategies|length > 0 %}
+    {# Computed outside the Table components: their content blocks have their own scope. #}
     {% set nbCoinsAtTheEnd = position.nbCoins %}
     {% set roi = 0 %}
-    {% set lastPrice = 0 %}
-    {% set counter_strategies = 1 %}
-{% if position.strategies|length > 0 %}
-    <h1 class="h3">Stratégie</h1>
-    <p>Nombre de ventes prévues: {{ position.strategies|length }}</p>
-    <table class="table table-sm table-bordered table-striped table-responsive-md table-dark">
-        <thead>
-        <tr>
-            <th class="text-end">Ventes</th>
-            <th class="text-end">Prix</th>
-            <th class="text-end">%</th>
-            <th class="text-end">Nombre vendue</th>
-            <th class="text-end">Argent récupérée</th>
-            <th class="text-end">Nombre restant</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for strategy in position.strategies %}
-            {% set currentSellNbCoin = nbCoinsAtTheEnd * strategy.percent / 100 %}
-            {% set currentRoi = currentSellNbCoin * strategy.priceSold %}
-            {% set roi = roi + currentRoi %}
-            {% set nbCoinsAtTheEnd = nbCoinsAtTheEnd - currentSellNbCoin %}
-            <tr>
-                <td class="text-white text-end">{{ counter_strategies }}</td>
-                <td class="text-white text-end">{{ strategy.priceSold }}</td>
-                <td class="text-white text-end">{{ strategy.percent }} %</td>
-                <td class="text-white text-end">{{ currentSellNbCoin }}</td>
-                <td class="text-white text-end">{{ currentRoi }} $</td>
-                <td class="text-white text-end">{{ nbCoinsAtTheEnd }}</td>
-            </tr>
-            {% set counter_strategies = counter_strategies + 1 %}
-        {% endfor %}
-
-        </tbody>
-    </table>
+    {% set rows = [] %}
+    {% for strategy in position.strategies %}
+        {% set sold = nbCoinsAtTheEnd * strategy.percent / 100 %}
+        {% set roi = roi + sold * strategy.priceSold %}
+        {% set nbCoinsAtTheEnd = nbCoinsAtTheEnd - sold %}
+        {% set rows = rows|merge([{strategy: strategy, sold: sold, roi: sold * strategy.priceSold, remaining: nbCoinsAtTheEnd}]) %}
+    {% endfor %}
     {% set result = roi - position.entryCost %}
-    {% set percentResult = result * 100 / position.entryCost %}
-    <h2 class="h5">Prévision :</h2>
-    <p>Nombre de coin restants après ventes : {{ nbCoinsAtTheEnd }}</p>
-    <p>Pourcentage de coin restants : {{ nbCoinsAtTheEnd * 100 / position.nbCoins }} %</p>
-    <p>Récupéré : {{ roi }}$</p>
-    <p>Gains/pertes : {{ result }}$</p>
-    <p>Pourcentage gains/pertes: {{ percentResult }}%</p>
-    <p></p>
+
+    <h3 class="mt-2 font-medium">Stratégie</h3>
+    <p class="text-sm text-muted-foreground">Nombre de ventes prévues : {{ rows|length }}</p>
+    <twig:Table>
+        <twig:Table:Header>
+            <twig:Table:Row>
+                <twig:Table:Head class="text-end">Vente</twig:Table:Head>
+                <twig:Table:Head class="text-end">Prix</twig:Table:Head>
+                <twig:Table:Head class="text-end">%</twig:Table:Head>
+                <twig:Table:Head class="text-end">Nombre vendu</twig:Table:Head>
+                <twig:Table:Head class="text-end">Argent récupéré</twig:Table:Head>
+                <twig:Table:Head class="text-end">Nombre restant</twig:Table:Head>
+            </twig:Table:Row>
+        </twig:Table:Header>
+        <twig:Table:Body>
+            {% for row in rows %}
+                <twig:Table:Row>
+                    <twig:Table:Cell class="text-end">{{ loop.index }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ row.strategy.priceSold }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ row.strategy.percent }} %</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ row.sold }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ row.roi }} $</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end tabular-nums">{{ row.remaining }}</twig:Table:Cell>
+                </twig:Table:Row>
+            {% endfor %}
+        </twig:Table:Body>
+    </twig:Table>
+    <h3 class="mt-2 font-medium">Prévision</h3>
+    <div class="grid gap-1 text-sm">
+        <p>Nombre de coins restants après ventes : {{ nbCoinsAtTheEnd }}</p>
+        <p>Pourcentage de coins restants : {{ nbCoinsAtTheEnd * 100 / position.nbCoins }} %</p>
+        <p>Récupéré : {{ roi }} $</p>
+        <p class="{{ result > 0 ? 'text-positive' : 'text-negative' }}">Gains/pertes : {{ result }} $ ({{ result * 100 / position.entryCost }} %)</p>
+    </div>
 {% endif %}
-
-
