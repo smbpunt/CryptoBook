@@ -17,8 +17,8 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 | 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ✅ |
 | 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ✅ |
 | 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ✅ |
-| 7 | Doctrine ORM 3 / DBAL 4 | 8.3 | 7.4 | ⬜ |
-| — | ⚠️ VPS de prod en PHP 8.4 | 8.4 | 7.4 | ⬜ |
+| — | PHP 8.4 (local) · ⚠️ VPS de prod à migrer avant de déployer | 8.4 | 7.4 | 🟡 |
+| 7 | Doctrine ORM 3 / DBAL 4 | 8.4 | 7.4 | ✅ |
 | 8 | Symfony 8.1 | 8.4 | 8.1 | ⬜ |
 | 9 | Refonte UI : Bootstrap → Shadcn | 8.4 | 8.1 | ⬜ |
 
@@ -71,8 +71,17 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 - `recipes:update` : `APP_SECRET` sort de `.env` (à définir en prod dans `.env.local`), routes via `routing.controllers`
 - Zéro dépréciation, y compris indirecte dans les tests ; reste celle du template EasyAdmin 4 au warmup (phase 8)
 
+### PHP 8.4
+- Avancé avant la phase 7 : DoctrineBundle 3 et MigrationsBundle 4 exigent PHP 8.4
+- Image Docker et contrainte Composer en 8.4, Rector + CS Fixer `@PHP84Migration` (`new` sans parenthèses)
+- Le VPS de prod doit passer en PHP 8.4 avant le prochain déploiement
+
 ### 7. Doctrine ORM 3
-- ORM 3 + DBAL 4, isolé dans ses propres commits
+- ORM 3 + DBAL 4, DoctrineBundle 3, MigrationsBundle 4 ; config alignée sur la recette (on garde les séquences PostgreSQL)
+- `ProjectMonitoring::$links` passe du type `array` (supprimé en DBAL 4) à `json`, avec conversion des données dans la migration
+- Migration DBAL 4 : suppression des commentaires `DC2Type`, `messenger_messages.id` en colonne identity (séquence reprise à `MAX(id)`)
+- Tris Doctrine via `\SortDirection` (polyfill PHP 8.6) au lieu de `'ASC'` / `'DESC'` et de `Order`
+- Zéro dépréciation Doctrine, y compris indirecte
 
 ### 8. Symfony 8.1
 - Prérequis : PHP 8.4 en prod
