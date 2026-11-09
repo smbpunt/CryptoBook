@@ -8,7 +8,7 @@ use App\Repository\ProjectMonitoringRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/project/monitoring')]
 class ProjectMonitoringController extends AbstractController
@@ -34,7 +34,7 @@ class ProjectMonitoringController extends AbstractController
             return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('project_monitoring/new.html.twig', [
+        return $this->render('project_monitoring/new.html.twig', [
             'project_monitoring' => $projectMonitoring,
             'form' => $form,
         ]);
@@ -56,7 +56,7 @@ class ProjectMonitoringController extends AbstractController
             return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('project_monitoring/edit.html.twig', [
+        return $this->render('project_monitoring/edit.html.twig', [
             'project_monitoring' => $projectMonitoring,
             'form' => $form,
         ]);

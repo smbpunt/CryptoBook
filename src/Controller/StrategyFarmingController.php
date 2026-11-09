@@ -10,7 +10,7 @@ use App\Service\FarmingService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/strategy/farming')]
 class StrategyFarmingController extends AbstractController
@@ -64,7 +64,7 @@ class StrategyFarmingController extends AbstractController
             return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('strategy_farming/new.html.twig', [
+        return $this->render('strategy_farming/new.html.twig', [
             'strategy_farming' => $strategyFarming,
             'form' => $form,
         ]);
@@ -86,7 +86,7 @@ class StrategyFarmingController extends AbstractController
             return $this->redirectToRoute('app_strategy_farming_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('strategy_farming/edit.html.twig', [
+        return $this->render('strategy_farming/edit.html.twig', [
             'strategy_farming' => $strategyFarming,
             'form' => $form,
         ]);

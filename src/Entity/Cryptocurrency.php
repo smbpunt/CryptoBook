@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
 #[UniqueEntity('libelleCoingecko', message: 'Cette cryptomonnaie existe déjà.')]
-class Cryptocurrency
+class Cryptocurrency implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

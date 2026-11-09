@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepositTypeRepository::class)]
-class DepositType
+class DepositType implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -75,6 +75,6 @@ class DepositType
 
     public function __toString(): string
     {
-        return $this->libelle;
+        return (string) $this->libelle;
     }
 }

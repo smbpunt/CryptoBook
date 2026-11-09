@@ -49,7 +49,7 @@ class DepositRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
         try {
             return $qb->getQuery()->getSingleScalarResult();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         return 0;

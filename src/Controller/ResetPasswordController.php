@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -142,7 +142,7 @@ class ResetPasswordController extends AbstractController
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
+        } catch (ResetPasswordExceptionInterface) {
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.

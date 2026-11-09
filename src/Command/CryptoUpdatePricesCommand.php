@@ -15,11 +15,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class CryptoUpdatePricesCommand extends Command
 {
-    private CryptocurrencyService $cryptocurrencyService;
-
-    public function __construct(CryptocurrencyService $cryptocurrencyService)
+    public function __construct(private readonly CryptocurrencyService $cryptocurrencyService)
     {
-        $this->cryptocurrencyService = $cryptocurrencyService;
         parent::__construct();
     }
 

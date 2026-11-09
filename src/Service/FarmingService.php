@@ -9,7 +9,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class FarmingService
 {
-    private User $user;
+    private readonly User $user;
 
     public function __construct(
         private readonly StrategyFarmingRepository $strategyFarmingRepository,

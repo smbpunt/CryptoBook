@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BlockchainRepository::class)]
-class Blockchain
+class Blockchain implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -125,6 +125,6 @@ class Blockchain
 
     public function __toString(): string
     {
-        return $this->libelle;
+        return (string) $this->libelle;
     }
 }

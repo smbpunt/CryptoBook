@@ -1,6 +1,7 @@
 <?php
 
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -13,6 +14,8 @@ return RectorConfig::configure()
         __DIR__.'/config/reference.php',
         // Managed by the phpunit/phpunit recipe: avoid diffs on every recipes:update
         __DIR__.'/tests/bootstrap.php',
+        // Keep Doctrine mapping on plain properties: promotion can widen types used to infer relations
+        ClassPropertyAssignToConstructorPromotionRector::class => [__DIR__.'/src/Entity'],
     ])
     ->withPhpSets()
     ->withPreparedSets(symfonyCodeQuality: true)

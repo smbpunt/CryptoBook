@@ -46,8 +46,8 @@ class StrategyFarmingType extends AbstractType
                 'attr' => ['class' => 'js-select2'],
             ]);
 
-        $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null) {
-            $dapps = null === $blockchain ? [] : $blockchain->getDapps();
+        $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null): void {
+            $dapps = $blockchain?->getDapps() ?? [];
             $form->add('dapp', EntityType::class, [
                 'class' => Dapp::class,
                 'required' => true,
@@ -59,7 +59,7 @@ class StrategyFarmingType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            static function (FormEvent $event) use ($formModifier) {
+            static function (FormEvent $event) use ($formModifier): void {
                 /**
                  * @var StrategyFarming $data
                  */
@@ -71,7 +71,7 @@ class StrategyFarmingType extends AbstractType
 
         $builder->get('blockchain')->addEventListener(
             FormEvents::POST_SUBMIT,
-            static function (FormEvent $event) use ($formModifier) {
+            static function (FormEvent $event) use ($formModifier): void {
                 $blockchain = $event->getForm()->getData();
                 $formModifier($event->getForm()->getParent(), $blockchain);
             }

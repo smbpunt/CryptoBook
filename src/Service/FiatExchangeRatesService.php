@@ -25,13 +25,9 @@ class FiatExchangeRatesService
         $currencies = $this->fiatCurrencyRepository->findAll();
 
         foreach ($currencies as $currency) {
-            $tos = array_filter($currencies, static function ($c) use ($currency) {
-                return $c->getId() !== $currency->getId();
-            });
+            $tos = array_filter($currencies, static fn ($c) => $c->getId() !== $currency->getId());
 
-            $stringtos = implode(',', array_map(static function ($c) {
-                return $c->getFixerKey();
-            }, $tos));
+            $stringtos = implode(',', array_map(static fn ($c) => $c->getFixerKey(), $tos));
 
             $response = $this->client->withOptions([
                 'base_uri' => 'https://api.apilayer.com/fixer/',

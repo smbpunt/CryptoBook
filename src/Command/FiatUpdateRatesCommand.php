@@ -15,11 +15,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class FiatUpdateRatesCommand extends Command
 {
-    private FiatExchangeRatesService $fiatExchangeRatesService;
-
-    public function __construct(FiatExchangeRatesService $fiatExchangeRatesService)
+    public function __construct(private readonly FiatExchangeRatesService $fiatExchangeRatesService)
     {
-        $this->fiatExchangeRatesService = $fiatExchangeRatesService;
         parent::__construct();
     }
 

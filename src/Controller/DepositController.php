@@ -9,7 +9,7 @@ use App\Service\DepositService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/deposit')]
 class DepositController extends AbstractController
@@ -44,7 +44,7 @@ class DepositController extends AbstractController
             return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('deposit/new.html.twig', [
+        return $this->render('deposit/new.html.twig', [
             'deposit' => $deposit,
             'form' => $form,
         ]);
@@ -66,7 +66,7 @@ class DepositController extends AbstractController
             return $this->redirectToRoute('app_deposit_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('deposit/edit.html.twig', [
+        return $this->render('deposit/edit.html.twig', [
             'deposit' => $deposit,
             'form' => $form,
         ]);

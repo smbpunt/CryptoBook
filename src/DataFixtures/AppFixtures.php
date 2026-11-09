@@ -18,7 +18,6 @@ use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
 use App\Entity\TypeProject;
 use App\Entity\User;
-use App\Service\CryptocurrencyService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;

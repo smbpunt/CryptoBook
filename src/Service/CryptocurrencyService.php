@@ -85,9 +85,7 @@ class CryptocurrencyService
     public function updatePrices(): void
     {
         $cryptos = $this->repoCryptocurrency->findAll();
-        $libelles = array_map(static function ($crypto) {
-            return $crypto->getLibelleCoingecko();
-        }, $cryptos);
+        $libelles = array_map(static fn ($crypto) => $crypto->getLibelleCoingecko(), $cryptos);
         $string = implode(',', $libelles);
         try {
             $prices = $this->client->simple()->getPrice($string, 'usd');

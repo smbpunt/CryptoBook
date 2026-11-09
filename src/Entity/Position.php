@@ -7,6 +7,7 @@ use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
@@ -248,7 +249,7 @@ class Position
 
     public function getVentesSortedByDate(): Collection
     {
-        return $this->ventes->matching(new Criteria(null, ['soldAt' => Criteria::ASC]));
+        return $this->ventes->matching(new Criteria(orderings: ['soldAt' => Order::Ascending], accessRawFieldValues: true));
     }
 
     #[ORM\PreFlush]

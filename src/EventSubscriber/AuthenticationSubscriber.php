@@ -4,18 +4,16 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
-class AuthenticationSubscriber implements EventSubscriberInterface
+class AuthenticationSubscriber
 {
-    private UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
+    #[AsEventListener(event: LoginSuccessEvent::class)]
     public function onLoginSuccessEvent(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();
@@ -23,12 +21,5 @@ class AuthenticationSubscriber implements EventSubscriberInterface
             $user->setLastConnectedAt(new \DateTimeImmutable());
             $this->userRepository->add($user, true);
         }
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            LoginSuccessEvent::class => 'onLoginSuccessEvent',
-        ];
     }
 }

@@ -54,7 +54,7 @@ class DcaService
 
         try {
             $firstDate = new \DateTime($stringFirstDate);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return [];
         }
 

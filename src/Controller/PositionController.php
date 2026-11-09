@@ -9,7 +9,7 @@ use App\Repository\PositionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/position')]
 class PositionController extends AbstractController
@@ -81,7 +81,7 @@ class PositionController extends AbstractController
             return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('position/new.html.twig', [
+        return $this->render('position/new.html.twig', [
             'position' => $position,
             'form' => $form,
         ]);
@@ -103,7 +103,7 @@ class PositionController extends AbstractController
             return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('position/edit.html.twig', [
+        return $this->render('position/edit.html.twig', [
             'position' => $position,
             'form' => $form,
         ]);
