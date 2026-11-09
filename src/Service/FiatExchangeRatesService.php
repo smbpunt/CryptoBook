@@ -25,11 +25,11 @@ class FiatExchangeRatesService
         $currencies = $this->fiatCurrencyRepository->findAll();
 
         foreach ($currencies as $currency) {
-            $tos = array_filter($currencies, function ($c) use ($currency) {
+            $tos = array_filter($currencies, static function ($c) use ($currency) {
                 return $c->getId() !== $currency->getId();
             });
 
-            $stringtos = implode(',', array_map(function ($c) {
+            $stringtos = implode(',', array_map(static function ($c) {
                 return $c->getFixerKey();
             }, $tos));
 

@@ -69,7 +69,7 @@ class StrategyLpType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier) {
+            static function (FormEvent $event) use ($formModifier) {
                 /**
                  * @var StrategyLp $data
                  */
@@ -81,7 +81,7 @@ class StrategyLpType extends AbstractType
 
         $builder->get('blockchain')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
+            static function (FormEvent $event) use ($formModifier) {
                 $blockchain = $event->getForm()->getData();
                 $formModifier($event->getForm()->getParent(), $blockchain);
             }
