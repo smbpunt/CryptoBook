@@ -28,5 +28,8 @@ framework:
 when@test:
     framework:
         test: true
+        # No real HTTP call in tests: every client answers through http_client.mock_transport
+        http_client:
+            mock_response_factory: true
         session:
             storage_factory_id: session.storage.factory.mock_file
