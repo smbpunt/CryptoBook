@@ -44,7 +44,7 @@ class ProjectMonitoringController extends AbstractController
     public function edit(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_project_monitoring_index');
+            return $this->redirectToRoute('app_project_monitoring_index');
         }
 
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
@@ -66,7 +66,7 @@ class ProjectMonitoringController extends AbstractController
     public function delete(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
         if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_project_monitoring_index');
+            return $this->redirectToRoute('app_project_monitoring_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$projectMonitoring->getId(), $request->request->get('_token'))) {

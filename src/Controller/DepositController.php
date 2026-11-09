@@ -54,7 +54,7 @@ class DepositController extends AbstractController
     public function edit(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
         if ($deposit->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_deposit_index');
+            return $this->redirectToRoute('app_deposit_index');
         }
 
         $form = $this->createForm(DepositType::class, $deposit);
@@ -76,7 +76,7 @@ class DepositController extends AbstractController
     public function delete(Request $request, Deposit $deposit, DepositRepository $depositRepository): Response
     {
         if ($deposit->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_deposit_index');
+            return $this->redirectToRoute('app_deposit_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$deposit->getId(), $request->request->get('_token'))) {

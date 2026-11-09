@@ -91,7 +91,7 @@ class PositionController extends AbstractController
     public function edit(Request $request, Position $position, PositionRepository $positionRepository): Response
     {
         if ($position->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_position_index');
+            return $this->redirectToRoute('app_position_index');
         }
 
         $form = $this->createForm(PositionType::class, $position);
@@ -113,7 +113,7 @@ class PositionController extends AbstractController
     public function delete(Request $request, Position $position, PositionRepository $positionRepository): Response
     {
         if ($position->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_position_index');
+            return $this->redirectToRoute('app_position_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$position->getId(), $request->request->get('_token'))) {

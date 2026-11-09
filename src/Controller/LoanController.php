@@ -63,7 +63,7 @@ class LoanController extends AbstractController
     public function edit(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
         if ($loan->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_loan_index');
+            return $this->redirectToRoute('app_loan_index');
         }
 
         $form = $this->createForm(LoanType::class, $loan);
@@ -85,7 +85,7 @@ class LoanController extends AbstractController
     public function delete(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
         if ($loan->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_loan_index');
+            return $this->redirectToRoute('app_loan_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$loan->getId(), $request->request->get('_token'))) {

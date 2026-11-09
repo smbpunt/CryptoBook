@@ -65,7 +65,7 @@ class NftController extends AbstractController
     public function edit(Request $request, Nft $nft, NftRepository $nftRepository): Response
     {
         if ($nft->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_nft_index');
+            return $this->redirectToRoute('app_nft_index');
         }
 
         $form = $this->createForm(NftType::class, $nft);
@@ -87,7 +87,7 @@ class NftController extends AbstractController
     public function delete(Request $request, Nft $nft, NftRepository $nftRepository): Response
     {
         if ($nft->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_nft_index');
+            return $this->redirectToRoute('app_nft_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$nft->getId(), $request->request->get('_token'))) {

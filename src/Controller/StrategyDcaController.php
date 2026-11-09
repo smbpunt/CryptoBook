@@ -154,7 +154,7 @@ class StrategyDcaController extends AbstractController
     public function delete(Request $request, StrategyDca $strategyDca, StrategyDcaRepository $strategyDcaRepository): Response
     {
         if ($strategyDca->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_strategy_dca_index');
+            return $this->redirectToRoute('app_strategy_dca_index');
         }
 
         if ($this->isCsrfTokenValid('delete'.$strategyDca->getId(), $request->request->get('_token'))) {
