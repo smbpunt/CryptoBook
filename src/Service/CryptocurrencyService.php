@@ -32,43 +32,43 @@ class CryptocurrencyService
     public function updateDatas(Cryptocurrency $cryptocurrency): void
     {
         $libelleCG = $cryptocurrency->getLibelleCoingecko();
-        if (is_null($libelleCG)) {
+        if (null === $libelleCG) {
             return;
         }
 
         try {
             $datas = $this->client->coins()->getCoin($libelleCG);
-            if (array_key_exists('market_data', $datas)) {
+            if (\array_key_exists('market_data', $datas)) {
                 // Mets à jour les prix
-                if (array_key_exists('current_price', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['current_price'])) {
+                if (\array_key_exists('current_price', $datas['market_data']) && \array_key_exists('usd', $datas['market_data']['current_price'])) {
                     $cryptocurrency->setPriceUsd($datas['market_data']['current_price']['usd']);
                 }
 
                 // Mets à jour le libelle
-                if (array_key_exists('name', $datas)) {
+                if (\array_key_exists('name', $datas)) {
                     $cryptocurrency->setLibelle($datas['name']);
                 }
 
                 // Mets à jour le symbol
-                if (array_key_exists('symbol', $datas)) {
+                if (\array_key_exists('symbol', $datas)) {
                     $cryptocurrency->setSymbol($datas['symbol']);
                 }
 
                 // Mets à jour les images
-                if (array_key_exists('image', $datas)) {
-                    if (array_key_exists('thumb', $datas['image'])) {
+                if (\array_key_exists('image', $datas)) {
+                    if (\array_key_exists('thumb', $datas['image'])) {
                         $cryptocurrency->setUrlImgThumb($datas['image']['thumb']);
                     }
-                    if (array_key_exists('small', $datas['image'])) {
+                    if (\array_key_exists('small', $datas['image'])) {
                         $cryptocurrency->setUrlImgSmall($datas['image']['small']);
                     }
-                    if (array_key_exists('large', $datas['image'])) {
+                    if (\array_key_exists('large', $datas['image'])) {
                         $cryptocurrency->setUrlImgLarge($datas['image']['large']);
                     }
                 }
 
                 // Mets à jour les market cap
-                if (array_key_exists('market_cap', $datas['market_data']) && array_key_exists('usd', $datas['market_data']['market_cap'])) {
+                if (\array_key_exists('market_cap', $datas['market_data']) && \array_key_exists('usd', $datas['market_data']['market_cap'])) {
                     $cryptocurrency->setMcapUsd($datas['market_data']['market_cap']['usd']);
                 }
             }
@@ -93,8 +93,8 @@ class CryptocurrencyService
             $prices = $this->client->simple()->getPrice($string, 'usd');
             foreach ($cryptos as $crypto) {
                 $libelleCg = $crypto->getLibelleCoingecko();
-                if (array_key_exists($libelleCg, $prices)) {
-                    if (array_key_exists('usd', $prices[$libelleCg])) {
+                if (\array_key_exists($libelleCg, $prices)) {
+                    if (\array_key_exists('usd', $prices[$libelleCg])) {
                         $crypto->setPriceUsd($prices[$libelleCg]['usd']);
                     } else {
                         $this->logger->warning('Erreur lors de la récupération des prix EN DOLLAR pour '.$crypto->getLibelleCoingecko());

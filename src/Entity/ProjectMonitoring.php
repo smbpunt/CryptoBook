@@ -108,7 +108,7 @@ class ProjectMonitoring
 
     public function addLink(string $link): self
     {
-        if (!in_array($link, $this->links, true)) {
+        if (!\in_array($link, $this->links, true)) {
             $this->links[] = $link;
         }
 

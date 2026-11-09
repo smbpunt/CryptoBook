@@ -53,7 +53,7 @@ class CryptobookController extends AbstractController
             $positions_stable[$key] = $value;
         }
 
-        array_multisort(array_column($positions, 'valueUsd'), SORT_DESC, $positions);
+        array_multisort(array_column($positions, 'valueUsd'), \SORT_DESC, $positions);
 
         $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd();
 

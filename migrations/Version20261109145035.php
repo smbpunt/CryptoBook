@@ -29,7 +29,7 @@ final class Version20261109145035 extends AbstractMigration
     private function commentColumns(string $comment): void
     {
         $statements = implode("\n", array_map(
-            static fn (string $column): string => sprintf('COMMENT ON COLUMN messenger_messages.%s IS %s;', $column, $comment),
+            static fn (string $column): string => \sprintf('COMMENT ON COLUMN messenger_messages.%s IS %s;', $column, $comment),
             self::COLUMNS,
         ));
 

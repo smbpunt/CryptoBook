@@ -67,7 +67,7 @@ class StrategyDcaController extends AbstractController
             'owner' => $this->getUser(),
         ]);
 
-        if (is_null($strategyDca)) {
+        if (null === $strategyDca) {
             return $this->redirectToRoute('app_strategy_dca_new');
         }
 
@@ -131,7 +131,7 @@ class StrategyDcaController extends AbstractController
             'owner' => $this->getUser(),
         ]);
 
-        if (is_null($strategyDca)) {
+        if (null === $strategyDca) {
             return $this->redirectToRoute('app_strategy_dca_new');
         }
 
