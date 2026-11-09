@@ -4,6 +4,8 @@ Faire passer CryptoBook de Symfony 6.3 / PHP 8.1 à Symfony 8.1 / PHP 8.4, sécu
 
 Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée dans `main` à la fin. Chaque phase y est livrée par un ou plusieurs commits dédiés.
 
+Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans [`bugs.md`](bugs.md), puis corrigés en fin de phase dans des commits `fix:` dédiés.
+
 ## Suivi
 
 | # | Phase | PHP | Symfony | État |
