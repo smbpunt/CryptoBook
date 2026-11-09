@@ -16,6 +16,11 @@ framework:
                     max_retries: 3
                     delay: 60000
                     multiplier: 1
+            fixer.client:
+                base_uri: 'https://api.apilayer.com/fixer/'
+                timeout: 10
+                headers:
+                    apikey: '%env(FIXER_API_KEY)%'
 
     #esi: true
     #fragments: true
@@ -23,5 +28,8 @@ framework:
 when@test:
     framework:
         test: true
+        # No real HTTP call in tests: every client answers through http_client.mock_transport
+        http_client:
+            mock_response_factory: true
         session:
             storage_factory_id: session.storage.factory.mock_file

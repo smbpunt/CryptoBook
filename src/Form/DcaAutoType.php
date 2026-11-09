@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Dto\DcaAutoQuery;
 use App\Entity\Cryptocurrency;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -13,10 +14,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DcaAutoType extends AbstractType
 {
-    public static string $HOURLY = 'h';
-    public static string $DAILY = 'd';
-    public static string $WEEKLY = 'w';
-    public static string $MONTHLY = 'm';
+    public const string HOURLY = 'h';
+    public const string DAILY = 'd';
+    public const string WEEKLY = 'w';
+    public const string MONTHLY = 'm';
+    public const array RECURRENCES = [self::HOURLY, self::DAILY, self::WEEKLY, self::MONTHLY];
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,15 +36,16 @@ class DcaAutoType extends AbstractType
             ->add('type_recurr', ChoiceType::class, [
                 'choices' => [
                     '---' => '',
-                    '4 Heures' => self::$HOURLY,
-                    'Journalier' => self::$DAILY,
-                    'Hebdomadaire' => self::$WEEKLY,
-                    'Mensuel' => self::$MONTHLY,
+                    '4 Heures' => self::HOURLY,
+                    'Journalier' => self::DAILY,
+                    'Hebdomadaire' => self::WEEKLY,
+                    'Mensuel' => self::MONTHLY,
                 ],
                 'required' => true,
             ])
             ->add('nb_recurr', IntegerType::class, [
                 'required' => true,
+                'attr' => ['min' => 1, 'max' => DcaAutoQuery::MAX_COUNT],
             ])
             ->add('date_first', DateTimeType::class, [
                 'required' => true,

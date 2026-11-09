@@ -3,13 +3,15 @@
 namespace App\Entity;
 
 use App\Entity\Trait\DescriptionTrait;
+use App\Entity\Trait\OwnerTrait;
 use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
-class StrategyFarming
+class StrategyFarming implements OwnedInterface
 {
     use DescriptionTrait;
+    use OwnerTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,11 +36,7 @@ class StrategyFarming
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $enteredAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'farmingStrategies')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owner;
-
-    public function __construct($owner)
+    public function __construct(User $owner)
     {
         $this->owner = $owner;
     }
@@ -104,18 +102,6 @@ class StrategyFarming
     public function setEnteredAt(?\DateTimeImmutable $enteredAt): self
     {
         $this->enteredAt = $enteredAt;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }

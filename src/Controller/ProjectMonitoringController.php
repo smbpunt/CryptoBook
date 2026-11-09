@@ -3,28 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\ProjectMonitoring;
+use App\Entity\User;
 use App\Form\ProjectMonitoringType;
 use App\Repository\ProjectMonitoringRepository;
+use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/project/monitoring')]
 class ProjectMonitoringController extends AbstractController
 {
     #[Route('/', name: 'app_project_monitoring_index', methods: ['GET'])]
-    public function index(ProjectMonitoringRepository $projectMonitoringRepository): Response
+    public function index(ProjectMonitoringRepository $projectMonitoringRepository, #[CurrentUser] User $user): Response
     {
         return $this->render('project_monitoring/index.html.twig', [
-            'project_monitorings' => $projectMonitoringRepository->findBy(['owner' => $this->getUser()]),
+            'project_monitorings' => $projectMonitoringRepository->findBy(['owner' => $user]),
         ]);
     }
 
     #[Route('/new', name: 'app_project_monitoring_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ProjectMonitoringRepository $projectMonitoringRepository): Response
+    public function new(Request $request, ProjectMonitoringRepository $projectMonitoringRepository, #[CurrentUser] User $user): Response
     {
-        $projectMonitoring = new ProjectMonitoring($this->getUser());
+        $projectMonitoring = new ProjectMonitoring($user);
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
         $form->handleRequest($request);
 
@@ -41,12 +47,9 @@ class ProjectMonitoringController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_project_monitoring_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(OwnerVoter::OWNER, 'projectMonitoring')]
     public function edit(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
-        if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_project_monitoring_index');
-        }
-
         $form = $this->createForm(ProjectMonitoringType::class, $projectMonitoring);
         $form->handleRequest($request);
 
@@ -63,15 +66,11 @@ class ProjectMonitoringController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_project_monitoring_delete', methods: ['POST'])]
-    public function delete(Request $request, ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
+    #[IsGranted(OwnerVoter::OWNER, 'projectMonitoring')]
+    #[IsCsrfTokenValid(new Expression('"delete" ~ args["projectMonitoring"].getId()'))]
+    public function delete(ProjectMonitoring $projectMonitoring, ProjectMonitoringRepository $projectMonitoringRepository): Response
     {
-        if ($projectMonitoring->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_project_monitoring_index');
-        }
-
-        if ($this->isCsrfTokenValid('delete'.$projectMonitoring->getId(), $request->request->get('_token'))) {
-            $projectMonitoringRepository->remove($projectMonitoring, true);
-        }
+        $projectMonitoringRepository->remove($projectMonitoring, true);
 
         return $this->redirectToRoute('app_project_monitoring_index', [], Response::HTTP_SEE_OTHER);
     }

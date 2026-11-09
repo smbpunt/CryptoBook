@@ -2,19 +2,18 @@
 
 namespace App\Menu;
 
+use Knp\Menu\Attribute\AsMenuBuilder;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class MenuBuilder
 {
-    /**
-     * Add any other dependency you need...
-     */
     public function __construct(private readonly FactoryInterface $factory, private readonly Security $security)
     {
     }
 
+    #[AsMenuBuilder(name: 'main')]
     public function createMainMenu(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root');

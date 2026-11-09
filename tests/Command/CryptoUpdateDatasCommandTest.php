@@ -2,15 +2,10 @@
 
 namespace App\Tests\Command;
 
-use App\Coingecko\Client\CoingeckoClient;
-use App\Command\CryptoUpdateDatasCommand;
 use App\Repository\CryptocurrencyRepository;
-use App\Service\CryptocurrencyService;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -23,7 +18,10 @@ final class CryptoUpdateDatasCommandTest extends KernelTestCase
         $data = Dataset::load($em);
 
         $paths = [];
-        $http = new MockHttpClient(static function (string $method, string $url) use (&$paths): MockResponse {
+        $http = self::getContainer()->get('http_client.transport');
+        \assert($http instanceof MockHttpClient);
+        $http->setResponseFactory(static function (string $method, string $url) use (&$paths): MockResponse {
+            self::assertStringStartsWith('https://api.coingecko.com/api/v3/coins/', $url);
             $path = (string) parse_url($url, \PHP_URL_PATH);
             $id = basename($path);
             $paths[] = $path;
@@ -39,14 +37,11 @@ final class CryptoUpdateDatasCommandTest extends KernelTestCase
                 'image' => ['thumb' => "https://img/$id/thumb.png", 'small' => "https://img/$id/small.png", 'large' => "https://img/$id/large.png"],
                 'market_data' => ['current_price' => ['usd' => 42], 'market_cap' => ['usd' => 1000]],
             ]);
-        }, 'https://api.coingecko.com/api/v3/');
-        $client = new CoingeckoClient($http);
-        $service = new CryptocurrencyService($client, self::getContainer()->get(CryptocurrencyRepository::class), $em, new NullLogger());
+        });
 
-        $tester = new CommandTester(new CryptoUpdateDatasCommand($service));
-        $tester->execute([]);
+        $result = self::runCommand('crypto:updateDatas');
 
-        $tester->assertCommandIsSuccessful();
+        self::assertCommandIsSuccessful($result);
         self::assertEqualsCanonicalizing(
             ['/api/v3/coins/bitcoin', '/api/v3/coins/ethereum', '/api/v3/coins/usd-coin'],
             $paths,

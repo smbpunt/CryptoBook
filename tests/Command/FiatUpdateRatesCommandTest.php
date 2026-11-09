@@ -2,13 +2,9 @@
 
 namespace App\Tests\Command;
 
-use App\Command\FiatUpdateRatesCommand;
 use App\Repository\FiatCurrencyRepository;
-use App\Service\FiatExchangeRatesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -21,7 +17,9 @@ final class FiatUpdateRatesCommandTest extends KernelTestCase
     public function testUpdatesRatesOfEveryCurrencyAgainstTheOthers(): void
     {
         $requestedUrls = [];
-        $http = new MockHttpClient(static function (string $method, string $url, array $options) use (&$requestedUrls): MockResponse {
+        $http = self::getContainer()->get('http_client.transport');
+        \assert($http instanceof MockHttpClient);
+        $http->setResponseFactory(static function (string $method, string $url, array $options) use (&$requestedUrls): MockResponse {
             $requestedUrls[] = $url;
             self::assertContains('apikey: test-key', $options['headers']);
             parse_str((string) parse_url($url, \PHP_URL_QUERY), $query);
@@ -30,12 +28,10 @@ final class FiatUpdateRatesCommandTest extends KernelTestCase
             return new JsonMockResponse(['rates' => array_fill_keys($symbols, 1.5)]);
         });
         $repository = self::getContainer()->get(FiatCurrencyRepository::class);
-        $service = new FiatExchangeRatesService($http, $repository, $this->createStub(Security::class), 'test-key');
 
-        $tester = new CommandTester(new FiatUpdateRatesCommand($service));
-        $tester->execute([]);
+        $result = self::runCommand('fiat:updateRates');
 
-        $tester->assertCommandIsSuccessful();
+        self::assertCommandIsSuccessful($result);
         self::assertCount(3, $requestedUrls);
         foreach ($requestedUrls as $url) {
             self::assertStringStartsWith('https://api.apilayer.com/fixer/latest?base=', $url);
@@ -50,5 +46,17 @@ final class FiatUpdateRatesCommandTest extends KernelTestCase
             self::assertSame(array_fill_keys($others, 1.5), $rates, $key);
             self::assertEqualsWithDelta(new \DateTimeImmutable(), $currency->getUpdatedAt(), 60);
         }
+    }
+
+    public function testFailsCleanlyWhenFixerIsUnavailable(): void
+    {
+        $http = self::getContainer()->get('http_client.transport');
+        \assert($http instanceof MockHttpClient);
+        $http->setResponseFactory(new JsonMockResponse(['success' => false, 'error' => ['code' => 104]]));
+
+        $result = self::runCommand('fiat:updateRates');
+
+        self::assertCommandFailed($result);
+        self::assertStringContainsString('has no rates', $result->getDisplay());
     }
 }

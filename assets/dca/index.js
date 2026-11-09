@@ -24,6 +24,9 @@ const goToGenerateDca = (e) => {
 
 const goToDcaauto = (e) => {
     e.preventDefault();
+    if (!e.currentTarget.closest('form').reportValidity()) {
+        return;
+    }
     const path = e.currentTarget.dataset.path;
 
     const value = document.getElementById('dca_auto_value').value;

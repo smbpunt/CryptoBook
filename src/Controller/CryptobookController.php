@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
 use App\Service\DepositService;
@@ -10,23 +11,24 @@ use App\Service\FiatExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
+    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService, #[CurrentUser] User $user): Response
     {
-        $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
-        $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
-        $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
+        $positions = $positionRepository->getSumCoinByUser($user) ?? [];
+        $positions_stable = $positionRepository->getSumCoinByUser($user, true) ?? [];
+        $totalDepositUsd = $depositService->getTotalDepositUsd($user);
 
-        $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
+        $userFavoriteCurrency = $user->getFavoriteFiatCurrency();
         $isFavoriteUsd = 'USD' === $userFavoriteCurrency->getFixerKey();
 
         $totalUsd = 0;
         foreach ($positions as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd, $user);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions[$key] = $value;
@@ -36,7 +38,7 @@ class CryptobookController extends AbstractController
         $totalUsdStable = 0;
         foreach ($positions_stable as $key => $value) {
             $valueUsd = $value['totalsum'] * $value['priceUsd'];
-            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd);
+            $valueEur = $isFavoriteUsd ? $valueUsd : $fiatExchangeRatesService->toFavoriteCurrency($valueUsd, $user);
             $value['valueUsd'] = $valueUsd;
             $value['valueEur'] = $valueEur;
             $positions_stable[$key] = $value;
@@ -55,9 +57,9 @@ class CryptobookController extends AbstractController
 
         array_multisort(array_column($positions, 'valueUsd'), \SORT_DESC, $positions);
 
-        $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd();
+        $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd($user);
 
-        $totalLoan = $loanRepository->getTotal($this->getUser());
+        $totalLoan = $loanRepository->getTotal($user);
 
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,

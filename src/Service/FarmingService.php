@@ -5,64 +5,56 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 
-class FarmingService
+final readonly class FarmingService
 {
-    private readonly User $user;
-
     public function __construct(
-        private readonly StrategyFarmingRepository $strategyFarmingRepository,
-        private readonly StrategyLpRepository $strategyLpRepository,
-        Security $security,
+        private StrategyFarmingRepository $strategyFarmingRepository,
+        private StrategyLpRepository $strategyLpRepository,
     ) {
-        $this->user = $security->getUser();
     }
 
     /**
-     * @return float
-     *               Retourne le total du farming (single asset) à l'année en USD
+     * Yearly rewards of the single asset farmings, in USD.
+     *
+     * @param bool|null $isStable only stable (true) or volatile (false) coins, every coin when null
      */
-    public function getTotalFarmingSimpleByYearUsd(bool $checkBooleanIsStable = false, bool $isStable = false): float
+    public function getTotalFarmingSimpleByYearUsd(User $user, ?bool $isStable = null): float
     {
-        $strategies = $checkBooleanIsStable ? $this->strategyFarmingRepository->findByStable($this->user, $isStable) : $this->strategyFarmingRepository->findBy([
-            'owner' => $this->user,
-        ]);
+        $strategies = null === $isStable
+            ? $this->strategyFarmingRepository->findBy(['owner' => $user])
+            : $this->strategyFarmingRepository->findByStable($user, $isStable);
 
-        $totalYearFarmingUsd = 0;
+        $total = 0;
         foreach ($strategies as $strategy) {
-            $value_dollar = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
-            $totalYearFarmingUsd += $strategy->getApr() * $value_dollar / 100;
+            $valueUsd = $strategy->getCoin()->getPriceUsd() * $strategy->getNbCoins();
+            $total += $strategy->getApr() * $valueUsd / 100;
         }
 
-        return $totalYearFarmingUsd;
+        return $total;
     }
 
     /**
-     * @return float
-     *               Retourne le total du farming (LP) à l'année en USD
+     * Yearly rewards of the liquidity pools, in USD.
      */
-    public function getTotalFarmingLpByYearUsd(): float
+    public function getTotalFarmingLpByYearUsd(User $user): float
     {
-        $strategies = $this->strategyLpRepository->findBy([
-            'owner' => $this->user,
-        ]);
+        $strategies = $this->strategyLpRepository->findBy(['owner' => $user]);
 
-        $totalYearFarmingUsd = 0;
+        $total = 0;
         foreach ($strategies as $strategy) {
-            $value_dollar = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
-            $totalYearFarmingUsd += $strategy->getApr() * $value_dollar / 100;
+            $valueUsd = $strategy->getCoin1()->getPriceUsd() * $strategy->getNbCoin1() + $strategy->getCoin2()->getPriceUsd() * $strategy->getNbCoin2();
+            $total += $strategy->getApr() * $valueUsd / 100;
         }
 
-        return $totalYearFarmingUsd;
+        return $total;
     }
 
     /**
-     * @return float
-     *               Retourne le total du farming (Single asset + LP) à l'année en USD
+     * Yearly rewards of every farming (single asset and liquidity pools), in USD.
      */
-    public function getTotalFarmingByYearUsd(): float
+    public function getTotalFarmingByYearUsd(User $user): float
     {
-        return $this->getTotalFarmingSimpleByYearUsd() + $this->getTotalFarmingLpByYearUsd();
+        return $this->getTotalFarmingSimpleByYearUsd($user) + $this->getTotalFarmingLpByYearUsd($user);
     }
 }
