@@ -41,17 +41,20 @@ class PositionRepository extends ServiceEntityRepository
         }
     }
 
-    public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
+    /**
+     * Quantity of each coin held in the user's open positions, crypto and stable together.
+     *
+     * @return list<array{totalsum: float|string, symbol: string, libelle: string, color: ?string, priceUsd: float, urlImgThumb: ?string, isStable: bool}>
+     */
+    public function getHoldingsByUser(UserInterface $user): array
     {
         return $this->createQueryBuilder('p')
             ->join('p.coin', 'c')
             ->andWhere('p.owner = :user')
-            ->andWhere('c.isStable = :isStable')
             ->andWhere('p.isOpened = TRUE')
             ->setParameter('user', $user)
-            ->setParameter('isStable', $isStable)
-            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
-            ->groupBy('c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
+            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb', 'c.isStable')
+            ->groupBy('c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb', 'c.isStable')
             ->getQuery()->getArrayResult();
     }
 

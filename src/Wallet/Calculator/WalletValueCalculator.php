@@ -18,31 +18,33 @@ final readonly class WalletValueCalculator
 
     public function calculate(User $user): WalletValue
     {
+        $rows = $this->positionRepository->getHoldingsByUser($user);
+
         return new WalletValue(
-            $this->holdings($user, false),
-            $this->holdings($user, true),
+            $this->holdings(array_values(array_filter($rows, static fn (array $row): bool => !$row['isStable']))),
+            $this->holdings(array_values(array_filter($rows, static fn (array $row): bool => $row['isStable']))),
         );
     }
 
     /**
+     * @param list<array{totalsum: float|string, symbol: string, libelle: string, color: ?string, priceUsd: float, urlImgThumb: ?string, isStable: bool}> $rows
+     *
      * @return list<Holding>
      */
-    private function holdings(User $user, bool $isStable): array
+    private function holdings(array $rows): array
     {
-        $rows = $this->positionRepository->getSumCoinByUser($user, $isStable);
-
-        $values = array_map(static fn (array $row): float => (float) $row['totalsum'] * (float) $row['priceUsd'], $rows);
+        $values = array_map(static fn (array $row): float => (float) $row['totalsum'] * $row['priceUsd'], $rows);
         $total = array_sum($values);
 
         $holdings = [];
         foreach ($rows as $i => $row) {
             $holdings[] = new Holding(
-                symbol: (string) $row['symbol'],
-                libelle: (string) $row['libelle'],
+                symbol: $row['symbol'],
+                libelle: $row['libelle'],
                 color: $row['color'],
                 urlImgThumb: $row['urlImgThumb'],
                 quantity: (float) $row['totalsum'],
-                priceUsd: (float) $row['priceUsd'],
+                priceUsd: $row['priceUsd'],
                 valueUsd: $values[$i],
                 percent: $total > 0 ? round($values[$i] * 100 / $total, 2) : 0.0,
             );

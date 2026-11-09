@@ -55,6 +55,25 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
         self::assertSame(['10:00' => 31000.0, '11:00' => 31000.0], $values);
     }
 
+    public function testHoursAreTruncatedInUtcSoDaylightSavingTimeKeepsEveryHour(): void
+    {
+        $d = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $recorder = self::getContainer()->get(WalletSnapshotRecorder::class);
+
+        // Europe/Paris back to winter time: 02:05 happens twice.
+        self::mockTime(new \DateTimeImmutable('2026-10-25 02:05:00+02:00'));
+        $recorder->record();
+        self::mockTime(new \DateTimeImmutable('2026-10-25 02:05:00+01:00'));
+        $recorder->record();
+
+        $takenAt = array_map(
+            static fn (WalletSnapshot $s): string => $s->getTakenAt()->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i'),
+            self::getContainer()->get(WalletSnapshotRepository::class)->findBy(['owner' => $d->user->getId()]),
+        );
+        sort($takenAt);
+        self::assertSame(['2026-10-25 00:00', '2026-10-25 01:00'], $takenAt);
+    }
+
     /**
      * @return array<int, WalletSnapshot>
      */

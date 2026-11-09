@@ -30,7 +30,8 @@ final readonly class WalletSnapshotRecorder
      */
     public function record(): int
     {
-        $now = $this->clock->now();
+        // Truncated in UTC: a local hour is ambiguous or missing on DST changes.
+        $now = $this->clock->now()->setTimezone(new \DateTimeZone('UTC'));
         $takenAt = $now->setTime((int) $now->format('G'), 0);
         $existing = $this->snapshotRepository->findByTakenAtIndexedByOwner($takenAt);
 

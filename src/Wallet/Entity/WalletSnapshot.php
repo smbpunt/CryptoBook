@@ -23,11 +23,18 @@ class WalletSnapshot implements OwnedInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    public function __construct(User $owner, #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-        private \DateTimeImmutable $takenAt, #[ORM\Column]
-        private float $valueUsd)
+    /** Start of the hour, in UTC. */
+    #[ORM\Column(type: Types::DATETIMETZ_IMMUTABLE)]
+    private \DateTimeImmutable $takenAt;
+
+    #[ORM\Column]
+    private float $valueUsd;
+
+    public function __construct(User $owner, \DateTimeImmutable $takenAt, float $valueUsd)
     {
         $this->owner = $owner;
+        $this->takenAt = $takenAt;
+        $this->valueUsd = $valueUsd;
     }
 
     public function getId(): ?int
