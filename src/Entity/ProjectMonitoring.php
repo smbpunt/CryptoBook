@@ -29,7 +29,7 @@ class ProjectMonitoring
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     private $links = [];
 
     #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
