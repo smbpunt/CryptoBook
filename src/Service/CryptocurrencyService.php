@@ -104,7 +104,7 @@ class CryptocurrencyService
             }
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->logger->critical('Erreur lors de la récupération des prix pour '.$libelles.'. Exception : '.$e->getMessage());
+            $this->logger->critical('Erreur lors de la récupération des prix pour '.$string.'. Exception : '.$e->getMessage());
         }
     }
 }

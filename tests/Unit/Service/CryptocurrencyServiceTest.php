@@ -69,13 +69,27 @@ final class CryptocurrencyServiceTest extends TestCase
         self::assertNull($coin->getLibelle());
     }
 
-    private function service(MockHandler $mock, ?LoggerInterface $logger = null): CryptocurrencyService
+    public function testUpdatePricesLogsApiErrorsWithCoinIds(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())->method('critical')
+            ->with(self::stringContains('bitcoin,ethereum'));
+        $repository = $this->createStub(CryptocurrencyRepository::class);
+        $repository->method('findAll')->willReturn([
+            (new Cryptocurrency())->setLibelleCoingecko('bitcoin'),
+            (new Cryptocurrency())->setLibelleCoingecko('ethereum'),
+        ]);
+
+        $this->service(new MockHandler([new Response(500)]), $logger, $repository)->updatePrices();
+    }
+
+    private function service(MockHandler $mock, ?LoggerInterface $logger = null, ?CryptocurrencyRepository $repository = null): CryptocurrencyService
     {
         $client = new CoinGeckoClient(new Client(['base_uri' => 'https://api.coingecko.com', 'handler' => HandlerStack::create($mock)]));
 
         return new CryptocurrencyService(
             $client,
-            $this->createStub(CryptocurrencyRepository::class),
+            $repository ?? $this->createStub(CryptocurrencyRepository::class),
             $this->createStub(EntityManagerInterface::class),
             $logger ?? new NullLogger(),
         );
