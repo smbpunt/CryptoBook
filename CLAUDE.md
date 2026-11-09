@@ -26,6 +26,7 @@ Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.l
 ## Environnement
 
 - Tout tourne dans Docker : `docker compose up -d`, puis `docker compose exec php composer install` / `bin/console …`. Application sur http://localhost:8888. Version de PHP en argument de build : `PHP_VERSION=8.4 docker compose build php`.
+- `make help` liste les raccourcis. Worktree : `make setup-worktree` (fichiers locaux, images du dépôt principal sans rebuild, migrations, fixtures, port choisi par Docker, voir `make url`), puis `make teardown-worktree` avant de le supprimer.
 - Le service `php` remplace `DATABASE_URL` par le service `database` (Postgres 16) ; la base `app_test` est créée au premier démarrage. `.env` pointe toujours sur `127.0.0.1` pour un usage depuis l'hôte.
 - PHP de l'hôte en 8.5, projet en 8.4 : ne pas lancer `composer update` sur l'hôte, il résout les dépendances pour la mauvaise version.
 - Front en AssetMapper + importmap (pas de Node) : paquets JS via `bin/console importmap:require`, scripts de page déclarés comme entrypoints dans `importmap.php`.

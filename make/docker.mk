@@ -1,0 +1,35 @@
+.PHONY: build up down logs bash url test migrate fixtures
+
+## ---- Docker ----
+
+build: ## Build Docker images
+	@$(DOCKER_COMP) build --pull
+
+up: ## Start containers (detached)
+	@$(DOCKER_COMP) up --detach --wait
+	@$(MAKE) --no-print-directory url
+
+down: ## Stop containers
+	@$(DOCKER_COMP) down --remove-orphans
+
+logs: ## Tail containers logs
+	@$(DOCKER_COMP) logs --tail=0 --follow
+
+bash: ## Shell into the php container
+	@$(PHP_CONT) sh
+
+url: ## Show the app URL (port chosen by Docker in a worktree)
+	@echo "App : http://localhost:$$($(DOCKER_COMP) port web 80 | sed 's/.*://')"
+
+test: ## Run PHPUnit, pass options via c="...", e.g. make test c="--filter Ownership"
+	@$(eval c ?=)
+	@$(PHP) bin/phpunit $(c)
+
+## ---- Database ----
+
+migrate: ## Run migrations on the dev and test databases
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --all-or-nothing --allow-no-migration
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --all-or-nothing --allow-no-migration --env=test
+
+fixtures: ## Load fixtures into the dev database (purges it)
+	@$(SYMFONY) doctrine:fixtures:load --no-interaction
