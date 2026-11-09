@@ -96,8 +96,7 @@
                                 </button>
                             </td>
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming.coin.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming.coin.libelle }}">
+                                {{ include('_coin_logo.html.twig', {url: strategy_farming.coin.urlImgThumb, name: strategy_farming.coin.libelle}) }}
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain %}
@@ -180,8 +179,7 @@
                                 </button>
                             </td>
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming.coin.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming.coin.libelle }}">
+                                {{ include('_coin_logo.html.twig', {url: strategy_farming.coin.urlImgThumb, name: strategy_farming.coin.libelle}) }}
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain is not null %}
@@ -265,10 +263,8 @@
                             </td>
 
                             <td class="text-white text-center align-middle">
-                                <img src="{{ strategy_farming.coin1.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming.coin1.libelle }}">
-                                <img src="{{ strategy_farming.coin2.urlImgThumb }}"
-                                     alt="Logo {{ strategy_farming.coin2.libelle }}">
+                                {{ include('_coin_logo.html.twig', {url: strategy_farming.coin1.urlImgThumb, name: strategy_farming.coin1.libelle}) }}
+                                {{ include('_coin_logo.html.twig', {url: strategy_farming.coin2.urlImgThumb, name: strategy_farming.coin2.libelle}) }}
                             </td>
                             <td class="text-white align-middle">
                                 {% if strategy_farming.dapp is not null and strategy_farming.dapp.blockchain is not null %}

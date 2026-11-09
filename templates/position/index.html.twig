@@ -58,7 +58,7 @@
                             </button>
                         </td>
                         <td class="text-white text-center align-middle" style="width: 53px;">
-                            <img src="{{ position['grouped']['coin'].urlImgThumb }}" alt="Logo {{ position['grouped']['coin'].libelle }}">
+                            {{ include('_coin_logo.html.twig', {url: position['grouped']['coin'].urlImgThumb, name: position['grouped']['coin'].libelle}) }}
                         </td>
                         <td class="text-white align-middle text-end">{{ position['grouped'].totalsum|round(8) }} {{ position['grouped']['coin'].symbol|upper }}</td>
                         <td class="align-middle text-end
@@ -180,8 +180,7 @@
                                 <i class="bi bi-info"></i>
                             </button>
                         </td>
-                        <td class="text-white align-middle text-center"><img src="{{ position.coin.urlImgThumb }}"
-                                                                             alt="Logo {{ position.coin.libelle }}"></td>
+                        <td class="text-white align-middle text-center">{{ include('_coin_logo.html.twig', {url: position.coin.urlImgThumb, name: position.coin.libelle}) }}</td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
                         <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
                         <td class="text-white align-middle text-end">{{ position.nbCoins|number_format(2, '.', ' ') }}</td>
@@ -227,7 +226,7 @@
                             </button>
                         </td>
                         <td class="text-white text-center align-middle">
-                            <img src="{{ position.coin.urlImgThumb }}" alt="Logo {{ position.coin.libelle }}">
+                            {{ include('_coin_logo.html.twig', {url: position.coin.urlImgThumb, name: position.coin.libelle}) }}
                         </td>
                         <td class="text-white align-middle">{{ position.coin.symbol|upper }}</td>
                         <td class="text-white align-middle text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') : '' }}</td>
