@@ -24,6 +24,7 @@ class CryptocurrencyService
         foreach ($cryptos as $cryptocurrency) {
             $this->updateDatas($cryptocurrency);
         }
+        $this->entityManager->flush();
     }
 
     /**
