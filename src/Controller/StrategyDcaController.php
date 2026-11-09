@@ -11,17 +11,13 @@ use App\Form\StrategyDcaType;
 use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyDcaRepository;
-use App\Security\Voter\OwnerVoter;
 use App\Service\DcaService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/strategy/dca')]
 class StrategyDcaController extends AbstractController
@@ -155,15 +151,5 @@ class StrategyDcaController extends AbstractController
             'strategy_dca' => $strategyDca,
             'form' => $form,
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_strategy_dca_delete', methods: ['POST'])]
-    #[IsGranted(OwnerVoter::OWNER, 'strategyDca')]
-    #[IsCsrfTokenValid(new Expression('"delete" ~ args["strategyDca"].getId()'))]
-    public function delete(StrategyDca $strategyDca, StrategyDcaRepository $strategyDcaRepository): Response
-    {
-        $strategyDcaRepository->remove($strategyDca, true);
-
-        return $this->redirectToRoute('app_strategy_dca_index', [], Response::HTTP_SEE_OTHER);
     }
 }

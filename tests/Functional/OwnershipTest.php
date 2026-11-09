@@ -37,8 +37,6 @@ final class OwnershipTest extends WebTestCase
         foreach (['loan' => '/loan', 'nft' => '/nft', 'position' => '/position', 'farming' => '/strategy/farming', 'lp' => '/strategy/lp'] as $property => $prefix) {
             yield "$property infos" => ['POST', "$prefix/{id}/infos", $property];
         }
-
-        yield 'dca delete' => ['POST', '/strategy/dca/{id}', 'dca'];
     }
 
     #[DataProvider('ownedRoutes')]
