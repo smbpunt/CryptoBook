@@ -41,6 +41,17 @@ final class FiatExchangeRatesServiceTest extends TestCase
         self::assertSame(100.0, $service->toUsd(100, $this->usd));
     }
 
+    public function testFallsBackToDollarWithoutLoggedInUser(): void
+    {
+        $repository = $this->createStub(FiatCurrencyRepository::class);
+        $repository->method('findOneBy')->willReturn($this->usd);
+
+        $service = new FiatExchangeRatesService(new FixerClient(new MockHttpClient()), $repository, $this->createStub(Security::class));
+
+        self::assertSame(100.0, $service->toFavoriteCurrency(100));
+        self::assertSame(100.0, $service->toUsd(100));
+    }
+
     private function service(FiatCurrency $favorite): FiatExchangeRatesService
     {
         $repository = $this->createStub(FiatCurrencyRepository::class);

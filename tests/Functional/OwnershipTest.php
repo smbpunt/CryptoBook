@@ -65,9 +65,9 @@ final class OwnershipTest extends WebTestCase
         $client->loginUser($data->user);
         $id = $data->deposit->getId();
 
-        // An invalid token is an authentication error: the firewall sends the user to the login page.
+        // An invalid token is a plain 403: the user is not sent to the login page.
         $client->request('POST', "/deposit/$id", ['_token' => 'invalid']);
-        self::assertResponseRedirects('/login');
+        self::assertResponseStatusCodeSame(403);
         self::assertNotNull(self::getContainer()->get(DepositRepository::class)->find($id));
 
         $client->request('GET', '/deposit/');

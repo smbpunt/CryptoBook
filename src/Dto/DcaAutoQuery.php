@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Exclude]
 final readonly class DcaAutoQuery
 {
+    public const int MAX_COUNT = 1000;
+
     public function __construct(
         #[SerializedName('crypto')]
         #[Assert\Positive]
@@ -21,7 +23,7 @@ final readonly class DcaAutoQuery
         #[Assert\Choice(choices: DcaAutoType::RECURRENCES)]
         public string $recurrence,
         #[SerializedName('nb')]
-        #[Assert\Positive]
+        #[Assert\Range(min: 1, max: self::MAX_COUNT)]
         public int $count,
         #[SerializedName('total')]
         #[Assert\Positive]

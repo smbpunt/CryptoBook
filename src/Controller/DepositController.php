@@ -26,7 +26,7 @@ class DepositController extends AbstractController
         $deposits = $depositRepository->findBy([
             'owner' => $user,
         ], [
-            'depositedAt' => 'ASC',
+            'depositedAt' => \SortDirection::Ascending,
         ]);
 
         $totalUsd = $depositService->getTotalDepositUsd($user);

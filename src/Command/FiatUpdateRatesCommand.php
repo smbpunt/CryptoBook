@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Fixer\Exception\FixerUnavailableException;
 use App\Service\FiatExchangeRatesService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -16,7 +17,14 @@ final readonly class FiatUpdateRatesCommand
 
     public function __invoke(SymfonyStyle $io): int
     {
-        $this->fiatExchangeRatesService->updateFiatRates();
+        try {
+            $this->fiatExchangeRatesService->updateFiatRates();
+        } catch (FixerUnavailableException $exception) {
+            $io->error($exception->getMessage());
+
+            return Command::FAILURE;
+        }
+
         $io->success('Fiat rates updated from Fixer.');
 
         return Command::SUCCESS;

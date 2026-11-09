@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Dto\DcaAutoQuery;
 use App\Entity\Cryptocurrency;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -44,6 +45,7 @@ class DcaAutoType extends AbstractType
             ])
             ->add('nb_recurr', IntegerType::class, [
                 'required' => true,
+                'attr' => ['min' => 1, 'max' => DcaAutoQuery::MAX_COUNT],
             ])
             ->add('date_first', DateTimeType::class, [
                 'required' => true,

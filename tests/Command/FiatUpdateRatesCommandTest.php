@@ -47,4 +47,16 @@ final class FiatUpdateRatesCommandTest extends KernelTestCase
             self::assertEqualsWithDelta(new \DateTimeImmutable(), $currency->getUpdatedAt(), 60);
         }
     }
+
+    public function testFailsCleanlyWhenFixerIsUnavailable(): void
+    {
+        $http = self::getContainer()->get('http_client.transport');
+        \assert($http instanceof MockHttpClient);
+        $http->setResponseFactory(new JsonMockResponse(['success' => false, 'error' => ['code' => 104]]));
+
+        $result = self::runCommand('fiat:updateRates');
+
+        self::assertCommandFailed($result);
+        self::assertStringContainsString('has no rates', $result->getDisplay());
+    }
 }

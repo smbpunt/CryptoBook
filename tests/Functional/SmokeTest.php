@@ -111,6 +111,9 @@ final class SmokeTest extends WebTestCase
 
         $this->client->request('GET', '/strategy/dca/dcaAuto?crypto=1&t=yearly&nb=3&total=300&d=2024-01-01');
         self::assertResponseStatusCodeSame(404);
+
+        $this->client->request('GET', '/strategy/dca/dcaAuto?crypto=1&t=h&nb=50000000&total=1&d=2024-01-01');
+        self::assertResponseStatusCodeSame(404);
     }
 
     public function testDcaNewRedirectsToEditWhenStrategyExists(): void

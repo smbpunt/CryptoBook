@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\FiatCurrency;
+use App\Entity\User;
 use App\Fixer\Client\FixerClient;
 use App\Fixer\Exception\FixerUnavailableException;
 use App\Repository\FiatCurrencyRepository;
@@ -39,8 +40,9 @@ class FiatExchangeRatesService
 
     private function getUserFiatCurrency(): FiatCurrency
     {
+        // No logged-in user (command, worker): fall back to USD.
         $user = $this->security->getUser();
-        if (null !== $user->getFavoriteFiatCurrency()) {
+        if ($user instanceof User && null !== $user->getFavoriteFiatCurrency()) {
             return $user->getFavoriteFiatCurrency();
         }
 
