@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @doc/upgrade-symfony-8.md
 
-- Work one phase at a time, one MR per phase, in the order of the table. Don't pull work from a later phase into an earlier one (e.g. no Asset Mapper before phase 5, no ORM 3 before phase 7).
+- Everything happens on a single branch, `chore/upgrade-symfony-8`, merged into `main` at the end. Work one phase at a time, in the order of the table, with dedicated commits per phase (never mix two phases in one commit). Don't pull work from a later phase into an earlier one (e.g. no Asset Mapper before phase 5, no ORM 3 before phase 7).
 - When a phase is done, update its status in the tracking table.
 - Phase 1 removes the API entirely (API Platform, JWT, CORS, `CurrentUserExtension`): don't extend or fix API code before then.
 

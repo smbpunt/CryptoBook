@@ -1,6 +1,8 @@
 # Montée de version Symfony 6.3 → 8.1
 
-Faire passer CryptoBook de Symfony 6.3 / PHP 8.1 à Symfony 8.1 / PHP 8.4, sécurisé par des tests, une MR par phase.
+Faire passer CryptoBook de Symfony 6.3 / PHP 8.1 à Symfony 8.1 / PHP 8.4, sécurisé par des tests.
+
+Tout le plan se fait sur une seule branche, `chore/upgrade-symfony-8`, mergée dans `main` à la fin. Chaque phase y est livrée par un ou plusieurs commits dédiés.
 
 ## Suivi
 
@@ -60,7 +62,7 @@ Faire passer CryptoBook de Symfony 6.3 / PHP 8.1 à Symfony 8.1 / PHP 8.4, sécu
 - Zéro dépréciation
 
 ### 7. Doctrine ORM 3
-- ORM 3 + DBAL 4, dans sa propre MR
+- ORM 3 + DBAL 4, isolé dans ses propres commits
 
 ### 8. Symfony 8.1
 - Prérequis : PHP 8.4 en prod
