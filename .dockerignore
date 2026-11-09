@@ -1,6 +1,5 @@
 .git
 .idea
-node_modules
 var
 vendor
 data-pg

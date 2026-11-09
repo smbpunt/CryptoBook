@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[186],{6613:(e,a,s)=>{var r=s(8527);console.log("date-picker.js loaded"),(0,r.Z)(".js-datetimepicker",{dateFormat:"d/m/Y"})}},e=>{e.O(0,[527],(()=>{return a=6613,e(e.s=a);var a}));e.O()}]);
