@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\LoanRepository;
 use App\Repository\PositionRepository;
 use App\Service\DepositService;
@@ -10,15 +11,16 @@ use App\Service\FiatExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class CryptobookController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService): Response
+    public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService, #[CurrentUser] User $user): Response
     {
         $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
         $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
-        $totalDepositUsd = $depositService->getTotalDepositUsdCurrentUser();
+        $totalDepositUsd = $depositService->getTotalDepositUsd($user);
 
         $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
         $isFavoriteUsd = 'USD' === $userFavoriteCurrency->getFixerKey();
@@ -55,7 +57,7 @@ class CryptobookController extends AbstractController
 
         array_multisort(array_column($positions, 'valueUsd'), \SORT_DESC, $positions);
 
-        $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd();
+        $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd($user);
 
         $totalLoan = $loanRepository->getTotal($this->getUser());
 

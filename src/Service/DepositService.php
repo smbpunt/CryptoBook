@@ -4,38 +4,23 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\DepositRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 
-class DepositService
+final readonly class DepositService
 {
-    public function __construct(
-        private readonly DepositRepository $depositRepository,
-        private readonly Security $security,
-    ) {
+    public function __construct(private DepositRepository $depositRepository)
+    {
     }
 
     /**
-     * @return float
-     *               Retourne le solde total d'argent investi pour le User
+     * Total amount deposited by the user, in USD.
      */
     public function getTotalDepositUsd(User $user): float
     {
-        $deposits = $this->depositRepository->findBy(['owner' => $user]);
-
-        $totalDepositUsd = 0;
-        foreach ($deposits as $deposit) {
-            $totalDepositUsd += $deposit->getAmountUsd();
+        $total = 0;
+        foreach ($this->depositRepository->findBy(['owner' => $user]) as $deposit) {
+            $total += $deposit->getAmountUsd();
         }
 
-        return $totalDepositUsd;
-    }
-
-    /**
-     * @return float
-     *               Retourne le solde total d'argent investi pour l'utilisateur connecté
-     */
-    public function getTotalDepositUsdCurrentUser(): float
-    {
-        return $this->getTotalDepositUsd($this->security->getUser());
+        return $total;
     }
 }

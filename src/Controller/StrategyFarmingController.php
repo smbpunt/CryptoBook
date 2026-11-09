@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\StrategyFarming;
+use App\Entity\User;
 use App\Form\StrategyFarmingType;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
@@ -11,12 +12,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/strategy/farming')]
 class StrategyFarmingController extends AbstractController
 {
     #[Route('/', name: 'app_strategy_farming_index', methods: ['GET'])]
-    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, FarmingService $farmingService): Response
+    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, FarmingService $farmingService, #[CurrentUser] User $user): Response
     {
         $strategies = $strategyFarmingRepository->findByStable($this->getUser(), false);
         $strategies_stable = $strategyFarmingRepository->findByStable($this->getUser(), true);
@@ -24,9 +26,9 @@ class StrategyFarmingController extends AbstractController
             'owner' => $this->getUser(),
         ]);
 
-        $total_year_singleasset = $farmingService->getTotalFarmingSimpleByYearUsd(checkBooleanIsStable: true, isStable: false);
-        $total_year_stable = $farmingService->getTotalFarmingSimpleByYearUsd(checkBooleanIsStable: true, isStable: true);
-        $total_year_lp = $farmingService->getTotalFarmingLpByYearUsd();
+        $total_year_singleasset = $farmingService->getTotalFarmingSimpleByYearUsd($user, isStable: false);
+        $total_year_stable = $farmingService->getTotalFarmingSimpleByYearUsd($user, isStable: true);
+        $total_year_lp = $farmingService->getTotalFarmingLpByYearUsd($user);
 
         return $this->render('strategy_farming/index.html.twig', [
             'strategy_farmings' => $strategies,
