@@ -2,10 +2,11 @@
 
 {% block title %}{{ parent() }} - Positions{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'position_form', 'collection', 'tab', 'select2', 'datepicker', 'tooltip']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app', 'collection', 'select2']) }}{% endblock %}
 
 {% block body %}
-    <h1>Nouvelle position</h1>
-
-    {{ include('position/_form.html.twig') }}
+    <twig:App:PageHeader title="Nouvelle position"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('position/_form.html.twig') }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

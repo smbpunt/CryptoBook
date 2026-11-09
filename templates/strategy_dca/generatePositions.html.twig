@@ -5,16 +5,16 @@
 {% block importmap %}{{ importmap(['app', 'collection']) }}{% endblock %}
 
 {% block body %}
-    <h1>Génerer vos positions DCA</h1>
+    <twig:App:PageHeader title="Générer vos positions DCA"/>
 
     {{ form_start(form_dca) }}
-    <ul class="list-group list-group-flush">
-        {% for form in form_dca.positions %}
-            <li class="list-group-item">
-                {{ include('position/_form_dca.html.twig') }}
-            </li>
-        {% endfor %}
-    </ul>
-    <button class="btn btn-light m-3">{{ button_label|default('Valider') }}</button>
+        <div class="grid gap-4">
+            {% for form in form_dca.positions %}
+                <twig:Card><twig:Card:Content>
+                    {{ include('position/_form_dca.html.twig') }}
+                </twig:Card:Content></twig:Card>
+            {% endfor %}
+        </div>
+        <twig:Button type="submit" class="mt-4">{{ button_label|default('Valider') }}</twig:Button>
     {{ form_end(form_dca) }}
 {% endblock %}

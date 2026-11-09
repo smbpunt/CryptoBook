@@ -1,0 +1,21 @@
+{%- props
+    ## string Unique id of the dialog.
+    id = 'informations'
+-%}
+{%- set _content -%}{%- block content %}{% endblock -%}{%- endset -%}
+{#
+ # Wraps a page section whose `App:InfoButton`s load server-rendered details into a shared dialog.
+ #}
+<twig:Dialog id="{{ id }}" data-controller="dialog remote-dialog" {{ ...attributes }}>
+    {{ _content }}
+    <twig:Dialog:Content class="sm:max-w-4xl max-h-[85vh] overflow-y-auto">
+        <twig:Dialog:Header>
+            <twig:Dialog:Title data-remote-dialog-target="title">Informations</twig:Dialog:Title>
+            <twig:Dialog:Description class="sr-only">Détails de l'élément sélectionné</twig:Dialog:Description>
+        </twig:Dialog:Header>
+        <div data-remote-dialog-target="body" class="grid gap-3"></div>
+        <template data-remote-dialog-target="loading">
+            <div class="flex justify-center py-8"><twig:Spinner class="size-6"/></div>
+        </template>
+    </twig:Dialog:Content>
+</twig:Dialog>

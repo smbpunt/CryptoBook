@@ -1,45 +1,13 @@
 {{ form_start(form) }}
-
-
-<div class="row mb-2">
-    <div class="col-md-3 align-self-end">
-        {{ form_label(form.loanedAt, 'Emprunté le') }}
-        {{ form_widget(form.loanedAt, { 'attr': {'placeholder': 'ex: 01/01/2021'} }) }}
+    <div class="grid gap-x-4 md:grid-cols-3">
+        {{ form_row(form.loanedAt, {label: 'Emprunté le'}) }}
+        {{ form_row(form.nbCoins, {label: 'Nombre', attr: {placeholder: 'ex: 1000'}}) }}
+        {{ form_row(form.coin, {label: 'Crypto'}) }}
     </div>
-    <div class="col-md-3 align-self-end">
+    <div class="grid gap-x-4 md:grid-cols-2">
+        {{ form_row(form.blockchain, {label: 'Blockchain'}) }}
+        <div id="id-dapp">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
     </div>
-</div>
-
-<div class="row mb-2">
-    <div class="col-md-3 align-self-end">
-        {{ form_label(form.nbCoins, 'Nombre') }}
-        {{ form_widget(form.nbCoins, { 'attr': {'placeholder': 'ex: 1000'} }) }}
-    </div>
-    <div class="col-md-3 align-self-end">
-        {{ form_label(form.coin, 'Crypto') }}
-        {{ form_widget(form.coin) }}
-    </div>
-</div>
-
-
-<div class="row mb-2">
-    <div class="col-md-3 align-self-end">
-        {{ form_label(form.blockchain, "Blockchain") }}
-        {{ form_widget(form.blockchain) }}
-    </div>
-    <div id="id-dapp" class="col-md-3 align-self-end">
-        {{ form_label(form.dapp, "Dapp") }}
-        {{ form_widget(form.dapp) }}
-    </div>
-</div>
-
-<div class="col-6 mb-3">
-    {{ form_label(form.description, 'Description') }}
-    {{ form_widget(form.description, { 'attr': {
-        'placeholder': 'ex: Mon emprunt est sur telle Dapp/Exchange, ou sur la blockchain...',
-        'rows': 3
-    } }) }}
-</div>
-
-<button class="btn btn-light m-3">{{ button_label|default('Save') }}</button>
+    {{ form_row(form.description, {label: 'Description', attr: {placeholder: 'ex: Mon emprunt est sur telle Dapp/Exchange, ou sur la blockchain...', rows: 3}}) }}
+    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
 {{ form_end(form) }}

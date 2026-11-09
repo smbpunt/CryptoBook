@@ -2,11 +2,11 @@
 
 {% block title %}{{ parent() }} - NFTs{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'select2', 'datepicker']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app', 'select2']) }}{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un NFT</h1>
-
-    {{ include('nft/_form.html.twig', {'button_label': 'Ajouter'}) }}
-
+    <twig:App:PageHeader title="Ajouter un NFT"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('nft/_form.html.twig', {button_label: 'Ajouter'}) }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

@@ -2,10 +2,11 @@
 
 {% block title %}{{ parent() }} - Dépôts{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'datepicker']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app']) }}{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un dépôt</h1>
-
-    {{ include('deposit/_form.html.twig', {'button_label': 'Ajouter'}) }}
+    <twig:App:PageHeader title="Ajouter un dépôt"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('deposit/_form.html.twig', {button_label: 'Ajouter'}) }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

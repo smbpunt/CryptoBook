@@ -1,60 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion !{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <div class="text-center">
-        <main class="form-signin">
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
-                {% if app.user %}
-                    <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a
-                                href="{{ path('app_logout') }}">Logout</a>
-                    </div>
-                {% endif %}
+    <twig:App:AuthCard title="Veuillez vous connecter">
+        <twig:Form method="post" class="space-y-4">
+            {% if error %}
+                <twig:Alert variant="destructive">
+                    <twig:ux:icon name="lucide:circle-alert"/>
+                    <twig:Alert:Title>{{ error.messageKey|trans(error.messageData, 'security') }}</twig:Alert:Title>
+                </twig:Alert>
+            {% endif %}
+            {% if app.user %}
+                <p class="text-sm text-muted-foreground">
+                    Connecté en tant que {{ app.user.userIdentifier }}, <a class="underline" href="{{ path('app_logout') }}">se déconnecter</a>
+                </p>
+            {% endif %}
 
-                <img class="mb-4" src="{{ asset('images/btc.png') }}" alt="">
-                <h1 class="h3 mb-3 fw-normal">Veuillez vous connecter</h1>
-
-                <div class="form-floating mb-3">
-                    <input type="email"
-                           value="{{ last_username }}"
-                           autocomplete="email"
-                           class="form-control"
-                           id="inputEmail"
-                           name="email"
-                           placeholder="name@example.com"
-                           required
-                           autofocus>
-                    <label class="form-label" for="inputEmail">Email</label>
+            <twig:Form:Item>
+                <twig:Form:Label for="inputEmail">Email</twig:Form:Label>
+                <twig:Input type="email" id="inputEmail" name="email" value="{{ last_username }}" autocomplete="email" placeholder="name@example.com" required autofocus/>
+            </twig:Form:Item>
+            <twig:Form:Item>
+                <div class="flex items-center">
+                    <twig:Form:Label for="inputPassword">Mot de passe</twig:Form:Label>
+                    <a href="{{ path('app_forgot_password_request') }}" class="ml-auto text-sm underline-offset-4 hover:underline">Mot de passe oublié ?</a>
                 </div>
+                <twig:Input type="password" id="inputPassword" name="password" autocomplete="current-password" required/>
+            </twig:Form:Item>
+            <div class="flex items-center gap-2">
+                <twig:Checkbox id="remember_me" name="_remember_me"/>
+                <twig:Label for="remember_me">Rester connecté</twig:Label>
+            </div>
 
-
-                <div class="form-floating">
-                    <input type="password"
-                           class="form-control"
-                           name="password"
-                           id="inputPassword"
-                           placeholder="Password"
-                           autocomplete="current-password"
-                           required>
-                    <label class="form-label" for="inputPassword">Mot de passe</label>
-                </div>
-
-                <div class="checkbox mb-3 mt-3">
-                    <label>
-                        <input type="checkbox" name="_remember_me"> Rester connecter
-                    </label>
-                </div>
-
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                <button class="w-100 btn btn-lg btn-warning" type="submit">Se connecter</button>
-                <p class="mt-5 mb-3 text-muted">© SMB Corporation</p>
-                <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
-            </form>
-        </main>
-    </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <twig:Button type="submit" class="w-full">Se connecter</twig:Button>
+            <p class="text-center text-sm text-muted-foreground">
+                Pas de compte ? <a href="{{ path('app_register') }}" class="underline underline-offset-4">S'inscrire</a>
+            </p>
+        </twig:Form>
+    </twig:App:AuthCard>
 {% endblock %}

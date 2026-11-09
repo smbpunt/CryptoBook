@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,24 +13,36 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body>
-<nav class="p-3 border-bottom navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ path('home') }}">Cryptobook</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            {{ knp_menu_render('main', {'currentClass': 'active'}) }}
-        </div>
+<body class="min-h-screen antialiased">
+<header class="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+    <div class="mx-auto flex h-14 max-w-screen-2xl items-center gap-4 px-4">
+        <a class="flex items-center gap-2 font-semibold" href="{{ path('home') }}">
+            <twig:ux:icon name="lucide:wallet" class="size-5"/>
+            Cryptobook
+        </a>
+        {% block header_nav %}
+            {# Built once for both navs; inside the block so error pages (which empty it) skip it. #}
+            {% set main_menu = knp_menu_get('main') %}
+            <nav class="ml-auto hidden lg:block" aria-label="Navigation principale">
+                {{ knp_menu_render(main_menu) }}
+            </nav>
+            <details class="group relative ml-auto lg:hidden">
+                <summary class="list-none [&::-webkit-details-marker]:hidden">
+                    <span class="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg hover:bg-muted" aria-label="Menu">
+                        <twig:ux:icon name="lucide:menu" class="size-5 group-open:hidden"/>
+                        <twig:ux:icon name="lucide:x" class="hidden size-5 group-open:block"/>
+                    </span>
+                </summary>
+                <nav class="absolute right-0 mt-2 w-56 rounded-lg border bg-popover p-2 shadow-md" aria-label="Navigation principale">
+                    {{ knp_menu_render(main_menu, {direction: 'column'}) }}
+                </nav>
+            </details>
+        {% endblock %}
     </div>
-</nav>
+</header>
 
-<div class="bg-dark text-white p-3">
-    <div class="container">
-        {% block body %}{% endblock %}
-    </div>
-</div>
+<main class="mx-auto max-w-screen-2xl px-4 py-6">
+    {% block body %}{% endblock %}
+</main>
 </body>
 </html>

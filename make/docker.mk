@@ -1,4 +1,4 @@
-.PHONY: build up down logs bash url test migrate fixtures users\:show
+.PHONY: build up down logs bash url test tailwind migrate fixtures users\:show
 
 ## ---- Docker ----
 
@@ -24,6 +24,10 @@ url: ## Show the app URL (port chosen by Docker in a worktree)
 test: ## Run PHPUnit, pass options via c="...", e.g. make test c="--filter Ownership"
 	@$(eval c ?=)
 	@$(PHP) bin/phpunit $(c)
+
+tailwind: ## Build the Tailwind CSS (var/tailwind/), pass c="--watch" to rebuild on change
+	@$(eval c ?=)
+	@$(SYMFONY) tailwind:build $(c)
 
 ## ---- Database ----
 

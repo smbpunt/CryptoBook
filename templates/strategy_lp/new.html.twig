@@ -2,10 +2,11 @@
 
 {% block title %}{{ parent() }} - LP{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'lp_form', 'datepicker']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app', 'lp_form']) }}{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un farming LP</h1>
-
-    {{ include('strategy_lp/_form.html.twig') }}
+    <twig:App:PageHeader title="Ajouter un farming LP"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy_lp/_form.html.twig') }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

@@ -1,5 +1,10 @@
 import Chart from 'chart.js/auto';
 
+// Dark theme colors in hex: Chart.js 3 does not parse the oklch() tokens of app.css.
+Chart.defaults.color = '#a1a1a1';
+Chart.defaults.borderColor = '#2e2e2e';
+Chart.defaults.elements.arc.borderColor = '#171717';
+
 const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 const element = document.getElementById('id-array-positions');
 const positions = element.dataset.pie;

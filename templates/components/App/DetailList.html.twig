@@ -1,0 +1,14 @@
+{%- props
+    ## array<string, mixed> Label => value pairs.
+    items
+-%}
+<twig:Card {{ ...attributes.defaults({class: 'max-w-2xl'}) }}>
+    <twig:Card:Content>
+        <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+            {% for label, value in items %}
+                <dt class="text-muted-foreground">{{ label }}</dt>
+                <dd class="tabular-nums">{{ value }}</dd>
+            {% endfor %}
+        </dl>
+    </twig:Card:Content>
+</twig:Card>

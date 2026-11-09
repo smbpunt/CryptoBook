@@ -2,11 +2,11 @@
 
 {% block title %}{{ parent() }} - Farming{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'farming_form', 'datepicker']) }}{% endblock %}
+{% block importmap %}{{ importmap(['app', 'farming_form']) }}{% endblock %}
 
 {% block body %}
-    <h1>Modifier la stratégie de farming</h1>
-
-    {{ include('strategy_farming/_form.html.twig', {'button_label': 'Modifier'}) }}
-
+    <twig:App:PageHeader title="Modifier la stratégie de farming"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy_farming/_form.html.twig', {button_label: 'Modifier'}) }}
+    </twig:Card:Content></twig:Card>
 {% endblock %}

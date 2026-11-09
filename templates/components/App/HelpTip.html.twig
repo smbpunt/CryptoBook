@@ -1,0 +1,14 @@
+{%- props
+    ## string Unique tooltip id.
+    id,
+    ## string Help text.
+    text
+-%}
+<twig:Tooltip id="{{ id }}" class="align-middle">
+    <twig:Tooltip:Trigger>
+        <span tabindex="0" class="inline-flex cursor-help text-muted-foreground" aria-label="{{ text }}" {{ html_attr(tooltip_trigger_attrs) }}>
+            <twig:ux:icon name="lucide:info" class="size-4"/>
+        </span>
+    </twig:Tooltip:Trigger>
+    <twig:Tooltip:Content>{{ text }}</twig:Tooltip:Content>
+</twig:Tooltip>

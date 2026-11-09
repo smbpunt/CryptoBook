@@ -1,0 +1,11 @@
+{%- props
+    ## string The metric label.
+    label
+-%}
+{%- set _content -%}{%- block content %}{% endblock -%}{%- endset -%}
+<twig:Card size="sm" {{ ...attributes }}>
+    <twig:Card:Header>
+        <twig:Card:Description>{{ label }}</twig:Card:Description>
+        <twig:Card:Title class="text-xl tabular-nums">{{ _content }}</twig:Card:Title>
+    </twig:Card:Header>
+</twig:Card>

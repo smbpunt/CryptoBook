@@ -1,0 +1,11 @@
+{%- props
+    ## number Yearly rewards in USD.
+    yearly,
+    ## int Decimals displayed.
+    decimals = 0
+-%}
+<div {{ attributes.defaults({class: 'grid grid-cols-2 gap-4 md:grid-cols-4'|tailwind_classes}) }}>
+    {% for label, divisor in {'Jour': 365, 'Semaine': 52, 'Mois': 12, 'Année': 1} %}
+        <twig:App:Stat label="{{ label }}">{{ (yearly / divisor)|number_format(decimals, '.', ' ') }} $</twig:App:Stat>
+    {% endfor %}
+</div>
