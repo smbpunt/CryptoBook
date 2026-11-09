@@ -133,11 +133,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         return $this;
     }
 
-    #[\Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
-
     /**
      * @return Collection<int, Deposit>
      */
