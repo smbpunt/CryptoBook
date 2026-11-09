@@ -6,7 +6,7 @@ Faire passer CryptoBook de Symfony 6.3 / PHP 8.1 à Symfony 8.1 / PHP 8.4, sécu
 
 | # | Phase | PHP | Symfony | État |
 |---|---|---|---|---|
-| 0 | Docker avec version PHP paramétrable | 8.3 | 6.3 | ⬜ |
+| 0 | Docker avec version PHP paramétrable | 8.3 | 6.3 | ✅ |
 | 1 | Suppression de l'API | 8.3 | 6.3 | ⬜ |
 | 2 | Outillage qualité | 8.3 | 6.3 | ⬜ |
 | 3 | Tests de non-régression | 8.3 | 6.3 | ⬜ |

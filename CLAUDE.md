@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Checking changes
 
-No tests, PHPStan or CS Fixer yet (they arrive in phase 2). Until then, check with:
+No tests, PHPStan or CS Fixer yet (they arrive in phase 2). Until then, check with (inside the `php` container):
 
 ```
 bin/console lint:container
@@ -29,7 +29,8 @@ bin/console doctrine:schema:validate
 
 ## Local setup gotchas
 
-- The local environment isn't working yet (phase 0 fixes it): `docker-compose.yml` has no database, and `.env` points to a Postgres on `127.0.0.1`.
+- Run everything in Docker: `docker compose up -d`, then `docker compose exec php composer install` / `bin/console …`. App on http://localhost:8888. PHP version is a build arg: `PHP_VERSION=8.4 docker compose build php`.
+- The `php` service overrides `DATABASE_URL` to the `database` service (Postgres 16); `app_test` is created on first start. `.env` still points to `127.0.0.1` for host use.
 - Host PHP is 8.5, the project targets 8.1 (then 8.3/8.4). Don't run `composer update` on the host: it resolves dependencies for the wrong PHP version.
 - Frontend is Webpack Encore (`npm run dev` / `watch` / `build`) until phase 5.
 
