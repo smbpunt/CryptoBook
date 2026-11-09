@@ -3,24 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Loan;
+use App\Entity\User;
 use App\Form\LoanType;
 use App\Repository\LoanRepository;
+use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/loan')]
 class LoanController extends AbstractController
 {
     #[Route('/', name: 'app_loan_index', methods: ['GET'])]
-    public function index(LoanRepository $loanRepository): Response
+    public function index(LoanRepository $loanRepository, #[CurrentUser] User $user): Response
     {
         $loans = $loanRepository->findBy([
-            'owner' => $this->getUser(),
+            'owner' => $user,
         ]);
 
-        $total = $loanRepository->getTotal($this->getUser());
+        $total = $loanRepository->getTotal($user);
 
         return $this->render('loan/index.html.twig', [
             'loans' => $loans,
@@ -29,21 +35,18 @@ class LoanController extends AbstractController
     }
 
     #[Route('/{id}/infos', name: 'app_loan_ajax_infos', methods: ['POST'])]
+    #[IsGranted(OwnerVoter::OWNER, 'loan')]
     public function ajax(Loan $loan): Response
     {
-        if ($loan->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
-
         return $this->render('loan/_informations.html.twig', [
             'loan' => $loan,
         ]);
     }
 
     #[Route('/new', name: 'app_loan_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, LoanRepository $loanRepository): Response
+    public function new(Request $request, LoanRepository $loanRepository, #[CurrentUser] User $user): Response
     {
-        $loan = new Loan($this->getUser());
+        $loan = new Loan($user);
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
@@ -60,12 +63,9 @@ class LoanController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_loan_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(OwnerVoter::OWNER, 'loan')]
     public function edit(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
-        if ($loan->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_loan_index');
-        }
-
         $form = $this->createForm(LoanType::class, $loan);
         $form->handleRequest($request);
 
@@ -82,15 +82,11 @@ class LoanController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_loan_delete', methods: ['POST'])]
-    public function delete(Request $request, Loan $loan, LoanRepository $loanRepository): Response
+    #[IsGranted(OwnerVoter::OWNER, 'loan')]
+    #[IsCsrfTokenValid(new Expression('"delete" ~ args["loan"].getId()'))]
+    public function delete(Loan $loan, LoanRepository $loanRepository): Response
     {
-        if ($loan->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_loan_index');
-        }
-
-        if ($this->isCsrfTokenValid('delete'.$loan->getId(), $request->request->get('_token'))) {
-            $loanRepository->remove($loan, true);
-        }
+        $loanRepository->remove($loan, true);
 
         return $this->redirectToRoute('app_loan_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -2,12 +2,13 @@
 
 namespace App\Tests\Functional;
 
+use App\Repository\DepositRepository;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * A user cannot edit the data of another user.
+ * A user cannot read, edit or delete the data of another user.
  */
 final class OwnershipTest extends WebTestCase
 {
@@ -17,19 +18,48 @@ final class OwnershipTest extends WebTestCase
         $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
         $client->loginUser($data->admin);
 
-        $pages = [
-            '/deposit/%d/edit' => [$data->deposit->getId(), '/deposit/'],
-            '/loan/%d/edit' => [$data->loan->getId(), '/loan/'],
-            '/nft/%d/edit' => [$data->nft->getId(), '/nft/'],
-            '/position/%d/edit' => [$data->position->getId(), '/position/'],
-            '/project/monitoring/%d/edit' => [$data->project->getId(), '/project/monitoring/'],
-            '/strategy/farming/%d/edit' => [$data->farming->getId(), '/strategy/farming/'],
-            '/strategy/lp/%d/edit' => [$data->lp->getId(), '/strategy/farming/'],
-        ];
-
-        foreach ($pages as $url => [$id, $index]) {
-            $client->request('GET', \sprintf($url, $id));
-            self::assertResponseRedirects($index, message: $url);
+        foreach ([
+            "/deposit/{$data->deposit->getId()}/edit",
+            "/loan/{$data->loan->getId()}/edit",
+            "/nft/{$data->nft->getId()}/edit",
+            "/position/{$data->position->getId()}/edit",
+            "/project/monitoring/{$data->project->getId()}/edit",
+            "/strategy/farming/{$data->farming->getId()}/edit",
+            "/strategy/lp/{$data->lp->getId()}/edit",
+        ] as $url) {
+            $client->request('GET', $url);
+            self::assertResponseStatusCodeSame(403, $url);
         }
+    }
+
+    public function testCannotDeleteDataOfAnotherUser(): void
+    {
+        $client = self::createClient();
+        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $client->loginUser($data->admin);
+
+        $client->request('POST', "/deposit/{$data->deposit->getId()}", ['_token' => 'whatever']);
+
+        self::assertResponseStatusCodeSame(403);
+        self::assertNotNull(self::getContainer()->get(DepositRepository::class)->find($data->deposit->getId()));
+    }
+
+    public function testOwnerDeletesWithAValidCsrfToken(): void
+    {
+        $client = self::createClient();
+        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $client->loginUser($data->user);
+        $id = $data->deposit->getId();
+
+        // An invalid token is an authentication error: the firewall sends the user to the login page.
+        $client->request('POST', "/deposit/$id", ['_token' => 'invalid']);
+        self::assertResponseRedirects('/login');
+        self::assertNotNull(self::getContainer()->get(DepositRepository::class)->find($id));
+
+        $client->request('GET', '/deposit/');
+        $client->submit($client->getCrawler()->filter(\sprintf('form[action="/deposit/%d"]', $id))->form());
+
+        self::assertResponseRedirects('/deposit/');
+        self::assertNull(self::getContainer()->get(DepositRepository::class)->find($id));
     }
 }

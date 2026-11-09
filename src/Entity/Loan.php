@@ -7,7 +7,7 @@ use App\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LoanRepository::class)]
-class Loan
+class Loan implements OwnedInterface
 {
     use DescriptionTrait;
 

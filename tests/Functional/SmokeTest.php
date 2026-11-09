@@ -59,7 +59,7 @@ final class SmokeTest extends WebTestCase
             '/nft/', '/nft/new', "/nft/{$d->nft->getId()}/edit",
             '/position/', '/position/new', "/position/{$d->position->getId()}/edit",
             '/project/monitoring/', '/project/monitoring/new', "/project/monitoring/{$d->project->getId()}/edit",
-            '/strategy/dca/', '/strategy/dca/edit', '/strategy/dca/generatePositions/0',
+            '/strategy/dca/', '/strategy/dca/edit', '/strategy/dca/generatePositions', '/strategy/dca/generatePositions/150.5',
             '/strategy/farming/', '/strategy/farming/new', "/strategy/farming/{$d->farming->getId()}/edit",
             '/strategy/lp/new', "/strategy/lp/{$d->lp->getId()}/edit",
             '/user/preferences',
@@ -108,6 +108,9 @@ final class SmokeTest extends WebTestCase
 
         $this->client->request('GET', '/strategy/dca/dcaAuto');
         self::assertResponseRedirects('/strategy/dca/');
+
+        $this->client->request('GET', '/strategy/dca/dcaAuto?crypto=1&t=yearly&nb=3&total=300&d=2024-01-01');
+        self::assertResponseStatusCodeSame(404);
     }
 
     public function testDcaNewRedirectsToEditWhenStrategyExists(): void

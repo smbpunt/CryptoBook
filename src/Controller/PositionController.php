@@ -3,22 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\Position;
+use App\Entity\User;
 use App\Form\PositionType;
 use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
+use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/position')]
 class PositionController extends AbstractController
 {
     #[Route('/', name: 'app_position_index', methods: ['GET'])]
-    public function index(PositionRepository $positionRepository, CryptocurrencyRepository $cryptocurrencyRepository): Response
+    public function index(PositionRepository $positionRepository, CryptocurrencyRepository $cryptocurrencyRepository, #[CurrentUser] User $user): Response
     {
         // Liste des positions avec calcul de la somme
-        $positions_sum = $cryptocurrencyRepository->getSumCoinByUser($this->getUser()) ?? [];
+        $positions_sum = $cryptocurrencyRepository->getSumCoinByUser($user) ?? [];
 
         $map = [];
 
@@ -27,7 +33,7 @@ class PositionController extends AbstractController
             $coin = $byCoin['coin'];
 
             // On récupére la liste des positions pour ce coin
-            $positionsByCoin = $positionRepository->getPositions($this->getUser(), false, true, $coin);
+            $positionsByCoin = $positionRepository->getPositions($user, false, true, $coin);
 
             // J'initialise à 0
             $coutMoyen = 0;
@@ -50,27 +56,24 @@ class PositionController extends AbstractController
 
         return $this->render('position/index.html.twig', [
             'positions' => $map,
-            'positions_stable' => $positionRepository->getPositions($this->getUser(), true),
-            'positions_closed' => $positionRepository->getPositions($this->getUser(), false, false),
+            'positions_stable' => $positionRepository->getPositions($user, true),
+            'positions_closed' => $positionRepository->getPositions($user, false, false),
         ]);
     }
 
     #[Route('/{id}/infos', name: 'app_position_ajax_infos', methods: ['POST'])]
+    #[IsGranted(OwnerVoter::OWNER, 'position')]
     public function ajax(Position $position): Response
     {
-        if ($position->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
-
         return $this->render('position/_strategy_position.html.twig', [
             'position' => $position,
         ]);
     }
 
     #[Route('/new', name: 'app_position_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PositionRepository $positionRepository): Response
+    public function new(Request $request, PositionRepository $positionRepository, #[CurrentUser] User $user): Response
     {
-        $position = new Position($this->getUser());
+        $position = new Position($user);
         $form = $this->createForm(PositionType::class, $position);
         $form->handleRequest($request);
 
@@ -88,12 +91,9 @@ class PositionController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_position_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(OwnerVoter::OWNER, 'position')]
     public function edit(Request $request, Position $position, PositionRepository $positionRepository): Response
     {
-        if ($position->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_position_index');
-        }
-
         $form = $this->createForm(PositionType::class, $position);
         $form->handleRequest($request);
 
@@ -110,15 +110,11 @@ class PositionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_position_delete', methods: ['POST'])]
-    public function delete(Request $request, Position $position, PositionRepository $positionRepository): Response
+    #[IsGranted(OwnerVoter::OWNER, 'position')]
+    #[IsCsrfTokenValid(new Expression('"delete" ~ args["position"].getId()'))]
+    public function delete(Position $position, PositionRepository $positionRepository): Response
     {
-        if ($position->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_position_index');
-        }
-
-        if ($this->isCsrfTokenValid('delete'.$position->getId(), $request->request->get('_token'))) {
-            $positionRepository->remove($position, true);
-        }
+        $positionRepository->remove($position, true);
 
         return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
     }

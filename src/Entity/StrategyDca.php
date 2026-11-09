@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StrategyDcaRepository::class)]
-class StrategyDca
+class StrategyDca implements OwnedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

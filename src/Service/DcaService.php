@@ -45,24 +45,24 @@ class DcaService
     /**
      * @return Position[]
      */
-    public function generateDcaAutoPositions(UserInterface $user, string $idCrypto, string $recurr, string $nbRecurr, string $total, string $stringFirstDate): array
+    public function generateDcaAutoPositions(UserInterface $user, int $coinId, string $recurrence, int $count, float $total, string $firstDate): array
     {
-        $coin = $this->cryptocurrencyRepository->find((int) $idCrypto);
+        $coin = $this->cryptocurrencyRepository->find($coinId);
         if (null === $coin) {
             return [];
         }
 
         try {
-            $firstDate = new \DateTime($stringFirstDate);
+            $date = new \DateTime($firstDate);
         } catch (\Exception) {
             return [];
         }
 
-        $modify = match ($recurr) {
-            DcaAutoType::$HOURLY => '+4 hours',
-            DcaAutoType::$DAILY => '+1 day',
-            DcaAutoType::$WEEKLY => '+1 week',
-            DcaAutoType::$MONTHLY => '+1 month',
+        $modify = match ($recurrence) {
+            DcaAutoType::HOURLY => '+4 hours',
+            DcaAutoType::DAILY => '+1 day',
+            DcaAutoType::WEEKLY => '+1 week',
+            DcaAutoType::MONTHLY => '+1 month',
             default => null,
         };
 
@@ -71,15 +71,15 @@ class DcaService
         }
 
         $positions = [];
-        for ($i = 0; $i < (int) $nbRecurr; ++$i) {
+        for ($i = 0; $i < $count; ++$i) {
             if ($i > 0) {
-                $firstDate->modify($modify);
+                $date->modify($modify);
             }
 
             $position = new Position($user);
-            $position->setOpenedAt(\DateTimeImmutable::createFromMutable($firstDate))
+            $position->setOpenedAt(\DateTimeImmutable::createFromMutable($date))
                 ->setCoin($coin)
-                ->setEntryCost((float) $total / (float) $nbRecurr)
+                ->setEntryCost($total / $count)
                 ->setIsOpened(true)
                 ->setIsDca(true)
                 ->setDescription('DCA Auto');

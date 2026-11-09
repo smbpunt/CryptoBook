@@ -45,11 +45,11 @@ final class DcaServiceTest extends TestCase
      */
     public static function recurrences(): iterable
     {
-        yield 'hourly' => [DcaAutoType::$HOURLY, ['2024-01-31 10:00', '2024-01-31 14:00', '2024-01-31 18:00']];
-        yield 'daily' => [DcaAutoType::$DAILY, ['2024-01-31 10:00', '2024-02-01 10:00', '2024-02-02 10:00']];
-        yield 'weekly' => [DcaAutoType::$WEEKLY, ['2024-01-31 10:00', '2024-02-07 10:00', '2024-02-14 10:00']];
+        yield 'hourly' => [DcaAutoType::HOURLY, ['2024-01-31 10:00', '2024-01-31 14:00', '2024-01-31 18:00']];
+        yield 'daily' => [DcaAutoType::DAILY, ['2024-01-31 10:00', '2024-02-01 10:00', '2024-02-02 10:00']];
+        yield 'weekly' => [DcaAutoType::WEEKLY, ['2024-01-31 10:00', '2024-02-07 10:00', '2024-02-14 10:00']];
         // PHP date arithmetic: Jan 31 + 1 month overflows to March.
-        yield 'monthly' => [DcaAutoType::$MONTHLY, ['2024-01-31 10:00', '2024-03-02 10:00', '2024-04-02 10:00']];
+        yield 'monthly' => [DcaAutoType::MONTHLY, ['2024-01-31 10:00', '2024-03-02 10:00', '2024-04-02 10:00']];
     }
 
     /**
@@ -63,7 +63,7 @@ final class DcaServiceTest extends TestCase
         $repository->method('find')->willReturn($coin);
 
         $positions = $this->service($repository)
-            ->generateDcaAutoPositions(new User(), '1', $recurrence, '3', '300', '2024-01-31 10:00');
+            ->generateDcaAutoPositions(new User(), 1, $recurrence, 3, 300, '2024-01-31 10:00');
 
         self::assertSame($expectedDates, array_map(static fn ($p) => $p->getOpenedAt()->format('Y-m-d H:i'), $positions));
         foreach ($positions as $position) {
@@ -79,13 +79,13 @@ final class DcaServiceTest extends TestCase
         $repository->method('find')->willReturn(new Cryptocurrency());
         $service = $this->service($repository);
 
-        self::assertSame([], $service->generateDcaAutoPositions(new User(), '1', 'yearly', '3', '300', '2024-01-01'));
-        self::assertSame([], $service->generateDcaAutoPositions(new User(), '1', DcaAutoType::$DAILY, '3', '300', 'not a date'));
+        self::assertSame([], $service->generateDcaAutoPositions(new User(), 1, 'yearly', 3, 300, '2024-01-01'));
+        self::assertSame([], $service->generateDcaAutoPositions(new User(), 1, DcaAutoType::DAILY, 3, 300, 'not a date'));
     }
 
     public function testGenerateDcaAutoPositionsReturnsNothingForUnknownCoin(): void
     {
-        self::assertSame([], $this->service()->generateDcaAutoPositions(new User(), '42', DcaAutoType::$DAILY, '3', '300', '2024-01-01'));
+        self::assertSame([], $this->service()->generateDcaAutoPositions(new User(), 42, DcaAutoType::DAILY, 3, 300, '2024-01-01'));
     }
 
     private function service(?CryptocurrencyRepository $repository = null): DcaService

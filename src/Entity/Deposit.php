@@ -6,7 +6,7 @@ use App\Repository\DepositRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepositRepository::class)]
-class Deposit
+class Deposit implements OwnedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

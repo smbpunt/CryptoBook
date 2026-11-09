@@ -2,49 +2,57 @@
 
 namespace App\Controller;
 
+use App\Dto\DcaAutoQuery;
 use App\Entity\StrategyDca;
+use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Form\DcaToPositionType;
 use App\Form\StrategyDcaType;
 use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyDcaRepository;
+use App\Security\Voter\OwnerVoter;
 use App\Service\DcaService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/strategy/dca')]
 class StrategyDcaController extends AbstractController
 {
     #[Route('/', name: 'app_strategy_dca_index', methods: ['GET'])]
-    public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository): Response
+    public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository, #[CurrentUser] User $user): Response
     {
         $dcaUser = $strategyDcaRepository->findOneBy([
-            'owner' => $this->getUser(),
+            'owner' => $user,
         ]);
 
         $form = $this->createForm(DcaAutoType::class);
 
         return $this->render('strategy_dca/index.html.twig', [
             'dca' => $dcaUser,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
     #[Route('/new', name: 'app_strategy_dca_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StrategyDcaRepository $strategyDcaRepository): Response
+    public function new(Request $request, StrategyDcaRepository $strategyDcaRepository, #[CurrentUser] User $user): Response
     {
         $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $this->getUser(),
+            'owner' => $user,
         ]);
 
         if ($strategyDca) {
             return $this->redirectToRoute('app_strategy_dca_edit');
         }
 
-        $strategyDca = new StrategyDca($this->getUser());
+        $strategyDca = new StrategyDca($user);
         $form = $this->createForm(StrategyDcaType::class, $strategyDca);
         $form->handleRequest($request);
 
@@ -60,11 +68,11 @@ class StrategyDcaController extends AbstractController
         ]);
     }
 
-    #[Route('/generatePositions/{invested}', name: 'app_strategy_dca_generate_positions', methods: ['GET', 'POST'])]
-    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, PositionRepository $positionRepository, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, float $invested = 0): Response
+    #[Route('/generatePositions/{invested<\d+(\.\d+)?>?0}', name: 'app_strategy_dca_generate_positions', methods: ['GET', 'POST'])]
+    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, PositionRepository $positionRepository, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, float $invested, #[CurrentUser] User $user): Response
     {
         $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $this->getUser(),
+            'owner' => $user,
         ]);
 
         if (null === $strategyDca) {
@@ -75,7 +83,7 @@ class StrategyDcaController extends AbstractController
         $ratioUsdEur = (null !== $jeur && null !== $jeur->getPriceUsd()) ? $jeur->getPriceUsd() : 1.04;
         $valueDca = $invested > 0 ? $invested : ($strategyDca->getFiatToDcaEur() * $ratioUsdEur + $strategyDca->getFarmingToDcaUsd());
 
-        $positions = $dcaService->generatePositions($strategyDca, $this->getUser(), $valueDca);
+        $positions = $dcaService->generatePositions($strategyDca, $user, $valueDca);
 
         $form = $this->createForm(DcaToPositionType::class, null, [
             'positions' => $positions,
@@ -96,15 +104,13 @@ class StrategyDcaController extends AbstractController
     }
 
     #[Route('/dcaAuto', name: 'app_strategy_dca_dcaauto', methods: ['GET', 'POST'])]
-    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService): Response
+    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService, #[CurrentUser] User $user, #[MapQueryString] ?DcaAutoQuery $query = null): Response
     {
-        $query = $request->query;
-        if (null === $query->get('crypto') || null === $query->get('t') || null === $query->get('nb') || null === $query->get('total') || null === $query->get('d')) {
-            // todo erreur
+        if (null === $query) {
             return $this->redirectToRoute('app_strategy_dca_index');
         }
 
-        $positions = $dcaService->generateDcaAutoPositions($this->getUser(), $query->get('crypto'), $query->get('t'), $query->get('nb'), $query->get('total'), $query->get('d'));
+        $positions = $dcaService->generateDcaAutoPositions($user, $query->coinId, $query->recurrence, $query->count, $query->total, $query->firstDate);
 
         $form = $this->createForm(DcaToPositionType::class, null, [
             'positions' => $positions,
@@ -126,10 +132,10 @@ class StrategyDcaController extends AbstractController
     }
 
     #[Route('/edit', name: 'app_strategy_dca_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, StrategyDcaRepository $strategyDcaRepository): Response
+    public function edit(Request $request, StrategyDcaRepository $strategyDcaRepository, #[CurrentUser] User $user): Response
     {
         $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $this->getUser(),
+            'owner' => $user,
         ]);
 
         if (null === $strategyDca) {
@@ -152,15 +158,11 @@ class StrategyDcaController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_strategy_dca_delete', methods: ['POST'])]
-    public function delete(Request $request, StrategyDca $strategyDca, StrategyDcaRepository $strategyDcaRepository): Response
+    #[IsGranted(OwnerVoter::OWNER, 'strategyDca')]
+    #[IsCsrfTokenValid(new Expression('"delete" ~ args["strategyDca"].getId()'))]
+    public function delete(StrategyDca $strategyDca, StrategyDcaRepository $strategyDcaRepository): Response
     {
-        if ($strategyDca->getOwner() !== $this->getUser()) {
-            return $this->redirectToRoute('app_strategy_dca_index');
-        }
-
-        if ($this->isCsrfTokenValid('delete'.$strategyDca->getId(), $request->request->get('_token'))) {
-            $strategyDcaRepository->remove($strategyDca, true);
-        }
+        $strategyDcaRepository->remove($strategyDca, true);
 
         return $this->redirectToRoute('app_strategy_dca_index', [], Response::HTTP_SEE_OTHER);
     }

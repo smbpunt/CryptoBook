@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Position
+class Position implements OwnedInterface
 {
     use DescriptionTrait;
 

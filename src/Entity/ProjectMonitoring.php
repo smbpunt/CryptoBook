@@ -7,7 +7,7 @@ use App\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectMonitoringRepository::class)]
-class ProjectMonitoring
+class ProjectMonitoring implements OwnedInterface
 {
     use DescriptionTrait;
 

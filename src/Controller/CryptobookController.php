@@ -18,11 +18,11 @@ class CryptobookController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(FiatExchangeRatesService $fiatExchangeRatesService, PositionRepository $positionRepository, DepositService $depositService, LoanRepository $loanRepository, FarmingService $farmingService, #[CurrentUser] User $user): Response
     {
-        $positions = $positionRepository->getSumCoinByUser($this->getUser()) ?? [];
-        $positions_stable = $positionRepository->getSumCoinByUser($this->getUser(), true) ?? [];
+        $positions = $positionRepository->getSumCoinByUser($user) ?? [];
+        $positions_stable = $positionRepository->getSumCoinByUser($user, true) ?? [];
         $totalDepositUsd = $depositService->getTotalDepositUsd($user);
 
-        $userFavoriteCurrency = $this->getUser()->getFavoriteFiatCurrency();
+        $userFavoriteCurrency = $user->getFavoriteFiatCurrency();
         $isFavoriteUsd = 'USD' === $userFavoriteCurrency->getFixerKey();
 
         $totalUsd = 0;
@@ -59,7 +59,7 @@ class CryptobookController extends AbstractController
 
         $totalYearFarmingUsd = $farmingService->getTotalFarmingByYearUsd($user);
 
-        $totalLoan = $loanRepository->getTotal($this->getUser());
+        $totalLoan = $loanRepository->getTotal($user);
 
         return $this->render('cryptobook/index.html.twig', [
             'positions' => $positions,

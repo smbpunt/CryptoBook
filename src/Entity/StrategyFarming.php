@@ -7,7 +7,7 @@ use App\Repository\StrategyFarmingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
-class StrategyFarming
+class StrategyFarming implements OwnedInterface
 {
     use DescriptionTrait;
 

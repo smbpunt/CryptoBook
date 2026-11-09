@@ -7,7 +7,7 @@ use App\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
-class Nft
+class Nft implements OwnedInterface
 {
     use DescriptionTrait;
 
