@@ -40,7 +40,7 @@ bin/console doctrine:schema:validate
 - Run everything in Docker: `docker compose up -d`, then `docker compose exec php composer install` / `bin/console …`. App on http://localhost:8888. PHP version is a build arg: `PHP_VERSION=8.4 docker compose build php`.
 - The `php` service overrides `DATABASE_URL` to the `database` service (Postgres 16); `app_test` is created on first start. `.env` still points to `127.0.0.1` for host use.
 - Host PHP is 8.5, the project targets 8.1 (then 8.3/8.4). Don't run `composer update` on the host: it resolves dependencies for the wrong PHP version.
-- Frontend is Webpack Encore (`npm run dev` / `watch` / `build`) until phase 5.
+- Frontend is AssetMapper + importmap (no Node): add JS packages with `bin/console importmap:require`, page scripts are entrypoints in `importmap.php`.
 
 ## Data
 

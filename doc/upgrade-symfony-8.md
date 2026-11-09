@@ -15,7 +15,7 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 | 2 | Outillage qualité | 8.3 | 6.3 | ✅ |
 | 3 | Tests de non-régression | 8.3 | 6.3 | ✅ |
 | 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ✅ |
-| 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ⬜ |
+| 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ✅ |
 | 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ⬜ |
 | 7 | Doctrine ORM 3 / DBAL 4 | 8.3 | 7.4 | ⬜ |
 | — | ⚠️ VPS de prod en PHP 8.4 | 8.4 | 7.4 | ⬜ |
@@ -56,9 +56,12 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 - Reste une dépréciation indirecte dans un template d'EasyAdmin 4 (`macro` hors racine, Twig 3.28), corrigée par EasyAdmin 5 en phase 8
 
 ### 5. Asset Mapper
-- Encore → importmap + `stimulus-bundle`
-- Bootstrap conservé tel quel (CSS compilé)
-- Suppression de `webpack.config.js`, `package.json`
+- Encore → importmap + `stimulus-bundle` : chaque entrée Webpack devient un entrypoint de `importmap.php`, appelé via le bloc `importmap` des templates
+- Bootstrap conservé tel quel (CSS compilé) ; les variables Sass du thème sont reportées en variables CSS dans `assets/styles/app.css`
+- Bootstrap Icons via le paquet Composer `twbs/bootstrap-icons` (l'importmap ne télécharge pas les polices)
+- `moment` et `pikaday` retirés (inutilisés)
+- Suppression de `webpack.config.js`, `package.json`, `public/build`
+- En prod, `bin/console asset-map:compile` à chaque déploiement (`importmap:install` passe par `composer install`)
 
 ### 6. Symfony 7.4
 - Passage direct 6.4 → 7.4 (possible grâce à l'étape 4)
