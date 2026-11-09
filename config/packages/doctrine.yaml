@@ -14,7 +14,12 @@ doctrine:
         report_fields_where_declared: true
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        identity_generation_preferences:
+            # Keep the existing sequences (AUTO resolved to SEQUENCE on PostgreSQL)
+            Doctrine\DBAL\Platforms\PostgreSQLPlatform: sequence
         auto_mapping: true
+        controller_resolver:
+            auto_mapping: false
         mappings:
             App:
                 type: attribute
