@@ -19,7 +19,7 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 | 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ✅ |
 | — | PHP 8.4 (local) · ⚠️ VPS de prod à migrer avant de déployer | 8.4 | 7.4 | 🟡 |
 | 7 | Doctrine ORM 3 / DBAL 4 | 8.4 | 7.4 | ✅ |
-| 8 | Symfony 8.1 | 8.4 | 8.1 | ⬜ |
+| 8 | Symfony 8.1 | 8.4 | 8.1 | ✅ |
 | 9 | Refonte UI : Bootstrap → Shadcn | 8.4 | 8.1 | ⬜ |
 
 ⬜ à faire · 🟡 en cours · ✅ fait
@@ -85,8 +85,11 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 
 ### 8. Symfony 8.1
 - Prérequis : PHP 8.4 en prod
-- Rector, EasyAdmin 5.x
-- `ignoreIndirectDeprecations` à `false` dans `phpunit.dist.xml` : les dépréciations venant des templates Twig ou des vendors font alors échouer les tests (impossible avant, à cause du template d'EasyAdmin 4)
+- EasyAdmin 5.9 (d'abord sur Symfony 7.4) : rien à adapter, le code utilisait déjà les URLs propres et `MenuItem::linkTo()` ; nouveau design EasyAdmin gardé tel quel (refonte UI en phase 9)
+- Symfony 8.1, `stimulus-bundle` 3 ; Rector retire `User::eraseCredentials()`
+- `recipes:update` : framework-bundle (`AGENTS.md`, `Kernel::getAllowedEnvs()`), stimulus-bundle, web-profiler-bundle (`collect_serializer_data` supprimé)
+- `ignoreIndirectDeprecations` à `false` dans `phpunit.dist.xml` : les dépréciations venant des templates Twig ou des vendors font échouer les tests
+- PHPUnit reste en 11
 
 ### 9. Refonte UI
 - Tailwind + kit Shadcn (Symfony UX Toolkit)
