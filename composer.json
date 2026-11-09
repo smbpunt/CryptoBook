@@ -53,6 +53,11 @@
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^3.4",
     "fakerphp/faker": "^1.19",
+    "friendsofphp/php-cs-fixer": "^3.66",
+    "phpstan/phpstan": "^2.3",
+    "phpstan/phpstan-doctrine": "^2.1",
+    "phpstan/phpstan-symfony": "^2.1",
+    "rector/rector": "^2.8",
     "symfony/debug-bundle": "6.3.*",
     "symfony/maker-bundle": "^1.0",
     "symfony/stopwatch": "6.3.*",
