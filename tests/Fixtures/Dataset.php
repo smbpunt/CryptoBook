@@ -27,7 +27,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class Dataset
 {
-    public const PASSWORD = 'password';
+    public const string PASSWORD = 'password';
 
     public FiatCurrency $usd;
     public FiatCurrency $eur;
