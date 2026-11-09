@@ -14,7 +14,7 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 | 1 | Suppression de l'API | 8.3 | 6.3 | ✅ |
 | 2 | Outillage qualité | 8.3 | 6.3 | ✅ |
 | 3 | Tests de non-régression | 8.3 | 6.3 | ✅ |
-| 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ⬜ |
+| 4 | Symfony 6.4, zéro dépréciation | 8.3 | 6.4 | ✅ |
 | 5 | Webpack → Asset Mapper | 8.3 | 6.4 | ⬜ |
 | 6 | Symfony 7.4, zéro dépréciation | 8.3 | 7.4 | ⬜ |
 | 7 | Doctrine ORM 3 / DBAL 4 | 8.3 | 7.4 | ⬜ |
@@ -53,6 +53,7 @@ Les bugs trouvés pendant une phase et hors de son périmètre sont notés dans 
 - Rector + `recipes:update`
 - Zéro dépréciation
 - Plus besoin de `--no-security-blocking` ; vérifier que les tests « risky » (handlers d'erreurs non restaurés) disparaissent
+- Reste une dépréciation indirecte dans un template d'EasyAdmin 4 (`macro` hors racine, Twig 3.28), corrigée par EasyAdmin 5 en phase 8
 
 ### 5. Asset Mapper
 - Encore → importmap + `stimulus-bundle`
