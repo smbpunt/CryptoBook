@@ -24,10 +24,20 @@ final class AllocationSliceTest extends TestCase
         ], $slices);
     }
 
-    public function testNoOthersWhenEveryHoldingIsVisible(): void
+    public function testCoinsWithoutColorTakeTheChartTokensInTurn(): void
     {
-        self::assertCount(1, AllocationSlice::fromHoldings([$this->holding('btc', null, 100)]));
-        self::assertSame([], AllocationSlice::fromHoldings([]));
+        $slices = AllocationSlice::fromHoldings([
+            $this->holding('a', null, 40),
+            $this->holding('b', '#123456', 30),
+            $this->holding('c', null, 15),
+            $this->holding('d', null, 10),
+            $this->holding('e', null, 5),
+        ]);
+
+        self::assertSame(
+            ['var(--chart-3)', '#123456', 'var(--chart-4)', 'var(--chart-5)', 'var(--chart-3)'],
+            array_map(static fn (AllocationSlice $slice): string => $slice->color, $slices),
+        );
     }
 
     private function holding(string $symbol, ?string $color, float $percent): DashboardHolding

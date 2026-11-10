@@ -8,6 +8,7 @@ use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
 use App\Wallet\Enum\HistoryPeriod;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
@@ -57,15 +58,24 @@ final class WalletHistoryBuilderTest extends KernelTestCase
         self::assertEquals(new \DateTimeImmutable('2026-11-01 10:00 UTC'), $history->startedAt());
     }
 
-    public function testEmptyWithoutSnapshots(): void
+    /**
+     * Daily periods start on the last snapshot of their first day: up to one day after the start of the period
+     * (2026-10-11 14:20 for 30 days), the history still covers it.
+     *
+     * @return iterable<string, array{string, bool}>
+     */
+    public static function dailyStarts(): iterable
     {
-        $this->snapshot('2026-11-10 14:00', 20000);
+        yield 'within the first day' => ['2026-10-12 14:00', true];
+        yield 'after the first day' => ['2026-10-12 15:00', false];
+    }
 
-        $history = $this->builder->build($this->data->admin, HistoryPeriod::Month, 0);
+    #[DataProvider('dailyStarts')]
+    public function testDailyPeriodCoversItsFirstDay(string $firstSnapshot, bool $covers): void
+    {
+        $this->snapshot($firstSnapshot, 20000);
 
-        self::assertTrue($history->isEmpty());
-        self::assertNull($history->startedAt());
-        self::assertSame(HistoryPeriod::Month, $history->period);
+        self::assertSame($covers, $this->builder->build($this->data->user, HistoryPeriod::Month, 25000)->coversPeriod);
     }
 
     private function snapshot(string $at, float $valueUsd): void

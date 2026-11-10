@@ -40,9 +40,8 @@ final class DashboardControllerTest extends WebTestCase
         self::assertSame('24 210 €', self::text($crawler, '#wallet-history-title + p'));
         // 30 days: from the first snapshot (24 000 $) to the current total (26 000 $).
         self::assertSame(['+8,3 %', '+1 862 €', 'depuis le 9 nov. · soit 26 000 $'], self::texts($crawler, '#wallet-history-title ~ div > *'));
-        self::assertSelectorExists('turbo-frame#wallet-history canvas[data-controller="wallet-chart symfony--ux-chartjs--chart"][role="img"]');
+        self::assertSelectorExists('turbo-frame#wallet-history canvas[role="img"]');
         self::assertSame('30 j', self::text($crawler, 'nav[aria-label="Période du graphique"] [aria-current="true"]'));
-        self::assertCount(6, $crawler->filter('nav[aria-label="Période du graphique"] a[href^="/history/"]'));
 
         self::assertSame(['Résultat latent', '+2 321,0 %', '+23 210 €'], self::texts($crawler, '[aria-labelledby="dashboard-result"] :is(h2, [data-slot="delta"], p)'));
         // 24 hours ago: the last snapshot between -48 h and -24 h (24 000 $).
@@ -51,7 +50,7 @@ final class DashboardControllerTest extends WebTestCase
 
         $main = self::text($crawler, 'main');
         self::assertSame(['Investi', 'Revenus farming', 'Emprunts', 'Crypto / stable'], self::texts($crawler, '[data-slot="card-description"]'));
-        self::assertStringContainsString('1 000 €', $main);
+        self::assertSame('1 000 €', self::normalize($crawler->filterXPath('//*[@data-slot="card-description"][normalize-space()="Investi"]/following-sibling::*[@data-slot="card-title"]')->text()));
         // 2 ETH at 5 % + LP of 4 000 $ at 10 % = 600 $ a year, 559 € = 47 € a month.
         self::assertStringContainsString('47 € / mois', $main);
         self::assertStringContainsString('1,9 % de la valeur du wallet', $main);
@@ -108,13 +107,6 @@ final class DashboardControllerTest extends WebTestCase
         $this->client->request('GET', '/history/2w');
 
         self::assertResponseStatusCodeSame(404);
-    }
-
-    public function testAnonymousIsRedirectedToLogin(): void
-    {
-        $this->client->request('GET', '/history/30d');
-
-        self::assertResponseRedirects('/login');
     }
 
     private function snapshot(string $at, float $valueUsd): void

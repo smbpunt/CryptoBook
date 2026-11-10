@@ -59,7 +59,13 @@ final class WalletSnapshotRepositoryTest extends KernelTestCase
             ['2026-11-02 00:00', 4.0],
             ['2026-11-10 14:00', 5.0],
         ], $this->points(HistoryPeriod::Month, true));
-        self::assertCount(4, $this->points(HistoryPeriod::All));
+        // No start: the snapshot of October too.
+        self::assertSame([
+            ['2026-10-01 10:00', 1.0],
+            ['2026-11-01 23:00', 3.0],
+            ['2026-11-02 00:00', 4.0],
+            ['2026-11-10 14:00', 5.0],
+        ], $this->points(HistoryPeriod::All, true));
     }
 
     public function testStats(): void

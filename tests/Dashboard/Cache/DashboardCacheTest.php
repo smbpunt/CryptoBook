@@ -67,7 +67,7 @@ final class DashboardCacheTest extends KernelTestCase
     }
 
     /**
-     * Adding, changing or deleting each kind of data the dashboard reads.
+     * Adding, changing or deleting each kind of data the dashboard reads, and a new snapshot.
      *
      * @return iterable<string, array{\Closure(Dataset, EntityManagerInterface): mixed}>
      */
@@ -90,6 +90,8 @@ final class DashboardCacheTest extends KernelTestCase
             ->setNbCoin1(1)->setNbCoin2(2000)->setPriceCoin1(2000)->setPriceCoin2(1)->setApr(4)->setDescription(''))];
         yield 'LP changed' => [static fn (Dataset $d) => $d->lp->setApr(20)];
         yield 'LP deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->lp)];
+        // Recorded every hour: the history ends on a new point.
+        yield 'snapshot added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new WalletSnapshot($d->user, new \DateTimeImmutable('2024-01-01 10:00'), 26000))];
     }
 
     /**
@@ -108,16 +110,6 @@ final class DashboardCacheTest extends KernelTestCase
         self::assertFalse($this->isCached($this->data->user->getId()));
         self::assertFalse($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
         self::assertTrue($this->isCached($this->data->admin->getId()));
-    }
-
-    public function testDeletionInvalidatesItsOwner(): void
-    {
-        self::assertEqualsWithDelta(1073.941, $this->cache->get($this->data->user)->depositUsd, 1e-9);
-
-        $this->em->remove($this->data->deposit);
-        $this->em->flush();
-
-        self::assertSame(0.0, $this->cache->get($this->data->user)->depositUsd);
     }
 
     public function testSaleInvalidatesThePositionOwner(): void
@@ -156,20 +148,6 @@ final class DashboardCacheTest extends KernelTestCase
         $this->em->flush();
 
         self::assertSame('$', $this->cache->get($this->data->user)->currencySymbol);
-        self::assertTrue($this->isCached($this->data->admin->getId()));
-    }
-
-    public function testSnapshotInvalidatesOnlyItsOwner(): void
-    {
-        $this->warmUp();
-        $this->cache->getHistory($this->data->user, HistoryPeriod::Month);
-        self::assertTrue($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
-
-        $this->em->persist(new WalletSnapshot($this->data->user, new \DateTimeImmutable('2024-01-01 10:00'), 26000));
-        $this->em->flush();
-
-        self::assertFalse($this->isCached($this->data->user->getId()));
-        self::assertFalse($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
         self::assertTrue($this->isCached($this->data->admin->getId()));
     }
 
