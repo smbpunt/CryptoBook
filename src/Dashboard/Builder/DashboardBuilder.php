@@ -12,6 +12,8 @@ use App\Strategy\Farming\Builder\FarmingOverviewBuilder;
 use App\User\Entity\User;
 use App\User\Resolver\FavoriteCurrencyResolver;
 use App\Wallet\Calculator\WalletValueCalculator;
+use App\Wallet\Repository\WalletSnapshotRepository;
+use Psr\Clock\ClockInterface;
 
 /**
  * Computes the dashboard of a user, without cache.
@@ -26,6 +28,8 @@ final readonly class DashboardBuilder
         private LoanRepository $loanRepository,
         private FiatConverter $fiatConverter,
         private FavoriteCurrencyResolver $favoriteCurrencyResolver,
+        private WalletSnapshotRepository $snapshotRepository,
+        private ClockInterface $clock,
     ) {
     }
 
@@ -45,6 +49,7 @@ final readonly class DashboardBuilder
             (string) $currency->getSymbol(),
             $this->fiatConverter->toUsd(1.0, $currency),
             $this->fiatConverter->fromUsd(1.0, $currency),
+            $this->snapshotRepository->findStats($user, $this->clock->now()),
         );
     }
 }

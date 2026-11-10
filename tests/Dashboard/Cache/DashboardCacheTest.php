@@ -6,6 +6,7 @@ use App\Dashboard\Cache\DashboardCache;
 use App\Position\Entity\Vente;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
+use App\Wallet\Enum\HistoryPeriod;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -119,11 +120,24 @@ final class DashboardCacheTest extends KernelTestCase
         self::assertTrue($this->isCached($this->data->admin->getId()));
     }
 
+    public function testSnapshotInvalidatesOnlyItsOwner(): void
+    {
+        $this->warmUp();
+        $this->cache->getHistory($this->data->user, HistoryPeriod::Month);
+        self::assertTrue($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
+
+        $this->em->persist(new WalletSnapshot($this->data->user, new \DateTimeImmutable('2024-01-01 10:00'), 26000));
+        $this->em->flush();
+
+        self::assertFalse($this->isCached($this->data->user->getId()));
+        self::assertFalse($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
+        self::assertTrue($this->isCached($this->data->admin->getId()));
+    }
+
     public function testDataTheDashboardDoesNotReadKeepsTheCache(): void
     {
         $this->warmUp();
 
-        $this->em->persist(new WalletSnapshot($this->data->user, new \DateTimeImmutable('2024-01-01 10:00'), 26000));
         $this->data->nft->setPriceUsd(3000);
         $this->data->project->setNote('Other note');
         $this->data->dca->setFiatToDcaEur(200);
@@ -145,6 +159,11 @@ final class DashboardCacheTest extends KernelTestCase
 
     private function isCached(?int $userId): bool
     {
-        return self::getContainer()->get('dashboard.cache')->hasItem('dashboard_'.$userId);
+        return self::getContainer()->get('dashboard.cache')->hasItem(DashboardCache::key((int) $userId));
+    }
+
+    private function isHistoryCached(?int $userId, HistoryPeriod $period): bool
+    {
+        return self::getContainer()->get('dashboard.cache')->hasItem(DashboardCache::historyKey((int) $userId, $period));
     }
 }

@@ -12,6 +12,7 @@ use App\Position\Entity\Vente;
 use App\Strategy\Farming\Entity\StrategyFarming;
 use App\Strategy\Lp\Entity\StrategyLp;
 use App\User\Entity\User;
+use App\Wallet\Entity\WalletSnapshot;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -47,7 +48,8 @@ final class DashboardCacheInvalidator
             match (true) {
                 $entity instanceof Cryptocurrency, $entity instanceof FiatCurrency => $this->all = true,
                 $entity instanceof Position, $entity instanceof Deposit, $entity instanceof Loan,
-                $entity instanceof StrategyFarming, $entity instanceof StrategyLp => $this->addUser($entity->getOwner()),
+                $entity instanceof StrategyFarming, $entity instanceof StrategyLp,
+                $entity instanceof WalletSnapshot => $this->addUser($entity->getOwner()),
                 $entity instanceof Vente => $this->addUser($entity->getPosition()?->getOwner()),
                 $entity instanceof User && $this->favoriteCurrencyChanged($uow, $entity) => $this->addUser($entity),
                 default => null,
