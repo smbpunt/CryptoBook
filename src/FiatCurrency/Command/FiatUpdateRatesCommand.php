@@ -3,7 +3,6 @@
 namespace App\FiatCurrency\Command;
 
 use App\FiatCurrency\Updater\FiatRateUpdater;
-use App\Fixer\Exception\FixerUnavailableException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -17,10 +16,15 @@ final readonly class FiatUpdateRatesCommand
 
     public function __invoke(SymfonyStyle $io): int
     {
-        try {
-            $this->fiatRateUpdater->updateAll();
-        } catch (FixerUnavailableException $exception) {
-            $io->error($exception->getMessage());
+        $failures = $this->fiatRateUpdater->updateAll();
+
+        if ([] !== $failures) {
+            // The other currencies are updated: only these keep their previous rates.
+            $io->error(array_map(
+                static fn (string $key, string $message): string => \sprintf('%s: %s', $key, $message),
+                array_keys($failures),
+                $failures,
+            ));
 
             return Command::FAILURE;
         }
