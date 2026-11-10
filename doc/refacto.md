@@ -275,6 +275,9 @@ Syntaxe à confirmer avec `vendor/bin/deptrac init` et la doc de la version inst
 - Positions : les stables fermées apparaissent dans l'onglet « Fermée », « Valider & continuer » rouvre le formulaire.
 - Taux de change absent : erreur explicite au lieu d'un montant à 0.
 - DCA : une stratégie dont les parts ne font pas 100 % est refusée à l'enregistrement.
+- DCA Auto mensuel : les dates gardent le jour du premier achat (ou le dernier jour d'un mois plus court) au lieu de glisser au 2 ou 3 du mois suivant.
+- Positions : « Valider & continuer » rouvre aussi le formulaire de création depuis la modification.
+- Inscription : la page n'annonce plus de mail de vérification.
 
 Les données déjà en base ne sont pas corrigées : une position à 0 coin ou une vente à plus de 100 % existante reste à reprendre à la main. Un DCA existant qui ne fait pas 100 % continue de générer des positions tant qu'il n'est pas modifié.
 
