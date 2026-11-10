@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Unit\Service;
+namespace App\Tests\Cryptocurrency\Updater;
 
 use App\Coingecko\Client\CoingeckoClient;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
-use App\Service\CryptocurrencyService;
+use App\Cryptocurrency\Updater\CoinDataUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -14,12 +14,9 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-/**
- * updateDatas() fills a new coin from CoinGecko (called by the prePersist listener).
- */
-final class CryptocurrencyServiceTest extends TestCase
+final class CoinDataUpdaterTest extends TestCase
 {
-    public function testUpdateDatasFillsCoinFromCoinGecko(): void
+    public function testFillsTheCoinFromCoinGecko(): void
     {
         $response = new JsonMockResponse([
             'name' => 'Bitcoin',
@@ -30,7 +27,7 @@ final class CryptocurrencyServiceTest extends TestCase
         $http = new MockHttpClient($response, 'https://api.coingecko.com/api/v3/');
         $coin = new Cryptocurrency()->setLibelleCoingecko('bitcoin');
 
-        $this->service($http)->updateDatas($coin);
+        $this->updater($http)->update($coin);
 
         self::assertSame(1, $http->getRequestsCount());
         self::assertSame('/api/v3/coins/bitcoin', parse_url($response->getRequestUrl(), \PHP_URL_PATH));
@@ -43,45 +40,31 @@ final class CryptocurrencyServiceTest extends TestCase
         self::assertSame('https://img/large.png', $coin->getUrlImgLarge());
     }
 
-    public function testUpdateDatasSkipsCoinWithoutCoinGeckoId(): void
+    public function testSkipsACoinWithoutCoinGeckoId(): void
     {
         $http = new MockHttpClient([]);
 
-        $this->service($http)->updateDatas(new Cryptocurrency());
+        $this->updater($http)->update(new Cryptocurrency());
 
         self::assertSame(0, $http->getRequestsCount());
     }
 
-    public function testUpdateDatasLogsApiErrors(): void
+    public function testLogsApiErrors(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects(self::once())->method('critical');
         $coin = new Cryptocurrency()->setLibelleCoingecko('bitcoin');
 
-        $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger)->updateDatas($coin);
+        $this->updater(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger)->update($coin);
 
         self::assertNull($coin->getLibelle());
     }
 
-    public function testUpdatePricesLogsApiErrorsWithCoinIds(): void
+    private function updater(MockHttpClient $http, ?LoggerInterface $logger = null): CoinDataUpdater
     {
-        $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects(self::once())->method('critical')
-            ->with(self::stringContains('bitcoin,ethereum'));
-        $repository = $this->createStub(CryptocurrencyRepository::class);
-        $repository->method('findAll')->willReturn([
-            new Cryptocurrency()->setLibelleCoingecko('bitcoin'),
-            new Cryptocurrency()->setLibelleCoingecko('ethereum'),
-        ]);
-
-        $this->service(new MockHttpClient(new MockResponse('', ['http_code' => 500])), $logger, $repository)->updatePrices();
-    }
-
-    private function service(MockHttpClient $http, ?LoggerInterface $logger = null, ?CryptocurrencyRepository $repository = null): CryptocurrencyService
-    {
-        return new CryptocurrencyService(
+        return new CoinDataUpdater(
             new CoingeckoClient($http),
-            $repository ?? $this->createStub(CryptocurrencyRepository::class),
+            $this->createStub(CryptocurrencyRepository::class),
             $this->createStub(EntityManagerInterface::class),
             $logger ?? new NullLogger(),
         );

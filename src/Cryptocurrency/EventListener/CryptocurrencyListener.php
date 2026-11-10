@@ -3,7 +3,7 @@
 namespace App\Cryptocurrency\EventListener;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Service\CryptocurrencyService;
+use App\Cryptocurrency\Updater\CoinDataUpdater;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 
@@ -13,7 +13,7 @@ use Doctrine\ORM\Events;
 #[AsEntityListener(event: Events::prePersist, entity: Cryptocurrency::class)]
 final readonly class CryptocurrencyListener
 {
-    public function __construct(private CryptocurrencyService $cryptocurrencyService)
+    public function __construct(private CoinDataUpdater $coinDataUpdater)
     {
     }
 
@@ -23,6 +23,6 @@ final readonly class CryptocurrencyListener
             return;
         }
 
-        $this->cryptocurrencyService->updateDatas($cryptocurrency);
+        $this->coinDataUpdater->update($cryptocurrency);
     }
 }
