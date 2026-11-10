@@ -35,6 +35,15 @@ class FiatCurrencyRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * The USD currency, seeded by a migration.
+     */
+    public function getUsd(): FiatCurrency
+    {
+        return $this->findOneBy(['fixerKey' => FiatCurrency::KEY_USD])
+            ?? throw new \LogicException('The USD currency is missing, run the migrations.');
+    }
+
     public function remove(FiatCurrency $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

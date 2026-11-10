@@ -673,18 +673,6 @@ parameters:
 			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$KEY_EUR has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/FiatCurrency/Entity/FiatCurrency.php
-
-		-
-			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$KEY_USD has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/FiatCurrency/Entity/FiatCurrency.php
-
-		-
 			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$rates type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1

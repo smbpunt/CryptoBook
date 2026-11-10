@@ -8,8 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FiatCurrencyRepository::class)]
 class FiatCurrency implements \Stringable
 {
-    public static $KEY_USD = 'USD';
-    public static $KEY_EUR = 'EUR';
+    public const string KEY_USD = 'USD';
+    public const string KEY_EUR = 'EUR';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -71,12 +72,12 @@ class FiatCurrency implements \Stringable
         return $this;
     }
 
-    public function getsymbol(): ?string
+    public function getSymbol(): ?string
     {
         return $this->symbol;
     }
 
-    public function setsymbol(string $symbol): self
+    public function setSymbol(string $symbol): self
     {
         $this->symbol = $symbol;
 

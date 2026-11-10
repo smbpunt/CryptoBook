@@ -6,12 +6,14 @@ use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Dto\DcaAutoQuery;
 use App\Entity\StrategyDca;
 use App\Entity\User;
+use App\FiatCurrency\Converter\FiatConverter;
 use App\Form\DcaAutoType;
 use App\Form\DcaToPositionType;
 use App\Form\StrategyDcaType;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyDcaRepository;
 use App\Service\DcaService;
+use App\User\Resolver\FavoriteCurrencyResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class StrategyDcaController extends AbstractController
 {
     #[Route('/', name: 'app_strategy_dca_index', methods: ['GET'])]
-    public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository, #[CurrentUser] User $user): Response
+    public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository, FiatConverter $fiatConverter, FavoriteCurrencyResolver $favoriteCurrencyResolver, #[CurrentUser] User $user): Response
     {
         $dcaUser = $strategyDcaRepository->findOneBy([
             'owner' => $user,
@@ -33,6 +35,7 @@ class StrategyDcaController extends AbstractController
 
         return $this->render('strategy_dca/index.html.twig', [
             'dca' => $dcaUser,
+            'fiatToDcaUsd' => null === $dcaUser ? 0.0 : $fiatConverter->toUsd((float) $dcaUser->getFiatToDcaEur(), $favoriteCurrencyResolver->resolve($user)),
             'form' => $form,
         ]);
     }

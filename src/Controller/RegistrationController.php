@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $usd = $fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);
+            $usd = $fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::KEY_USD]);
             if (!$usd) {
                 throw new \Exception('USD not found');
             }

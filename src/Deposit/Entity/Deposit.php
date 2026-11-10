@@ -84,7 +84,7 @@ class Deposit implements OwnedInterface
 
     public function getAmountUsd(): ?float
     {
-        return $this->fiatCurrency->getFixerKey() == FiatCurrency::$KEY_USD ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::$KEY_USD];
+        return FiatCurrency::KEY_USD == $this->fiatCurrency->getFixerKey() ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::KEY_USD];
     }
 
     public function setAmount(?float $amount): self
