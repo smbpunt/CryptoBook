@@ -3,6 +3,7 @@
 namespace App\Wallet\Calculator;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Position\Dto\CoinQuantity;
 use App\Position\Repository\PositionRepository;
 use App\User\Entity\User;
 use App\Wallet\Dto\WalletHolding;
@@ -31,27 +32,27 @@ final readonly class WalletValueCalculator
     {
         $rowsByOwner = [];
         foreach ($this->positionRepository->sumQuantitiesByOwnerAndCoin() as $row) {
-            $rowsByOwner[$row['ownerId']][] = $row;
+            $rowsByOwner[$row->ownerId][] = $row;
         }
 
         return array_map($this->valuate(...), $rowsByOwner);
     }
 
     /**
-     * @param list<array{0: Cryptocurrency, ownerId: int, quantity: float}> $rows
+     * @param list<CoinQuantity> $rows
      */
     private function valuate(array $rows): WalletValuation
     {
         $crypto = [];
         $stable = [];
         foreach ($rows as $row) {
-            if ($row['quantity'] <= 0.0) {
+            if ($row->quantity <= 0.0) {
                 continue;
             }
 
-            $coin = $row[0];
+            $coin = $row->coin;
             $priceUsd = $coin->getPriceUsd() ?? 0.0;
-            $line = ['coin' => $coin, 'quantity' => $row['quantity'], 'priceUsd' => $priceUsd, 'valueUsd' => $row['quantity'] * $priceUsd];
+            $line = ['coin' => $coin, 'quantity' => $row->quantity, 'priceUsd' => $priceUsd, 'valueUsd' => $row->quantity * $priceUsd];
             if ($coin->isIsStable()) {
                 $stable[] = $line;
             } else {

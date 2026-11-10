@@ -2,7 +2,7 @@
 
 namespace App\Position\Controller;
 
-use App\Cryptocurrency\Repository\CryptocurrencyRepository;
+use App\Position\Builder\PositionGroupBuilder;
 use App\Position\Entity\Position;
 use App\Position\Form\PositionType;
 use App\Position\Repository\PositionRepository;
@@ -21,43 +21,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PositionController extends AbstractController
 {
     #[Route('/', name: 'app_position_index', methods: ['GET'])]
-    public function index(PositionRepository $positionRepository, CryptocurrencyRepository $cryptocurrencyRepository, #[CurrentUser] User $user): Response
+    public function index(PositionRepository $positionRepository, PositionGroupBuilder $positionGroupBuilder, #[CurrentUser] User $user): Response
     {
-        // Liste des positions avec calcul de la somme
-        $positions_sum = $cryptocurrencyRepository->getSumCoinByUser($user) ?? [];
-
-        $map = [];
-
-        foreach ($positions_sum as $byCoin) {
-            // coin en cours
-            $coin = $byCoin['coin'];
-
-            // On récupére la liste des positions pour ce coin
-            $positionsByCoin = $positionRepository->getPositions($user, false, true, $coin);
-
-            // J'initialise à 0
-            $coutMoyen = 0;
-
-            // Je boucle sur les positions du coin en cours
-            foreach ($positionsByCoin as $position) {
-                // % d'allocation sur le coin, par rapport au nombre total
-                $percent = $position->getRemainingCoins() / $byCoin['totalsum'];
-
-                // J'incrémente les cout moyen, en fonction du % d'allocation
-                $coutMoyen += $position->getEntryCoinValue() * $percent;
-            }
-
-            $map[] = [
-                'grouped' => $byCoin,
-                'coutMoyen' => $coutMoyen,
-                'splitted' => $positionsByCoin,
-            ];
-        }
-
         return $this->render('position/index.html.twig', [
-            'positions' => $map,
-            'positions_stable' => $positionRepository->getPositions($user, true),
-            'positions_closed' => $positionRepository->getPositions($user, false, false),
+            'groups' => $positionGroupBuilder->build($positionRepository->findOpen($user, stable: false)),
+            'positions_stable' => $positionRepository->findOpen($user, stable: true),
+            'positions_closed' => $positionRepository->findClosed($user),
         ]);
     }
 

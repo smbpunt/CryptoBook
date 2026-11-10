@@ -3,12 +3,13 @@
 namespace App\Position\Repository;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Position\Dto\CoinQuantity;
 use App\Position\Entity\Position;
 use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Position>
@@ -47,7 +48,7 @@ class PositionRepository extends ServiceEntityRepository
      * Quantity of every coin held by each owner, in a single query. Closed positions count for 0,
      * so an owner whose positions are all closed still gets rows.
      *
-     * @return list<array{0: Cryptocurrency, ownerId: int, quantity: float}>
+     * @return list<CoinQuantity>
      */
     public function sumQuantitiesByOwnerAndCoin(?User $owner = null): array
     {
@@ -63,36 +64,50 @@ class PositionRepository extends ServiceEntityRepository
                 ->setParameter('owner', $owner);
         }
 
-        return array_map(static fn (array $row): array => [
-            0 => $row[0],
-            'ownerId' => (int) $row['ownerId'],
-            'quantity' => (float) $row['quantity'],
-        ], $qb->getQuery()->getResult());
+        return array_map(static fn (array $row): CoinQuantity => new CoinQuantity(
+            $row[0],
+            (int) $row['ownerId'],
+            (float) $row['quantity'],
+        ), $qb->getQuery()->getResult());
     }
 
     /**
-     * @return Position[]
+     * Open positions of the user, with their coin, biggest market cap first.
+     *
+     * @return list<Position>
      */
-    public function getPositions(UserInterface $user, bool $isStable, bool $isOpen = true, ?Cryptocurrency $cryptocurrency = null): array
+    public function findOpen(User $owner, bool $stable): array
     {
-        $qb = $this->createQueryBuilder('p')
+        return $this->createOwnedQueryBuilder($owner)
+            ->andWhere('p.isOpened = true')
+            ->andWhere('c.isStable = :stable')
+            ->setParameter('stable', $stable)
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * Closed positions of the user, with their coin, biggest market cap first.
+     *
+     * @return list<Position>
+     */
+    public function findClosed(User $owner): array
+    {
+        return $this->createOwnedQueryBuilder($owner)
+            ->andWhere('p.isOpened = false')
+            ->andWhere('c.isStable = false')
+            ->getQuery()->getResult();
+    }
+
+    private function createOwnedQueryBuilder(User $owner): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('c')
             ->join('p.coin', 'c')
-            ->where('p.owner = :user')
-            ->andWhere('c.isStable = :isStable')
-            ->andWhere('p.isOpened = :isOpen')
-            ->setParameter('user', $user)
-            ->setParameter('isStable', $isStable)
-            ->setParameter('isOpen', $isOpen)
+            ->where('p.owner = :owner')
+            ->setParameter('owner', $owner)
             ->addOrderBy('c.mcapUsd', \SortDirection::Descending)
             ->addOrderBy('p.openedAt', \SortDirection::Ascending)
             ->addOrderBy('p.entryCost', \SortDirection::Descending);
-
-        if ($cryptocurrency) {
-            $qb->andWhere('p.coin = :coin')
-                ->setParameter('coin', $cryptocurrency);
-        }
-
-        return $qb->getQuery()->getResult();
     }
 
     //    /**

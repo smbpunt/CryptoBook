@@ -97,12 +97,6 @@ parameters:
 			path: src/Blockchain/Repository/DappRepository.php
 
 		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 1
-			path: src/Position/Controller/PositionController.php
-
-		-
 			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$color has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -188,12 +182,6 @@ parameters:
 
 		-
 			message: '#^Class App\\Cryptocurrency\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
-
-		-
-			message: '#^Method App\\Cryptocurrency\\Repository\\CryptocurrencyRepository\:\:getSumCoinByUser\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
@@ -323,72 +311,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/CoinPercentDca.php
-
-		-
-			message: '#^Method App\\Position\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$coin has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$entryCost has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$isDca has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$isOpened has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$nbCoins has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$openedAt has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$remainingCoins has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$strategies has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Position\:\:\$ventes has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Position.php
 
 		-
 			message: '#^Property App\\Entity\\StrategyDca\:\:\$farmingToDcaUsd has no type specified\.$#'
@@ -529,96 +451,6 @@ parameters:
 			path: src/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/StrategyPosition.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$percent has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/StrategyPosition.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$position has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/StrategyPosition.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$priceSold has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/StrategyPosition.php
-
-		-
-			message: '#^Method App\\User\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\User\\Entity\\User\:\:\$email has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\User\\Entity\\User\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\User\\Entity\\User\:\:\$lastConnectedAt has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\User\\Entity\\User\:\:\$password has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\User\\Entity\\User\:\:\$roles has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/User/Entity/User.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Vente\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Vente.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Vente\:\:\$percent has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Vente.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Vente\:\:\$position has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Vente.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Vente\:\:\$priceSold has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Vente.php
-
-		-
-			message: '#^Property App\\Position\\Entity\\Vente\:\:\$soldAt has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Position/Entity/Vente.php
-
-		-
 			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -709,12 +541,6 @@ parameters:
 			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Security\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Security/Form/ChangePasswordFormType.php
-
-		-
 			message: '#^Class App\\Form\\CoinPercentDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
@@ -739,24 +565,6 @@ parameters:
 			path: src/Form/DcaToPositionType.php
 
 		-
-			message: '#^Class App\\Position\\Form\\PositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Position/Form/PositionType.php
-
-		-
-			message: '#^Class App\\Security\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Security/Form/RegistrationFormType.php
-
-		-
-			message: '#^Class App\\Security\\Form\\ResetPasswordRequestFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Security/Form/ResetPasswordRequestFormType.php
-
-		-
 			message: '#^Class App\\Form\\StrategyDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
@@ -773,24 +581,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: src/Form/StrategyLpType.php
-
-		-
-			message: '#^Class App\\Position\\Form\\StrategyPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Position/Form/StrategyPositionType.php
-
-		-
-			message: '#^Class App\\User\\Form\\UserPreferencesType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/User/Form/UserPreferencesType.php
-
-		-
-			message: '#^Class App\\Position\\Form\\VenteType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Position/Form/VenteType.php
 
 		-
 			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
@@ -979,6 +769,216 @@ parameters:
 			path: src/Nft/Repository/NftRepository.php
 
 		-
+			message: '#^Method App\\Position\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$coin has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$entryCost has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$isDca has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$isOpened has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$nbCoins has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$openedAt has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$remainingCoins has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$strategies has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Position\:\:\$ventes has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Position.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/StrategyPosition.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$percent has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/StrategyPosition.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$position has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/StrategyPosition.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\StrategyPosition\:\:\$priceSold has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/StrategyPosition.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Vente\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Vente.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Vente\:\:\$percent has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Vente.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Vente\:\:\$position has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Vente.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Vente\:\:\$priceSold has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Vente.php
+
+		-
+			message: '#^Property App\\Position\\Entity\\Vente\:\:\$soldAt has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Position/Entity/Vente.php
+
+		-
+			message: '#^Class App\\Position\\Form\\PositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Position/Form/PositionType.php
+
+		-
+			message: '#^Class App\\Position\\Form\\StrategyPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Position/Form/StrategyPositionType.php
+
+		-
+			message: '#^Class App\\Position\\Form\\VenteType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Position/Form/VenteType.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/PositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/PositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/PositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/PositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/StrategyPositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/StrategyPositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/StrategyPositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/StrategyPositionRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/VenteRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/VenteRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/VenteRepository.php
+
+		-
+			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Position/Repository/VenteRepository.php
+
+		-
 			message: '#^Method App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:getLinks\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1123,54 +1123,6 @@ parameters:
 			path: src/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/PositionRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/PositionRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/PositionRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\PositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/PositionRepository.php
-
-		-
-			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/Repository/ResetPasswordRequestRepository.php
-
-		-
-			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/Repository/ResetPasswordRequestRepository.php
-
-		-
-			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/Repository/ResetPasswordRequestRepository.php
-
-		-
-			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/Repository/ResetPasswordRequestRepository.php
-
-		-
 			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1243,28 +1195,88 @@ parameters:
 			path: src/Repository/StrategyLpRepository.php
 
 		-
-			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Class App\\Security\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
 			count: 1
-			path: src/Position/Repository/StrategyPositionRepository.php
+			path: src/Security/Form/ChangePasswordFormType.php
 
 		-
-			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Class App\\Security\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
 			count: 1
-			path: src/Position/Repository/StrategyPositionRepository.php
+			path: src/Security/Form/RegistrationFormType.php
 
 		-
-			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Class App\\Security\\Form\\ResetPasswordRequestFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
 			count: 1
-			path: src/Position/Repository/StrategyPositionRepository.php
+			path: src/Security/Form/ResetPasswordRequestFormType.php
 
 		-
-			message: '#^Class App\\Position\\Repository\\StrategyPositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Position/Repository/StrategyPositionRepository.php
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
+
+		-
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
+
+		-
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
+
+		-
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
+
+		-
+			message: '#^Method App\\User\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Property App\\User\\Entity\\User\:\:\$email has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Property App\\User\\Entity\\User\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Property App\\User\\Entity\\User\:\:\$lastConnectedAt has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Property App\\User\\Entity\\User\:\:\$password has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Property App\\User\\Entity\\User\:\:\$roles has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/User/Entity/User.php
+
+		-
+			message: '#^Class App\\User\\Form\\UserPreferencesType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/User/Form/UserPreferencesType.php
 
 		-
 			message: '#^Class App\\User\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
@@ -1289,27 +1301,3 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/User/Repository/UserRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/VenteRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/VenteRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/VenteRepository.php
-
-		-
-			message: '#^Class App\\Position\\Repository\\VenteRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Position/Repository/VenteRepository.php
