@@ -1,22 +1,21 @@
 {% extends 'knp_menu_base.html.twig' %}
 
 {#
- # Flat navigation (one level) rendered with the shadcn Button component.
- # `options.direction` switches between the desktop row and the mobile column.
+ # Main navigation: one level, rendered as pills. The row scrolls horizontally on narrow screens.
  #}
 {% block root %}
-    {% set vertical = options.direction|default('row') == 'column' %}
-    <ul class="{{ vertical ? 'flex flex-col gap-1' : 'flex flex-wrap items-center gap-1' }}">
+    <ul class="flex gap-0.5 whitespace-nowrap">
         {% for item in item.children|filter(item => item.displayed) %}
             {% set current = matcher.isCurrent(item) or matcher.isAncestor(item, options.matchingDepth) %}
             <li>
-                <twig:Button
-                    as="a"
-                    variant="ghost"
+                <a
                     href="{{ item.uri }}"
-                    aria-current="{{ current ? 'page' : false }}"
-                    class="{{ html_classes({'w-full justify-start': vertical, 'bg-muted text-foreground': current, 'text-muted-foreground': not current}) }}"
-                >{{ item.label }}</twig:Button>
+                    {% if current %}aria-current="page"{% endif %}
+                    class="{{ html_classes('inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50', {
+                        'bg-popover text-foreground ring-1 ring-border': current,
+                        'text-muted-foreground hover:bg-muted hover:text-foreground': not current,
+                    }) }}"
+                >{{ item.label }}</a>
             </li>
         {% endfor %}
     </ul>

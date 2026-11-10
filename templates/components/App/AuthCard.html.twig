@@ -8,7 +8,7 @@
 <div class="flex min-h-[70vh] items-center justify-center">
     <twig:Card {{ ...attributes.defaults({class: 'w-full max-w-sm'}) }}>
         <twig:Card:Header class="items-center text-center">
-            <img class="mx-auto mb-2 size-12" src="{{ asset('images/btc.png') }}" alt="">
+            <twig:App:Logo label="CryptoBook" class="mx-auto mb-3"/>
             <twig:Card:Title class="text-lg">{{ title }}</twig:Card:Title>
             {% if description %}<twig:Card:Description>{{ description }}</twig:Card:Description>{% endif %}
         </twig:Card:Header>
