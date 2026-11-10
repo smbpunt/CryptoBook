@@ -4,16 +4,21 @@ namespace App\Dashboard\EventListener;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dashboard\Cache\DashboardCache;
+use App\Deposit\Entity\Deposit;
 use App\FiatCurrency\Entity\FiatCurrency;
+use App\Loan\Entity\Loan;
+use App\Position\Entity\Position;
 use App\Position\Entity\Vente;
-use App\User\Entity\OwnedInterface;
+use App\Strategy\Farming\Entity\StrategyFarming;
+use App\Strategy\Lp\Entity\StrategyLp;
 use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\UnitOfWork;
 
 /**
- * Invalidates the dashboard cache when its data changes: every user for prices and rates,
+ * Invalidates the dashboard cache when the data it reads changes: every user for prices and rates,
  * the owner for its own data. Catches the commands, the back-office and the forms alike.
  */
 #[AsDoctrineListener(event: Events::onFlush)]
@@ -41,9 +46,10 @@ final class DashboardCacheInvalidator
         foreach ($entities as $entity) {
             match (true) {
                 $entity instanceof Cryptocurrency, $entity instanceof FiatCurrency => $this->all = true,
-                $entity instanceof OwnedInterface => $this->addUser($entity->getOwner()),
+                $entity instanceof Position, $entity instanceof Deposit, $entity instanceof Loan,
+                $entity instanceof StrategyFarming, $entity instanceof StrategyLp => $this->addUser($entity->getOwner()),
                 $entity instanceof Vente => $this->addUser($entity->getPosition()?->getOwner()),
-                $entity instanceof User => $this->addUser($entity),
+                $entity instanceof User && $this->favoriteCurrencyChanged($uow, $entity) => $this->addUser($entity),
                 default => null,
             };
         }
@@ -66,5 +72,13 @@ final class DashboardCacheInvalidator
         if (null !== $user?->getId()) {
             $this->userIds[$user->getId()] = true;
         }
+    }
+
+    /**
+     * The dashboard only reads the favorite currency of the user, not its last connection.
+     */
+    private function favoriteCurrencyChanged(UnitOfWork $uow, User $user): bool
+    {
+        return \array_key_exists('favoriteFiatCurrency', $uow->getEntityChangeSet($user));
     }
 }
