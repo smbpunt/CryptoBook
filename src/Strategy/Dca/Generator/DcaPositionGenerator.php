@@ -33,7 +33,8 @@ final readonly class DcaPositionGenerator
                 ->setOpenedAt($openedAt)
                 ->setCoin($coin)
                 ->setEntryCost($invested)
-                ->setNbCoins(round($invested / $coin->getPriceUsd(), 8))
+                // Without a price, the quantity is left to fill in.
+                ->setNbCoins($coin->getPriceUsd() > 0 ? round($invested / $coin->getPriceUsd(), 8) : 0.0)
                 ->setIsOpened(true)
                 ->setIsDca(true)
                 ->setDescription('DCA '.$part->getPercent().'%');

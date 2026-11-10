@@ -3,8 +3,8 @@
 {% macro part_prototype(part) %}
     <tr class="js-item border-b">
         <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
-        <td class="p-2">{{ form_widget(part.percent) }}</td>
-        <td class="p-2">{{ form_widget(part.coin) }}</td>
+        <td class="p-2">{{ form_widget(part.percent) }}{{ form_errors(part.percent) }}</td>
+        <td class="p-2">{{ form_widget(part.coin) }}{{ form_errors(part.coin) }}</td>
     </tr>
 {% endmacro %}
 
@@ -33,6 +33,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="mb-4">{{ form_errors(form.parts) }}</div>
 
     <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
 {{ form_end(form) }}

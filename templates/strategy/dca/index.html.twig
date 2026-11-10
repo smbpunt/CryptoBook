@@ -57,7 +57,7 @@
         </twig:App:PageHeader>
 
         <div class="mb-6 grid grid-cols-3 gap-4 md:max-w-2xl">
-            <twig:App:Stat label="FIAT">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</twig:App:Stat>
+            <twig:App:Stat label="FIAT">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</twig:App:Stat>
             <twig:App:Stat label="Farming">{{ dca.farmingToDcaUsd|number_format(2, '.', ' ') }} $</twig:App:Stat>
             <twig:App:Stat label="Total">~ {{ totalFarmingUsd|round(2)|number_format(2, '.', ' ') }} $</twig:App:Stat>
         </div>
@@ -78,7 +78,7 @@
                         <twig:Table:Cell>{{ part.coin.symbol|upper }}</twig:Table:Cell>
                         <twig:Table:Cell class="text-end tabular-nums">{{ part.percent }} %</twig:Table:Cell>
                         <twig:Table:Cell class="text-end tabular-nums">{{ amount|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ (amount / part.coin.priceUsd)|round(6) }}</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|round(6) : '—' }}</twig:Table:Cell>
                     </twig:Table:Row>
                 {% else %}
                     <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucune allocation.</twig:Table:Cell></twig:Table:Row>

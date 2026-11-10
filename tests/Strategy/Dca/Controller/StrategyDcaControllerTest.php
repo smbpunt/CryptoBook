@@ -33,6 +33,52 @@ final class StrategyDcaControllerTest extends WebTestCase
             ->each(static fn (Crawler $cell): string => trim($cell->text())));
     }
 
+    public function testCoinWithoutPrice(): void
+    {
+        $this->data->btc->setPriceUsd(0);
+        $this->em()->flush();
+
+        $crawler = $this->client->request('GET', '/strategy/dca/');
+        self::assertResponseIsSuccessful();
+        self::assertSame('—', trim($crawler->filter('main tbody tr')->first()->filter('td')->last()->text()));
+
+        $this->client->request('GET', '/strategy/dca/generatePositions/1000');
+        self::assertResponseIsSuccessful();
+        self::assertInputValueSame('dca_to_position[positions][0][nbCoins]', '0.00000000');
+    }
+
+    public function testFiatAmountIsInEuros(): void
+    {
+        $this->client->loginUser($this->data->admin);
+        $this->em()->persist(new StrategyDca($this->data->admin)->setFiatToDcaEur(100)->setFarmingToDcaUsd(0));
+        $this->em()->flush();
+
+        $this->client->request('GET', '/strategy/dca/');
+
+        self::assertSelectorTextContains('main', '100.00 €');
+    }
+
+    public function testPartsMustSumToOneHundredPercent(): void
+    {
+        $crawler = $this->client->request('GET', '/strategy/dca/edit');
+        $values = $crawler->selectButton('Modifier')->form()->getPhpValues();
+        $values['strategy_dca']['parts'] = [
+            ['coin' => (string) $this->data->btc->getId(), 'percent' => '60'],
+            ['coin' => (string) $this->data->eth->getId(), 'percent' => '30'],
+        ];
+
+        $this->client->request('POST', '/strategy/dca/edit', $values);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testDcaAutoWithAnUnknownCoinIsNotFound(): void
+    {
+        $this->client->request('GET', '/strategy/dca/dcaAuto?crypto=999999&t=d&nb=2&total=200&d=2024-01-01T10:00');
+
+        self::assertResponseStatusCodeSame(404);
+    }
+
     public function testGeneratedPositionsAreSaved(): void
     {
         $this->client->request('GET', '/strategy/dca/generatePositions/1000');

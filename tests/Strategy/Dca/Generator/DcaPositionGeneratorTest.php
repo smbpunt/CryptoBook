@@ -38,4 +38,15 @@ final class DcaPositionGeneratorTest extends TestCase
             self::assertTrue($position->isIsOpened());
         }
     }
+
+    public function testCoinWithoutPriceGetsNoQuantity(): void
+    {
+        $user = new User();
+        $dca = new StrategyDca($user)->addPart(new CoinPercentDca()->setCoin(new Cryptocurrency()->setPriceUsd(0))->setPercent(100));
+
+        $positions = new DcaPositionGenerator(new MockClock())->generate($dca, $user, 1000);
+
+        self::assertSame(0.0, $positions[0]->getNbCoins());
+        self::assertSame(1000.0, $positions[0]->getEntryCost());
+    }
 }

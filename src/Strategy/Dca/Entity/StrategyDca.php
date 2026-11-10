@@ -8,6 +8,8 @@ use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: StrategyDcaRepository::class)]
 class StrategyDca implements OwnedInterface
@@ -21,13 +23,16 @@ class StrategyDca implements OwnedInterface
     #[ORM\JoinColumn(nullable: false)]
     private User $owner;
 
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'strategyDca', targetEntity: CoinPercentDca::class, cascade: ['persist'], orphanRemoval: true)]
     private $parts;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $fiatToDcaEur;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $farmingToDcaUsd;
 
     public function __construct(User $owner)
@@ -81,7 +86,7 @@ class StrategyDca implements OwnedInterface
         return $this->fiatToDcaEur;
     }
 
-    public function setFiatToDcaEur(float $fiatToDcaEur): self
+    public function setFiatToDcaEur(?float $fiatToDcaEur): self
     {
         $this->fiatToDcaEur = $fiatToDcaEur;
 
@@ -93,10 +98,26 @@ class StrategyDca implements OwnedInterface
         return $this->farmingToDcaUsd;
     }
 
-    public function setFarmingToDcaUsd(float $farmingToDcaUsd): self
+    public function setFarmingToDcaUsd(?float $farmingToDcaUsd): self
     {
         $this->farmingToDcaUsd = $farmingToDcaUsd;
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validatePartsSum(ExecutionContextInterface $context): void
+    {
+        $sum = 0.0;
+        foreach ($this->parts as $part) {
+            $sum += (float) $part->getPercent();
+        }
+
+        if (abs($sum - 100) > 0.01) {
+            $context->buildViolation('Les allocations doivent faire 100 % (actuellement {{ sum }} %).')
+                ->setParameter('{{ sum }}', (string) round($sum, 2))
+                ->atPath('parts')
+                ->addViolation();
+        }
     }
 }

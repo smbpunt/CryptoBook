@@ -5,6 +5,7 @@ namespace App\Strategy\Dca\Entity;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Strategy\Dca\Repository\CoinPercentDcaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoinPercentDcaRepository::class)]
 class CoinPercentDca
@@ -16,9 +17,12 @@ class CoinPercentDca
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
+    #[Assert\Range(min: 0, max: 100)]
     private $percent;
 
     #[ORM\ManyToOne(targetEntity: StrategyDca::class, inversedBy: 'parts')]
@@ -47,7 +51,7 @@ class CoinPercentDca
         return $this->percent;
     }
 
-    public function setPercent(float $percent): self
+    public function setPercent(?float $percent): self
     {
         $this->percent = $percent;
 
