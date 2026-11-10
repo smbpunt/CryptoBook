@@ -97,6 +97,21 @@ final class PositionControllerTest extends WebTestCase
         $this->client->request('POST', '/position/new', $values);
 
         self::assertResponseStatusCodeSame(422);
+        self::assertSelectorExists('form [data-slot="form-message"]');
+    }
+
+    public function testInvalidSaleOpensTheSaleTabWithItsError(): void
+    {
+        $crawler = $this->client->request('GET', '/position/new');
+        $values = $crawler->selectButton('Valider')->form()->getPhpValues();
+        $values['position'] = ['coin' => (string) $this->data->eth->getId(), 'nbCoins' => '1', 'entryCost' => '1000'] + $values['position'];
+        $values['position']['ventes'] = [['soldAt' => '2024-02-01', 'percent' => '150', 'priceSold' => '3000']];
+
+        $crawler = $this->client->request('POST', '/position/new', $values);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertSame('vente', $crawler->filter('[data-slot="tabs"]')->attr('data-tabs-active-tab-value'));
+        self::assertSelectorExists('.ventes-wrapper [data-slot="form-message"]');
     }
 
     public function testExitPlanOverOneHundredPercentIsAFormError(): void
@@ -108,6 +123,7 @@ final class PositionControllerTest extends WebTestCase
         $this->client->request('POST', "/position/{$this->data->position->getId()}/edit", $values);
 
         self::assertResponseStatusCodeSame(422);
+        self::assertSelectorExists('.strategies-wrapper [data-slot="form-message"]');
     }
 
     public function testInfosOfAFreePositionWithAnExitPlan(): void

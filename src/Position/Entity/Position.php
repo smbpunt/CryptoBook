@@ -68,7 +68,6 @@ class Position implements OwnedInterface
         $this->owner = $owner;
         $this->isOpened = true;
         $this->isDca = false;
-        $this->remainingCoins = 0;
         $this->description = '';
     }
 
@@ -260,18 +259,18 @@ class Position implements OwnedInterface
     #[ORM\PreFlush]
     public function calculateRemainingCoins(): void
     {
+        $previous = $this->remainingCoins;
         $this->remainingCoins = $this->nbCoins;
-        if ($this->ventes->isEmpty()) {
-            return;
-        }
-
-        $ventes = $this->getVentesSortedByDate();
-        foreach ($ventes as $vente) {
+        foreach ($this->getVentesSortedByDate() as $vente) {
             $this->remainingCoins *= (1 - ($vente->getPercent() / 100));
         }
 
+        // Sold out: closed. Coins back after a sale was lowered or removed: opened again.
+        // A position closed by hand with coins left stays closed (a new one has no previous count).
         if (0.0 === $this->remainingCoins) {
             $this->setIsOpened(false);
+        } elseif (0.0 === $previous) {
+            $this->setIsOpened(true);
         }
     }
 }

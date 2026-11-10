@@ -44,6 +44,28 @@ final class PositionTest extends TestCase
         self::assertFalse($position->isIsOpened());
     }
 
+    public function testLoweredFullSaleReopensPosition(): void
+    {
+        $position = $this->position(nbCoins: 2, entryCost: 100);
+        $sale = $this->vente('2024-01-01', 100);
+        $position->addVente($sale);
+        $position->calculateRemainingCoins();
+
+        $sale->setPercent(50);
+        $position->calculateRemainingCoins();
+
+        self::assertSame(1.0, $position->getRemainingCoins());
+        self::assertTrue($position->isIsOpened());
+    }
+
+    public function testPositionClosedByHandStaysClosed(): void
+    {
+        $position = $this->position(nbCoins: 2, entryCost: 100)->setIsOpened(false);
+        $position->calculateRemainingCoins();
+
+        self::assertFalse($position->isIsOpened());
+    }
+
     public function testValuations(): void
     {
         $position = $this->position(nbCoins: 4, entryCost: 1000, priceUsd: 300);
