@@ -22,11 +22,9 @@
                 <twig:Input type="email" id="inputEmail" name="email" value="{{ last_username }}" autocomplete="email" placeholder="name@example.com" required autofocus/>
             </twig:Form:Item>
             <twig:Form:Item>
-                <div class="flex items-center">
-                    <twig:Form:Label for="inputPassword">Mot de passe</twig:Form:Label>
-                    <a href="{{ path('app_forgot_password_request') }}" class="ml-auto text-sm underline-offset-4 hover:underline">Mot de passe oublié ?</a>
-                </div>
+                <twig:Form:Label for="inputPassword">Mot de passe</twig:Form:Label>
                 <twig:Input type="password" id="inputPassword" name="password" autocomplete="current-password" required/>
+                <a href="{{ path('app_forgot_password_request') }}" class="justify-self-end text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">Mot de passe oublié ?</a>
             </twig:Form:Item>
             <div class="flex items-center gap-2">
                 <twig:Checkbox id="remember_me" name="_remember_me"/>

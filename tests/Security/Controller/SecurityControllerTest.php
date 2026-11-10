@@ -41,6 +41,16 @@ final class SecurityControllerTest extends WebTestCase
         self::assertSelectorExists('[data-slot="alert"]');
     }
 
+    public function testTabOrderReachesThePasswordBeforeTheForgottenPasswordLink(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+
+        $focusable = $crawler->filter('form input:not([type=hidden]), form button, form a')->each(
+            static fn ($node): string => $node->attr('name') ?? $node->attr('href') ?? $node->text(),
+        );
+        self::assertSame(['email', 'password', '/reset-password', '_remember_me', 'Se connecter', '/register'], $focusable);
+    }
+
     private function em(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);
