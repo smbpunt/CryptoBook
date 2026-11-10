@@ -18,7 +18,7 @@ final class DepositServiceTest extends TestCase
         $eur = new FiatCurrency()->setFixerKey('EUR')->setRates(['USD' => 1.1]);
 
         $repository = $this->createMock(DepositRepository::class);
-        $repository->expects(self::once())->method('findBy')->with(['owner' => $user])->willReturn([
+        $repository->expects(self::once())->method('findByOwnerWithCurrency')->with($user)->willReturn([
             new Deposit($user)->setAmount(100)->setFiatCurrency($eur),
             new Deposit($user)->setAmount(50)->setFiatCurrency($usd),
         ]);

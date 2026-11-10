@@ -17,7 +17,7 @@ final readonly class DepositService
     public function getTotalDepositUsd(User $user): float
     {
         $total = 0;
-        foreach ($this->depositRepository->findBy(['owner' => $user]) as $deposit) {
+        foreach ($this->depositRepository->findByOwnerWithCurrency($user) as $deposit) {
             $total += $deposit->getAmountUsd();
         }
 
