@@ -1,0 +1,59 @@
+{% set symbol = dashboard.currencySymbol %}
+<twig:Card class="min-w-0 flex-[999_1_600px] gap-0 p-[22px]" aria-labelledby="dashboard-holdings">
+    <div class="flex items-center justify-between gap-3">
+        <h2 id="dashboard-holdings" class="font-display text-lg font-semibold tracking-[-0.02em]">Wallet crypto</h2>
+        <a href="{{ path('app_position_index') }}" class="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-[13px] font-medium text-brand-text outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">
+            Voir les positions<twig:ux:icon name="lucide:arrow-right" class="size-3.5"/>
+        </a>
+    </div>
+    {% if dashboard.cryptoHoldings is empty %}
+        <twig:Empty class="mt-2 border border-border">
+            <twig:Empty:Header>
+                <twig:Empty:Media variant="icon"><twig:ux:icon name="lucide:wallet"/></twig:Empty:Media>
+                <twig:Empty:Title>Aucune crypto</twig:Empty:Title>
+                <twig:Empty:Description>Ajoutez une position pour la voir ici.</twig:Empty:Description>
+            </twig:Empty:Header>
+        </twig:Empty>
+    {% else %}
+        <div class="mt-2 overflow-x-auto">
+            <table class="w-full min-w-[560px] border-collapse text-sm">
+                <thead>
+                    <tr class="text-left text-xs text-muted-foreground [&>th]:border-b [&>th]:border-border [&>th]:py-2.5 [&>th]:font-medium">
+                        <th scope="col" class="pr-2">Actif</th>
+                        <th scope="col" class="px-2 text-right">Quantité</th>
+                        <th scope="col" class="px-2 text-right">Prix</th>
+                        <th scope="col" class="px-2 text-right">Valeur</th>
+                        <th scope="col" class="w-[30%] pl-4">Poids</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for holding in dashboard.cryptoHoldings %}
+                        {% set price = dashboard.toFavorite(holding.priceUsd) %}
+                        <tr class="[&>td]:border-b [&>td]:border-border [&>td]:py-[11px] last:[&>td]:border-b-0">
+                            <td class="pr-2">
+                                <span class="flex items-center gap-2.5">
+                                    <twig:App:CoinLogo url="{{ holding.thumbUrl }}" name="{{ holding.name }}" class="size-7"/>
+                                    <span>
+                                        <span class="block font-semibold">{{ holding.symbol|upper }}</span>
+                                        <span class="block text-xs text-muted-foreground">{{ holding.name }}</span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td class="px-2 text-right tabular-nums">{{ holding.quantity|decimal(holding.quantity >= 1000 ? 0 : (holding.quantity >= 1 ? 2 : 4)) }}</td>
+                            <td class="px-2 text-right text-muted-foreground tabular-nums">{{ price|amount(symbol, price >= 1000 ? 0 : (price >= 1 ? 2 : 4)) }}</td>
+                            <td class="px-2 text-right font-semibold tabular-nums">{{ dashboard.toFavorite(holding.valueUsd)|amount(symbol) }}</td>
+                            <td class="pl-4">
+                                <span class="flex items-center gap-2.5">
+                                    <span aria-hidden="true" class="h-1.5 flex-auto overflow-hidden rounded-full bg-muted">
+                                        <span class="block h-full rounded-full bg-chart-1" style="width: {{ holding.percent|round(2) }}%{{ holding.color ? '; background: ' ~ holding.color }}"></span>
+                                    </span>
+                                    <span class="w-12 text-right text-[13px] text-muted-foreground tabular-nums">{{ holding.percent|percent }}</span>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</twig:Card>

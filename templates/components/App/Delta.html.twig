@@ -1,0 +1,10 @@
+{%- props
+    ## float|null Signed percentage. Null shows "—".
+    value = null,
+    ## int Decimals of the percentage.
+    decimals = 1
+-%}
+{%- set tone = value is null ? 'bg-muted text-muted-foreground' : (value|round(decimals) < 0 ? 'bg-negative/10 text-negative' : 'bg-positive/10 text-positive') -%}
+<span data-slot="delta" {{ attributes.defaults({class: ('inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[13px] leading-none font-semibold whitespace-nowrap tabular-nums ' ~ tone)|tailwind_classes}) }}>
+    {{- value is null ? '—' : value|signed_percent(decimals) -}}
+</span>
