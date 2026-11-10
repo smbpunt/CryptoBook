@@ -26,7 +26,6 @@ return [
     'app' => ['path' => './assets/app.js', 'entrypoint' => true],
     '@hotwired/stimulus' => ['version' => '3.2.2'],
     '@symfony/stimulus-bundle' => ['path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js'],
-    'chart.js/auto' => ['version' => '3.9.1'],
     'choices.js' => ['version' => '9.1.0'],
     'choices.js/public/assets/styles/choices.min.css' => ['version' => '9.1.0', 'type' => 'css'],
     'shadcn/dist/tailwind.css' => ['version' => '4.23.0', 'type' => 'css'],
@@ -34,4 +33,6 @@ return [
     '@fontsource-variable/inter/index.css' => ['version' => '5.3.0', 'type' => 'css'],
     '@fontsource-variable/space-grotesk/index.css' => ['version' => '5.3.0', 'type' => 'css'],
     '@hotwired/turbo' => ['version' => '8.0.23'],
+    'chart.js' => ['version' => '4.6.1'],
+    '@kurkle/color' => ['version' => '0.3.4'],
 ];

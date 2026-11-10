@@ -3,6 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Tests\Fixtures\Dataset;
+use App\Wallet\Entity\WalletSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -17,9 +18,14 @@ final class StimulusControllersTest extends WebTestCase
         $client = self::createClient();
         $d = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
         $client->loginUser($d->user);
+        // The chart needs a snapshot.
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $em->persist(new WalletSnapshot($d->user, new \DateTimeImmutable('-1 hour'), 25000));
+        $em->flush();
 
         $pages = [
-            '/' => ['[data-controller="allocation-chart"]'],
+            // The ux-chartjs `chart` controller runs after `wallet-chart`, which configures it.
+            '/' => ['canvas[data-controller="wallet-chart symfony--ux-chartjs--chart"]'],
             '/position/' => ['table[data-controller="row-toggle"] button[data-action="row-toggle#toggle"][aria-controls^="detail-"]'],
             // The form theme adds `choices` to every `js-select2` select: checked once here.
             '/position/new' => ['select[data-controller~="choices"]', '[data-controller="collection"] [data-collection-target="items"]', 'button[data-action="collection#add"]'],

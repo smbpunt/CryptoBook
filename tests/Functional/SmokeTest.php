@@ -69,6 +69,10 @@ final class SmokeTest extends WebTestCase
             $this->client->request('GET', $url);
             self::assertResponseIsSuccessful("GET $url");
         }
+
+        // Period of the dashboard chart, loaded in its Turbo Frame.
+        $this->client->request('GET', '/history/30d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+        self::assertResponseIsSuccessful('GET /history/30d');
     }
 
     public function testAjaxInfos(): void

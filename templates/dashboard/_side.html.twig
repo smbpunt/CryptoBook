@@ -1,0 +1,49 @@
+{% set symbol = dashboard.currencySymbol %}
+{% set resultUsd = dashboard.resultUsd %}
+{% set hasSnapshots = dashboard.snapshotStats.highUsd is not null %}
+<div class="flex min-w-0 flex-[1_1_300px] flex-col gap-5">
+    <twig:Card class="flex-auto gap-0 p-[22px]" aria-labelledby="dashboard-result">
+        <div class="flex items-center justify-between gap-3">
+            <h2 id="dashboard-result" class="text-sm font-medium text-muted-foreground">Résultat latent</h2>
+            <twig:App:Delta :value="dashboard.resultPercent"/>
+        </div>
+        <p class="mt-2.5 font-display text-[34px] leading-[1.1] font-semibold tracking-[-0.03em] tabular-nums {{ resultUsd < 0 ? 'text-negative' : 'text-positive' }}">{{ dashboard.toFavorite(resultUsd)|signed_amount(symbol) }}</p>
+        {# Share of the deposits in the total, the rest is the gain. A loss fills the bar with the deposits. #}
+        {% set investedShare = resultUsd < 0 or dashboard.totalUsd <= 0 ? 100 : dashboard.depositUsd * 100 / dashboard.totalUsd %}
+        <div aria-hidden="true" class="mt-[18px] flex h-2 overflow-hidden rounded-full bg-muted">
+            <div class="bg-muted-foreground/55" style="width: {{ investedShare|round(2) }}%"></div>
+            <div class="flex-auto bg-positive"></div>
+        </div>
+        <div class="mt-2.5 flex flex-wrap justify-between gap-x-3 text-[13px] text-muted-foreground">
+            <span>Investi <strong class="font-semibold text-foreground tabular-nums">{{ dashboard.toFavorite(dashboard.depositUsd)|amount(symbol) }}</strong></span>
+            <span>{{ resultUsd < 0 ? 'Moins-value' : 'Plus-value' }} <strong class="font-semibold tabular-nums {{ resultUsd < 0 ? 'text-negative' : 'text-positive' }}">{{ dashboard.toFavorite(resultUsd)|signed_amount(symbol) }}</strong></span>
+        </div>
+    </twig:Card>
+
+    {% set dayChangeUsd = dashboard.dayChangeUsd %}
+    <twig:Card class="flex-row items-center gap-3.5 px-[22px] py-5" aria-labelledby="dashboard-day-change">
+        <span aria-hidden="true" class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted"><twig:ux:icon name="lucide:clock" class="size-[18px]"/></span>
+        <div class="min-w-0 flex-auto">
+            <h2 id="dashboard-day-change" class="text-[13px] font-medium text-muted-foreground">Variation 24 h</h2>
+            <p class="mt-0.5 font-display text-[22px] font-semibold tracking-[-0.02em] tabular-nums {{ dayChangeUsd is null ? '' : (dayChangeUsd < 0 ? 'text-negative' : 'text-positive') }}">
+                {{- dayChangeUsd is null ? '—' : dashboard.toFavorite(dayChangeUsd)|signed_amount(symbol) -}}
+            </p>
+        </div>
+        <twig:App:Delta :value="dashboard.dayChangePercent"/>
+    </twig:Card>
+
+    {% set highAt = dashboard.highAt %}
+    <twig:Card class="flex-row items-center gap-3.5 px-[22px] py-5" aria-labelledby="dashboard-high">
+        <span aria-hidden="true" class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted"><twig:ux:icon name="lucide:mountain" class="size-[18px]"/></span>
+        <div class="min-w-0 flex-auto">
+            <h2 id="dashboard-high" class="text-[13px] font-medium text-muted-foreground">
+                Plus haut historique
+                {%- if hasSnapshots %} · {{ highAt ? highAt|format_date(timezone: 'Europe/Paris', pattern: 'd MMM yyyy', locale: 'fr') : 'maintenant' }}{% endif -%}
+            </h2>
+            <p class="mt-0.5 font-display text-[22px] font-semibold tracking-[-0.02em] tabular-nums">
+                {{- hasSnapshots ? dashboard.toFavorite(dashboard.highUsd)|amount(symbol) : '—' -}}
+            </p>
+        </div>
+        <twig:App:Delta :value="hasSnapshots and dashboard.highUsd > 0 ? (dashboard.totalUsd - dashboard.highUsd) * 100 / dashboard.highUsd : null"/>
+    </twig:Card>
+</div>

@@ -1,11 +1,24 @@
 {%- props
     ## string The metric label.
-    label
+    label,
+    ## string|null Icon name (`lucide:…`), shown in a chip before the label.
+    icon = null,
+    ## string|null Secondary text under the value.
+    hint = null
 -%}
 {%- set _content -%}{%- block content %}{% endblock -%}{%- endset -%}
-<twig:Card size="sm" {{ ...attributes }}>
+{%- set _footer -%}{%- block footer %}{% endblock -%}{%- endset -%}
+{# The sm card shrinks its title: the dashboard KPIs (with an icon) use the default size. #}
+<twig:Card size="{{ icon ? 'default' : 'sm' }}" {{ ...attributes }}>
     <twig:Card:Header>
-        <twig:Card:Description>{{ label }}</twig:Card:Description>
-        <twig:Card:Title class="text-xl tabular-nums">{{ _content }}</twig:Card:Title>
+        <twig:Card:Description class="flex items-center gap-2.5 {{ icon ? 'mb-2.5 text-[13px] font-medium' }}">
+            {%- if icon -%}
+                <span aria-hidden="true" class="inline-flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-muted text-foreground"><twig:ux:icon name="{{ icon }}" class="size-4"/></span>
+            {%- endif -%}
+            {{ label }}
+        </twig:Card:Description>
+        <twig:Card:Title class="tabular-nums {{ icon ? 'font-display text-[26px] font-semibold tracking-[-0.025em]' : 'text-xl' }}">{{ _content }}</twig:Card:Title>
+        {%- if hint %}<p class="text-[13px] text-muted-foreground tabular-nums">{{ hint }}</p>{% endif -%}
+        {{- _footer -}}
     </twig:Card:Header>
 </twig:Card>
