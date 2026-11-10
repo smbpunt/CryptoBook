@@ -3,6 +3,7 @@
 namespace App\Position\Controller;
 
 use App\Position\Builder\PositionGroupBuilder;
+use App\Position\Calculator\ExitPlanCalculator;
 use App\Position\Entity\Position;
 use App\Position\Form\PositionType;
 use App\Position\Repository\PositionRepository;
@@ -32,10 +33,11 @@ class PositionController extends AbstractController
 
     #[Route('/{id}/infos', name: 'app_position_ajax_infos', methods: ['POST'])]
     #[IsGranted(OwnerVoter::OWNER, 'position')]
-    public function ajax(Position $position): Response
+    public function ajax(Position $position, ExitPlanCalculator $exitPlanCalculator): Response
     {
         return $this->render('position/_strategy_position.html.twig', [
             'position' => $position,
+            'exitPlan' => $position->getStrategies()->isEmpty() ? null : $exitPlanCalculator->calculate($position),
         ]);
     }
 
