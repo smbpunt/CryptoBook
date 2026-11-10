@@ -21,7 +21,7 @@ final class FiatCurrencyTest extends TestCase
     public function testMissingRateIsAnError(): void
     {
         $this->expectException(MissingRateException::class);
-        $this->expectExceptionMessage('No EUR to AUD rate');
+        $this->expectExceptionMessageIsOrContains('No EUR to AUD rate');
 
         new FiatCurrency()->setFixerKey('EUR')->setRates(['USD' => 1.1])->rateTo('AUD');
     }
