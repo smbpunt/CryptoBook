@@ -40,7 +40,5 @@ class CryptocurrencyCrudController extends AbstractCrudController
         yield ColorField::new('color')->hideOnIndex();
         yield MoneyField::new('priceUsd')->setCurrency('USD')->setStoredAsCents(false)->hideOnForm();
         yield MoneyField::new('mcapUsd')->setCurrency('USD')->setStoredAsCents(false)->hideOnForm();
-        yield MoneyField::new('priceEur')->setCurrency('EUR')->setStoredAsCents(false)->hideOnForm()->hideOnIndex();
-        yield MoneyField::new('mcapEur')->setCurrency('EUR')->setStoredAsCents(false)->hideOnForm()->hideOnIndex();
     }
 }
