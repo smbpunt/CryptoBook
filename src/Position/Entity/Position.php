@@ -11,6 +11,7 @@ use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,43 +24,45 @@ class Position implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
     #[Assert\Positive]
-    private $nbCoins;
+    private ?float $nbCoins = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $coin;
+    private ?Cryptocurrency $coin = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isOpened;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $isOpened = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
     #[Assert\PositiveOrZero]
-    private $entryCost;
+    private ?float $entryCost = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $openedAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $openedAt = null;
 
-    #[ORM\Column(type: 'float')]
-    private $remainingCoins;
+    #[ORM\Column(type: Types::FLOAT)]
+    private ?float $remainingCoins = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isDca;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $isDca = null;
 
+    /** @var Collection<int, Vente> */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: Vente::class, cascade: ['persist'], orphanRemoval: true)]
-    private $ventes;
+    private Collection $ventes;
 
+    /** @var Collection<int, StrategyPosition> */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: StrategyPosition::class, cascade: ['persist'], orphanRemoval: true)]
-    private $strategies;
+    private Collection $strategies;
 
     public function __construct(User $owner)
     {

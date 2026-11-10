@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * @extends AbstractType<array<string, mixed>>
+ */
 class DcaAutoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -5,6 +5,7 @@ namespace App\Deposit\Entity;
 use App\Deposit\Repository\DepositTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepositTypeRepository::class)]
@@ -12,14 +13,15 @@ class DepositType implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $libelle = null;
 
+    /** @var Collection<int, Deposit> */
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Deposit::class)]
-    private $deposits;
+    private Collection $deposits;
 
     public function __construct()
     {

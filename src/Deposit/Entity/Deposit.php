@@ -9,6 +9,7 @@ use App\FiatCurrency\Exception\MissingRateException;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,25 +20,25 @@ class Deposit implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $depositedAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $depositedAt = null;
 
     #[ORM\ManyToOne(targetEntity: DepositType::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $type;
+    private ?DepositType $type = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $amount;
+    private ?float $amount = null;
 
     #[ORM\ManyToOne(targetEntity: Exchange::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $exchange;
+    private ?Exchange $exchange = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]

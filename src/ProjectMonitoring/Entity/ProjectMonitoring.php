@@ -8,6 +8,7 @@ use App\Shared\Entity\DescriptionTrait;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,26 +20,27 @@ class ProjectMonitoring implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotNull]
-    private $libelle;
+    private ?string $libelle = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
-    private $coin;
+    private ?Cryptocurrency $coin = null;
 
-    #[ORM\Column(type: 'text')]
-    private $note;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $note = null;
 
-    #[ORM\Column(type: 'json')]
-    private $links = [];
+    /** @var list<string> */
+    #[ORM\Column(type: Types::JSON)]
+    private array $links = [];
 
     #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $type;
+    private ?TypeProject $type = null;
 
     public function __construct(User $owner)
     {
@@ -86,14 +88,21 @@ class ProjectMonitoring implements OwnedInterface
         return $this;
     }
 
-    public function getLinks(): ?array
+    /**
+     * @return list<string>
+     */
+    public function getLinks(): array
     {
         return $this->links;
     }
 
+    /**
+     * @param list<string> $links
+     */
     public function setLinks(array $links): self
     {
-        $this->links = $links;
+        // A CollectionType with allow_delete leaves gaps in the keys, which would be stored as a JSON object
+        $this->links = array_values($links);
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\User\Entity;
 
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\User\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -17,23 +18,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Veuillez saisir un email.')]
     #[Assert\Email(message: 'Cet email n\'est pas valide.')]
     #[Assert\Length(max: 180)]
-    private $email;
+    private ?string $email = null;
 
-    #[ORM\Column(type: 'json')]
-    private $roles = [];
+    /** @var list<string> */
+    #[ORM\Column(type: Types::JSON)]
+    private array $roles = [];
 
-    #[ORM\Column(type: 'string')]
-    private $password;
+    #[ORM\Column(type: Types::STRING)]
+    private ?string $password = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $lastConnectedAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $lastConnectedAt = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -80,9 +82,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return array_values(array_unique($roles));
     }
 
+    /**
+     * @param list<string> $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

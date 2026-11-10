@@ -7,6 +7,7 @@ use App\User\Entity\OwnedInterface;
 use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -16,24 +17,25 @@ class StrategyDca implements OwnedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private User $owner;
 
+    /** @var Collection<int, CoinPercentDca> */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'strategyDca', targetEntity: CoinPercentDca::class, cascade: ['persist'], orphanRemoval: true)]
-    private $parts;
+    private Collection $parts;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $fiatToDcaEur;
+    private ?float $fiatToDcaEur = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $farmingToDcaUsd;
+    private ?float $farmingToDcaUsd = null;
 
     public function __construct(User $owner)
     {
