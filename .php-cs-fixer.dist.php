@@ -6,6 +6,9 @@ $finder = (new PhpCsFixer\Finder())
     ->notPath([
         'config/bundles.php',
         'config/reference.php',
+        // Managed by Flex recipes: avoid diffs on every recipes:update
+        'public/index.php',
+        'tests/bootstrap.php',
     ])
 ;
 
