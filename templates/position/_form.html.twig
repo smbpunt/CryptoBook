@@ -1,8 +1,8 @@
 {% import _self as formMacros %}
 
 {% macro vente_prototype(vente) %}
-    <tr class="js-item border-b">
-        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+    <tr class="border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
         <td class="p-2">{{ form_widget(vente.soldAt) }}{{ form_errors(vente.soldAt) }}</td>
         <td class="p-2">{{ form_widget(vente.percent, {addon: '%'}) }}{{ form_errors(vente.percent) }}</td>
         <td class="p-2">{{ form_widget(vente.priceSold, {addon: '$'}) }}{{ form_errors(vente.priceSold) }}</td>
@@ -10,8 +10,8 @@
 {% endmacro %}
 
 {% macro strategy_prototype(strategy) %}
-    <tr class="js-item border-b">
-        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+    <tr class="border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
         <td class="p-2">{{ form_widget(strategy.percent, {addon: '%'}) }}{{ form_errors(strategy.percent) }}</td>
         <td class="p-2">{{ form_widget(strategy.priceSold, {addon: '$'}) }}{{ form_errors(strategy.priceSold) }}</td>
     </tr>
@@ -46,40 +46,44 @@
         <twig:Tabs:Content value="strategy">
             {# Component content has its own scope: re-import the macros. #}
             {% import 'position/_form.html.twig' as formMacros %}
-            <twig:Button variant="outline" class="add_item_link my-2" data-wrapper="strategies-wrapper">
-                <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une stratégie
-            </twig:Button>
-            <table class="w-full max-w-2xl text-sm">
-                <thead class="border-b">
-                    <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
-                </thead>
-                <tbody class="strategies-wrapper"
-                       data-index="{{ form.strategies|length }}"
-                       data-prototype="{{ formMacros.strategy_prototype(form.strategies.vars.prototype)|e('html_attr') }}">
-                {% for strategy in form.strategies %}
-                    {{ formMacros.strategy_prototype(strategy) }}
-                {% endfor %}
-                </tbody>
-            </table>
+            <div data-controller="collection"
+                 data-collection-index-value="{{ form.strategies is empty ? 0 : max(form.strategies.children|keys) + 1 }}"
+                 data-collection-prototype-value="{{ formMacros.strategy_prototype(form.strategies.vars.prototype)|e('html_attr') }}">
+                <twig:Button variant="outline" class="my-2" data-action="collection#add">
+                    <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une stratégie
+                </twig:Button>
+                <table class="w-full max-w-2xl text-sm">
+                    <thead class="border-b">
+                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
+                    </thead>
+                    <tbody data-collection-target="items">
+                    {% for strategy in form.strategies %}
+                        {{ formMacros.strategy_prototype(strategy) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </twig:Tabs:Content>
         <twig:Tabs:Content value="vente">
             {# Component content has its own scope: re-import the macros. #}
             {% import 'position/_form.html.twig' as formMacros %}
-            <twig:Button variant="outline" class="add_item_link my-2" data-wrapper="ventes-wrapper">
-                <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une vente
-            </twig:Button>
-            <table class="w-full max-w-3xl text-sm">
-                <thead class="border-b">
-                    <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">Date</th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
-                </thead>
-                <tbody class="ventes-wrapper"
-                       data-index="{{ form.ventes|length }}"
-                       data-prototype="{{ formMacros.vente_prototype(form.ventes.vars.prototype)|e('html_attr') }}">
-                {% for vente in form.ventes %}
-                    {{ formMacros.vente_prototype(vente) }}
-                {% endfor %}
-                </tbody>
-            </table>
+            <div data-controller="collection"
+                 data-collection-index-value="{{ form.ventes is empty ? 0 : max(form.ventes.children|keys) + 1 }}"
+                 data-collection-prototype-value="{{ formMacros.vente_prototype(form.ventes.vars.prototype)|e('html_attr') }}">
+                <twig:Button variant="outline" class="my-2" data-action="collection#add">
+                    <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une vente
+                </twig:Button>
+                <table class="w-full max-w-3xl text-sm">
+                    <thead class="border-b">
+                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">Date</th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
+                    </thead>
+                    <tbody data-collection-target="items">
+                    {% for vente in form.ventes %}
+                        {{ formMacros.vente_prototype(vente) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </twig:Tabs:Content>
     </twig:Tabs>
 

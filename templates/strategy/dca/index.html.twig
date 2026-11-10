@@ -2,11 +2,12 @@
 
 {% block title %}{{ parent() }} - DCA{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'dca_index', 'select2']) }}{% endblock %}
-
 {% block body %}
     {% if dca is not null %}
-        <twig:App:PageHeader title="Mon DCA">
+        <twig:App:PageHeader title="Mon DCA"
+                             data-controller="dca"
+                             data-dca-generate-url-value="{{ path('app_strategy_dca_generate_positions') }}"
+                             data-dca-auto-url-value="{{ path('app_strategy_dca_dcaauto') }}">
             <twig:Dialog id="dca_generate">
                 <twig:Dialog:Trigger>
                     <twig:Button {{ ...dialog_trigger_attrs }}>Générer mes positions</twig:Button>
@@ -19,12 +20,12 @@
                     <twig:Form:Item>
                         <twig:Form:Label for="dca_value">Argent investi ($)</twig:Form:Label>
                         <twig:InputGroup>
-                            <twig:InputGroup:Input id="dca_value" required placeholder="ex: 100" value="{{ amountUsd is null ? '' : amountUsd|round(2) }}"/>
+                            <twig:InputGroup:Input id="dca_value" data-dca-target="amount" required placeholder="ex: 100" value="{{ amountUsd is null ? '' : amountUsd|round(2) }}"/>
                             <twig:InputGroup:Addon align="inline-end">$</twig:InputGroup:Addon>
                         </twig:InputGroup>
                     </twig:Form:Item>
                     <twig:Dialog:Footer>
-                        <twig:Button id="btn-generate" data-path="{{ absolute_url(path('app_strategy_dca_generate_positions')) }}">Valider</twig:Button>
+                        <twig:Button data-action="dca#generate">Valider</twig:Button>
                     </twig:Dialog:Footer>
                 </twig:Dialog:Content>
             </twig:Dialog>
@@ -38,14 +39,14 @@
                         <twig:Dialog:Title>DCA Auto</twig:Dialog:Title>
                         <twig:Dialog:Description>Génère des achats récurrents.</twig:Dialog:Description>
                     </twig:Dialog:Header>
-                    {{ form_start(form) }}
+                    {{ form_start(form, {attr: {'data-dca-target': 'autoForm'}}) }}
                         {{ form_row(form.coin, {label: 'Crypto'}) }}
                         {{ form_row(form.value, {label: 'Investi au total', addon: '$', attr: {placeholder: 'ex: 200'}}) }}
                         {{ form_row(form.type_recurr, {label: 'Type de récurrence'}) }}
                         {{ form_row(form.nb_recurr, {label: 'Nombre de récurrence', attr: {placeholder: 'ex: 31'}}) }}
                         {{ form_row(form.date_first, {label: 'Date du premier achat'}) }}
                         <twig:Dialog:Footer>
-                            <twig:Button id="btn-generate-dcaauto" data-path="{{ absolute_url(path('app_strategy_dca_dcaauto')) }}">Valider</twig:Button>
+                            <twig:Button data-action="dca#auto">Valider</twig:Button>
                         </twig:Dialog:Footer>
                     {{ form_end(form) }}
                 </twig:Dialog:Content>

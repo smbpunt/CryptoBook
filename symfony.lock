@@ -561,6 +561,18 @@
     "symfony/ux-toolkit": {
         "version": "v3.7.1"
     },
+    "symfony/ux-turbo": {
+        "version": "3.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.20",
+            "ref": "eaff62fc37864d355804c778309a226ae539831f"
+        },
+        "files": [
+            "config/packages/ux_turbo.yaml"
+        ]
+    },
     "symfony/ux-twig-component": {
         "version": "2.36",
         "recipe": {

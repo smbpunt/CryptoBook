@@ -82,7 +82,7 @@ final class StrategyDcaControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Taux EUR indisponible');
-        self::assertSelectorExists('#btn-generate-dcaauto');
+        self::assertSelectorExists('button[data-action="dca#auto"]');
     }
 
     public function testGenerateWithoutAmountGoesBackToTheIndex(): void

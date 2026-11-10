@@ -2,8 +2,6 @@
 
 {% block title %}{{ parent() }} - Positions{% endblock %}
 
-{% block importmap %}{{ importmap(['app', 'position_index']) }}{% endblock %}
-
 {% block body %}
     <twig:App:PageHeader title="Mes positions">
         <twig:Button as="a" href="{{ path('app_position_new') }}">
@@ -20,7 +18,7 @@
             </twig:Tabs:List>
 
             <twig:Tabs:Content value="crypto">
-                <twig:Table>
+                <twig:Table data-controller="row-toggle">
                     <twig:Table:Header>
                         <twig:Table:Row>
                             <twig:Table:Head class="w-8"/>
@@ -39,7 +37,7 @@
                             <twig:Table:Row>
                                 <twig:Table:Cell class="text-center text-muted-foreground">({{ group.positions|length }})</twig:Table:Cell>
                                 <twig:Table:Cell>
-                                    <twig:Button variant="ghost" size="icon-sm" class="btn-split" data-id="{{ coin.id }}" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Détail des positions">
+                                    <twig:Button variant="ghost" size="icon-sm" data-action="row-toggle#toggle" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Détail des positions">
                                         <twig:ux:icon name="lucide:chevrons-up-down"/>
                                     </twig:Button>
                                 </twig:Table:Cell>

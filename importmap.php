@@ -24,14 +24,6 @@
  */
 return [
     'app' => ['path' => './assets/app.js', 'entrypoint' => true],
-    'select2' => ['path' => './assets/select2.js', 'entrypoint' => true],
-    'home' => ['path' => './assets/home.js', 'entrypoint' => true],
-    'position_index' => ['path' => './assets/position/index.js', 'entrypoint' => true],
-    'farming_form' => ['path' => './assets/farming/form.js', 'entrypoint' => true],
-    'loan_form' => ['path' => './assets/loan/form.js', 'entrypoint' => true],
-    'lp_form' => ['path' => './assets/lp/form.js', 'entrypoint' => true],
-    'dca_index' => ['path' => './assets/dca/index.js', 'entrypoint' => true],
-    'collection' => ['path' => './assets/collection.js', 'entrypoint' => true],
     '@hotwired/stimulus' => ['version' => '3.2.2'],
     '@symfony/stimulus-bundle' => ['path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js'],
     'chart.js/auto' => ['version' => '3.9.1'],
@@ -41,4 +33,5 @@ return [
     'tw-animate-css/dist/tw-animate.css' => ['version' => '1.4.0', 'type' => 'css'],
     '@fontsource-variable/inter/index.css' => ['version' => '5.3.0', 'type' => 'css'],
     '@fontsource-variable/space-grotesk/index.css' => ['version' => '5.3.0', 'type' => 'css'],
+    '@hotwired/turbo' => ['version' => '8.0.23'],
 ];

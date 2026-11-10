@@ -1,8 +1,8 @@
-{{ form_start(form) }}
+{{ form_start(form, {attr: {'data-controller': 'dependent-select'}}) }}
     {{ form_errors(form) }}
     <div class="grid gap-x-4 md:grid-cols-2">
-        {{ form_row(form.blockchain, {label: 'Blockchain'}) }}
-        <div id="id-dapp">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
+        {{ form_row(form.blockchain, {label: 'Blockchain', attr: form.blockchain.vars.attr|merge({'data-action': 'dependent-select#refresh'})}) }}
+        <div id="id-dapp" data-dependent-select-target="field">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
     </div>
     <div class="grid gap-x-4 md:grid-cols-[2fr_1fr_1fr]">
         {{ form_row(form.coin1, {label: 'Crypto 1'}) }}

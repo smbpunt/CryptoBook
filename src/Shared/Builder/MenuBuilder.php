@@ -60,10 +60,12 @@ class MenuBuilder
         $menu->addChild('Préférences', ['route' => 'app_user_preferences', 'extras' => ['icon' => 'lucide:settings']]);
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            $menu->addChild('Admin', ['route' => 'admin', 'extras' => ['icon' => 'lucide:shield']]);
+            // EasyAdmin has its own layout: a full page load, not a Turbo visit.
+            $menu->addChild('Admin', ['route' => 'admin', 'linkAttributes' => ['data-turbo' => 'false'], 'extras' => ['icon' => 'lucide:shield']]);
         }
 
-        $menu->addChild('Déconnexion', ['route' => 'app_logout', 'extras' => ['icon' => 'lucide:log-out']]);
+        // Full page load: Turbo would prefetch the GET logout on hover, and keep the user's pages in its cache.
+        $menu->addChild('Déconnexion', ['route' => 'app_logout', 'linkAttributes' => ['data-turbo' => 'false'], 'extras' => ['icon' => 'lucide:log-out']]);
 
         return $menu;
     }

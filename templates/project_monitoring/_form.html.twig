@@ -1,8 +1,8 @@
 {% import _self as formMacros %}
 
 {% macro links_prototype(link) %}
-    <tr class="js-item border-b">
-        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+    <tr class="border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
         <td class="p-2">{{ form_widget(link) }}</td>
     </tr>
 {% endmacro %}
@@ -19,18 +19,20 @@
             {{ form_row(form.note, {label: 'Note perso', attr: {rows: 6}}) }}
         </div>
         <div>
-            <twig:Button variant="outline" class="add_item_link mb-2" data-wrapper="links-wrapper">
-                <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter un lien
-            </twig:Button>
-            <table class="w-full text-sm">
-                <tbody class="links-wrapper"
-                       data-index="{{ form.links|length }}"
-                       data-prototype="{{ formMacros.links_prototype(form.links.vars.prototype)|e('html_attr') }}">
-                {% for link in form.links %}
-                    {{ formMacros.links_prototype(link) }}
-                {% endfor %}
-                </tbody>
-            </table>
+            <div data-controller="collection"
+                 data-collection-index-value="{{ form.links is empty ? 0 : max(form.links.children|keys) + 1 }}"
+                 data-collection-prototype-value="{{ formMacros.links_prototype(form.links.vars.prototype)|e('html_attr') }}">
+                <twig:Button variant="outline" class="mb-2" data-action="collection#add">
+                    <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter un lien
+                </twig:Button>
+                <table class="w-full text-sm">
+                    <tbody data-collection-target="items">
+                    {% for link in form.links %}
+                        {{ formMacros.links_prototype(link) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <twig:Button type="submit" class="mt-4">{{ button_label|default('Save') }}</twig:Button>
