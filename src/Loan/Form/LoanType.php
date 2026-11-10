@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Form;
+namespace App\Loan\Form;
 
 use App\Entity\Blockchain;
 use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
-use App\Entity\Loan;
+use App\Loan\Entity\Loan;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;

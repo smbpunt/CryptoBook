@@ -7,7 +7,7 @@ use App\Dashboard\Dto\DashboardHolding;
 use App\Deposit\Calculator\DepositTotalCalculator;
 use App\Deposit\Repository\DepositRepository;
 use App\Entity\User;
-use App\Repository\LoanRepository;
+use App\Loan\Repository\LoanRepository;
 use App\Service\FarmingService;
 use App\Service\FiatExchangeRatesService;
 use App\Wallet\Calculator\WalletValueCalculator;

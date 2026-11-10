@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Loan\Repository;
 
-use App\Entity\Loan;
+use App\Loan\Entity\Loan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;

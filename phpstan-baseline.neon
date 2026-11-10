@@ -331,40 +331,40 @@ parameters:
 			path: src/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$coin has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$dapp has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$dapp has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$loanedAt has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$loanedAt has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
-			message: '#^Property App\\Entity\\Loan\:\:\$nbCoins has no type specified\.$#'
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$nbCoins has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Loan.php
+			path: src/Loan/Entity/Loan.php
 
 		-
 			message: '#^Property App\\Entity\\Nft\:\:\$blockchain has no type specified\.$#'
@@ -847,10 +847,10 @@ parameters:
 			path: src/Deposit/Form/DepositType.php
 
 		-
-			message: '#^Class App\\Form\\LoanType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Loan\\Form\\LoanType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/LoanType.php
+			path: src/Loan/Form/LoanType.php
 
 		-
 			message: '#^Class App\\Form\\NftType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
@@ -1123,28 +1123,28 @@ parameters:
 			path: src/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/LoanRepository.php
+			path: src/Loan/Repository/LoanRepository.php
 
 		-
-			message: '#^Class App\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/LoanRepository.php
+			path: src/Loan/Repository/LoanRepository.php
 
 		-
-			message: '#^Class App\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/LoanRepository.php
+			path: src/Loan/Repository/LoanRepository.php
 
 		-
-			message: '#^Class App\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/LoanRepository.php
+			path: src/Loan/Repository/LoanRepository.php
 
 		-
 			message: '#^Class App\\Repository\\NftRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'

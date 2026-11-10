@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Loan\Entity\Loan;
 use App\Repository\CryptocurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

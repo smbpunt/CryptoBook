@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Entity;
+namespace App\Loan\Entity;
 
+use App\Entity\Blockchain;
+use App\Entity\Cryptocurrency;
+use App\Entity\Dapp;
+use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;
-use App\Repository\LoanRepository;
+use App\Entity\User;
+use App\Loan\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LoanRepository::class)]

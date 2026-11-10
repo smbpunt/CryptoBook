@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Loan\Controller;
 
-use App\Entity\Loan;
 use App\Entity\User;
-use App\Form\LoanType;
-use App\Repository\LoanRepository;
+use App\Loan\Entity\Loan;
+use App\Loan\Form\LoanType;
+use App\Loan\Repository\LoanRepository;
 use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;

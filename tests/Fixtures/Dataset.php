@@ -10,7 +10,6 @@ use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
 use App\Entity\Exchange;
 use App\Entity\FiatCurrency;
-use App\Entity\Loan;
 use App\Entity\Nft;
 use App\Entity\Position;
 use App\Entity\ProjectMonitoring;
@@ -19,6 +18,7 @@ use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
 use App\Entity\TypeProject;
 use App\Entity\User;
+use App\Loan\Entity\Loan;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
