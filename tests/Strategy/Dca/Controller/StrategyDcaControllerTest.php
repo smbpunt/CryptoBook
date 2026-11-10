@@ -70,6 +70,42 @@ final class StrategyDcaControllerTest extends WebTestCase
         $this->client->request('POST', '/strategy/dca/edit', $values);
 
         self::assertResponseStatusCodeSame(422);
+        self::assertSelectorTextContains('form', 'Les allocations doivent faire 100 %');
+    }
+
+    public function testIndexWithoutEurRate(): void
+    {
+        $this->data->eur->setRates([]);
+        $this->em()->flush();
+
+        $this->client->request('GET', '/strategy/dca/');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('main', 'Taux EUR indisponible');
+        self::assertSelectorExists('#btn-generate-dcaauto');
+    }
+
+    public function testGenerateWithoutAmountGoesBackToTheIndex(): void
+    {
+        $this->data->dca->setFiatToDcaEur(0)->setFarmingToDcaUsd(0);
+        $this->em()->flush();
+
+        $this->client->request('GET', '/strategy/dca/generatePositions');
+
+        self::assertResponseRedirects('/strategy/dca/');
+    }
+
+    public function testPartAtZeroPercentIsNotGenerated(): void
+    {
+        $this->data->dca->getParts()->last()->setPercent(0);
+        $this->data->dca->getParts()->first()->setPercent(100);
+        $this->em()->flush();
+
+        $this->client->request('GET', '/strategy/dca/generatePositions/1000');
+        $this->client->submitForm('Valider');
+
+        self::assertResponseRedirects('/position/');
+        self::assertCount(1, $this->em()->getRepository(Position::class)->findBy(['owner' => $this->data->user, 'isDca' => true]));
     }
 
     public function testDcaAutoWithAnUnknownCoinIsNotFound(): void

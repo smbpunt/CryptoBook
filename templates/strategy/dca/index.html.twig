@@ -6,8 +6,6 @@
 
 {% block body %}
     {% if dca is not null %}
-        {% set totalFarmingUsd = amountUsd %}
-
         <twig:App:PageHeader title="Mon DCA">
             <twig:Dialog id="dca_generate">
                 <twig:Dialog:Trigger>
@@ -21,7 +19,7 @@
                     <twig:Form:Item>
                         <twig:Form:Label for="dca_value">Argent investi ($)</twig:Form:Label>
                         <twig:InputGroup>
-                            <twig:InputGroup:Input id="dca_value" required placeholder="ex: 100" value="{{ totalFarmingUsd|round(2) }}"/>
+                            <twig:InputGroup:Input id="dca_value" required placeholder="ex: 100" value="{{ amountUsd is null ? '' : amountUsd|round(2) }}"/>
                             <twig:InputGroup:Addon align="inline-end">$</twig:InputGroup:Addon>
                         </twig:InputGroup>
                     </twig:Form:Item>
@@ -59,7 +57,7 @@
         <div class="mb-6 grid grid-cols-3 gap-4 md:max-w-2xl">
             <twig:App:Stat label="FIAT">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</twig:App:Stat>
             <twig:App:Stat label="Farming">{{ dca.farmingToDcaUsd|number_format(2, '.', ' ') }} $</twig:App:Stat>
-            <twig:App:Stat label="Total">~ {{ totalFarmingUsd|round(2)|number_format(2, '.', ' ') }} $</twig:App:Stat>
+            <twig:App:Stat label="Total">{{ amountUsd is null ? 'Taux EUR indisponible' : '~ ' ~ amountUsd|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:App:Stat>
         </div>
 
         <twig:Table>
@@ -73,12 +71,12 @@
             </twig:Table:Header>
             <twig:Table:Body>
                 {% for part in dca.parts %}
-                    {% set amount = totalFarmingUsd * part.percent / 100 %}
+                    {% set amount = amountUsd is null ? null : amountUsd * part.percent / 100 %}
                     <twig:Table:Row>
                         <twig:Table:Cell>{{ part.coin.symbol|upper }}</twig:Table:Cell>
                         <twig:Table:Cell class="text-end tabular-nums">{{ part.percent }} %</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ amount|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|round(6) : '—' }}</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is null ? '—' : amount|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is not null and part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|round(6) : '—' }}</twig:Table:Cell>
                     </twig:Table:Row>
                 {% else %}
                     <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucune allocation.</twig:Table:Cell></twig:Table:Row>

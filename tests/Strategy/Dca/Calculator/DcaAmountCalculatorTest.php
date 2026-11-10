@@ -27,4 +27,12 @@ final class DcaAmountCalculatorTest extends KernelTestCase
 
         self::assertSame(20.0, $calculator->amountUsd(new StrategyDca(new User())->setFiatToDcaEur(0)->setFarmingToDcaUsd(20)));
     }
+
+    public function testNullWithoutEuroRate(): void
+    {
+        self::getContainer()->get(FiatCurrencyRepository::class)->getByFixerKey('EUR')->setRates([]);
+        $dca = new StrategyDca(new User())->setFiatToDcaEur(100)->setFarmingToDcaUsd(20);
+
+        self::assertNull(self::getContainer()->get(DcaAmountCalculator::class)->amountUsd($dca));
+    }
 }

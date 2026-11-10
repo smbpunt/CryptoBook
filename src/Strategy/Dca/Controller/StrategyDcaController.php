@@ -73,6 +73,10 @@ class StrategyDcaController extends AbstractController
         }
 
         $amountUsd = $invested > 0 ? $invested : $amountCalculator->amountUsd($strategyDca);
+        // Nothing to split: the index shows why (no amount, or no EUR rate).
+        if (null === $amountUsd || $amountUsd <= 0) {
+            return $this->redirectToRoute('app_strategy_dca_index');
+        }
 
         return $this->savePositions($request, $generator->generate($strategyDca, $user, $amountUsd));
     }

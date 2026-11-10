@@ -22,6 +22,8 @@ class StrategyDcaType extends AbstractType
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
+                // Keeps the "sum to 100 %" error next to the parts.
+                'error_bubbling' => false,
             ]);
     }
 

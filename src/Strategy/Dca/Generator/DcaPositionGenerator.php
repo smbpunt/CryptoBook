@@ -8,7 +8,7 @@ use App\User\Entity\User;
 use Psr\Clock\ClockInterface;
 
 /**
- * Splits an amount between the coins of the DCA, at their current price.
+ * Splits an amount between the coins of the DCA, at their current price. A part at 0 % buys nothing.
  */
 final readonly class DcaPositionGenerator
 {
@@ -26,6 +26,10 @@ final readonly class DcaPositionGenerator
 
         $positions = [];
         foreach ($dca->getParts() as $part) {
+            if ($part->getPercent() <= 0) {
+                continue;
+            }
+
             $invested = $amountUsd * $part->getPercent() / 100;
             $coin = $part->getCoin();
 
