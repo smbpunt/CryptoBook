@@ -7,7 +7,6 @@ use App\Position\Dto\CoinQuantity;
 use App\Position\Entity\Position;
 use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,23 +46,28 @@ class PositionRepository extends ServiceEntityRepository
      */
     public function sumQuantitiesByOwnerAndCoin(?User $owner = null): array
     {
-        // Coin as root alias: Doctrine only hydrates an entity selected from the root.
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->from(Cryptocurrency::class, 'c')
-            ->join(Position::class, 'p', Join::ON, 'p.coin = c')
-            ->select('c', 'IDENTITY(p.owner) AS ownerId', 'SUM(CASE WHEN p.isOpened = TRUE THEN p.remainingCoins ELSE 0 END) AS quantity')
-            ->groupBy('p.owner', 'c.id');
+        // Scalars only: with the coin entity selected, Doctrine merges the rows of a coin held by several owners.
+        $qb = $this->createQueryBuilder('p')
+            ->select('IDENTITY(p.coin) AS coinId', 'IDENTITY(p.owner) AS ownerId', 'SUM(CASE WHEN p.isOpened = TRUE THEN p.remainingCoins ELSE 0 END) AS quantity')
+            ->groupBy('p.owner', 'p.coin');
 
         if ($owner instanceof User) {
             $qb->andWhere('p.owner = :owner')
                 ->setParameter('owner', $owner);
         }
 
+        /** @var list<array{coinId: int|string, ownerId: int|string, quantity: float|string}> $rows */
+        $rows = $qb->getQuery()->getArrayResult();
+        $coinsById = [];
+        foreach ($this->getEntityManager()->getRepository(Cryptocurrency::class)->findBy(['id' => array_unique(array_column($rows, 'coinId'))]) as $coin) {
+            $coinsById[$coin->getId()] = $coin;
+        }
+
         return array_map(static fn (array $row): CoinQuantity => new CoinQuantity(
-            $row[0],
+            $coinsById[$row['coinId']],
             (int) $row['ownerId'],
             (float) $row['quantity'],
-        ), $qb->getQuery()->getResult());
+        ), $rows);
     }
 
     /**
