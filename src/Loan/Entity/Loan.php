@@ -24,7 +24,7 @@ class Loan implements OwnedInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'loans')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private $coin;
@@ -33,7 +33,7 @@ class Loan implements OwnedInterface
     #[Assert\NotNull]
     private $nbCoins;
 
-    #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'loans')]
+    #[ORM\ManyToOne(targetEntity: Dapp::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private $dapp;

@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $lastConnectedAt;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?FiatCurrency $favoriteFiatCurrency = null;
 

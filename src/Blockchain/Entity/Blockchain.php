@@ -4,7 +4,6 @@ namespace App\Blockchain\Entity;
 
 use App\Blockchain\Repository\BlockchainRepository;
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Nft\Entity\Nft;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,20 +19,16 @@ class Blockchain implements \Stringable
     #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'blockchains')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
     #[ORM\OneToMany(mappedBy: 'blockchain', targetEntity: Dapp::class, orphanRemoval: true)]
     private $dapps;
 
-    #[ORM\OneToMany(mappedBy: 'blockchain', targetEntity: Nft::class)]
-    private $nfts;
-
     public function __construct()
     {
         $this->dapps = new ArrayCollection();
-        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,36 +84,6 @@ class Blockchain implements \Stringable
             // set the owning side to null (unless already changed)
             if ($dapp->getBlockchain() === $this) {
                 $dapp->setBlockchain(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Nft>
-     */
-    public function getNfts(): Collection
-    {
-        return $this->nfts;
-    }
-
-    public function addNft(Nft $nft): self
-    {
-        if (!$this->nfts->contains($nft)) {
-            $this->nfts[] = $nft;
-            $nft->setBlockchain($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNft(Nft $nft): self
-    {
-        if ($this->nfts->removeElement($nft)) {
-            // set the owning side to null (unless already changed)
-            if ($nft->getBlockchain() === $this) {
-                $nft->setBlockchain(null);
             }
         }
 

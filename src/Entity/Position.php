@@ -26,7 +26,7 @@ class Position implements OwnedInterface
     #[ORM\Column(type: 'float')]
     private $nbCoins;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'positions')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $coin;
 

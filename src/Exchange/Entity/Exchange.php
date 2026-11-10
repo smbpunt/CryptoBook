@@ -2,10 +2,7 @@
 
 namespace App\Exchange\Entity;
 
-use App\Deposit\Entity\Deposit;
 use App\Exchange\Repository\ExchangeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ExchangeRepository::class)]
@@ -21,14 +18,6 @@ class Exchange implements \Stringable
 
     #[ORM\Column(type: 'string', length: 255)]
     private $url;
-
-    #[ORM\OneToMany(mappedBy: 'exchange', targetEntity: Deposit::class)]
-    private $deposits;
-
-    public function __construct()
-    {
-        $this->deposits = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -55,36 +44,6 @@ class Exchange implements \Stringable
     public function setUrl(string $url): self
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Deposit>
-     */
-    public function getDeposits(): Collection
-    {
-        return $this->deposits;
-    }
-
-    public function addDeposit(Deposit $deposit): self
-    {
-        if (!$this->deposits->contains($deposit)) {
-            $this->deposits[] = $deposit;
-            $deposit->setExchange($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDeposit(Deposit $deposit): self
-    {
-        if ($this->deposits->removeElement($deposit)) {
-            // set the owning side to null (unless already changed)
-            if ($deposit->getExchange() === $this) {
-                $deposit->setExchange(null);
-            }
-        }
 
         return $this;
     }

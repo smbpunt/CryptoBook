@@ -59,12 +59,12 @@ class Nft implements OwnedInterface
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $soldOn;
 
-    #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'nfts')]
+    #[ORM\ManyToOne(targetEntity: Blockchain::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private $blockchain;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'nfts')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private $cryptocurrency;

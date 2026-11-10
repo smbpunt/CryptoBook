@@ -2,11 +2,7 @@
 
 namespace App\FiatCurrency\Entity;
 
-use App\Deposit\Entity\Deposit;
-use App\Entity\User;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FiatCurrencyRepository::class)]
@@ -33,18 +29,6 @@ class FiatCurrency implements \Stringable
 
     #[ORM\Column(nullable: true)]
     private array $rates = [];
-
-    #[ORM\OneToMany(mappedBy: 'fiatCurrency', targetEntity: Deposit::class, orphanRemoval: true)]
-    private Collection $deposits;
-
-    #[ORM\OneToMany(mappedBy: 'favoriteFiatCurrency', targetEntity: User::class)]
-    private Collection $users;
-
-    public function __construct()
-    {
-        $this->deposits = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -117,68 +101,8 @@ class FiatCurrency implements \Stringable
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    /**
-     * @return Collection<int, Deposit>
-     */
-    public function getDeposits(): Collection
-    {
-        return $this->deposits;
-    }
-
-    public function addDeposit(Deposit $deposit): self
-    {
-        if (!$this->deposits->contains($deposit)) {
-            $this->deposits->add($deposit);
-            $deposit->setFiatCurrency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDeposit(Deposit $deposit): self
-    {
-        if ($this->deposits->removeElement($deposit)) {
-            // set the owning side to null (unless already changed)
-            if ($deposit->getFiatCurrency() === $this) {
-                $deposit->setFiatCurrency(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString(): string
     {
         return (string) $this->symbol;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setFavoriteFiatCurrency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getFavoriteFiatCurrency() === $this) {
-                $user->setFavoriteFiatCurrency(null);
-            }
-        }
-
-        return $this;
     }
 }

@@ -3,10 +3,6 @@
 namespace App\Blockchain\Entity;
 
 use App\Blockchain\Repository\DappRepository;
-use App\Entity\StrategyFarming;
-use App\Loan\Entity\Loan;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DappRepository::class)]
@@ -26,18 +22,6 @@ class Dapp implements \Stringable
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
     #[ORM\JoinColumn(nullable: false)]
     private $blockchain;
-
-    #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: Loan::class)]
-    private $loans;
-
-    #[ORM\OneToMany(mappedBy: 'dapp', targetEntity: StrategyFarming::class)]
-    private $farmingStrategies;
-
-    public function __construct()
-    {
-        $this->farmingStrategies = new ArrayCollection();
-        $this->loans = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -76,66 +60,6 @@ class Dapp implements \Stringable
     public function setBlockchain(?Blockchain $blockchain): self
     {
         $this->blockchain = $blockchain;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Loan>
-     */
-    public function getLoans(): Collection
-    {
-        return $this->loans;
-    }
-
-    public function addLoan(Loan $loan): self
-    {
-        if (!$this->loans->contains($loan)) {
-            $this->loans[] = $loan;
-            $loan->setDapp($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLoan(Loan $loan): self
-    {
-        if ($this->loans->removeElement($loan)) {
-            // set the owning side to null (unless already changed)
-            if ($loan->getDapp() === $this) {
-                $loan->setDapp(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, StrategyFarming>
-     */
-    public function getFarmingStrategies(): Collection
-    {
-        return $this->farmingStrategies;
-    }
-
-    public function addFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if (!$this->farmingStrategies->contains($farmingStrategy)) {
-            $this->farmingStrategies[] = $farmingStrategy;
-            $farmingStrategy->setDapp($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFarmingStrategy(StrategyFarming $farmingStrategy): self
-    {
-        if ($this->farmingStrategies->removeElement($farmingStrategy)) {
-            // set the owning side to null (unless already changed)
-            if ($farmingStrategy->getDapp() === $this) {
-                $farmingStrategy->setDapp(null);
-            }
-        }
 
         return $this;
     }

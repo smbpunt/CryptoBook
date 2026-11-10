@@ -21,14 +21,14 @@ class StrategyFarming implements OwnedInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'farmingStrategies')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $coin;
 
     #[ORM\Column(type: 'float')]
     private $nbCoins;
 
-    #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'farmingStrategies')]
+    #[ORM\ManyToOne(targetEntity: Dapp::class)]
     private $dapp;
 
     private $blockchain;

@@ -26,7 +26,7 @@ class ProjectMonitoring implements OwnedInterface
     #[Assert\NotNull]
     private $libelle;
 
-    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'projectMonitorings')]
+    #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     private $coin;
 
     #[ORM\Column(type: 'text')]

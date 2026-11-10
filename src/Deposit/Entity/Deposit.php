@@ -33,12 +33,12 @@ class Deposit implements OwnedInterface
     #[Assert\NotNull]
     private $amount;
 
-    #[ORM\ManyToOne(targetEntity: Exchange::class, inversedBy: 'deposits')]
+    #[ORM\ManyToOne(targetEntity: Exchange::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private $exchange;
 
-    #[ORM\ManyToOne(inversedBy: 'deposits')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private ?FiatCurrency $fiatCurrency = null;

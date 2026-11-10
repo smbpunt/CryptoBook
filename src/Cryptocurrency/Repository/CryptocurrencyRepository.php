@@ -3,7 +3,9 @@
 namespace App\Cryptocurrency\Repository;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Entity\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -43,7 +45,7 @@ class CryptocurrencyRepository extends ServiceEntityRepository
     public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
     {
         return $this->createQueryBuilder('c')
-            ->join('c.positions', 'p')
+            ->join(Position::class, 'p', Join::ON, 'p.coin = c')
             ->andWhere('p.owner = :user')
             ->andWhere('c.isStable = :isStable')
             ->andWhere('p.isOpened = true')
