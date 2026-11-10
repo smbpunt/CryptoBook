@@ -278,6 +278,14 @@ Syntaxe à confirmer avec `vendor/bin/deptrac init` et la doc de la version inst
 - DCA Auto mensuel : les dates gardent le jour du premier achat (ou le dernier jour d'un mois plus court) au lieu de glisser au 2 ou 3 du mois suivant.
 - Positions : « Valider & continuer » rouvre aussi le formulaire de création depuis la modification.
 - Inscription : la page n'annonce plus de mail de vérification.
+- Positions : une position fermée par une vente à 100 % se rouvre quand la vente baisse ou disparaît. Une position fermée à la main avec des coins reste fermée.
+- DCA : une part à 0 % ne génère plus de position. Sans montant à répartir, la génération renvoie sur la page DCA.
+- DCA : sans taux EUR → USD, la page reste accessible et affiche « Taux EUR indisponible » au lieu d'une 500.
+- Dashboard : le cache n'est plus vidé par les données qu'il ne lit pas (snapshots, NFT, projets, DCA, dernière connexion).
+- Valeur des wallets (`wallet:snapshot`) : juste quand plusieurs utilisateurs ont le même coin.
+- `fiat:updateRates` : une devise en échec chez Fixer (ou sans taux USD) est loguée et garde ses taux, les autres sont mises à jour. La commande sort en erreur et liste les devises en échec.
+- Admin, devises : à la création, les taux sont demandés à Fixer. Code hors ISO 4217 ou inconnu de Fixer → erreur de formulaire, la devise n'est pas créée. Le code n'est plus modifiable ensuite.
+- Conversion USD → devise : `montant / taux de la devise vers USD`, au lieu du taux de la devise USD. Une devise n'a besoin que de son taux USD. Écart de l'ordre de 0,04 % avec les taux de la migration.
 
 Les données déjà en base ne sont pas corrigées : une position à 0 coin ou une vente à plus de 100 % existante reste à reprendre à la main. Un DCA existant qui ne fait pas 100 % continue de générer des positions tant qu'il n'est pas modifié.
 
@@ -289,6 +297,7 @@ Les données déjà en base ne sont pas corrigées : une position à 0 coin ou u
 - Dépôts convertis en USD au taux du jour : le total « Investi » bouge avec le change. Il faudrait stocker le taux à la date du dépôt.
 - Routes `/{id}/infos` en POST alors qu'elles ne font que lire. Touche le JS, à voir en phase 4.
 - DCA Auto : jusqu'à 1000 positions dans un seul formulaire.
+- Cache du dashboard : un calcul commencé avant un flush peut être enregistré après son invalidation. Données périmées jusqu'à la prochaine mise à jour des prix ou la fin du TTL.
 
 ## Hors périmètre
 
