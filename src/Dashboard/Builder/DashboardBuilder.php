@@ -8,7 +8,7 @@ use App\Deposit\Calculator\DepositTotalCalculator;
 use App\Deposit\Repository\DepositRepository;
 use App\FiatCurrency\Converter\FiatConverter;
 use App\Loan\Repository\LoanRepository;
-use App\Service\FarmingService;
+use App\Strategy\Farming\Builder\FarmingOverviewBuilder;
 use App\User\Entity\User;
 use App\User\Resolver\FavoriteCurrencyResolver;
 use App\Wallet\Calculator\WalletValueCalculator;
@@ -22,7 +22,7 @@ final readonly class DashboardBuilder
         private WalletValueCalculator $walletValueCalculator,
         private DepositRepository $depositRepository,
         private DepositTotalCalculator $depositTotalCalculator,
-        private FarmingService $farmingService,
+        private FarmingOverviewBuilder $farmingOverviewBuilder,
         private LoanRepository $loanRepository,
         private FiatConverter $fiatConverter,
         private FavoriteCurrencyResolver $favoriteCurrencyResolver,
@@ -41,7 +41,7 @@ final readonly class DashboardBuilder
             $wallet->stableUsd,
             $this->depositTotalCalculator->totalUsd($this->depositRepository->findByOwnerWithCurrency($user)),
             $this->loanRepository->sumValueUsd($user),
-            $this->farmingService->getTotalFarmingByYearUsd($user),
+            $this->farmingOverviewBuilder->build($user)->totalYearlyUsd(),
             (string) $currency->getSymbol(),
             $this->fiatConverter->toUsd(1.0, $currency),
             $this->fiatConverter->fromUsd(1.0, $currency),

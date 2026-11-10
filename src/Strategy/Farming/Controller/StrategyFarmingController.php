@@ -2,11 +2,10 @@
 
 namespace App\Strategy\Farming\Controller;
 
-use App\Service\FarmingService;
+use App\Strategy\Farming\Builder\FarmingOverviewBuilder;
 use App\Strategy\Farming\Entity\StrategyFarming;
 use App\Strategy\Farming\Form\StrategyFarmingType;
 use App\Strategy\Farming\Repository\StrategyFarmingRepository;
-use App\Strategy\Lp\Repository\StrategyLpRepository;
 use App\User\Entity\User;
 use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,26 +21,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class StrategyFarmingController extends AbstractController
 {
     #[Route('/', name: 'app_strategy_farming_index', methods: ['GET'])]
-    public function index(StrategyFarmingRepository $strategyFarmingRepository, StrategyLpRepository $strategyLpRepository, FarmingService $farmingService, #[CurrentUser] User $user): Response
+    public function index(FarmingOverviewBuilder $farmingOverviewBuilder, #[CurrentUser] User $user): Response
     {
-        $strategies = $strategyFarmingRepository->findByStable($user, false);
-        $strategies_stable = $strategyFarmingRepository->findByStable($user, true);
-        $strategies_lp = $strategyLpRepository->findBy([
-            'owner' => $user,
-        ]);
-
-        $total_year_singleasset = $farmingService->getTotalFarmingSimpleByYearUsd($user, isStable: false);
-        $total_year_stable = $farmingService->getTotalFarmingSimpleByYearUsd($user, isStable: true);
-        $total_year_lp = $farmingService->getTotalFarmingLpByYearUsd($user);
-
         return $this->render('strategy/farming/index.html.twig', [
-            'strategy_farmings' => $strategies,
-            'strategy_farmings_stable' => $strategies_stable,
-            'strategy_farmings_lp' => $strategies_lp,
-            'total_year' => $total_year_singleasset,
-            'total_year_stable' => $total_year_stable,
-            'total_year_lp' => $total_year_lp,
-            'total_total_year' => $total_year_singleasset + $total_year_stable + $total_year_lp,
+            'overview' => $farmingOverviewBuilder->build($user),
         ]);
     }
 

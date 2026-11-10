@@ -3,9 +3,9 @@
 namespace App\Strategy\Farming\Repository;
 
 use App\Strategy\Farming\Entity\StrategyFarming;
+use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<StrategyFarming>
@@ -43,14 +43,20 @@ class StrategyFarmingRepository extends ServiceEntityRepository
     /**
      * @return StrategyFarming[]
      */
-    public function findByStable(UserInterface $user, bool $isStable): array
+    /**
+     * Farmings of the user on stable coins or not, with their coin.
+     *
+     * @return list<StrategyFarming>
+     */
+    public function findByOwner(User $owner, bool $stable): array
     {
         return $this->createQueryBuilder('f')
+            ->addSelect('c')
             ->join('f.coin', 'c')
-            ->where('f.owner = :user')
-            ->andWhere('c.isStable = :isStable')
-            ->setParameter('user', $user)
-            ->setParameter('isStable', $isStable)
+            ->where('f.owner = :owner')
+            ->andWhere('c.isStable = :stable')
+            ->setParameter('owner', $owner)
+            ->setParameter('stable', $stable)
             ->getQuery()->getResult();
     }
 

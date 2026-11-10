@@ -12,18 +12,18 @@
         </twig:Button>
     </twig:App:PageHeader>
 
-    {% if total_total_year > 0 %}
-        <twig:App:YieldStats :yearly="total_total_year" class="mb-6"/>
+    {% if overview.totalYearlyUsd > 0 %}
+        <twig:App:YieldStats :yearly="overview.totalYearlyUsd" class="mb-6"/>
 
         <twig:App:InfoDialog>
             <twig:Tabs defaultValue="crypto">
                 <twig:Tabs:List>
-                    <twig:Tabs:Trigger value="crypto">Crypto ({{ strategy_farmings|length }})</twig:Tabs:Trigger>
-                    <twig:Tabs:Trigger value="stable">Stable ({{ strategy_farmings_stable|length }})</twig:Tabs:Trigger>
-                    <twig:Tabs:Trigger value="lp">LP ({{ strategy_farmings_lp|length }})</twig:Tabs:Trigger>
+                    <twig:Tabs:Trigger value="crypto">Crypto ({{ overview.cryptoFarmings|length }})</twig:Tabs:Trigger>
+                    <twig:Tabs:Trigger value="stable">Stable ({{ overview.stableFarmings|length }})</twig:Tabs:Trigger>
+                    <twig:Tabs:Trigger value="lp">LP ({{ overview.lps|length }})</twig:Tabs:Trigger>
                 </twig:Tabs:List>
 
-                {% for tab, data in {crypto: {list: strategy_farmings, year: total_year}, stable: {list: strategy_farmings_stable, year: total_year_stable}} %}
+                {% for tab, data in {crypto: {list: overview.cryptoFarmings, year: overview.cryptoYearlyUsd}, stable: {list: overview.stableFarmings, year: overview.stableYearlyUsd}} %}
                     <twig:Tabs:Content value="{{ tab }}" class="grid gap-4">
                         <twig:App:YieldStats :yearly="data.year"/>
                         <twig:Table>
@@ -87,7 +87,7 @@
                 {% endfor %}
 
                 <twig:Tabs:Content value="lp" class="grid gap-4">
-                    <twig:App:YieldStats :yearly="total_year_lp" :decimals="2"/>
+                    <twig:App:YieldStats :yearly="overview.lpYearlyUsd" :decimals="2"/>
                     <twig:Table>
                         <twig:Table:Header>
                             <twig:Table:Row>
@@ -106,7 +106,7 @@
                             </twig:Table:Row>
                         </twig:Table:Header>
                         <twig:Table:Body>
-                            {% for strategy_farming in strategy_farmings_lp %}
+                            {% for strategy_farming in overview.lps %}
                                 {% set dapp = strategy_farming.dapp %}
                                 <twig:Table:Row>
                                     <twig:Table:Cell>
