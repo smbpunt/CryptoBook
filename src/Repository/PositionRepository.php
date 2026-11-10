@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Position;
-use App\Entity\User;
+use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;

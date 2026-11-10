@@ -2,9 +2,9 @@
 
 namespace App\Wallet\Entity;
 
-use App\Entity\OwnedInterface;
-use App\Entity\Trait\OwnerTrait;
-use App\Entity\User;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use App\Wallet\Repository\WalletSnapshotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

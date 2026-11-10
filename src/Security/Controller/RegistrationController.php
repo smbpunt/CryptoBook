@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Security\Controller;
 
-use App\Entity\User;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
-use App\Form\RegistrationFormType;
+use App\Security\Form\RegistrationFormType;
+use App\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +44,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('security/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }

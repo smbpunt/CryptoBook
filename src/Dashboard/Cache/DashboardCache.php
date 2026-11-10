@@ -4,7 +4,7 @@ namespace App\Dashboard\Cache;
 
 use App\Dashboard\Builder\DashboardBuilder;
 use App\Dashboard\Dto\DashboardData;
-use App\Entity\User;
+use App\User\Entity\User;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;

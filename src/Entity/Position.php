@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnerTrait;
 use App\Repository\PositionRepository;
+use App\Shared\Entity\DescriptionTrait;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;

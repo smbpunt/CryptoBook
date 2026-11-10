@@ -4,8 +4,8 @@ namespace App\Tests\Deposit\Calculator;
 
 use App\Deposit\Calculator\DepositTotalCalculator;
 use App\Deposit\Entity\Deposit;
-use App\Entity\User;
 use App\FiatCurrency\Entity\FiatCurrency;
+use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class DepositTotalCalculatorTest extends TestCase

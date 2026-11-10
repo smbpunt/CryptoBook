@@ -6,10 +6,10 @@ use App\Dashboard\Dto\DashboardData;
 use App\Dashboard\Dto\DashboardHolding;
 use App\Deposit\Calculator\DepositTotalCalculator;
 use App\Deposit\Repository\DepositRepository;
-use App\Entity\User;
 use App\FiatCurrency\Converter\FiatConverter;
 use App\Loan\Repository\LoanRepository;
 use App\Service\FarmingService;
+use App\User\Entity\User;
 use App\User\Resolver\FavoriteCurrencyResolver;
 use App\Wallet\Calculator\WalletValueCalculator;
 

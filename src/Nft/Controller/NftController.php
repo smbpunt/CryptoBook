@@ -2,12 +2,12 @@
 
 namespace App\Nft\Controller;
 
-use App\Entity\User;
 use App\Nft\Calculator\NftProfitCalculator;
 use App\Nft\Entity\Nft;
 use App\Nft\Form\NftType;
 use App\Nft\Repository\NftRepository;
-use App\Security\Voter\OwnerVoter;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

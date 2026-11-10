@@ -4,8 +4,8 @@ namespace App\Tests\Functional;
 
 use App\Deposit\Entity\Deposit;
 use App\Entity\Position;
-use App\Entity\User;
 use App\Tests\Fixtures\Dataset;
+use App\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

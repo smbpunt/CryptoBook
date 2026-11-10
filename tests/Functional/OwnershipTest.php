@@ -3,10 +3,10 @@
 namespace App\Tests\Functional;
 
 use App\Deposit\Repository\DepositRepository;
-use App\Entity\OwnedInterface;
-use App\Entity\User;
 use App\Repository\StrategyDcaRepository;
 use App\Tests\Fixtures\Dataset;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

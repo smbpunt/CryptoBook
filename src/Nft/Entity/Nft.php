@@ -4,11 +4,11 @@ namespace App\Nft\Entity;
 
 use App\Blockchain\Entity\Blockchain;
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\OwnedInterface;
-use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnerTrait;
-use App\Entity\User;
 use App\Nft\Repository\NftRepository;
+use App\Shared\Entity\DescriptionTrait;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

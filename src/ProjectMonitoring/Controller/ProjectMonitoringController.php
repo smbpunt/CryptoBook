@@ -2,11 +2,11 @@
 
 namespace App\ProjectMonitoring\Controller;
 
-use App\Entity\User;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;
 use App\ProjectMonitoring\Form\ProjectMonitoringType;
 use App\ProjectMonitoring\Repository\ProjectMonitoringRepository;
-use App\Security\Voter\OwnerVoter;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,9 +2,9 @@
 
 namespace App\User\Resolver;
 
-use App\Entity\User;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
+use App\User\Entity\User;
 
 final readonly class FavoriteCurrencyResolver
 {

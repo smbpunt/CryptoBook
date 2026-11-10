@@ -3,12 +3,12 @@
 namespace App\Deposit\Entity;
 
 use App\Deposit\Repository\DepositRepository;
-use App\Entity\OwnedInterface;
-use App\Entity\Trait\OwnerTrait;
-use App\Entity\User;
 use App\Exchange\Entity\Exchange;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Exception\MissingRateException;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

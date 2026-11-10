@@ -12,13 +12,13 @@ use App\Entity\Position;
 use App\Entity\StrategyDca;
 use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
-use App\Entity\User;
 use App\Exchange\Entity\Exchange;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\Loan\Entity\Loan;
 use App\Nft\Entity\Nft;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;
 use App\ProjectMonitoring\Entity\TypeProject;
+use App\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

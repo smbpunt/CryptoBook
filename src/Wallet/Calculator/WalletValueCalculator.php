@@ -3,8 +3,8 @@
 namespace App\Wallet\Calculator;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\User;
 use App\Repository\PositionRepository;
+use App\User\Entity\User;
 use App\Wallet\Dto\WalletHolding;
 use App\Wallet\Dto\WalletValuation;
 

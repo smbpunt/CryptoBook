@@ -4,8 +4,8 @@ namespace App\Tests\Unit\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Position;
-use App\Entity\User;
 use App\Entity\Vente;
+use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class PositionTest extends TestCase

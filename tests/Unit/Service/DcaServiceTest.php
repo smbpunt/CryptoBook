@@ -6,9 +6,9 @@ use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Entity\CoinPercentDca;
 use App\Entity\StrategyDca;
-use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Service\DcaService;
+use App\User\Entity\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

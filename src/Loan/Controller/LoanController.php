@@ -2,11 +2,11 @@
 
 namespace App\Loan\Controller;
 
-use App\Entity\User;
 use App\Loan\Entity\Loan;
 use App\Loan\Form\LoanType;
 use App\Loan\Repository\LoanRepository;
-use App\Security\Voter\OwnerVoter;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

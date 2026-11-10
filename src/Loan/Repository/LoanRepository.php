@@ -2,8 +2,8 @@
 
 namespace App\Loan\Repository;
 
-use App\Entity\User;
 use App\Loan\Entity\Loan;
+use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

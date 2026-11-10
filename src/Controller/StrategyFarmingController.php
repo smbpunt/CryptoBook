@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\StrategyFarming;
-use App\Entity\User;
 use App\Form\StrategyFarmingType;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
-use App\Security\Voter\OwnerVoter;
 use App\Service\FarmingService;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

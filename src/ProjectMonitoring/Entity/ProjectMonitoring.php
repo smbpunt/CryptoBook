@@ -3,11 +3,11 @@
 namespace App\ProjectMonitoring\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\OwnedInterface;
-use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnerTrait;
-use App\Entity\User;
 use App\ProjectMonitoring\Repository\ProjectMonitoringRepository;
+use App\Shared\Entity\DescriptionTrait;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\StrategyLp;
-use App\Entity\User;
 use App\Form\StrategyLpType;
 use App\Repository\StrategyLpRepository;
-use App\Security\Voter\OwnerVoter;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

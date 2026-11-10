@@ -3,9 +3,9 @@
 namespace App\Tests\FiatCurrency\Entity;
 
 use App\Deposit\Entity\Deposit;
-use App\Entity\User;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Exception\MissingRateException;
+use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class FiatCurrencyTest extends TestCase

@@ -1,20 +1,23 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\User\EventListener;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
-class AuthenticationSubscriber
+/**
+ * Records the date of the last login.
+ */
+#[AsEventListener]
+final readonly class LastConnectionListener
 {
-    public function __construct(private readonly UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
     }
 
-    #[AsEventListener(event: LoginSuccessEvent::class)]
-    public function onLoginSuccessEvent(LoginSuccessEvent $event): void
+    public function __invoke(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();
         if ($user instanceof User) {

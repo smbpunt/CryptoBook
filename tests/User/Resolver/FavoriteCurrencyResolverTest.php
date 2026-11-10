@@ -2,9 +2,9 @@
 
 namespace App\Tests\User\Resolver;
 
-use App\Entity\User;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
+use App\User\Entity\User;
 use App\User\Resolver\FavoriteCurrencyResolver;
 use PHPUnit\Framework\TestCase;
 

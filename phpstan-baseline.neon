@@ -553,40 +553,40 @@ parameters:
 			path: src/Entity/StrategyPosition.php
 
 		-
-			message: '#^Method App\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
+			message: '#^Method App\\User\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$email has no type specified\.$#'
+			message: '#^Property App\\User\\Entity\\User\:\:\$email has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\User\\Entity\\User\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$lastConnectedAt has no type specified\.$#'
+			message: '#^Property App\\User\\Entity\\User\:\:\$lastConnectedAt has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$password has no type specified\.$#'
+			message: '#^Property App\\User\\Entity\\User\:\:\$password has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
-			message: '#^Property App\\Entity\\User\:\:\$roles has no type specified\.$#'
+			message: '#^Property App\\User\\Entity\\User\:\:\$roles has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/User.php
+			path: src/User/Entity/User.php
 
 		-
 			message: '#^Property App\\Entity\\Vente\:\:\$id has no type specified\.$#'
@@ -709,10 +709,10 @@ parameters:
 			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Security\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/ChangePasswordFormType.php
+			path: src/Security/Form/ChangePasswordFormType.php
 
 		-
 			message: '#^Class App\\Form\\CoinPercentDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
@@ -745,16 +745,16 @@ parameters:
 			path: src/Form/PositionType.php
 
 		-
-			message: '#^Class App\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Security\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/RegistrationFormType.php
+			path: src/Security/Form/RegistrationFormType.php
 
 		-
-			message: '#^Class App\\Form\\ResetPasswordRequestFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Security\\Form\\ResetPasswordRequestFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/ResetPasswordRequestFormType.php
+			path: src/Security/Form/ResetPasswordRequestFormType.php
 
 		-
 			message: '#^Class App\\Form\\StrategyDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
@@ -781,10 +781,10 @@ parameters:
 			path: src/Form/StrategyPositionType.php
 
 		-
-			message: '#^Class App\\Form\\UserPreferencesType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\User\\Form\\UserPreferencesType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/UserPreferencesType.php
+			path: src/User/Form/UserPreferencesType.php
 
 		-
 			message: '#^Class App\\Form\\VenteType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
@@ -1147,28 +1147,28 @@ parameters:
 			path: src/Repository/PositionRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ResetPasswordRequestRepository.php
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ResetPasswordRequestRepository.php
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ResetPasswordRequestRepository.php
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Security\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ResetPasswordRequestRepository.php
+			path: src/Security/Repository/ResetPasswordRequestRepository.php
 
 		-
 			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
@@ -1267,28 +1267,28 @@ parameters:
 			path: src/Repository/StrategyPositionRepository.php
 
 		-
-			message: '#^Class App\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\User\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/UserRepository.php
+			path: src/User/Repository/UserRepository.php
 
 		-
-			message: '#^Class App\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\User\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/UserRepository.php
+			path: src/User/Repository/UserRepository.php
 
 		-
-			message: '#^Class App\\Repository\\UserRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\User\\Repository\\UserRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/UserRepository.php
+			path: src/User/Repository/UserRepository.php
 
 		-
-			message: '#^Class App\\Repository\\UserRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\User\\Repository\\UserRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/UserRepository.php
+			path: src/User/Repository/UserRepository.php
 
 		-
 			message: '#^Class App\\Repository\\VenteRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'

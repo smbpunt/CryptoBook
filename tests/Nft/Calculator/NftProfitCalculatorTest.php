@@ -2,9 +2,9 @@
 
 namespace App\Tests\Nft\Calculator;
 
-use App\Entity\User;
 use App\Nft\Calculator\NftProfitCalculator;
 use App\Nft\Entity\Nft;
+use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class NftProfitCalculatorTest extends TestCase

@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Entity\Position;
-use App\Entity\User;
 use App\Form\PositionType;
 use App\Repository\PositionRepository;
-use App\Security\Voter\OwnerVoter;
+use App\User\Entity\User;
+use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

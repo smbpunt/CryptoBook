@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\Trait\DescriptionTrait;
-use App\Entity\Trait\OwnerTrait;
 use App\Repository\StrategyFarmingRepository;
+use App\Shared\Entity\DescriptionTrait;
+use App\User\Entity\OwnedInterface;
+use App\User\Entity\OwnerTrait;
+use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]

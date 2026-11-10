@@ -3,7 +3,7 @@
 namespace App\Deposit\Repository;
 
 use App\Deposit\Entity\Deposit;
-use App\Entity\User;
+use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -5,10 +5,10 @@ namespace App\Tests\Unit\Service;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
-use App\Entity\User;
 use App\Repository\StrategyFarmingRepository;
 use App\Repository\StrategyLpRepository;
 use App\Service\FarmingService;
+use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class FarmingServiceTest extends TestCase

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\User\Controller;
 
-use App\Entity\User;
-use App\Form\UserPreferencesType;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Form\UserPreferencesType;
+use App\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_preferences', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user_preferences/index.html.twig', [
+        return $this->render('user/preferences.html.twig', [
             'form' => $form,
         ]);
     }

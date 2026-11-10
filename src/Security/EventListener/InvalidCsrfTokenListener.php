@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\Security\EventListener;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
