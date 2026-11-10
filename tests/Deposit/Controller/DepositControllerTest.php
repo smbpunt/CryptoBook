@@ -40,6 +40,19 @@ final class DepositControllerTest extends WebTestCase
         self::assertSame(1500.0, $this->em()->find(Deposit::class, $this->data->deposit->getId())?->getAmount());
     }
 
+    public function testEmptyAmountIsAFormError(): void
+    {
+        $this->client->request('GET', '/deposit/new');
+        $this->client->submitForm('Ajouter', [
+            'deposit[amount]' => '',
+            'deposit[exchange]' => (string) $this->data->exchange->getId(),
+            'deposit[fiatCurrency]' => (string) $this->data->usd->getId(),
+            'deposit[type]' => (string) $this->data->depositType->getId(),
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
     private function em(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);

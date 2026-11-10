@@ -9,6 +9,7 @@ use App\Entity\OwnedInterface;
 use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DepositRepository::class)]
 class Deposit implements OwnedInterface
@@ -25,17 +26,21 @@ class Deposit implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: DepositType::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $type;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $amount;
 
     #[ORM\ManyToOne(targetEntity: Exchange::class, inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $exchange;
 
     #[ORM\ManyToOne(inversedBy: 'deposits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?FiatCurrency $fiatCurrency = null;
 
     public function __construct(User $owner)
@@ -82,7 +87,7 @@ class Deposit implements OwnedInterface
         return $this->fiatCurrency->getFixerKey() == FiatCurrency::$KEY_USD ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::$KEY_USD];
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount;
 
