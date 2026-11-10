@@ -26,7 +26,7 @@ class LoanController extends AbstractController
             'owner' => $user,
         ]);
 
-        $total = $loanRepository->getTotal($user);
+        $total = $loanRepository->sumValueUsd($user);
 
         return $this->render('loan/index.html.twig', [
             'loans' => $loans,

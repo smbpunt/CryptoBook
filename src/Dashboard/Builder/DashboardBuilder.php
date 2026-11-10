@@ -37,7 +37,7 @@ final readonly class DashboardBuilder
             $wallet->cryptoUsd,
             $wallet->stableUsd,
             $this->depositTotalCalculator->totalUsd($this->depositRepository->findByOwnerWithCurrency($user)),
-            $this->loanRepository->getTotal($user),
+            $this->loanRepository->sumValueUsd($user),
             $this->farmingService->getTotalFarmingByYearUsd($user),
             (string) $this->fiatRates->getFavoriteCurrency($user)->getsymbol(),
             $this->fiatRates->getUsdRateFromFavoriteCurrency($user),

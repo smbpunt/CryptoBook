@@ -2,10 +2,10 @@
 
 namespace App\Loan\Repository;
 
+use App\Entity\User;
 use App\Loan\Entity\Loan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Loan>
@@ -40,20 +40,17 @@ class LoanRepository extends ServiceEntityRepository
         }
     }
 
-    public function getTotal(UserInterface $user): float
+    /**
+     * Current value of the loans of the user, in USD.
+     */
+    public function sumValueUsd(User $owner): float
     {
-        $qb = $this->createQueryBuilder('l')
-            ->select('SUM(l.nbCoins * c.priceUsd) as totalsum')
+        return (float) $this->createQueryBuilder('l')
+            ->select('COALESCE(SUM(l.nbCoins * c.priceUsd), 0)')
             ->join('l.coin', 'c')
-            ->where('l.owner = :user')
-            ->groupBy('l.owner')
-            ->setParameter('user', $user);
-        try {
-            return $qb->getQuery()->getSingleScalarResult();
-        } catch (\Exception) {
-        }
-
-        return 0;
+            ->where('l.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->getQuery()->getSingleScalarResult();
     }
 
     //    /**
