@@ -166,6 +166,14 @@ final class PositionControllerTest extends WebTestCase
         self::assertResponseRedirects('/position/new');
     }
 
+    public function testSubmitAndNextFromTheEditFormOpensTheCreationForm(): void
+    {
+        $this->client->request('GET', "/position/{$this->data->position->getId()}/edit");
+        $this->client->submitForm('Valider & continuer');
+
+        self::assertResponseRedirects('/position/new');
+    }
+
     public function testEditPosition(): void
     {
         $this->client->request('GET', "/position/{$this->data->position->getId()}/edit");

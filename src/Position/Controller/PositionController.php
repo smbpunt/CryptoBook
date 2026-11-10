@@ -12,6 +12,7 @@ use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\ClickableInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -52,10 +53,7 @@ class PositionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $positionRepository->add($position, true);
 
-            $next = $form->get('submitAndNext');
-            \assert($next instanceof ClickableInterface);
-
-            return $this->redirectToRoute($next->isClicked() ? 'app_position_new' : 'app_position_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectAfterSave($form);
         }
 
         return $this->render('position/new.html.twig', [
@@ -74,7 +72,7 @@ class PositionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $positionRepository->add($position, true);
 
-            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectAfterSave($form);
         }
 
         return $this->render('position/edit.html.twig', [
@@ -91,5 +89,18 @@ class PositionController extends AbstractController
         $positionRepository->remove($position, true);
 
         return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Valider & continuer opens the creation form, Valider the list.
+     *
+     * @param FormInterface<Position> $form
+     */
+    private function redirectAfterSave(FormInterface $form): Response
+    {
+        $next = $form->get('submitAndNext');
+        \assert($next instanceof ClickableInterface);
+
+        return $this->redirectToRoute($next->isClicked() ? 'app_position_new' : 'app_position_index', [], Response::HTTP_SEE_OTHER);
     }
 }
