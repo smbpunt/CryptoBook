@@ -1,4 +1,4 @@
-.PHONY: build up down logs bash url test tailwind migrate fixtures users\:show
+.PHONY: build up down logs bash url test tailwind scheduler migrate fixtures users\:show
 
 ## ---- Docker ----
 
@@ -28,6 +28,9 @@ test: ## Run PHPUnit, pass options via c="...", e.g. make test c="--filter Owner
 tailwind: ## Build the Tailwind CSS (var/tailwind/), pass c="--watch" to rebuild on change
 	@$(eval c ?=)
 	@$(SYMFONY) tailwind:build $(c)
+
+scheduler: ## Run the Scheduler worker in the foreground, Ctrl+C to stop (no permanent worker in dev: Fixer quota)
+	@$(PHP_CONT) php bin/console messenger:consume scheduler_default -vv
 
 ## ---- Database ----
 

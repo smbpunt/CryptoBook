@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Cryptocurrency;
 use App\Entity\Position;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,18 +42,31 @@ class PositionRepository extends ServiceEntityRepository
         }
     }
 
-    public function getSumCoinByUser(UserInterface $user, bool $isStable = false): array
+    /**
+     * Quantity of every coin held by each owner, in a single query. Closed positions count for 0,
+     * so an owner whose positions are all closed still gets rows.
+     *
+     * @return list<array{0: Cryptocurrency, ownerId: int, quantity: float}>
+     */
+    public function sumQuantitiesByOwnerAndCoin(?User $owner = null): array
     {
-        return $this->createQueryBuilder('p')
-            ->join('p.coin', 'c')
-            ->andWhere('p.owner = :user')
-            ->andWhere('c.isStable = :isStable')
-            ->andWhere('p.isOpened = TRUE')
-            ->setParameter('user', $user)
-            ->setParameter('isStable', $isStable)
-            ->select('SUM(p.remainingCoins) as totalsum', 'c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
-            ->groupBy('c.symbol', 'c.libelle', 'c.color', 'c.priceUsd', 'c.urlImgThumb')
-            ->getQuery()->getArrayResult();
+        // Coin as root alias: Doctrine only hydrates an entity selected from the root.
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->from(Cryptocurrency::class, 'c')
+            ->join('c.positions', 'p')
+            ->select('c', 'IDENTITY(p.owner) AS ownerId', 'SUM(CASE WHEN p.isOpened = TRUE THEN p.remainingCoins ELSE 0 END) AS quantity')
+            ->groupBy('p.owner', 'c.id');
+
+        if ($owner instanceof User) {
+            $qb->andWhere('p.owner = :owner')
+                ->setParameter('owner', $owner);
+        }
+
+        return array_map(static fn (array $row): array => [
+            0 => $row[0],
+            'ownerId' => (int) $row['ownerId'],
+            'quantity' => (float) $row['quantity'],
+        ], $qb->getQuery()->getResult());
     }
 
     /**
