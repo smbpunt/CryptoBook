@@ -51,34 +51,6 @@ Après le point 2, pour styler Tom Select et non Choices.
 - Champs, autocomplete, DatePicker et erreurs, dans les deux thèmes.
 - « Valider & continuer » en `variant="secondary"`.
 
-### 5. Routes `/{id}/infos` en GET
-
-Positions, emprunts, NFT, farming, LP : en POST alors qu'elles ne font que lire. Touche `remote_dialog_controller.js` et `App:InfoButton`.
-
-### 6. Symbole crypto plus long
-
-`Cryptocurrency::symbol` fait 8 caractères : un symbole CoinGecko plus long fait échouer le flush de `crypto:updateDatas` pour tous les coins. Demande une migration.
-
-### 7. `crypto:updateDatas` groupé
-
-Un appel CoinGecko par coin, sans pause : au-delà de la limite de l'API, les coins suivants sont ignorés. Un appel groupé `coins/markets` réglerait le problème.
-
-### 8. Coin sans nom dans l'admin
-
-Coin créé dans l'admin pendant une panne CoinGecko : `libelle` reste nul, erreur SQL.
-
-### 9. Taux de change des dépôts
-
-Dépôts convertis en USD au taux du jour : le total « Investi » bouge avec le change. Stocker le taux à la date du dépôt.
-
-### 10. DCA Auto
-
-Jusqu'à 1000 positions dans un seul formulaire.
-
-### 11. Cache du dashboard
-
-Un calcul commencé avant un flush peut être enregistré après son invalidation : données périmées jusqu'à la prochaine mise à jour des prix ou la fin du TTL.
-
 ## Hors périmètre
 
 - Renommer entités et colonnes en anglais (`Vente`, `libelle`).
