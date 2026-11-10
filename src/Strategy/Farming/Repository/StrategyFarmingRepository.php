@@ -41,9 +41,6 @@ class StrategyFarmingRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return StrategyFarming[]
-     */
-    /**
      * Farmings of the user on stable coins or not, with their coin.
      *
      * @return list<StrategyFarming>
