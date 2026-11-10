@@ -23,7 +23,7 @@ final class DcaAmountCalculatorTest extends KernelTestCase
     {
         $repository = $this->createStub(FiatCurrencyRepository::class);
         $repository->method('getByFixerKey')->willThrowException(new \LogicException('The EUR currency is missing.'));
-        $calculator = new DcaAmountCalculator(new FiatConverter($repository), $repository);
+        $calculator = new DcaAmountCalculator(new FiatConverter(), $repository);
 
         self::assertSame(20.0, $calculator->amountUsd(new StrategyDca(new User())->setFiatToDcaEur(0)->setFarmingToDcaUsd(20)));
     }

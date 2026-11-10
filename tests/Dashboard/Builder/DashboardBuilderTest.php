@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Wallet values are covered by WalletValueCalculatorTest: only what the builder adds is checked here.
- * Migration rates: 1 EUR = 1.073941 USD, 1 USD = 0.930795 EUR.
+ * Migration rate: 1 EUR = 1.073941 USD, so 1 USD = 1 / 1.073941 EUR.
  */
 final class DashboardBuilderTest extends KernelTestCase
 {
@@ -35,8 +35,8 @@ final class DashboardBuilderTest extends KernelTestCase
         self::assertEqualsWithDelta(600.0, $dashboard->yearFarmingUsd, 1e-9);
         self::assertSame('€', $dashboard->currencySymbol);
         self::assertSame(1.073941, $dashboard->usdPerFavorite);
-        self::assertSame(0.930795, $dashboard->favoritePerUsd);
-        self::assertEqualsWithDelta(93.0795, $dashboard->toFavorite(100), 1e-9);
+        self::assertEqualsWithDelta(1 / 1.073941, $dashboard->favoritePerUsd, 1e-12);
+        self::assertEqualsWithDelta(100 / 1.073941, $dashboard->toFavorite(100), 1e-9);
     }
 
     public function testOnlyCountsTheUserData(): void

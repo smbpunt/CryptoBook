@@ -18,22 +18,22 @@ final class DashboardControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
-        // Migration rates: 1 EUR = 1.073941 USD, 1 USD = 0.930795 EUR. 1 000 € deposited = 1 073.94 $.
+        // Migration rate: 1 EUR = 1.073941 USD, the other way is 1 / 1.073941. 1 000 € deposited = 1 073.94 $.
         self::assertSame([
             'Investi' => ['1 074 $', '1 000 €'],
-            'Wallet crypto' => ['25 000 $', '23 270 €'],
+            'Wallet crypto' => ['25 000 $', '23 279 €'],
             'Wallet stable' => ['1 000 $', '931 €'],
-            'Total' => ['26 000 $', '24 201 €'],
-            'Résultat' => ['24 926 $', '23 201 €'],
+            'Total' => ['26 000 $', '24 210 €'],
+            'Résultat' => ['24 926 $', '23 210 €'],
             'Résultat %' => ['2 321 %'],
-            'Total emprunt' => ['500 $', '465 €'],
+            'Total emprunt' => ['500 $', '466 €'],
         ], self::rows($crawler, 'Bilan'));
         // 2 ETH at 5 % + LP of 4 000 $ at 10 % = 600 $ a year.
         self::assertSame([
             'Jour' => ['2 $', '2 €'],
             'Semaine' => ['12 $', '11 €'],
             'Mois' => ['50 $', '47 €'],
-            'Année' => ['600 $', '558 €'],
+            'Année' => ['600 $', '559 €'],
         ], self::rows($crawler, 'Farming'));
         self::assertSelectorTextContains('table thead', '1.0739 $');
 

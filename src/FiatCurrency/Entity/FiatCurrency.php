@@ -5,6 +5,7 @@ namespace App\FiatCurrency\Entity;
 use App\FiatCurrency\Exception\MissingRateException;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FiatCurrencyRepository::class)]
 class FiatCurrency implements \Stringable
@@ -18,15 +19,22 @@ class FiatCurrency implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelle = null;
 
+    /** ISO 4217 code, as Fixer knows it. */
     #[ORM\Column(length: 5)]
+    #[Assert\NotBlank]
+    #[Assert\Currency]
     private ?string $fixerKey = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 5)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 5)]
     private ?string $symbol = null;
 
     #[ORM\Column(nullable: true)]
@@ -42,7 +50,7 @@ class FiatCurrency implements \Stringable
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibelle(?string $libelle): self
     {
         $this->libelle = $libelle;
 
@@ -54,7 +62,7 @@ class FiatCurrency implements \Stringable
         return $this->fixerKey;
     }
 
-    public function setFixerKey(string $fixerKey): self
+    public function setFixerKey(?string $fixerKey): self
     {
         $this->fixerKey = $fixerKey;
 
@@ -78,7 +86,7 @@ class FiatCurrency implements \Stringable
         return $this->symbol;
     }
 
-    public function setSymbol(string $symbol): self
+    public function setSymbol(?string $symbol): self
     {
         $this->symbol = $symbol;
 
