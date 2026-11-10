@@ -9,11 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Loan>
- *
- * @method Loan|null find($id, $lockMode = null, $lockVersion = null)
- * @method Loan|null findOneBy(array $criteria, array $orderBy = null)
- * @method Loan[]    findAll()
- * @method Loan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class LoanRepository extends ServiceEntityRepository
 {

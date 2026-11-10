@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<ProjectMonitoring>
- *
- * @method ProjectMonitoring|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProjectMonitoring|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProjectMonitoring[]    findAll()
- * @method ProjectMonitoring[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProjectMonitoringRepository extends ServiceEntityRepository
 {

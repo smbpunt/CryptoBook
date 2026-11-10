@@ -10,11 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Nft>
- *
- * @method Nft|null find($id, $lockMode = null, $lockVersion = null)
- * @method Nft|null findOneBy(array $criteria, array $orderBy = null)
- * @method Nft[]    findAll()
- * @method Nft[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class NftRepository extends ServiceEntityRepository
 {

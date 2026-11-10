@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<FiatCurrency>
- *
- * @method FiatCurrency|null find($id, $lockMode = null, $lockVersion = null)
- * @method FiatCurrency|null findOneBy(array $criteria, array $orderBy = null)
- * @method FiatCurrency[]    findAll()
- * @method FiatCurrency[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FiatCurrencyRepository extends ServiceEntityRepository
 {

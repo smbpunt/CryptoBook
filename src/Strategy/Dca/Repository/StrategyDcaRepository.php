@@ -9,11 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<StrategyDca>
- *
- * @method StrategyDca|null find($id, $lockMode = null, $lockVersion = null)
- * @method StrategyDca|null findOneBy(array $criteria, array $orderBy = null)
- * @method StrategyDca[]    findAll()
- * @method StrategyDca[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class StrategyDcaRepository extends ServiceEntityRepository
 {

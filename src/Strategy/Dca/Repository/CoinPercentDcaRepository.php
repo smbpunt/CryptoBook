@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<CoinPercentDca>
- *
- * @method CoinPercentDca|null find($id, $lockMode = null, $lockVersion = null)
- * @method CoinPercentDca|null findOneBy(array $criteria, array $orderBy = null)
- * @method CoinPercentDca[]    findAll()
- * @method CoinPercentDca[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CoinPercentDcaRepository extends ServiceEntityRepository
 {

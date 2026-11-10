@@ -9,11 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<StrategyFarming>
- *
- * @method StrategyFarming|null find($id, $lockMode = null, $lockVersion = null)
- * @method StrategyFarming|null findOneBy(array $criteria, array $orderBy = null)
- * @method StrategyFarming[]    findAll()
- * @method StrategyFarming[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class StrategyFarmingRepository extends ServiceEntityRepository
 {
