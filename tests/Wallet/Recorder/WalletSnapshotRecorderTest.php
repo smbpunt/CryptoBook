@@ -30,12 +30,14 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
 
     public function testRecordsOneSnapshotPerUserAndPerHour(): void
     {
-        $clock = self::mockTime('2026-11-10 14:05:00 UTC');
+        // Half-hour offset: the hour is truncated after the UTC conversion (14:05 UTC).
+        $clock = self::mockTime(new \DateTimeImmutable('2026-11-10 19:35:00', new \DateTimeZone('Asia/Kolkata')));
 
         self::assertSame(1, $this->recorder->record());
         $clock->sleep(30 * 60);
         self::assertSame(0, $this->recorder->record());
 
+        $this->em->clear();
         $snapshots = $this->repository->findBy(['owner' => $this->data->user]);
         self::assertCount(1, $snapshots);
         self::assertEquals(new \DateTimeImmutable('2026-11-10 14:00:00 UTC'), $snapshots[0]->getRecordedAt());
@@ -44,6 +46,19 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
         $clock->sleep(30 * 60);
         self::assertSame(1, $this->recorder->record());
         self::assertCount(2, $this->repository->findBy(['owner' => $this->data->user]));
+    }
+
+    public function testRecordsOnlyUsersMissingForTheHour(): void
+    {
+        self::mockTime('2026-11-10 14:05:00 UTC');
+        $this->recorder->record();
+
+        // admin opens a first position within the same hour.
+        $this->em->persist(new Position($this->data->admin)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(1000));
+        $this->em->flush();
+
+        self::assertSame(1, $this->recorder->record());
+        self::assertCount(2, $this->repository->findAll());
     }
 
     public function testRecordsZeroWhenEveryPositionIsClosed(): void

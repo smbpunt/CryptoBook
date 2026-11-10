@@ -19,7 +19,7 @@ final class DashboardTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         $usdByLabel = [];
-        $crawler->filter('tr')->each(static function (Crawler $row) use (&$usdByLabel): void {
+        $crawler->filterXPath("//*[normalize-space()='Bilan']/ancestor::*[.//table][1]//tr")->each(static function (Crawler $row) use (&$usdByLabel): void {
             $cells = $row->filter('td');
             if ($cells->count() >= 2) {
                 $usdByLabel[trim($cells->eq(0)->text())] = trim($cells->eq(1)->text());
@@ -40,8 +40,12 @@ final class DashboardTest extends WebTestCase
         $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
         $client->loginUser($data->admin);
 
-        $client->request('GET', '/');
+        $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
+        $data = $crawler->filter('#id-array-positions');
+        self::assertSame('[]', $data->attr('data-pie'));
+        self::assertSame('0', $data->attr('data-crypto'));
+        self::assertSelectorNotExists('#chart-pos');
     }
 }

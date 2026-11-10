@@ -54,12 +54,31 @@ final class WalletValueCalculatorTest extends KernelTestCase
         self::assertSame(7.41, $holdings[1]->percent);
     }
 
-    public function testEmptyWalletIsWorthZero(): void
+    public function testSumsOpenPositionsOfTheSameCoin(): void
     {
-        $wallet = $this->calculator->forUser($this->data->admin);
+        $this->em->persist(new Position($this->data->user)->setCoin($this->data->btc)->setNbCoins(0.25)->setEntryCost(10000));
+        $this->em->persist(new Position($this->data->user)->setCoin($this->data->btc)->setNbCoins(1)->setEntryCost(40000)->setIsOpened(false));
+        $this->em->flush();
 
-        self::assertSame([], $wallet->cryptoHoldings);
+        $holdings = $this->calculator->forUser($this->data->user)->cryptoHoldings;
+
+        self::assertCount(1, $holdings);
+        self::assertSame(0.75, $holdings[0]->quantity);
+        self::assertSame(37500.0, $holdings[0]->valueUsd);
+    }
+
+    public function testCoinsWithoutValueAreWorthZero(): void
+    {
+        // Open positions but nothing to share: no division by zero.
+        $this->data->btc->setPriceUsd(0);
+        $this->data->usdc->setPriceUsd(0);
+        $this->em->flush();
+
+        $wallet = $this->calculator->forUser($this->data->user);
+
         self::assertSame(0.0, $wallet->totalUsd);
+        self::assertSame(0.0, $wallet->cryptoHoldings[0]->percent);
+        self::assertSame(0.0, $wallet->stableHoldings[0]->percent);
     }
 
     public function testClosedPositionsCountForZero(): void
@@ -75,9 +94,12 @@ final class WalletValueCalculatorTest extends KernelTestCase
 
     public function testValuesEveryOwnerWithAPosition(): void
     {
-        $wallets = $this->calculator->forAllUsers();
+        $this->em->persist(new Position($this->data->admin)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(1000));
+        $this->em->flush();
 
-        self::assertSame([$this->data->user->getId()], array_keys($wallets));
-        self::assertSame(26000.0, $wallets[$this->data->user->getId()]->totalUsd);
+        $totals = array_map(static fn ($wallet) => $wallet->totalUsd, $this->calculator->forAllUsers());
+        ksort($totals);
+
+        self::assertSame([$this->data->user->getId() => 26000.0, $this->data->admin->getId() => 2000.0], $totals);
     }
 }
