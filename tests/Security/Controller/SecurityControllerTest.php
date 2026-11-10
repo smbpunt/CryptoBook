@@ -41,6 +41,20 @@ final class SecurityControllerTest extends WebTestCase
         self::assertSelectorExists('[data-slot="alert"]');
     }
 
+    public function testLoginFromAnotherOriginIsRejected(): void
+    {
+        $this->client->request('GET', '/login');
+        $this->client->request('POST', '/login', [
+            'email' => 'user@example.com',
+            'password' => Dataset::PASSWORD,
+            '_csrf_token' => 'csrf-token',
+        ], server: ['HTTP_ORIGIN' => 'https://evil.example', 'HTTP_REFERER' => 'https://evil.example/']);
+
+        self::assertResponseRedirects('/login');
+        $this->em()->clear();
+        self::assertNull($this->em()->getRepository(User::class)->find($this->data->user->getId())->getLastConnectedAt());
+    }
+
     public function testTabOrderReachesThePasswordBeforeTheForgottenPasswordLink(): void
     {
         $crawler = $this->client->request('GET', '/login');
