@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Position\Form;
+
+use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Position\Entity\Position;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class PositionType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('openedAt', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+                'input' => 'datetime_immutable',
+            ])
+            ->add('nbCoins', NumberType::class, [
+                'required' => true,
+                'scale' => 8,
+            ])
+            ->add('isOpened', CheckboxType::class, [
+                'label' => 'Position ouverte ?',
+                'required' => false,
+            ])
+            ->add('isDca', CheckboxType::class, [
+                'label' => 'DCA ?',
+                'required' => false,
+            ])
+            ->add('entryCost', NumberType::class, [
+                'required' => true,
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'empty_data' => '',
+            ])
+            ->add('coin', EntityType::class, [
+                'class' => Cryptocurrency::class,
+                'placeholder' => 'Choisir une crypto',
+                'required' => true,
+                'attr' => ['class' => 'js-select2'],
+            ])
+            ->add('ventes', CollectionType::class, [
+                'entry_type' => VenteType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+            ])
+            ->add('strategies', CollectionType::class, [
+                'entry_type' => StrategyPositionType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+            ])
+            ->add('submit', SubmitType::class)
+            ->add('submitAndNext', SubmitType::class);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Position::class,
+        ]);
+    }
+}

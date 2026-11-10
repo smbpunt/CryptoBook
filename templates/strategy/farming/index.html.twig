@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Farming{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Mon farming">
+        <twig:Button as="a" variant="outline" href="{{ path('app_strategy_lp_new') }}">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter LP
+        </twig:Button>
+        <twig:Button as="a" href="{{ path('app_strategy_farming_new') }}">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter
+        </twig:Button>
+    </twig:App:PageHeader>
+
+    {% if overview.totalYearlyUsd > 0 %}
+        <twig:App:YieldStats :yearly="overview.totalYearlyUsd" class="mb-6"/>
+
+        <twig:App:InfoDialog>
+            <twig:Tabs defaultValue="crypto">
+                <twig:Tabs:List>
+                    <twig:Tabs:Trigger value="crypto">Crypto ({{ overview.cryptoFarmings|length }})</twig:Tabs:Trigger>
+                    <twig:Tabs:Trigger value="stable">Stable ({{ overview.stableFarmings|length }})</twig:Tabs:Trigger>
+                    <twig:Tabs:Trigger value="lp">LP ({{ overview.lps|length }})</twig:Tabs:Trigger>
+                </twig:Tabs:List>
+
+                {% for tab, data in {crypto: {list: overview.cryptoFarmings, year: overview.cryptoYearlyUsd}, stable: {list: overview.stableFarmings, year: overview.stableYearlyUsd}} %}
+                    <twig:Tabs:Content value="{{ tab }}" class="grid gap-4">
+                        <twig:App:YieldStats :yearly="data.year"/>
+                        <twig:Table>
+                            <twig:Table:Header>
+                                <twig:Table:Row>
+                                    <twig:Table:Head class="w-10"/>
+                                    <twig:Table:Head class="w-10"/>
+                                    <twig:Table:Head>Blockchain</twig:Table:Head>
+                                    <twig:Table:Head>Dapp</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Nombre</twig:Table:Head>
+                                    <twig:Table:Head>Coin</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">APR</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">$</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Gains /jour</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Gains /mois</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Gains /an</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                                </twig:Table:Row>
+                            </twig:Table:Header>
+                            <twig:Table:Body>
+                                {% for strategy_farming in data.list %}
+                                    {% set dapp = strategy_farming.dapp %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell>
+                                            <twig:App:InfoButton url="{{ path('app_strategy_farming_ajax_infos', {id: strategy_farming.id}) }}"/>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell class="text-center">
+                                            <twig:App:CoinLogo url="{{ strategy_farming.coin.urlImgThumb }}" name="{{ strategy_farming.coin.libelle }}"/>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell>{{ dapp is not null and dapp.blockchain ? dapp.blockchain|capitalize }}</twig:Table:Cell>
+                                        <twig:Table:Cell>
+                                            {% if dapp is not null and dapp.url is not empty %}
+                                                <a class="underline-offset-4 hover:underline" href="{{ dapp.url }}">{{ dapp|capitalize }}</a>
+                                            {% elseif dapp is not null %}
+                                                {{ dapp|capitalize }}
+                                            {% endif %}
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.nbCoins }}</twig:Table:Cell>
+                                        <twig:Table:Cell>{{ strategy_farming.coin.symbol|upper }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.apr }} %</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.valueUsd|round(2) }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 365)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 12)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.annualRewardsUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end">
+                                            <twig:App:RowActions
+                                                editUrl="{{ path('app_strategy_farming_edit', {id: strategy_farming.id}) }}"
+                                                deleteUrl="{{ path('app_strategy_farming_delete', {id: strategy_farming.id}) }}"
+                                                tokenId="delete{{ strategy_farming.id }}"
+                                            />
+                                        </twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% else %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell colspan="12" class="py-6 text-center text-muted-foreground">Aucun farming.</twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% endfor %}
+                            </twig:Table:Body>
+                        </twig:Table>
+                    </twig:Tabs:Content>
+                {% endfor %}
+
+                <twig:Tabs:Content value="lp" class="grid gap-4">
+                    <twig:App:YieldStats :yearly="overview.lpYearlyUsd" :decimals="2"/>
+                    <twig:Table>
+                        <twig:Table:Header>
+                            <twig:Table:Row>
+                                <twig:Table:Head class="w-10"/>
+                                <twig:Table:Head class="w-16"/>
+                                <twig:Table:Head>Blockchain</twig:Table:Head>
+                                <twig:Table:Head>Dapp</twig:Table:Head>
+                                <twig:Table:Head>Pair</twig:Table:Head>
+                                <twig:Table:Head class="text-end">APR</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Investi</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Live</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Gains /jour</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Gains /mois</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Gains /an</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                            </twig:Table:Row>
+                        </twig:Table:Header>
+                        <twig:Table:Body>
+                            {% for strategy_farming in overview.lps %}
+                                {% set dapp = strategy_farming.dapp %}
+                                <twig:Table:Row>
+                                    <twig:Table:Cell>
+                                        <twig:App:InfoButton url="{{ path('app_strategy_lp_ajax_infos', {id: strategy_farming.id}) }}"/>
+                                    </twig:Table:Cell>
+                                    <twig:Table:Cell>
+                                        <div class="flex -space-x-1">
+                                            <twig:App:CoinLogo url="{{ strategy_farming.coin1.urlImgThumb }}" name="{{ strategy_farming.coin1.libelle }}"/>
+                                            <twig:App:CoinLogo url="{{ strategy_farming.coin2.urlImgThumb }}" name="{{ strategy_farming.coin2.libelle }}"/>
+                                        </div>
+                                    </twig:Table:Cell>
+                                    <twig:Table:Cell>{{ dapp is not null and dapp.blockchain is not null ? dapp.blockchain }}</twig:Table:Cell>
+                                    <twig:Table:Cell>
+                                        {% if dapp is not null and dapp.url is not empty %}
+                                            <a class="underline-offset-4 hover:underline" href="{{ dapp.url }}">{{ dapp }}</a>
+                                        {% elseif dapp is not null %}
+                                            {{ dapp }}
+                                        {% endif %}
+                                    </twig:Table:Cell>
+                                    <twig:Table:Cell>{{ strategy_farming.coin1.symbol|upper }}/{{ strategy_farming.coin2.symbol|upper }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.apr }} %</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.investedUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.valueUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 365)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 12)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.annualRewardsUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end">
+                                        <twig:App:RowActions
+                                            editUrl="{{ path('app_strategy_lp_edit', {id: strategy_farming.id}) }}"
+                                            deleteUrl="{{ path('app_strategy_lp_delete', {id: strategy_farming.id}) }}"
+                                            tokenId="delete{{ strategy_farming.id }}"
+                                        />
+                                    </twig:Table:Cell>
+                                </twig:Table:Row>
+                            {% else %}
+                                <twig:Table:Row>
+                                    <twig:Table:Cell colspan="12" class="py-6 text-center text-muted-foreground">Aucune LP.</twig:Table:Cell>
+                                </twig:Table:Row>
+                            {% endfor %}
+                        </twig:Table:Body>
+                    </twig:Table>
+                </twig:Tabs:Content>
+            </twig:Tabs>
+        </twig:App:InfoDialog>
+    {% else %}
+        <twig:Empty class="border">
+            <twig:Empty:Header>
+                <twig:Empty:Title>Aucun farming</twig:Empty:Title>
+                <twig:Empty:Description>Vous n'avez encore aucun farming.</twig:Empty:Description>
+            </twig:Empty:Header>
+        </twig:Empty>
+    {% endif %}
+{% endblock %}

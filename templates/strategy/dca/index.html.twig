@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - DCA{% endblock %}
+
+{% block importmap %}{{ importmap(['app', 'dca_index', 'select2']) }}{% endblock %}
+
+{% block body %}
+    {% if dca is not null %}
+        <twig:App:PageHeader title="Mon DCA">
+            <twig:Dialog id="dca_generate">
+                <twig:Dialog:Trigger>
+                    <twig:Button {{ ...dialog_trigger_attrs }}>Générer mes positions</twig:Button>
+                </twig:Dialog:Trigger>
+                <twig:Dialog:Content>
+                    <twig:Dialog:Header>
+                        <twig:Dialog:Title>DCA</twig:Dialog:Title>
+                        <twig:Dialog:Description>Montant à répartir selon votre allocation.</twig:Dialog:Description>
+                    </twig:Dialog:Header>
+                    <twig:Form:Item>
+                        <twig:Form:Label for="dca_value">Argent investi ($)</twig:Form:Label>
+                        <twig:InputGroup>
+                            <twig:InputGroup:Input id="dca_value" required placeholder="ex: 100" value="{{ amountUsd is null ? '' : amountUsd|round(2) }}"/>
+                            <twig:InputGroup:Addon align="inline-end">$</twig:InputGroup:Addon>
+                        </twig:InputGroup>
+                    </twig:Form:Item>
+                    <twig:Dialog:Footer>
+                        <twig:Button id="btn-generate" data-path="{{ absolute_url(path('app_strategy_dca_generate_positions')) }}">Valider</twig:Button>
+                    </twig:Dialog:Footer>
+                </twig:Dialog:Content>
+            </twig:Dialog>
+
+            <twig:Dialog id="dca_auto">
+                <twig:Dialog:Trigger>
+                    <twig:Button {{ ...dialog_trigger_attrs }}>DCA Auto</twig:Button>
+                </twig:Dialog:Trigger>
+                <twig:Dialog:Content>
+                    <twig:Dialog:Header>
+                        <twig:Dialog:Title>DCA Auto</twig:Dialog:Title>
+                        <twig:Dialog:Description>Génère des achats récurrents.</twig:Dialog:Description>
+                    </twig:Dialog:Header>
+                    {{ form_start(form) }}
+                        {{ form_row(form.coin, {label: 'Crypto'}) }}
+                        {{ form_row(form.value, {label: 'Investi au total', addon: '$', attr: {placeholder: 'ex: 200'}}) }}
+                        {{ form_row(form.type_recurr, {label: 'Type de récurrence'}) }}
+                        {{ form_row(form.nb_recurr, {label: 'Nombre de récurrence', attr: {placeholder: 'ex: 31'}}) }}
+                        {{ form_row(form.date_first, {label: 'Date du premier achat'}) }}
+                        <twig:Dialog:Footer>
+                            <twig:Button id="btn-generate-dcaauto" data-path="{{ absolute_url(path('app_strategy_dca_dcaauto')) }}">Valider</twig:Button>
+                        </twig:Dialog:Footer>
+                    {{ form_end(form) }}
+                </twig:Dialog:Content>
+            </twig:Dialog>
+
+            <twig:Button as="a" variant="outline" href="{{ path('app_strategy_dca_edit') }}">Modifier mon DCA</twig:Button>
+        </twig:App:PageHeader>
+
+        <div class="mb-6 grid grid-cols-3 gap-4 md:max-w-2xl">
+            <twig:App:Stat label="FIAT">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</twig:App:Stat>
+            <twig:App:Stat label="Farming">{{ dca.farmingToDcaUsd|number_format(2, '.', ' ') }} $</twig:App:Stat>
+            <twig:App:Stat label="Total">{{ amountUsd is null ? 'Taux EUR indisponible' : '~ ' ~ amountUsd|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:App:Stat>
+        </div>
+
+        <twig:Table>
+            <twig:Table:Header>
+                <twig:Table:Row>
+                    <twig:Table:Head>Coin</twig:Table:Head>
+                    <twig:Table:Head class="text-end">%</twig:Table:Head>
+                    <twig:Table:Head class="text-end">Dollar à investir</twig:Table:Head>
+                    <twig:Table:Head class="text-end">Nombre</twig:Table:Head>
+                </twig:Table:Row>
+            </twig:Table:Header>
+            <twig:Table:Body>
+                {% for part in dca.parts %}
+                    {% set amount = amountUsd is null ? null : amountUsd * part.percent / 100 %}
+                    <twig:Table:Row>
+                        <twig:Table:Cell>{{ part.coin.symbol|upper }}</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ part.percent }} %</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is null ? '—' : amount|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:Table:Cell>
+                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is not null and part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|round(6) : '—' }}</twig:Table:Cell>
+                    </twig:Table:Row>
+                {% else %}
+                    <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucune allocation.</twig:Table:Cell></twig:Table:Row>
+                {% endfor %}
+            </twig:Table:Body>
+        </twig:Table>
+    {% else %}
+        <twig:App:PageHeader title="Mon DCA">
+            <twig:Button as="a" href="{{ path('app_strategy_dca_new') }}">Créer mon DCA</twig:Button>
+        </twig:App:PageHeader>
+        <twig:Empty class="border">
+            <twig:Empty:Header>
+                <twig:Empty:Title>Aucune stratégie DCA définie</twig:Empty:Title>
+            </twig:Empty:Header>
+        </twig:Empty>
+    {% endif %}
+{% endblock %}

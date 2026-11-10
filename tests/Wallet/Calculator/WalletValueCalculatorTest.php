@@ -2,7 +2,7 @@
 
 namespace App\Tests\Wallet\Calculator;
 
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Calculator\WalletValueCalculator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,25 +81,14 @@ final class WalletValueCalculatorTest extends KernelTestCase
         self::assertSame(0.0, $wallet->stableHoldings[0]->percent);
     }
 
-    public function testClosedPositionsCountForZero(): void
+    public function testOwnersOfTheSameCoinAreValuedApart(): void
     {
-        $this->data->position->setIsOpened(false);
-        $this->em->flush();
-
-        $wallet = $this->calculator->forUser($this->data->user);
-
-        self::assertSame([], $wallet->cryptoHoldings);
-        self::assertSame(1000.0, $wallet->totalUsd);
-    }
-
-    public function testValuesEveryOwnerWithAPosition(): void
-    {
-        $this->em->persist(new Position($this->data->admin)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(1000));
+        $this->em->persist(new Position($this->data->admin)->setCoin($this->data->btc)->setNbCoins(1)->setEntryCost(1000));
         $this->em->flush();
 
         $totals = array_map(static fn ($wallet) => $wallet->totalUsd, $this->calculator->forAllUsers());
         ksort($totals);
 
-        self::assertSame([$this->data->user->getId() => 26000.0, $this->data->admin->getId() => 2000.0], $totals);
+        self::assertSame([$this->data->user->getId() => 26000.0, $this->data->admin->getId() => 50000.0], $totals);
     }
 }

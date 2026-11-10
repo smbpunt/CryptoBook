@@ -8,21 +8,21 @@ CryptoBook, suivi de portefeuille crypto : positions, dépôts, prêts, NFT, str
 
 - Prix et données des cryptos via l'API CoinGecko (client maison dans `src/Coingecko/`), taux de change fiat via l'API Fixer.
 - Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`, et snapshot horaire de la valeur des wallets : `wallet:snapshot`. Planifiées par Symfony Scheduler (`src/Shared/Schedule/MainSchedule.php`). En prod, worker `messenger:consume scheduler_default async` lancé par systemd (`deploy/systemd/`). En dev, pas de worker permanent (quota Fixer) : `make scheduler` à la demande.
-- Back-office EasyAdmin dans `src/Controller/Admin/`.
+- Back-office EasyAdmin dans `src/Admin/Controller/`.
 - Dashboard mis en cache par utilisateur (pool `dashboard.cache`, filesystem taggé). Invalidé par un listener Doctrine (`src/Dashboard/EventListener/`) : prix et taux pour tous, données d'un utilisateur pour lui seul. Une modification hors Doctrine (SQL brut) demande `bin/console cache:pool:clear dashboard.cache`.
 
 Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.lock`.
 
 ## Architecture
 
-- Authentification par formulaire (`App\Security\UserAuthenticator`), mot de passe oublié via `symfonycasts/reset-password-bundle`
+- Authentification par formulaire (`App\Security\Authenticator\UserAuthenticator`), mot de passe oublié via `symfonycasts/reset-password-bundle`
 - Doctrine ORM 3 + PostgreSQL, Twig, AssetMapper, Stimulus, EasyAdmin 5, KnpMenu
 - UI : Tailwind CSS 4 (`symfonycasts/tailwind-bundle`) + kit shadcn du UX Toolkit. Composants du kit dans `templates/components/` (installés via `bin/console ux:install <nom> --kit shadcn`, modifiables, pas de mise à jour automatique), composants applicatifs dans `templates/components/App/`. Thème de formulaire : `templates/form/shadcn_layout.html.twig` (option `addon` pour un suffixe `$`/`%` ; les `DateType` en `single_text` s'affichent avec le `DatePicker` du kit, qui envoie une date `Y-m-d`). Icônes : `<twig:ux:icon name="lucide:…"/>`, puis `bin/console ux:icons:lock`.
 - Piège TwigComponent : le contenu passé à un composant a sa propre portée (variables `set` dans une boucle, imports de macros, `block()` ne traversent pas). `outerBlocks` ne remonte que d'un niveau : capturer le contenu en haut du composant (`{% set _content %}{% block content %}{% endblock %}{% endset %}`).
 
 ## Organisation du code par feature
 
-Cible : ranger le code par sujet métier, pas par type technique. Inspiré du DDD, sans ses couches. L'existant est encore rangé par type : le nouveau code suit cette organisation, l'ancien migre quand on le modifie.
+Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, sans ses couches.
 
 - Une feature = un dossier dans `src/`, au singulier, nommé avec le vocabulaire métier du projet (`Position/`, `Deposit/`, `Loan/`, `Nft/`, `Strategy/`…).
 - Dans une feature, chaque classe va dans un dossier de type, même seule. Nom Symfony quand il existe (`Controller/`, `Entity/`, `Repository/`, `Form/`, `Voter/`, `Command/`, `EventSubscriber/`, `Twig/`), sinon le suffixe de la classe (`Builder/MenuBuilder`, `Calculator/DcaCalculator`). DTO dans `Dto/`, enums dans `Enum/`, value objects dans `ValueObject/`.
@@ -30,7 +30,8 @@ Cible : ranger le code par sujet métier, pas par type technique. Inspiré du DD
 - Une feature peut contenir des sous-features : `src/Strategy/Dca/`. Une simple page n'en est pas une. Deux niveaux maximum.
 - Chaque application externe appelée (CoinGecko, Fixer…) a son propre dossier : le client, ses DTO et ses exceptions, sans logique métier.
 - Le code commun va dans `src/Shared/`.
-- Les features peuvent s'utiliser entre elles, sans dépendance circulaire.
+- Les features peuvent s'utiliser entre elles, sans dépendance circulaire. Les dépendances autorisées sont déclarées dans `deptrac.yaml` et vérifiées par Deptrac : une nouvelle feature = une couche et une ligne de règles.
+- Un mapping Doctrine par dossier `Entity` de feature dans `config/packages/doctrine.yaml` (pas de mapping unique sur `src/` : il chargerait `DataFixtures/`).
 - Templates dans `templates/<feature>/`, à plat, avec un sous-dossier par sous-feature. Tests dans `tests/<Feature>/`, même arborescence que `src/`. Les tests transverses (`SmokeTest`, `OwnershipTest`…) restent dans `tests/Functional/`.
 - Ne bougent pas : `src/Kernel.php`, `src/DataFixtures/`, `templates/base.html.twig`, `templates/bundles/`, `translations/`.
 - Maker ne suit pas toujours ce rangement : donner le nom complet de la classe (`make:entity '\App\<Feature>\Entity\<Classe>'`) et déplacer ensuite ce qui est mal placé.
@@ -72,11 +73,12 @@ bin/console doctrine:schema:validate
 vendor/bin/php-cs-fixer fix --dry-run
 vendor/bin/rector process --dry-run
 vendor/bin/phpstan analyse
+vendor/bin/deptrac analyse
 bin/phpunit
 ```
 
 - PHPStan (niveau 6) utilise une baseline (`phpstan-baseline.neon`) : ne pas y ajouter d'erreurs, les corriger. La régénérer uniquement quand des erreurs disparaissent.
-- Rector doit rester propre. La promotion de propriétés est désactivée sur `src/Entity` (elle peut élargir les types dont Doctrine se sert pour deviner les relations).
+- Rector doit rester propre. La promotion de propriétés est désactivée sur les dossiers `Entity` des features (elle peut élargir les types dont Doctrine se sert pour deviner les relations).
 
 ## Conventions Symfony
 

@@ -154,7 +154,7 @@ final class SmokeTest extends WebTestCase
         ];
 
         foreach ($entities as $entity => $id) {
-            foreach (["/admin/$entity", "/admin/$entity/new", "/admin/$entity/$id/edit"] as $url) {
+            foreach (["/admin/$entity", "/admin/$entity/new", "/admin/$entity/$id", "/admin/$entity/$id/edit"] as $url) {
                 $this->client->request('GET', $url);
                 self::assertResponseIsSuccessful($url);
             }

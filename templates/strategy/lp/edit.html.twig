@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - LP{% endblock %}
+
+{% block importmap %}{{ importmap(['app', 'lp_form']) }}{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Modifier la stratégie LP"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/lp/_form.html.twig', {button_label: 'Update'}) }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Farming{% endblock %}
+
+{% block importmap %}{{ importmap(['app', 'farming_form']) }}{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Modifier la stratégie de farming"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/farming/_form.html.twig', {button_label: 'Modifier'}) }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

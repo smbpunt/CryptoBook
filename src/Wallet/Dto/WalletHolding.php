@@ -2,7 +2,7 @@
 
 namespace App\Wallet\Dto;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 
 /**
  * One coin of a wallet, valued at its current price.

@@ -1,6 +1,6 @@
 # Roadmap
 
-## 1. Historique de la valeur du wallet : collecte
+## 1. Historique de la valeur du wallet : collecte @histo.md
 
 Enregistrer la valeur totale du wallet de chaque utilisateur au fil du temps. Les quantités passées ne se reconstruisent pas : chaque heure sans enregistrement est perdue.
 

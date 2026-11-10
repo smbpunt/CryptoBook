@@ -14,7 +14,7 @@
     <twig:App:InfoDialog>
         <twig:Tabs defaultValue="crypto">
             <twig:Tabs:List>
-                <twig:Tabs:Trigger value="crypto">Crypto ({{ positions|length }})</twig:Tabs:Trigger>
+                <twig:Tabs:Trigger value="crypto">Crypto ({{ groups|length }})</twig:Tabs:Trigger>
                 <twig:Tabs:Trigger value="stable">Stable ({{ positions_stable|length }})</twig:Tabs:Trigger>
                 <twig:Tabs:Trigger value="closed">Fermée ({{ positions_closed|length }})</twig:Tabs:Trigger>
             </twig:Tabs:List>
@@ -33,12 +33,11 @@
                         </twig:Table:Row>
                     </twig:Table:Header>
                     <twig:Table:Body>
-                        {% for position in positions %}
-                            {% set coin = position['grouped']['coin'] %}
-                            {% set coutMoyen = position['coutMoyen'] %}
-                            {% set percent = coutMoyen == 0 ? null : (coin.priceUsd * 100 / coutMoyen) - 100 %}
+                        {% for group in groups %}
+                            {% set coin = group.coin %}
+                            {% set percent = group.evolutionPercent %}
                             <twig:Table:Row>
-                                <twig:Table:Cell class="text-center text-muted-foreground">({{ position['splitted']|length }})</twig:Table:Cell>
+                                <twig:Table:Cell class="text-center text-muted-foreground">({{ group.positions|length }})</twig:Table:Cell>
                                 <twig:Table:Cell>
                                     <twig:Button variant="ghost" size="icon-sm" class="btn-split" data-id="{{ coin.id }}" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Détail des positions">
                                         <twig:ux:icon name="lucide:chevrons-up-down"/>
@@ -47,14 +46,14 @@
                                 <twig:Table:Cell class="text-center">
                                     <twig:App:CoinLogo url="{{ coin.urlImgThumb }}" name="{{ coin.libelle }}"/>
                                 </twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">{{ position['grouped'].totalsum|round(8) }} {{ coin.symbol|upper }}</twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums {{ coutMoyen < coin.priceUsd ? 'text-positive' : 'text-negative' }}">
-                                    ~ {{ coutMoyen|round(2) }} $
+                                <twig:Table:Cell class="text-end tabular-nums">{{ group.quantity|round(8) }} {{ coin.symbol|upper }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums {{ group.averageCost < coin.priceUsd ? 'text-positive' : 'text-negative' }}">
+                                    ~ {{ group.averageCost|round(2) }} $
                                 </twig:Table:Cell>
                                 <twig:Table:Cell class="text-end tabular-nums {{ percent is null or percent > 0 ? 'text-positive' : 'text-negative' }}">
                                     {{ percent is null ? '+ ∞' : percent|round(2) ~ ' %' }}
                                 </twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">~ {{ (position['grouped'].totalsum * coin.priceUsd)|round(2) }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">~ {{ group.valueUsd|round(2) }} $</twig:Table:Cell>
                             </twig:Table:Row>
                             <tr id="detail-{{ coin.id }}" class="hidden bg-muted/30">
                                 <td colspan="7" class="p-2">
@@ -72,7 +71,7 @@
                                             </twig:Table:Row>
                                         </twig:Table:Header>
                                         <twig:Table:Body>
-                                            {% for detail in position['splitted'] %}
+                                            {% for detail in group.positions %}
                                                 <twig:Table:Row>
                                                     <twig:Table:Cell>
                                                         <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: detail.id}) }}"/>
@@ -84,8 +83,9 @@
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums {{ detail.percentEvolution > 0 ? 'text-positive' : 'text-negative' }}">
-                                                        {{ detail.percentEvolution <= -99.9 ? 'LUNA SPOTTED' : detail.percentEvolution|number_format(0, '.', ' ') ~ ' %' }}
+                                                    {% set evolution = detail.percentEvolution %}
+                                                    <twig:Table:Cell class="text-end tabular-nums {{ evolution is null or evolution > 0 ? 'text-positive' : 'text-negative' }}">
+                                                        {% if evolution is null %}+ ∞{% elseif evolution <= -99.9 %}LUNA SPOTTED{% else %}{{ evolution|number_format(0, '.', ' ') }} %{% endif %}
                                                     </twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end">
                                                         <twig:App:RowActions

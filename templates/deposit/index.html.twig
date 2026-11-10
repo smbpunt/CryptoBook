@@ -11,7 +11,7 @@
 
     <div class="mb-6 grid grid-cols-2 gap-4 md:max-w-md">
         <twig:App:Stat label="Total USD">{{ totalUsd|number_format(0, '.', ' ') }} $</twig:App:Stat>
-        <twig:App:Stat label="Total {{ app.user.favoriteFiatCurrency.symbol }}">{{ fiatRates.toFavoriteCurrency(totalUsd, app.user)|number_format(0, '.', ' ') }} {{ app.user.favoriteFiatCurrency.symbol }}</twig:App:Stat>
+        <twig:App:Stat label="Total {{ favoriteCurrency.symbol }}">{{ totalFavorite|number_format(0, '.', ' ') }} {{ favoriteCurrency.symbol }}</twig:App:Stat>
     </div>
 
     <twig:Table>

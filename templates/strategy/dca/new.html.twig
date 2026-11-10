@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - DCA{% endblock %}
+
+{% block importmap %}{{ importmap(['app', 'collection']) }}{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Initialiser mon DCA"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/dca/_form.html.twig') }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

@@ -3,8 +3,9 @@
 namespace App\Tests\Dashboard\Cache;
 
 use App\Dashboard\Cache\DashboardCache;
-use App\Entity\Vente;
+use App\Position\Entity\Vente;
 use App\Tests\Fixtures\Dataset;
+use App\Wallet\Entity\WalletSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -116,6 +117,20 @@ final class DashboardCacheTest extends KernelTestCase
 
         self::assertSame('$', $this->cache->get($this->data->user)->currencySymbol);
         self::assertTrue($this->isCached($this->data->admin->getId()));
+    }
+
+    public function testDataTheDashboardDoesNotReadKeepsTheCache(): void
+    {
+        $this->warmUp();
+
+        $this->em->persist(new WalletSnapshot($this->data->user, new \DateTimeImmutable('2024-01-01 10:00'), 26000));
+        $this->data->nft->setPriceUsd(3000);
+        $this->data->project->setNote('Other note');
+        $this->data->dca->setFiatToDcaEur(200);
+        $this->data->user->setLastConnectedAt(new \DateTimeImmutable());
+        $this->em->flush();
+
+        self::assertTrue($this->isCached($this->data->user->getId()));
     }
 
     private function warmUp(): void

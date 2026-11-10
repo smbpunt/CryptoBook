@@ -2,7 +2,7 @@
 
 namespace App\Wallet\Recorder;
 
-use App\Entity\User;
+use App\User\Entity\User;
 use App\Wallet\Calculator\WalletValueCalculator;
 use App\Wallet\Entity\WalletSnapshot;
 use App\Wallet\Repository\WalletSnapshotRepository;

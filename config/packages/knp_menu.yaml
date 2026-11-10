@@ -1,4 +1,4 @@
 knp_menu:
   twig:
-    template: menu/template.html.twig
+    template: shared/menu.html.twig
   default_renderer: twig

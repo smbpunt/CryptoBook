@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Cryptocurrency\Entity;
+
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+#[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
+#[UniqueEntity('libelleCoingecko', message: 'Cette cryptomonnaie existe déjà.')]
+class Cryptocurrency implements \Stringable
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    private $libelleCoingecko;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $libelle;
+
+    #[ORM\Column(type: 'float')]
+    private $priceUsd;
+
+    #[ORM\Column(type: 'float')]
+    private $mcapUsd;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $urlImgThumb;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $urlImgSmall;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $urlImgLarge;
+
+    #[ORM\Column(type: 'string', length: 8)]
+    private $symbol;
+
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    private $color;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isStable;
+
+    public function __construct()
+    {
+        $this->isStable = false;
+        $this->priceUsd = 0;
+        $this->mcapUsd = 0;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLibelleCoingecko(): ?string
+    {
+        return $this->libelleCoingecko;
+    }
+
+    public function setLibelleCoingecko(string $libelleCoingecko): self
+    {
+        $this->libelleCoingecko = $libelleCoingecko;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getPriceUsd(): ?float
+    {
+        return $this->priceUsd;
+    }
+
+    public function setPriceUsd(float $priceUsd): self
+    {
+        $this->priceUsd = $priceUsd;
+
+        return $this;
+    }
+
+    public function getMcapUsd(): ?float
+    {
+        return $this->mcapUsd;
+    }
+
+    public function setMcapUsd(float $mcapUsd): self
+    {
+        $this->mcapUsd = $mcapUsd;
+
+        return $this;
+    }
+
+    public function getUrlImgThumb(): ?string
+    {
+        return $this->urlImgThumb;
+    }
+
+    public function setUrlImgThumb(?string $urlImgThumb): self
+    {
+        $this->urlImgThumb = $urlImgThumb;
+
+        return $this;
+    }
+
+    public function getUrlImgSmall(): ?string
+    {
+        return $this->urlImgSmall;
+    }
+
+    public function setUrlImgSmall(?string $urlImgSmall): self
+    {
+        $this->urlImgSmall = $urlImgSmall;
+
+        return $this;
+    }
+
+    public function getUrlImgLarge(): ?string
+    {
+        return $this->urlImgLarge;
+    }
+
+    public function setUrlImgLarge(?string $urlImgLarge): self
+    {
+        $this->urlImgLarge = $urlImgLarge;
+
+        return $this;
+    }
+
+    public function getSymbol(): ?string
+    {
+        return $this->symbol;
+    }
+
+    public function setSymbol(string $symbol): self
+    {
+        $this->symbol = $symbol;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function isIsStable(): ?bool
+    {
+        return $this->isStable;
+    }
+
+    public function setIsStable(bool $isStable): self
+    {
+        $this->isStable = $isStable;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->symbol ? strtoupper($this->symbol) : 'Non défini';
+    }
+}

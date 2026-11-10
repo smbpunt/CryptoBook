@@ -4,11 +4,13 @@ namespace App\Dashboard\Builder;
 
 use App\Dashboard\Dto\DashboardData;
 use App\Dashboard\Dto\DashboardHolding;
-use App\Entity\User;
-use App\Repository\LoanRepository;
-use App\Service\DepositService;
-use App\Service\FarmingService;
-use App\Service\FiatExchangeRatesService;
+use App\Deposit\Calculator\DepositTotalCalculator;
+use App\Deposit\Repository\DepositRepository;
+use App\FiatCurrency\Converter\FiatConverter;
+use App\Loan\Repository\LoanRepository;
+use App\Strategy\Farming\Builder\FarmingOverviewBuilder;
+use App\User\Entity\User;
+use App\User\Resolver\FavoriteCurrencyResolver;
 use App\Wallet\Calculator\WalletValueCalculator;
 
 /**
@@ -18,28 +20,31 @@ final readonly class DashboardBuilder
 {
     public function __construct(
         private WalletValueCalculator $walletValueCalculator,
-        private DepositService $depositService,
-        private FarmingService $farmingService,
+        private DepositRepository $depositRepository,
+        private DepositTotalCalculator $depositTotalCalculator,
+        private FarmingOverviewBuilder $farmingOverviewBuilder,
         private LoanRepository $loanRepository,
-        private FiatExchangeRatesService $fiatRates,
+        private FiatConverter $fiatConverter,
+        private FavoriteCurrencyResolver $favoriteCurrencyResolver,
     ) {
     }
 
     public function build(User $user): DashboardData
     {
         $wallet = $this->walletValueCalculator->forUser($user);
+        $currency = $this->favoriteCurrencyResolver->resolve($user);
 
         return new DashboardData(
             array_map(DashboardHolding::fromWalletHolding(...), $wallet->cryptoHoldings),
             array_map(DashboardHolding::fromWalletHolding(...), $wallet->stableHoldings),
             $wallet->cryptoUsd,
             $wallet->stableUsd,
-            $this->depositService->getTotalDepositUsd($user),
-            $this->loanRepository->getTotal($user),
-            $this->farmingService->getTotalFarmingByYearUsd($user),
-            (string) $this->fiatRates->getFavoriteCurrency($user)->getsymbol(),
-            $this->fiatRates->getUsdRateFromFavoriteCurrency($user),
-            $this->fiatRates->toFavoriteCurrency(1.0, $user),
+            $this->depositTotalCalculator->totalUsd($this->depositRepository->findByOwnerWithCurrency($user)),
+            $this->loanRepository->sumValueUsd($user),
+            $this->farmingOverviewBuilder->build($user)->totalYearlyUsd(),
+            (string) $currency->getSymbol(),
+            $this->fiatConverter->toUsd(1.0, $currency),
+            $this->fiatConverter->fromUsd(1.0, $currency),
         );
     }
 }
