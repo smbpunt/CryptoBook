@@ -29,8 +29,7 @@ final readonly class FarmingOverviewBuilder
             $lps,
             self::sum(array_map(static fn (StrategyFarming $farming): float => $farming->getAnnualRewardsUsd(), $crypto)),
             self::sum(array_map(static fn (StrategyFarming $farming): float => $farming->getAnnualRewardsUsd(), $stable)),
-            // At the current prices of the coins.
-            self::sum(array_map(static fn (StrategyLp $lp): float => $lp->getApr() * ($lp->getCoin1()->getPriceUsd() * $lp->getNbCoin1() + $lp->getCoin2()->getPriceUsd() * $lp->getNbCoin2()) / 100, $lps)),
+            self::sum(array_map(static fn (StrategyLp $lp): float => $lp->getAnnualRewardsUsd(), $lps)),
         );
     }
 

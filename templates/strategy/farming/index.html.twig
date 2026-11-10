@@ -128,7 +128,7 @@
                                     </twig:Table:Cell>
                                     <twig:Table:Cell>{{ strategy_farming.coin1.symbol|upper }}/{{ strategy_farming.coin2.symbol|upper }}</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.apr }} %</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.priceCoin1 * strategy_farming.nbCoin1 + strategy_farming.priceCoin2 * strategy_farming.nbCoin2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.investedUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ strategy_farming.valueUsd|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 365)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ (strategy_farming.annualRewardsUsd / 12)|number_format(2, '.', ' ') }} $</twig:Table:Cell>

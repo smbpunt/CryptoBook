@@ -204,9 +204,20 @@ class StrategyLp implements OwnedInterface
         return $this;
     }
 
+    /**
+     * Value of the coins at the prices entered with the LP.
+     */
+    public function getInvestedUsd(): float
+    {
+        return $this->priceCoin1 * $this->nbCoin1 + $this->priceCoin2 * $this->nbCoin2;
+    }
+
+    /**
+     * Value of the coins at their current price.
+     */
     public function getValueUsd(): float
     {
-        return $this->getPriceCoin1() * $this->getNbCoin1() + $this->getPriceCoin2() * $this->getNbCoin2();
+        return $this->coin1->getPriceUsd() * $this->nbCoin1 + $this->coin2->getPriceUsd() * $this->nbCoin2;
     }
 
     public function getAnnualRewardsUsd(): float

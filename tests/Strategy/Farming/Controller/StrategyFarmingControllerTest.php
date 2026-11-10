@@ -36,6 +36,21 @@ final class StrategyFarmingControllerTest extends WebTestCase
         self::assertSame(['700 $', '200 $', '100 $', '400.00 $'], $this->yearlyStats($crawler));
     }
 
+    public function testLpLiveValueAndRewardsUseTheCurrentPrices(): void
+    {
+        // LP entered with 1 ETH at 2 000 $ + 2 000 USDC, ETH now at 3 000 $: 5 000 $ at 10 % = 500 $ a year.
+        $this->data->eth->setPriceUsd(3000);
+        $this->em()->flush();
+
+        $crawler = $this->client->request('GET', '/strategy/farming/');
+
+        $row = $crawler->filter('[data-slot="tabs-content"]')->last()->filter('tbody tr')->first()->filter('td')
+            ->each(static fn (Crawler $cell): string => trim($cell->text()));
+        // Investi, Live, then the rewards of a day, a month and a year.
+        self::assertSame(['4 000.00 $', '5 000.00 $', '1.37 $', '41.67 $', '500.00 $'], \array_slice($row, -6, 5));
+        self::assertSame('500.00 $', $this->yearlyStats($crawler)[3]);
+    }
+
     public function testCreateFarming(): void
     {
         $crawler = $this->client->request('GET', '/strategy/farming/new');
