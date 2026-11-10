@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Functional;
+namespace App\Tests\Dashboard\Controller;
 
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-final class DashboardTest extends WebTestCase
+final class DashboardControllerTest extends WebTestCase
 {
     public function testShowsTheWalletTotals(): void
     {

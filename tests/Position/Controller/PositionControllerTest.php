@@ -188,6 +188,43 @@ final class PositionControllerTest extends WebTestCase
         self::assertNull($this->em()->find(Position::class, $id));
     }
 
+    public function testPositionFormTabsDoNotSubmit(): void
+    {
+        $crawler = $this->client->request('GET', '/position/new');
+
+        $tabs = $crawler->filter('form[name="position"] [role="tab"]');
+        self::assertCount(2, $tabs);
+        self::assertSame(['button', 'button'], $tabs->each(static fn ($tab): ?string => $tab->attr('type')), 'A tab inside the form must not submit it.');
+        // Enter submits through the first submit button of the form.
+        self::assertSame('position[submit]', $crawler->filter('form[name="position"] button[type="submit"]')->first()->attr('name'));
+    }
+
+    public function testCreatePositionWithSale(): void
+    {
+        $crawler = $this->client->request('GET', '/position/new');
+
+        // Sales are a JS collection: post the raw values with one sale added.
+        $form = $crawler->selectButton('Valider')->form([
+            'position[coin]' => (string) $this->data->eth->getId(),
+            'position[nbCoins]' => '4',
+            'position[entryCost]' => '1000',
+            'position[openedAt]' => '2024-01-01',
+        ]);
+        $values = $form->getPhpValues();
+        $values['position']['ventes'][0] = ['soldAt' => '2024-02-01', 'percent' => '25', 'priceSold' => '3000'];
+        $this->client->request('POST', '/position/new', $values);
+
+        self::assertResponseRedirects('/position/');
+        $position = $this->em()->getRepository(Position::class)->findOneBy(['owner' => $this->data->user, 'coin' => $this->data->eth]);
+        self::assertNotNull($position);
+        self::assertSame(1000.0, $position->getEntryCost());
+        self::assertSame(3.0, $position->getRemainingCoins());
+        self::assertCount(1, $position->getVentes());
+        self::assertSame('2024-01-01', $position->getOpenedAt()?->format('Y-m-d'));
+        self::assertSame('2024-02-01', $position->getVentes()->first()->getSoldAt()?->format('Y-m-d'));
+        self::assertTrue($position->isIsOpened());
+    }
+
     /**
      * @return list<string>
      */

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Functional;
+namespace App\Tests\Security\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ResetPasswordTest extends WebTestCase
+final class ResetPasswordControllerTest extends WebTestCase
 {
     public function testInvalidResetTokenSendsBackToTheRequestFormWithAnError(): void
     {

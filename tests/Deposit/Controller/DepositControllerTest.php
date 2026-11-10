@@ -53,6 +53,24 @@ final class DepositControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
+    public function testCreateDeposit(): void
+    {
+        $this->client->request('GET', '/deposit/new');
+        $this->client->submitForm('Ajouter', [
+            'deposit[amount]' => '250',
+            'deposit[exchange]' => (string) $this->data->exchange->getId(),
+            'deposit[fiatCurrency]' => (string) $this->data->usd->getId(),
+            'deposit[type]' => (string) $this->data->depositType->getId(),
+        ]);
+
+        self::assertResponseRedirects('/deposit/');
+        $deposits = $this->em()->getRepository(Deposit::class)->findBy(['owner' => $this->data->user, 'amount' => 250]);
+        self::assertCount(1, $deposits);
+        self::assertSame($this->data->usd->getId(), $deposits[0]->getFiatCurrency()->getId());
+        self::assertSame($this->data->exchange->getId(), $deposits[0]->getExchange()->getId());
+        self::assertSame($this->data->depositType->getId(), $deposits[0]->getType()->getId());
+    }
+
     private function em(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);
