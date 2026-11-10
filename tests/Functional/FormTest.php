@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\Deposit;
+use App\Deposit\Entity\Deposit;
 use App\Entity\Position;
 use App\Entity\User;
 use App\Tests\Fixtures\Dataset;

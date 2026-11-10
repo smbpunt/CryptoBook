@@ -2,12 +2,12 @@
 
 namespace App\Tests\Fixtures;
 
+use App\Deposit\Entity\Deposit;
+use App\Deposit\Entity\DepositType;
 use App\Entity\Blockchain;
 use App\Entity\CoinPercentDca;
 use App\Entity\Cryptocurrency;
 use App\Entity\Dapp;
-use App\Entity\Deposit;
-use App\Entity\DepositType;
 use App\Entity\Exchange;
 use App\Entity\FiatCurrency;
 use App\Entity\Loan;

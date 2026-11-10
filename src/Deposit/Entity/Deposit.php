@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Deposit\Entity;
 
+use App\Deposit\Repository\DepositRepository;
+use App\Entity\Exchange;
+use App\Entity\FiatCurrency;
+use App\Entity\OwnedInterface;
 use App\Entity\Trait\OwnerTrait;
-use App\Repository\DepositRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepositRepository::class)]

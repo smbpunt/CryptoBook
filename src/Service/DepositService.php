@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
+use App\Deposit\Repository\DepositRepository;
 use App\Entity\User;
-use App\Repository\DepositRepository;
 
 final readonly class DepositService
 {

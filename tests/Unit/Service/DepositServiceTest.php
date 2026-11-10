@@ -2,10 +2,10 @@
 
 namespace App\Tests\Unit\Service;
 
-use App\Entity\Deposit;
+use App\Deposit\Entity\Deposit;
+use App\Deposit\Repository\DepositRepository;
 use App\Entity\FiatCurrency;
 use App\Entity\User;
-use App\Repository\DepositRepository;
 use App\Service\DepositService;
 use PHPUnit\Framework\TestCase;
 

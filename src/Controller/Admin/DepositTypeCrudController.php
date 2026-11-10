@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\DepositType;
+use App\Deposit\Entity\DepositType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 /**

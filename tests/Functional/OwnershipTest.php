@@ -2,9 +2,9 @@
 
 namespace App\Tests\Functional;
 
+use App\Deposit\Repository\DepositRepository;
 use App\Entity\OwnedInterface;
 use App\Entity\User;
-use App\Repository\DepositRepository;
 use App\Repository\StrategyDcaRepository;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;

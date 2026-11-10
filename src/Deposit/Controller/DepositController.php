@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Deposit\Controller;
 
-use App\Entity\Deposit;
+use App\Deposit\Entity\Deposit;
+use App\Deposit\Form\DepositType;
+use App\Deposit\Repository\DepositRepository;
 use App\Entity\User;
-use App\Form\DepositType;
-use App\Repository\DepositRepository;
 use App\Security\Voter\OwnerVoter;
 use App\Service\DepositService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

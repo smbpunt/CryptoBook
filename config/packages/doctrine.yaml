@@ -20,6 +20,11 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
+            Deposit:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Deposit/Entity'
+                prefix: 'App\Deposit\Entity'
             Wallet:
                 type: attribute
                 is_bundle: false

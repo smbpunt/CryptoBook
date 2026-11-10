@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Deposit\Entity\Deposit;
 use App\Repository\ExchangeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Deposit\Repository;
 
-use App\Entity\DepositType;
+use App\Deposit\Entity\DepositType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
