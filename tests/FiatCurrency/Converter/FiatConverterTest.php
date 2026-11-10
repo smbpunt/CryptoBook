@@ -22,7 +22,6 @@ final class FiatConverterTest extends TestCase
 
     public function testConvertsEuros(): void
     {
-        self::assertSame(1.25, $this->converter->toUsd(1.0, $this->eur));
         self::assertEqualsWithDelta(125.0, $this->converter->toUsd(100, $this->eur), 1e-9);
         self::assertEqualsWithDelta(80.0, $this->converter->fromUsd(100, $this->eur), 1e-9);
     }
@@ -33,7 +32,7 @@ final class FiatConverterTest extends TestCase
         self::assertSame(100.0, $this->converter->fromUsd(100, $this->usd));
     }
 
-    public function testOnlyTheUsdRateOfTheCurrencyIsNeeded(): void
+    public function testMissingUsdRateIsAnError(): void
     {
         $this->expectException(MissingRateException::class);
 

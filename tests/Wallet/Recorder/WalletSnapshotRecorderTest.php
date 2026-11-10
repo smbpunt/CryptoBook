@@ -33,6 +33,7 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
         // Half-hour offset: the hour is truncated after the UTC conversion (14:05 UTC).
         $clock = self::mockTime(new \DateTimeImmutable('2026-11-10 19:35:00', new \DateTimeZone('Asia/Kolkata')));
 
+        // admin has no position: no snapshot.
         self::assertSame(1, $this->recorder->record());
         $clock->sleep(30 * 60);
         self::assertSame(0, $this->recorder->record());
@@ -74,14 +75,5 @@ final class WalletSnapshotRecorderTest extends KernelTestCase
         $snapshot = $this->repository->findOneBy(['owner' => $this->data->user]);
         self::assertInstanceOf(WalletSnapshot::class, $snapshot);
         self::assertSame(0.0, $snapshot->getValueUsd());
-    }
-
-    public function testSkipsUsersWithoutPosition(): void
-    {
-        self::mockTime('2026-11-10 14:05:00 UTC');
-
-        $this->recorder->record();
-
-        self::assertNull($this->repository->findOneBy(['owner' => $this->data->admin]));
     }
 }

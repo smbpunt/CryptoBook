@@ -2,6 +2,8 @@
 
 namespace App\Tests\Loan\Controller;
 
+use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
 use App\Loan\Entity\Loan;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +24,12 @@ final class LoanControllerTest extends WebTestCase
 
     public function testXhrPostRendersTheDappsOfTheBlockchainWithoutSaving(): void
     {
+        $polygon = new Blockchain()->setLibelle('Polygon')->setCoin($this->data->eth);
+        $quickswap = new Dapp()->setLibelle('QuickSwap')->setUrl('https://quickswap.exchange/')->setBlockchain($polygon);
+        $this->em()->persist($polygon);
+        $this->em()->persist($quickswap);
+        $this->em()->flush();
+
         $crawler = $this->client->request('GET', '/loan/new');
         $form = $crawler->selectButton('Ajouter')->form();
         $values = $form->getPhpValues();
@@ -32,6 +40,7 @@ final class LoanControllerTest extends WebTestCase
         $crawler = $this->client->xmlHttpRequest('POST', '/loan/new', $values);
 
         self::assertCount(1, $crawler->filter('#loan_dapp option[value="'.$this->data->aave->getId().'"]'));
+        self::assertCount(0, $crawler->filter('#loan_dapp option[value="'.$quickswap->getId().'"]'));
         self::assertSame(1, $this->countLoans());
     }
 

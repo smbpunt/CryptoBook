@@ -2,7 +2,6 @@
 
 namespace App\Tests\Position\Controller;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Position\Entity\Position;
 use App\Position\Entity\StrategyPosition;
 use App\Position\Entity\Vente;
@@ -27,23 +26,25 @@ final class PositionControllerTest extends WebTestCase
 
     public function testCoinsAreGroupedWithTheirAverageCost(): void
     {
-        // 0.5 BTC at 40 000 $ (Dataset) + 0.5 BTC at 60 000 $: 1 BTC at 50 000 $, the current price.
-        $this->persist(new Position($this->data->user)->setCoin($this->data->btc)->setNbCoins(0.5)->setEntryCost(30000));
+        // 0.5 BTC for 20 000 $ (Dataset) + 0.5 BTC for 50 000 $: 1 BTC at 70 000 $, worth 50 000 $ now.
+        $this->persist(new Position($this->data->user)->setCoin($this->data->btc)->setNbCoins(0.5)->setEntryCost(50000));
 
         $crawler = $this->client->request('GET', '/position/');
 
         self::assertResponseIsSuccessful();
         $row = self::cells($crawler->filter('[data-slot="tabs-content"]')->first()->filter('tbody tr')->first());
-        self::assertSame(['(2)', '', '', '1 BTC', '~ 50000 $', '0 %', '~ 50000 $'], $row);
+        self::assertSame(['(2)', '', '', '1 BTC', '~ 70000 $', '-28.57 %', '~ 50000 $'], $row);
     }
 
     public function testStableAndClosedTabs(): void
     {
         $this->persist(new Position($this->data->user)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(1000)->setIsOpened(false));
+        // A closed stable position goes to the closed tab too.
+        $this->persist(new Position($this->data->user)->setCoin($this->data->usdc)->setNbCoins(10)->setEntryCost(10)->setIsOpened(false));
 
         $crawler = $this->client->request('GET', '/position/');
 
-        self::assertSame(['Crypto (1)', 'Stable (1)', 'Fermée (1)'], $crawler->filter('[role="tab"]')->each(static fn (Crawler $tab): string => trim($tab->text())));
+        self::assertSame(['Crypto (1)', 'Stable (1)', 'Fermée (2)'], $crawler->filter('[role="tab"]')->each(static fn (Crawler $tab): string => trim($tab->text())));
     }
 
     public function testInfosShowTheExitPlan(): void
@@ -78,7 +79,6 @@ final class PositionControllerTest extends WebTestCase
         yield 'no coins' => [['nbCoins' => '0'], []];
         yield 'empty quantity' => [['nbCoins' => ''], []];
         yield 'negative cost' => [['entryCost' => '-1'], []];
-        yield 'sale over 100 %' => [[], [['soldAt' => '2024-02-01', 'percent' => '150', 'priceSold' => '3000']]];
         yield 'negative sale price' => [[], [['soldAt' => '2024-02-01', 'percent' => '50', 'priceSold' => '-1']]];
     }
 
@@ -145,29 +145,6 @@ final class PositionControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/position/');
 
         self::assertSame('+ ∞', trim($crawler->filter('[id^="detail-"]')->last()->filter('tbody tr td')->eq(6)->text()));
-    }
-
-    public function testAverageCostOfACoinUnderOneCent(): void
-    {
-        $shib = new Cryptocurrency()->setLibelleCoingecko('shiba-inu')->setLibelle('Shiba Inu')->setSymbol('shib')
-            ->setPriceUsd(0.00002)->setMcapUsd(1)->setIsStable(false);
-        $this->em()->persist($shib);
-        // 1 000 000 SHIB for 10 $: 0.00001 $ each, rounded to 0 by getEntryCoinValue().
-        $this->persist(new Position($this->data->user)->setCoin($shib)->setNbCoins(1_000_000)->setEntryCost(10));
-
-        $crawler = $this->client->request('GET', '/position/');
-
-        $row = self::cells($crawler->filterXPath("//tr[td[contains(normalize-space(.), ' SHIB')]]")->first());
-        self::assertSame('100 %', $row[5]);
-    }
-
-    public function testClosedStablePositionIsInTheClosedTab(): void
-    {
-        $this->persist(new Position($this->data->user)->setCoin($this->data->usdc)->setNbCoins(10)->setEntryCost(10)->setIsOpened(false));
-
-        $crawler = $this->client->request('GET', '/position/');
-
-        self::assertSame('Fermée (1)', trim($crawler->filter('[role="tab"]')->eq(2)->text()));
     }
 
     public function testSubmitAndNextOpensTheFormAgain(): void

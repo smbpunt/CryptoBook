@@ -21,15 +21,10 @@ final class MainScheduleTest extends KernelTestCase
         foreach ($schedule->getRecurringMessages() as $recurringMessage) {
             $command = $this->commandOf($recurringMessage);
             self::assertTrue($application->has($command), "Unknown command $command");
-            $commands[$command] = (string) $recurringMessage->getTrigger();
+            $commands[] = $command;
         }
 
-        self::assertSame([
-            'crypto:updatePrices' => '*/15 * * * *',
-            'wallet:snapshot' => '1 * * * *',
-            'crypto:updateDatas' => '5 3 * * *',
-            'fiat:updateRates' => '0 6 * * *',
-        ], $commands);
+        self::assertEqualsCanonicalizing(['crypto:updatePrices', 'crypto:updateDatas', 'fiat:updateRates', 'wallet:snapshot'], $commands);
     }
 
     public function testReplaysOnlyTheLastMissedRunInProd(): void

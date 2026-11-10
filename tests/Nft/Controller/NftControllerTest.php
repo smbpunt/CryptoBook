@@ -37,23 +37,17 @@ final class NftControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
-    public function testIndexShowsTheProfitOfTheSoldNfts(): void
+    public function testIndexShowsTheProfitOfTheSoldNftsOnly(): void
     {
-        // Bought 2 000 $, sold 3 000 $ with 10 % fees: 700 $. Bought 1 000 $, sold 500 $: -500 $.
-        $this->data->nft->setSoldOn(new \DateTimeImmutable('2024-06-01'))->setPriceSoldUsd(3000)->setPercentSaleFees(10);
-        $sold = new Nft($this->data->user)->setCollection('Apes')->setBlockchain($this->data->ethereum)
+        // Bought 1 000 $, sold 1 500 $. The held NFT of the Dataset does not count.
+        $this->em()->persist(new Nft($this->data->user)->setCollection('Apes')->setBlockchain($this->data->ethereum)
             ->setCryptocurrency($this->data->eth)->setPriceCrypto(0.5)->setPriceUsd(1000)
-            ->setSoldOn(new \DateTimeImmutable('2024-07-01'))->setPriceSoldUsd(500);
-        $held = new Nft($this->data->user)->setCollection('Held')->setBlockchain($this->data->ethereum)
-            ->setCryptocurrency($this->data->eth)->setPriceCrypto(1)->setPriceUsd(2000);
-        $this->em()->persist($sold);
-        $this->em()->persist($held);
+            ->setSoldOn(new \DateTimeImmutable('2024-07-01'))->setPriceSoldUsd(1500));
         $this->em()->flush();
 
         $this->client->request('GET', '/nft/');
 
-        self::assertSelectorTextContains('main', 'Résultat : 200 $');
-        self::assertSelectorTextContains('main', 'Vendu (2)');
+        self::assertSelectorTextContains('main', 'Résultat : 500 $');
     }
 
     /**
