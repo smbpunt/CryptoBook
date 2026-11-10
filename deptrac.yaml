@@ -1,0 +1,99 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#^src/Kernel\.php$#'
+    - '#/src/DataFixtures/#'
+  layers:
+    - name: Admin
+      collectors:
+        - type: classLike
+          value: ^App\\Admin\\.*
+    - name: Blockchain
+      collectors:
+        - type: classLike
+          value: ^App\\Blockchain\\.*
+    - name: Coingecko
+      collectors:
+        - type: classLike
+          value: ^App\\Coingecko\\.*
+    - name: Cryptocurrency
+      collectors:
+        - type: classLike
+          value: ^App\\Cryptocurrency\\.*
+    - name: Dashboard
+      collectors:
+        - type: classLike
+          value: ^App\\Dashboard\\.*
+    - name: Deposit
+      collectors:
+        - type: classLike
+          value: ^App\\Deposit\\.*
+    - name: Exchange
+      collectors:
+        - type: classLike
+          value: ^App\\Exchange\\.*
+    - name: FiatCurrency
+      collectors:
+        - type: classLike
+          value: ^App\\FiatCurrency\\.*
+    - name: Fixer
+      collectors:
+        - type: classLike
+          value: ^App\\Fixer\\.*
+    - name: Loan
+      collectors:
+        - type: classLike
+          value: ^App\\Loan\\.*
+    - name: Nft
+      collectors:
+        - type: classLike
+          value: ^App\\Nft\\.*
+    - name: Position
+      collectors:
+        - type: classLike
+          value: ^App\\Position\\.*
+    - name: ProjectMonitoring
+      collectors:
+        - type: classLike
+          value: ^App\\ProjectMonitoring\\.*
+    - name: Security
+      collectors:
+        - type: classLike
+          value: ^App\\Security\\.*
+    - name: Shared
+      collectors:
+        - type: classLike
+          value: ^App\\Shared\\.*
+    - name: Strategy
+      collectors:
+        - type: classLike
+          value: ^App\\Strategy\\.*
+    - name: User
+      collectors:
+        - type: classLike
+          value: ^App\\User\\.*
+    - name: Wallet
+      collectors:
+        - type: classLike
+          value: ^App\\Wallet\\.*
+  # Features a layer may use, on top of itself and Shared. A new feature = a layer and a line here.
+  ruleset:
+    Admin: [Blockchain, Cryptocurrency, Deposit, Exchange, FiatCurrency, ProjectMonitoring, User, Shared]
+    Blockchain: [Cryptocurrency, Shared]
+    Coingecko: [Shared]
+    Cryptocurrency: [Coingecko, Shared]
+    Dashboard: [Wallet, Deposit, Loan, Strategy, FiatCurrency, User, Cryptocurrency, Position, Shared]
+    Deposit: [User, FiatCurrency, Exchange, Shared]
+    Exchange: [Shared]
+    FiatCurrency: [Fixer, Shared]
+    Fixer: [Shared]
+    Loan: [User, Cryptocurrency, Blockchain, Shared]
+    Nft: [User, Cryptocurrency, Blockchain, Shared]
+    Position: [User, Cryptocurrency, Shared]
+    ProjectMonitoring: [User, Cryptocurrency, Shared]
+    Security: [User, FiatCurrency, Shared]
+    Shared: ~
+    Strategy: [User, Cryptocurrency, Blockchain, Position, FiatCurrency, Shared]
+    User: [FiatCurrency, Shared]
+    Wallet: [Position, User, Cryptocurrency, Shared]

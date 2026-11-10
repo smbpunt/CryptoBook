@@ -11,6 +11,9 @@
             "config/packages/dama_doctrine_test_bundle.yaml"
         ]
     },
+    "deptrac/deptrac": {
+        "version": "4.7.2"
+    },
     "doctrine/collections": {
         "version": "1.6.8"
     },

@@ -28,3 +28,7 @@ CLAUDE.local.md
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> deptrac/deptrac ###
+/.deptrac.cache
+###< deptrac/deptrac ###
