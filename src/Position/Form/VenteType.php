@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\Position\Form;
 
-use App\Entity\Vente;
+use App\Position\Entity\Vente;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;

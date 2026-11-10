@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;

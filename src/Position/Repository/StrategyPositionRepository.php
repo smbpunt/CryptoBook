@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Position\Repository;
 
-use App\Entity\StrategyPosition;
+use App\Position\Entity\StrategyPosition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

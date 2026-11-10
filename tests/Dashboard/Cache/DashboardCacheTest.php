@@ -3,7 +3,7 @@
 namespace App\Tests\Dashboard\Cache;
 
 use App\Dashboard\Cache\DashboardCache;
-use App\Entity\Vente;
+use App\Position\Entity\Vente;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

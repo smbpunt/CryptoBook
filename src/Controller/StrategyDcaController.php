@@ -9,7 +9,7 @@ use App\FiatCurrency\Converter\FiatConverter;
 use App\Form\DcaAutoType;
 use App\Form\DcaToPositionType;
 use App\Form\StrategyDcaType;
-use App\Repository\PositionRepository;
+use App\Position\Repository\PositionRepository;
 use App\Repository\StrategyDcaRepository;
 use App\Service\DcaService;
 use App\User\Entity\User;

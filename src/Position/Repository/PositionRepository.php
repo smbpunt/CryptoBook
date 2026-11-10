@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Position\Repository;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;

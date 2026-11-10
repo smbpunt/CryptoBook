@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\Position\Form;
 
-use App\Entity\StrategyPosition;
+use App\Position\Entity\StrategyPosition;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

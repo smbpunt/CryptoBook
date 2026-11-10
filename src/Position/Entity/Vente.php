@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Position\Entity;
 
-use App\Repository\VenteRepository;
+use App\Position\Repository\VenteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VenteRepository::class)]

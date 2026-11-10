@@ -2,7 +2,7 @@
 
 namespace App\Tests\Wallet\Calculator;
 
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Calculator\WalletValueCalculator;
 use Doctrine\ORM\EntityManagerInterface;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Position\Entity;
 
-use App\Repository\StrategyPositionRepository;
+use App\Position\Repository\StrategyPositionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StrategyPositionRepository::class)]

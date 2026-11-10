@@ -3,7 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Deposit\Entity\Deposit;
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;

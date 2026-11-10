@@ -4,8 +4,8 @@ namespace App\Dashboard\EventListener;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dashboard\Cache\DashboardCache;
-use App\Entity\Vente;
 use App\FiatCurrency\Entity\FiatCurrency;
+use App\Position\Entity\Vente;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;

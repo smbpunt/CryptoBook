@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
-use App\Entity\Position;
 use App\Entity\StrategyDca;
 use App\Form\DcaAutoType;
+use App\Position\Entity\Position;
 use App\User\Entity\User;
 
 class DcaService

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Position\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Repository\PositionRepository;
+use App\Position\Repository\PositionRepository;
 use App\Shared\Entity\DescriptionTrait;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;

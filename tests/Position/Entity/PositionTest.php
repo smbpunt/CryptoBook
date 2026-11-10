@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Unit\Entity;
+namespace App\Tests\Position\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\Position;
-use App\Entity\Vente;
+use App\Position\Entity\Position;
+use App\Position\Entity\Vente;
 use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 

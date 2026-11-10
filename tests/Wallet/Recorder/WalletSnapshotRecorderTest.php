@@ -2,7 +2,7 @@
 
 namespace App\Tests\Wallet\Recorder;
 
-use App\Entity\Position;
+use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
 use App\Wallet\Recorder\WalletSnapshotRecorder;
