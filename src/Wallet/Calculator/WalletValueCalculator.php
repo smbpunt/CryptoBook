@@ -2,7 +2,6 @@
 
 namespace App\Wallet\Calculator;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Position\Dto\CoinQuantity;
 use App\Position\Repository\PositionRepository;
 use App\User\Entity\User;
@@ -50,13 +49,10 @@ final readonly class WalletValueCalculator
                 continue;
             }
 
-            $coin = $row->coin;
-            $priceUsd = $coin->getPriceUsd() ?? 0.0;
-            $line = ['coin' => $coin, 'quantity' => $row->quantity, 'priceUsd' => $priceUsd, 'valueUsd' => $row->quantity * $priceUsd];
-            if ($coin->isIsStable()) {
-                $stable[] = $line;
+            if ($row->coin->isIsStable()) {
+                $stable[] = $row;
             } else {
-                $crypto[] = $line;
+                $crypto[] = $row;
             }
         }
 
@@ -67,22 +63,32 @@ final readonly class WalletValueCalculator
     }
 
     /**
-     * @param list<array{coin: Cryptocurrency, quantity: float, priceUsd: float, valueUsd: float}> $lines
+     * Two passes: the total of the group first, then each holding with its share of it.
+     *
+     * @param list<CoinQuantity> $rows
      *
      * @return array{list<WalletHolding>, float}
      */
-    private function holdings(array $lines): array
+    private function holdings(array $rows): array
     {
-        $totalUsd = array_sum(array_column($lines, 'valueUsd'));
-        usort($lines, static fn (array $a, array $b): int => $b['valueUsd'] <=> $a['valueUsd']);
+        $totalUsd = 0.0;
+        foreach ($rows as $row) {
+            $totalUsd += $row->quantity * ($row->coin->getPriceUsd() ?? 0.0);
+        }
 
-        $holdings = array_map(static fn (array $line): WalletHolding => new WalletHolding(
-            $line['coin'],
-            $line['quantity'],
-            $line['priceUsd'],
-            $line['valueUsd'],
-            $totalUsd > 0 ? round($line['valueUsd'] * 100 / $totalUsd, 2) : 0.0,
-        ), $lines);
+        $holdings = array_map(static function (CoinQuantity $row) use ($totalUsd): WalletHolding {
+            $priceUsd = $row->coin->getPriceUsd() ?? 0.0;
+            $valueUsd = $row->quantity * $priceUsd;
+
+            return new WalletHolding(
+                $row->coin,
+                $row->quantity,
+                $priceUsd,
+                $valueUsd,
+                $totalUsd > 0 ? round($valueUsd * 100 / $totalUsd, 2) : 0.0,
+            );
+        }, $rows);
+        usort($holdings, static fn (WalletHolding $a, WalletHolding $b): int => $b->valueUsd <=> $a->valueUsd);
 
         return [$holdings, $totalUsd];
     }
