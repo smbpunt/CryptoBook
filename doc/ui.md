@@ -25,7 +25,7 @@ Chaque PR est déployable seule. Hors périmètre : EasyAdmin, e-mail de reset.
 | Agrégation | par jour au-delà de 24h | — | horaire pour 24h et 7j (7 points par jour = courbe trop pauvre), par jour ensuite |
 | Stats | plus haut et plus bas de la période | plus haut historique + écart, variation 24 h | maquette |
 | Bascule EUR/USD | — | dans le header | non : montants dans la devise favorite, équivalent `$` en secondaire |
-| Menu mobile | — | pastilles défilantes | maquette, le burger `<details>` disparaît |
+| Menu mobile | — | onglets défilants | maquette, le burger `<details>` disparaît |
 
 ## PR 1 — Fondations
 
@@ -68,9 +68,9 @@ Chaque PR est déployable seule. Hors périmètre : EasyAdmin, e-mail de reset.
 
 ### Layout et navigation
 - `App:Logo` (pictogramme SVG + « Crypto**Book** »), utilisé dans le header et `App:AuthCard` (à la place de `btc.png`). `<title>` : `CryptoBook`.
-- Header : logo, navigation en pastilles (`overflow-x-auto` sur mobile), bouton de thème, bouton compte.
+- Header : logo, navigation en onglets (`overflow-x-auto` sur mobile), bouton de thème, bouton compte.
 - `MenuBuilder` : `main` garde les 8 entrées métier (« Tableau de bord », « Positions », « Dépôts »). Nouveau menu `account` (Préférences, Admin, Déconnexion), rendu dans un `Popover` du kit derrière le bouton compte.
-- `templates/shared/menu.html.twig` : pastille `rounded-full`, page courante en `bg-popover ring-1 ring-border`.
+- `templates/shared/menu.html.twig` : onglets de 60 px sans fond, page courante en `font-semibold` soulignée de `--brand` (2 px, sur la bordure du header).
 - Conteneur : `max-w-[85rem]`, `px-6 py-8`.
 
 ### Composants du kit
@@ -174,7 +174,7 @@ Le dashboard est le seul à croiser snapshots et dépôts : aucune règle Deptra
 - Formulaires (`form/shadcn_layout.html.twig`) : champs, Choices, DatePicker, erreurs, dans les deux thèmes.
 - Auth : `App:AuthCard` avec `App:Logo`.
 - Page d'erreur.
-- Mobile (390 px) : dashboard complet (pastilles défilantes, total en taille fluide, périodes sur deux lignes, tableau défilant). Autres pages : pas de défilement horizontal de la page, rien de plus.
+- Mobile (390 px) : dashboard complet (onglets défilants, total en taille fluide, périodes sur deux lignes, tableau défilant). Autres pages : pas de défilement horizontal de la page, rien de plus.
 
 ## À chaque PR
 

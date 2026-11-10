@@ -49,7 +49,7 @@ Déjà fait : le fond à dégradés granuleux (référence : `doc/grin.jpg`).
 - Thème clair et sombre : suit le système par défaut, avec un bouton pour changer
 - Couleurs de la maquette : orange (marque) et lavande (graphique), cartes translucides sur le fond
 - Typo Inter + Space Grotesk, chiffres tabulaires pour les montants
-- Nouveau header : logo, navigation en pastilles, menu compte
+- Nouveau header : logo, navigation en onglets, menu compte
 
 ### PR 2 — Turbo
 
