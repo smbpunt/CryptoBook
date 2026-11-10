@@ -30,6 +30,11 @@ class FiatCurrencyRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(FiatCurrency $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

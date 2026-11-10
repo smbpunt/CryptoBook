@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Deposit;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,6 +39,21 @@ class DepositRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Deposits of the user with their currency, in one query.
+     *
+     * @return list<Deposit>
+     */
+    public function findByOwnerWithCurrency(User $owner): array
+    {
+        return $this->createQueryBuilder('d')
+            ->addSelect('f')
+            ->join('d.fiatCurrency', 'f')
+            ->where('d.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->getQuery()->getResult();
     }
 
     public function getTotal(UserInterface $user): float

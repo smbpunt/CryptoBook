@@ -14,6 +14,17 @@ framework:
         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
         #app: cache.adapter.apcu
 
-        # Namespaced pools use the above "app" backend by default
-        #pools:
-            #my.dedicated.cache: null
+        pools:
+            # Dashboard data per user, invalidated by App\Dashboard\EventListener\DashboardCacheInvalidator.
+            # The lifetime is only a safety net for changes made outside Doctrine.
+            dashboard.cache:
+                adapter: cache.adapter.filesystem
+                tags: true
+                default_lifetime: 3600
+
+when@test:
+    framework:
+        cache:
+            pools:
+                dashboard.cache:
+                    adapter: cache.adapter.array
