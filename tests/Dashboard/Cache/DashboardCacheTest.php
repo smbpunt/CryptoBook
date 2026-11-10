@@ -3,11 +3,17 @@
 namespace App\Tests\Dashboard\Cache;
 
 use App\Dashboard\Cache\DashboardCache;
+use App\Deposit\Entity\Deposit;
+use App\Loan\Entity\Loan;
+use App\Position\Entity\Position;
 use App\Position\Entity\Vente;
+use App\Strategy\Farming\Entity\StrategyFarming;
+use App\Strategy\Lp\Entity\StrategyLp;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
 use App\Wallet\Enum\HistoryPeriod;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -60,14 +66,47 @@ final class DashboardCacheTest extends KernelTestCase
         self::assertFalse($this->isCached($this->data->admin->getId()));
     }
 
-    public function testOwnDataChangeInvalidatesOnlyItsOwner(): void
+    /**
+     * Adding, changing or deleting each kind of data the dashboard reads.
+     *
+     * @return iterable<string, array{\Closure(Dataset, EntityManagerInterface): mixed}>
+     */
+    public static function ownDataChanges(): iterable
+    {
+        yield 'position added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new Position($d->user)->setCoin($d->eth)->setNbCoins(1)->setEntryCost(2000))];
+        yield 'position changed' => [static fn (Dataset $d) => $d->position->setNbCoins(1)];
+        yield 'position deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->position)];
+        yield 'deposit added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new Deposit($d->user)->setAmount(500)
+            ->setExchange($d->exchange)->setType($d->depositType)->setFiatCurrency($d->eur)->setDepositedAt(new \DateTimeImmutable('2024-06-01')))];
+        yield 'deposit changed' => [static fn (Dataset $d) => $d->deposit->setAmount(2000)];
+        yield 'deposit deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->deposit)];
+        yield 'loan added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new Loan($d->user)->setCoin($d->usdc)->setNbCoins(100)->setDapp($d->aave)->setDescription(''))];
+        yield 'loan changed' => [static fn (Dataset $d) => $d->loan->setNbCoins(800)];
+        yield 'loan deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->loan)];
+        yield 'farming added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new StrategyFarming($d->user)->setCoin($d->btc)->setNbCoins(0.1)->setApr(3)->setDapp($d->aave)->setDescription(''))];
+        yield 'farming changed' => [static fn (Dataset $d) => $d->farming->setApr(8)];
+        yield 'farming deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->farming)];
+        yield 'LP added' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->persist(new StrategyLp($d->user)->setCoin1($d->eth)->setCoin2($d->usdc)->setDapp($d->aave)
+            ->setNbCoin1(1)->setNbCoin2(2000)->setPriceCoin1(2000)->setPriceCoin2(1)->setApr(4)->setDescription(''))];
+        yield 'LP changed' => [static fn (Dataset $d) => $d->lp->setApr(20)];
+        yield 'LP deleted' => [static fn (Dataset $d, EntityManagerInterface $em) => $em->remove($d->lp)];
+    }
+
+    /**
+     * @param \Closure(Dataset, EntityManagerInterface): mixed $change
+     */
+    #[DataProvider('ownDataChanges')]
+    public function testOwnDataChangeInvalidatesOnlyItsOwner(\Closure $change): void
     {
         $this->warmUp();
+        $this->cache->getHistory($this->data->user, HistoryPeriod::Month);
+        self::assertTrue($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
 
-        $this->data->deposit->setAmount(2000);
+        $change($this->data, $this->em);
         $this->em->flush();
 
         self::assertFalse($this->isCached($this->data->user->getId()));
+        self::assertFalse($this->isHistoryCached($this->data->user->getId(), HistoryPeriod::Month));
         self::assertTrue($this->isCached($this->data->admin->getId()));
     }
 
