@@ -49,9 +49,9 @@ Loan, Nft          → User, Cryptocurrency, Blockchain
 ProjectMonitoring  → User, Cryptocurrency
 Position           → User, Cryptocurrency
 Strategy           → User, Cryptocurrency, Blockchain, Position, FiatCurrency
-Wallet             → Position
-Dashboard          → Wallet, Deposit, Loan, Strategy, FiatCurrency
-Security           → User
+Wallet             → Position, User, Cryptocurrency
+Dashboard          → Wallet, Deposit, Loan, Strategy, FiatCurrency, User, Cryptocurrency, Position
+Security           → User, FiatCurrency
 Admin              → référentiels, User
 ```
 
