@@ -101,7 +101,8 @@ class ProjectMonitoring implements OwnedInterface
      */
     public function setLinks(array $links): self
     {
-        $this->links = $links;
+        // A CollectionType with allow_delete leaves gaps in the keys, which would be stored as a JSON object
+        $this->links = array_values($links);
 
         return $this;
     }
