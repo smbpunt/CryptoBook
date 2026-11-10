@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 CryptoBook, suivi de portefeuille crypto : positions, dépôts, prêts, NFT, stratégies (DCA, farming, LP) et suivi de projets. Symfony 8.1, PHP 8.4, PostgreSQL 16.
 
 - Prix et données des cryptos via l'API CoinGecko (client maison dans `src/Coingecko/`), taux de change fiat via l'API Fixer.
-- Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`.
+- Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`, et snapshot horaire de la valeur des wallets : `wallet:snapshot`. Planifiées par Symfony Scheduler (`src/Shared/Schedule/MainSchedule.php`). En prod, worker `messenger:consume scheduler_default async` lancé par systemd (`deploy/systemd/`). En dev, pas de worker permanent (quota Fixer) : `make scheduler` à la demande.
 - Back-office EasyAdmin dans `src/Controller/Admin/`.
 
 Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.lock`.
