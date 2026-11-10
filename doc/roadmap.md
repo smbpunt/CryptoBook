@@ -1,71 +1,55 @@
 # Roadmap
 
-## 1. Historique de la valeur du wallet : collecte @histo.md
+## Fait
 
-Enregistrer la valeur totale du wallet de chaque utilisateur au fil du temps. Les quantités passées ne se reconstruisent pas : chaque heure sans enregistrement est perdue.
+- **Historique du wallet** : snapshot horaire de la valeur totale par utilisateur, en USD (`wallet:snapshot`). Calcul centralisé dans `WalletValueCalculator`. Tout est planifié par Symfony Scheduler (`MainSchedule`), avec en prod un worker lancé par systemd.
+- **Cache du dashboard** : cache filesystem taggé par utilisateur, invalidé par un listener Doctrine.
+- **Refacto par feature** : code rangé par sujet métier, classes `*Service` découpées, `OwnerVoter`, DTO, Deptrac, PHPStan sans baseline.
+- **UI, PR 1 à 3** (plan : @ui.md) :
+  - thèmes clair et sombre, tokens, typo Inter + Space Grotesk, header en onglets ;
+  - Turbo avec un seul entrypoint : les scripts de page sont des contrôleurs Stimulus (`collection`, `dependent-select`, `row-toggle`, `dca`…) ;
+  - dashboard de la maquette, avec le graphique du wallet en `symfony/ux-chartjs` (Chart.js 4).
+- Calendrier : les `DateType` utilisent le DatePicker du kit shadcn, flatpickr n'est plus chargé.
 
-- Valeur totale = positions crypto + stables (comme le total actuel du dashboard)
-- Un snapshot par heure et par utilisateur, avec la valeur totale seule, en USD (convertie dans la devise favorite à l'affichage)
-- Pas de reconstitution du passé : l'historique commence au premier snapshot
-- On garde tous les snapshots, l'agrégation se fait à la lecture
-- Centraliser le calcul de la valeur dans une seule classe, utilisée par le dashboard et par les snapshots
-- Symfony Scheduler pour tout planifier : mise à jour des prix, puis snapshot, données CoinGecko, taux fiat. Il remplace les crons actuels
-- En prod (VPS) : worker du Scheduler lancé par un service systemd
+## 1. Ménage du front
 
-## 2. Cache du dashboard
+Des restes sans aucun usage, à supprimer sans risque.
 
-Le dashboard recalcule tout à chaque chargement, alors que les données ne changent qu'à la mise à jour des prix ou quand l'utilisateur modifie quelque chose.
+- `assets/vendor/flatpickr`, `bootstrap`, `@popperjs` : ignorés par git et absents d'`importmap.php`, un `rm -rf` suffit.
+- `assets/vendor/installed.php` : entrée `chart.js/auto` 3.9.1, reste de l'ancien graphique.
+- `assets/controllers/hello_controller.js` : utilisé nulle part.
 
-- Mesurer d'abord dans le profiler : corriger les requêtes en trop avant de mettre du cache
-- Mettre en cache toutes les données du dashboard, par utilisateur
-- Cache sur le filesystem, sans infra en plus
-- Vider le cache à la mise à jour des prix ou des taux, et quand l'utilisateur modifie ses données
+## 2. Choices.js → Symfony UX Autocomplete
 
-## 3. Refacto SOLID + organisation par feature
+C'est le plus gros gain : Choices.js 9.1.0 date de 2019, et il demande un contournement dans le thème de formulaire et du CSS à part. À faire avant la PR 4 de l'UI, pour ne pas restyler un widget qui va disparaître.
 
-Ranger le code par sujet métier (voir `CLAUDE.md`) et le nettoyer au passage.
+- Aujourd'hui : classe `js-select2` (19 occurrences), `choices_controller.js`, environ 14 règles CSS dans `app.css`, contournement dans `form/shadcn_layout.html.twig` (`choice_widget_collapsed`).
+- `symfony/ux-autocomplete` (Tom Select, compatible AssetMapper) : `'autocomplete' => true` sur les `EntityType`.
+- Liste des cryptos, qui est longue : autocomplete AJAX avec `#[AsEntityAutocompleteField]`, filtré sur les données de l'utilisateur si besoin.
+- Blockchain → dapp (loan, farming, LP) : remplacer `dependent_select_controller.js` par une option `filter` sur la blockchain si elle suffit, sinon garder le contrôleur.
+- CSS de Tom Select repris avec les tokens, comme aujourd'hui pour Choices.
+- Corrige le bug de `doc/bug.md` : un select requis vide bloque l'envoi sans afficher de message (le vrai `<select>` est masqué par Choices).
 
-- Une feature à la fois, une PR par feature
-- Dans chaque PR : d'abord déplacer les fichiers sans rien changer, ensuite refactorer
-- Commencer par une feature simple (`Deposit`, `Loan`), finir par `Strategy`
-- Vérifier que les tests couvrent la feature avant d'y toucher
-- Une feature par référentiel (`Cryptocurrency/`, `FiatCurrency/`, `Blockchain/`…)
-- Back-office EasyAdmin regroupé dans une feature `Admin/`
-- Objectifs :
-  - contrôleurs fins
-  - fin des classes `*Service`, découpées en classes à responsabilité unique
-  - voters pour vérifier le propriétaire
-  - DTO à la place des tableaux associatifs
-- Les montants restent en float
+## 3. UI, PR 4 : reste des pages
 
-## 4. Refonte de l'UI + graphique du wallet @ui.md
+Plan détaillé : @ui.md.
 
-Donner une identité à l'application, avec l'évolution de la valeur du wallet en pièce centrale du dashboard. Maquette : https://claude.ai/artifact/2g7JtSLYbx78MeF4pJtwHT
+- `App:PageHeader` : titre en `font-display`, à la taille du dashboard.
+- Listes (dépôts, emprunts, NFT, positions, projets, farming, DCA) : tableau dans une carte, en-tête comme le dashboard, montants au format français (filtres `amount`, `percent`…, il reste environ 40 `number_format`), `App:Delta` pour les variations.
+- Formulaires : champs, autocomplete, DatePicker et erreurs, dans les deux thèmes. « Valider & continuer » en `variant="secondary"`.
+- Auth : titres homogènes, page « Email envoyé » en français.
+- `<title>` homogènes, page d'erreur.
+- Mobile : aucune page ne défile horizontalement aujourd'hui. Dashboard à revérifier à 390 px.
 
-Déjà fait : le fond à dégradés granuleux (référence : `doc/grin.jpg`).
+## À reprendre
 
-### PR 1 — Fondations
+Repéré pendant la refacto, non corrigé.
 
-- Thème clair et sombre : suit le système par défaut, avec un bouton pour changer
-- Couleurs de la maquette : orange (marque) et lavande (graphique), cartes translucides sur le fond
-- Typo Inter + Space Grotesk, chiffres tabulaires pour les montants
-- Nouveau header : logo, navigation en onglets, menu compte
-
-### PR 2 — Turbo
-
-- Symfony UX Turbo : navigation sans rechargement complet
-- Un seul entrypoint JS, les scripts de page deviennent des contrôleurs Stimulus
-
-### PR 3 — Dashboard + graphique
-
-- Dashboard de la maquette, avec ses données réelles
-- Courbe de la valeur totale et ligne du total déposé, avec `symfony/ux-chartjs` à la place du Chart.js 3 actuel
-- Périodes : 24h, 7j, 30j, 90j, 1an, Tout (horaire jusqu'à 7j, par jour au-delà)
-- Changement de période sans rechargement (Turbo Frame)
-- Variation sur 24 h, plus haut historique
-- Répartition en donut SVG, sans JS
-
-### PR 4 — Reste des pages
-
-- Listes, formulaires, pages d'auth, page d'erreur
-- Mobile : dashboard lisible sur téléphone, le reste suit les recommandations shadcn/Tailwind sans effort particulier
+- `Cryptocurrency::symbol` fait 8 caractères : un symbole CoinGecko plus long fait échouer le flush de `crypto:updateDatas` pour tous les coins. Demande une migration.
+- `crypto:updateDatas` fait un appel CoinGecko par coin, sans pause : au-delà de la limite de l'API, les coins suivants sont ignorés. Un appel groupé `coins/markets` réglerait le problème.
+- Coin créé dans l'admin sans nom pendant une panne CoinGecko : `libelle` reste nul, erreur SQL.
+- Dépôts convertis en USD au taux du jour : le total « Investi » bouge avec le change. Il faudrait stocker le taux à la date du dépôt.
+- Routes `/{id}/infos` (positions, emprunts, NFT…) en POST alors qu'elles ne font que lire.
+- DCA Auto : jusqu'à 1000 positions dans un seul formulaire.
+- Cache du dashboard : un calcul commencé avant un flush peut être enregistré après son invalidation. Données périmées jusqu'à la prochaine mise à jour des prix ou la fin du TTL.
+- Hors périmètre pour l'instant : renommer entités et colonnes en anglais (`Vente`, `libelle`), montants en float.

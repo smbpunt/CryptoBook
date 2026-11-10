@@ -1,6 +1,6 @@
 # Plan — Refonte de l'UI + graphique du wallet
 
-Couvre les phases 4 et 5 de `roadmap.md`. Maquette : https://claude.ai/artifact/2g7JtSLYbx78MeF4pJtwHT (dashboard, clair et sombre).
+Couvre la refonte de l'UI de `roadmap.md`. Maquette : https://claude.ai/artifact/2g7JtSLYbx78MeF4pJtwHT (dashboard, clair et sombre).
 
 ## Découpage : 4 PR
 
