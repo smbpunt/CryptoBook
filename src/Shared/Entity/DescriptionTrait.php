@@ -2,11 +2,12 @@
 
 namespace App\Shared\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait DescriptionTrait
 {
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description;
 
     public function getDescription(): ?string

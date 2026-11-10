@@ -16,6 +16,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<Loan>
+ */
 class LoanType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

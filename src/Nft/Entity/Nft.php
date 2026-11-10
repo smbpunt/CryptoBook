@@ -9,6 +9,7 @@ use App\Shared\Entity\DescriptionTrait;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,54 +21,54 @@ class Nft implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotNull]
-    private $collection;
+    private ?string $collection = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $num;
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $num = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $rank;
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $rank = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $supply;
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $supply = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $priceCrypto;
+    private ?float $priceCrypto = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $priceUsd;
+    private ?float $priceUsd = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $priceSoldCrypto;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $priceSoldCrypto = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $priceSoldUsd;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $priceSoldUsd = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $percentSaleFees;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $percentSaleFees = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $purchasedOn;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $purchasedOn = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $soldOn;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $soldOn = null;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $blockchain;
+    private ?Blockchain $blockchain = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $cryptocurrency;
+    private ?Cryptocurrency $cryptocurrency = null;
 
     public function __construct(User $owner)
     {

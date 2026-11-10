@@ -4,6 +4,7 @@ namespace App\Strategy\Dca\Entity;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Strategy\Dca\Repository\CoinPercentDcaRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -12,22 +13,22 @@ class CoinPercentDca
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $coin;
+    private ?Cryptocurrency $coin = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
     #[Assert\Range(min: 0, max: 100)]
-    private $percent;
+    private ?float $percent = null;
 
     #[ORM\ManyToOne(targetEntity: StrategyDca::class, inversedBy: 'parts')]
     #[ORM\JoinColumn(nullable: false)]
-    private $strategyDca;
+    private ?StrategyDca $strategyDca = null;
 
     public function getId(): ?int
     {

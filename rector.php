@@ -18,7 +18,7 @@ return RectorConfig::configure()
         ClassPropertyAssignToConstructorPromotionRector::class => [__DIR__.'/src/*/Entity/*', __DIR__.'/src/*/*/Entity/*'],
     ])
     ->withPhpSets()
-    ->withPreparedSets(symfonyCodeQuality: true)
+    ->withPreparedSets(doctrineCodeQuality: true, symfonyCodeQuality: true)
     ->withComposerBased(twig: true, doctrine: true, phpunit: true, symfony: true)
     ->withAttributesSets(all: true)
     ->withTypeCoverageLevel(0)

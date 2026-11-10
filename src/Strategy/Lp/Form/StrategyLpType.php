@@ -16,6 +16,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<StrategyLp>
+ */
 class StrategyLpType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

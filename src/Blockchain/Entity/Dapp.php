@@ -3,6 +3,7 @@
 namespace App\Blockchain\Entity;
 
 use App\Blockchain\Repository\DappRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DappRepository::class)]
@@ -10,18 +11,18 @@ class Dapp implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $libelle = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $url;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
     #[ORM\JoinColumn(nullable: false)]
-    private $blockchain;
+    private ?Blockchain $blockchain = null;
 
     public function getId(): ?int
     {

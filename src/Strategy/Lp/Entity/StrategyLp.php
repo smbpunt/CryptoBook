@@ -10,6 +10,7 @@ use App\Strategy\Lp\Repository\StrategyLpRepository;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,51 +22,51 @@ class StrategyLp implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $coin1;
+    private ?Cryptocurrency $coin1 = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $coin2;
+    private ?Cryptocurrency $coin2 = null;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $dapp;
+    private ?Dapp $dapp = null;
 
-    private $blockchain;
+    private ?Blockchain $blockchain = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $startAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $startAt = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $priceCoin1;
+    private ?float $priceCoin1 = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $priceCoin2;
+    private ?float $priceCoin2 = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $nbCoin1;
+    private ?float $nbCoin1 = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $nbCoin2;
+    private ?float $nbCoin2 = null;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $lpDeposit;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $lpDeposit = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $apr;
+    private ?float $apr = null;
 
     public function __construct(User $owner)
     {

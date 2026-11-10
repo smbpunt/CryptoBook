@@ -6,6 +6,7 @@ use App\Blockchain\Repository\BlockchainRepository;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BlockchainRepository::class)]
@@ -13,18 +14,19 @@ class Blockchain implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $libelle = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $coin;
+    private ?Cryptocurrency $coin = null;
 
+    /** @var Collection<int, Dapp> */
     #[ORM\OneToMany(mappedBy: 'blockchain', targetEntity: Dapp::class, orphanRemoval: true)]
-    private $dapps;
+    private Collection $dapps;
 
     public function __construct()
     {

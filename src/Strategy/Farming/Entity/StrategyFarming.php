@@ -10,6 +10,7 @@ use App\Strategy\Farming\Repository\StrategyFarmingRepository;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,29 +22,29 @@ class StrategyFarming implements OwnedInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private $coin;
+    private ?Cryptocurrency $coin = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $nbCoins;
+    private ?float $nbCoins = null;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
-    private $dapp;
+    private ?Dapp $dapp = null;
 
-    private $blockchain;
+    private ?Blockchain $blockchain = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    private $apr;
+    private ?float $apr = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $enteredAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $enteredAt = null;
 
     public function __construct(User $owner)
     {

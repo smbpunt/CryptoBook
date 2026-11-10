@@ -3,6 +3,7 @@
 namespace App\Cryptocurrency\Entity;
 
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -12,38 +13,38 @@ class Cryptocurrency implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $libelleCoingecko;
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    private ?string $libelleCoingecko = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $libelle = null;
 
-    #[ORM\Column(type: 'float')]
-    private $priceUsd;
+    #[ORM\Column(type: Types::FLOAT)]
+    private ?float $priceUsd = null;
 
-    #[ORM\Column(type: 'float')]
-    private $mcapUsd;
+    #[ORM\Column(type: Types::FLOAT)]
+    private ?float $mcapUsd = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $urlImgThumb;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $urlImgThumb = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $urlImgSmall;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $urlImgSmall = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $urlImgLarge;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $urlImgLarge = null;
 
-    #[ORM\Column(type: 'string', length: 8)]
-    private $symbol;
+    #[ORM\Column(type: Types::STRING, length: 8)]
+    private ?string $symbol = null;
 
-    #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    private $color;
+    #[ORM\Column(type: Types::STRING, length: 10, nullable: true)]
+    private ?string $color = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isStable;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $isStable = null;
 
     public function __construct()
     {

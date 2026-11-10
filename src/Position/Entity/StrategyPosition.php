@@ -3,6 +3,7 @@
 namespace App\Position\Entity;
 
 use App\Position\Repository\StrategyPositionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,22 +12,22 @@ class StrategyPosition
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
     #[Assert\Range(min: 0, max: 100)]
-    private $percent;
+    private ?float $percent = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
     #[Assert\PositiveOrZero]
-    private $priceSold;
+    private ?float $priceSold = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'strategies')]
     #[ORM\JoinColumn(nullable: false)]
-    private $position;
+    private ?Position $position = null;
 
     public function getId(): ?int
     {

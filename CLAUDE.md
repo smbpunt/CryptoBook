@@ -80,7 +80,7 @@ vendor/bin/deptrac analyse
 bin/phpunit
 ```
 
-- PHPStan (niveau 6) utilise une baseline (`phpstan-baseline.neon`) : ne pas y ajouter d'erreurs, les corriger. La régénérer uniquement quand des erreurs disparaissent.
+- PHPStan (niveau 6) sans baseline : corriger les erreurs, ne pas en recréer une. Les entités sont typées depuis leur mapping (`doctrineCodeQuality` de Rector), les collections en `/** @var Collection<int, X> */` et les FormType en `@extends AbstractType<X>`.
 - Rector doit rester propre. La promotion de propriétés est désactivée sur les dossiers `Entity` des features (elle peut élargir les types dont Doctrine se sert pour deviner les relations).
 
 ## Conventions Symfony
