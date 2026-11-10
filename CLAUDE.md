@@ -57,12 +57,7 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 
 ## Commandes qualité
 
-Dans le conteneur `php`.
-
-Correction automatique (dans cet ordre) :
-
-1. `vendor/bin/rector process` — refactoring automatique
-2. `vendor/bin/php-cs-fixer fix` — formatage
+Dans le conteneur `php`. Correction : `vendor/bin/rector process` puis `vendor/bin/php-cs-fixer fix`.
 
 Vérification complète :
 
@@ -80,8 +75,7 @@ vendor/bin/deptrac analyse
 bin/phpunit
 ```
 
-- PHPStan (niveau 6) sans baseline : corriger les erreurs, ne pas en recréer une. Les entités sont typées depuis leur mapping (`doctrineCodeQuality` de Rector), les collections en `/** @var Collection<int, X> */` et les FormType en `@extends AbstractType<X>`.
-- Rector doit rester propre. La promotion de propriétés est désactivée sur les dossiers `Entity` des features (elle peut élargir les types dont Doctrine se sert pour deviner les relations).
+Tout est propre, sans baseline PHPStan : corriger les erreurs, ne jamais les ignorer.
 
 ## Conventions Symfony
 
