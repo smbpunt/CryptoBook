@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Functional;
 
 use App\FiatCurrency\Entity\FiatCurrency;
 use Doctrine\ORM\EntityManagerInterface;
