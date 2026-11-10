@@ -11,6 +11,7 @@ use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StrategyLpRepository::class)]
 class StrategyLp implements OwnedInterface
@@ -25,14 +26,17 @@ class StrategyLp implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin1;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin2;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $dapp;
 
     private $blockchain;
@@ -41,21 +45,26 @@ class StrategyLp implements OwnedInterface
     private $startAt;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $priceCoin1;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $priceCoin2;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $nbCoin1;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $nbCoin2;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private $lpDeposit;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $apr;
 
     public function __construct(User $owner)
@@ -137,7 +146,7 @@ class StrategyLp implements OwnedInterface
         return $this->priceCoin1;
     }
 
-    public function setPriceCoin1(float $priceCoin1): self
+    public function setPriceCoin1(?float $priceCoin1): self
     {
         $this->priceCoin1 = $priceCoin1;
 
@@ -149,7 +158,7 @@ class StrategyLp implements OwnedInterface
         return $this->priceCoin2;
     }
 
-    public function setPriceCoin2(float $priceCoin2): self
+    public function setPriceCoin2(?float $priceCoin2): self
     {
         $this->priceCoin2 = $priceCoin2;
 
@@ -161,7 +170,7 @@ class StrategyLp implements OwnedInterface
         return $this->nbCoin1;
     }
 
-    public function setNbCoin1(float $nbCoin1): self
+    public function setNbCoin1(?float $nbCoin1): self
     {
         $this->nbCoin1 = $nbCoin1;
 
@@ -173,7 +182,7 @@ class StrategyLp implements OwnedInterface
         return $this->nbCoin2;
     }
 
-    public function setNbCoin2(float $nbCoin2): self
+    public function setNbCoin2(?float $nbCoin2): self
     {
         $this->nbCoin2 = $nbCoin2;
 
@@ -197,7 +206,7 @@ class StrategyLp implements OwnedInterface
         return $this->apr;
     }
 
-    public function setApr(float $apr): self
+    public function setApr(?float $apr): self
     {
         $this->apr = $apr;
 

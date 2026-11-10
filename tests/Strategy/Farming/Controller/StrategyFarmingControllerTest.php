@@ -53,23 +53,50 @@ final class StrategyFarmingControllerTest extends WebTestCase
 
     public function testCreateFarming(): void
     {
+        $this->postFarming('3');
+
+        self::assertResponseRedirects('/strategy/farming/');
+        self::assertSame(1, $this->em()->getRepository(StrategyFarming::class)->count(['owner' => $this->data->user, 'nbCoins' => 3]));
+    }
+
+    public function testFarmingWithoutQuantityIsAFormError(): void
+    {
+        $this->postFarming('');
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testCreateLp(): void
+    {
+        $this->postLp('12');
+
+        self::assertResponseRedirects('/strategy/farming/');
+        self::assertSame(1, $this->em()->getRepository(StrategyLp::class)->count(['owner' => $this->data->user, 'nbCoin1' => 2]));
+    }
+
+    public function testLpWithoutAprIsAFormError(): void
+    {
+        $this->postLp('');
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    private function postFarming(string $nbCoins): void
+    {
         $crawler = $this->client->request('GET', '/strategy/farming/new');
         $values = $crawler->selectButton('Créer')->form()->getPhpValues();
         $values['strategy_farming'] = [
             'coin' => (string) $this->data->eth->getId(),
-            'nbCoins' => '3',
+            'nbCoins' => $nbCoins,
             'apr' => '4',
             'blockchain' => (string) $this->data->ethereum->getId(),
             'dapp' => (string) $this->data->aave->getId(),
         ] + $values['strategy_farming'];
 
         $this->client->request('POST', '/strategy/farming/new', $values);
-
-        self::assertResponseRedirects('/strategy/farming/');
-        self::assertSame(1, $this->em()->getRepository(StrategyFarming::class)->count(['owner' => $this->data->user, 'nbCoins' => 3]));
     }
 
-    public function testCreateLp(): void
+    private function postLp(string $apr): void
     {
         $crawler = $this->client->request('GET', '/strategy/lp/new');
         $values = $crawler->filter('form[name="strategy_lp"]')->form()->getPhpValues();
@@ -80,15 +107,12 @@ final class StrategyFarmingControllerTest extends WebTestCase
             'priceCoin2' => '1',
             'nbCoin1' => '2',
             'nbCoin2' => '4000',
-            'apr' => '12',
+            'apr' => $apr,
             'blockchain' => (string) $this->data->ethereum->getId(),
             'dapp' => (string) $this->data->aave->getId(),
         ] + $values['strategy_lp'];
 
         $this->client->request('POST', '/strategy/lp/new', $values);
-
-        self::assertResponseRedirects('/strategy/farming/');
-        self::assertSame(1, $this->em()->getRepository(StrategyLp::class)->count(['owner' => $this->data->user, 'nbCoin1' => 2]));
     }
 
     /**

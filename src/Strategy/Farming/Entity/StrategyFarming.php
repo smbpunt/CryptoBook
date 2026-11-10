@@ -11,6 +11,7 @@ use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StrategyFarmingRepository::class)]
 class StrategyFarming implements OwnedInterface
@@ -25,9 +26,11 @@ class StrategyFarming implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
@@ -36,6 +39,7 @@ class StrategyFarming implements OwnedInterface
     private $blockchain;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $apr;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -68,7 +72,7 @@ class StrategyFarming implements OwnedInterface
         return $this->nbCoins;
     }
 
-    public function setNbCoins(float $nbCoins): self
+    public function setNbCoins(?float $nbCoins): self
     {
         $this->nbCoins = $nbCoins;
 
@@ -92,7 +96,7 @@ class StrategyFarming implements OwnedInterface
         return $this->apr;
     }
 
-    public function setApr(float $apr): self
+    public function setApr(?float $apr): self
     {
         $this->apr = $apr;
 
