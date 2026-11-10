@@ -2,7 +2,7 @@
 #
 # Setup:
 #   sudo cp deploy/systemd/cryptobook-worker.service /etc/systemd/system/
-#   (adjust User, WorkingDirectory and the PHP path to the server)
+#   (adjust User, WorkingDirectory and the PHP path to the server, PHP 8.5 required)
 #   bin/console doctrine:migrations:migrate -n --env=prod
 #   sudo systemctl daemon-reload && sudo systemctl enable --now cryptobook-worker
 #   remove the crypto:* and fiat:* lines from the crontab

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projet
 
-CryptoBook, suivi de portefeuille crypto : positions, dépôts, prêts, NFT, stratégies (DCA, farming, LP) et suivi de projets. Symfony 8.1, PHP 8.4, PostgreSQL 16.
+CryptoBook, suivi de portefeuille crypto : positions, dépôts, prêts, NFT, stratégies (DCA, farming, LP) et suivi de projets. Symfony 8.1, PHP 8.5, PostgreSQL 16.
 
 - Prix et données des cryptos via l'API CoinGecko (client maison dans `src/Coingecko/`), taux de change fiat via l'API Fixer.
 - Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`, et snapshot horaire de la valeur des wallets : `wallet:snapshot`. Planifiées par Symfony Scheduler (`src/Shared/Schedule/MainSchedule.php`). En prod, worker `messenger:consume scheduler_default async` lancé par systemd (`deploy/systemd/`). En dev, pas de worker permanent (quota Fixer) : `make scheduler` à la demande.
@@ -46,11 +46,11 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 
 ## Environnement
 
-- Tout tourne dans Docker : `docker compose up -d`, puis `docker compose exec php composer install` / `bin/console …`. Application sur http://localhost:8888. Version de PHP en argument de build : `PHP_VERSION=8.4 docker compose build php`.
+- Tout tourne dans Docker : `docker compose up -d`, puis `docker compose exec php composer install` / `bin/console …`. Application sur http://localhost:8888. Version de PHP en argument de build : `PHP_VERSION=8.5 docker compose build php`.
 - Raccourcis via le `Makefile` (`make help` pour la liste) : `make up`, `make url`, `make migrate`, `make test`…
 - CSS : `make tailwind` (ou `make tailwind c=--watch`) compile `assets/styles/app.css` vers `var/tailwind/`, requis avant d'afficher l'application.
 - Le service `php` remplace `DATABASE_URL` par le service `database` (Postgres 16) ; la base `app_test` est créée au premier démarrage. `.env` pointe toujours sur `127.0.0.1` pour un usage depuis l'hôte.
-- PHP de l'hôte en 8.5, projet en 8.4 : ne pas lancer `composer update` sur l'hôte, il résout les dépendances pour la mauvaise version.
+- Résolution des dépendances fixée sur PHP 8.5 (`config.platform.php` de `composer.json`) : à changer avec la version de l'image.
 - Front en AssetMapper + importmap (pas de Node) : paquets JS via `bin/console importmap:require`. Un seul entrypoint, `app` : avec Turbo, l'importmap ne change pas d'une page à l'autre et un module ne s'exécute qu'une fois. Le JS de page est un contrôleur Stimulus (`assets/controllers/`, `/* stimulusFetch: 'lazy' */`), qui nettoie dans `disconnect()` ou sur `turbo:before-cache` ce qu'il ajoute au DOM.
 - Turbo Drive : redirection après un POST en 303, formulaire invalide en 422 (`render()` reçoit le formulaire). Liens hors Turbo en `data-turbo="false"` : Admin (layout EasyAdmin), Déconnexion (sinon préchargée au survol).
 - En cas d'erreur : lire `var/log/dev.log` et le profiler (`/_profiler`) avant de modifier le code.
