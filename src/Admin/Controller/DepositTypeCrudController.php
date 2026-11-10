@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Admin\Controller;
 
 use App\Deposit\Entity\DepositType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;

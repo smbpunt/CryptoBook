@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Menu;
+namespace App\Shared\Builder;
 
 use Knp\Menu\Attribute\AsMenuBuilder;
 use Knp\Menu\FactoryInterface;

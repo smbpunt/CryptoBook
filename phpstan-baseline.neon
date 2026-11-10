@@ -649,10 +649,10 @@ parameters:
 			path: src/Loan/Repository/LoanRepository.php
 
 		-
-			message: '#^Method App\\Menu\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			message: '#^Method App\\Shared\\Builder\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Menu/MenuBuilder.php
+			path: src/Shared/Builder/MenuBuilder.php
 
 		-
 			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$blockchain has no type specified\.$#'

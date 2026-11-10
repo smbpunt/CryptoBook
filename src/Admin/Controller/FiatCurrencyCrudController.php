@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Admin\Controller;
 
 use App\FiatCurrency\Entity\FiatCurrency;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;

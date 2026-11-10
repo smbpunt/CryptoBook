@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Admin\Controller;
 
-use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 /**
- * @extends AbstractCrudController<Blockchain>
+ * @extends AbstractCrudController<Dapp>
  */
-class BlockchainCrudController extends AbstractCrudController
+class DappCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Blockchain::class;
+        return Dapp::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle');
-        yield AssociationField::new('coin', 'Coin')
-            ->autocomplete();
+        yield TextField::new('url');
+        yield AssociationField::new('blockchain', 'Blockchain');
     }
 }

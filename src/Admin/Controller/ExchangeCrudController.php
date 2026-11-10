@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Admin\Controller;
 
 use App\Exchange\Entity\Exchange;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
