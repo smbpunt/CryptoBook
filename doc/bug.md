@@ -9,6 +9,14 @@ Sur `/strategy/dca/`, dialogue « DCA Auto » : valider sans choisir de crypto b
 - Déjà présent avant Turbo (Choices était chargé par `select2.js`).
 - Touche tout select `js-select2` requis validé côté navigateur.
 
+## DatePicker coupé par la carte
+
+Sur les formulaires dans une carte (ex. `/strategy/farming/new`), le calendrier du DatePicker passe sous le bas de la carte : les dernières semaines sont invisibles.
+
+- `Card` a `overflow-hidden` (`templates/components/Card.html.twig`), le contenu du popover est en `absolute`.
+- `overflow-hidden` ne sert qu'aux images en premier ou dernier enfant, déjà arrondies par `*:[img:first-child]:rounded-t-[22px]`.
+- Touchera aussi la liste déroulante de Tom Select (roadmap, point 1).
+
 ## Repéré pendant la refacto, non corrigé
 
 - Routes `/{id}/infos` (positions, emprunts, NFT, farming, LP) en POST alors qu'elles ne font que lire. Touche `remote_dialog_controller.js` et `App:InfoButton`.
