@@ -2,10 +2,11 @@
 
 namespace App\Nft\Repository;
 
+use App\Entity\User;
 use App\Nft\Entity\Nft;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Nft>
@@ -40,14 +41,36 @@ class NftRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBySold(UserInterface $user, bool $isSold = false)
+    /**
+     * NFTs still held by the user, oldest purchase first.
+     *
+     * @return list<Nft>
+     */
+    public function findHeld(User $owner): array
+    {
+        return $this->createOwnedQueryBuilder($owner)
+            ->andWhere('n.soldOn IS NULL')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * NFTs sold by the user, oldest purchase first.
+     *
+     * @return list<Nft>
+     */
+    public function findSold(User $owner): array
+    {
+        return $this->createOwnedQueryBuilder($owner)
+            ->andWhere('n.soldOn IS NOT NULL')
+            ->getQuery()->getResult();
+    }
+
+    private function createOwnedQueryBuilder(User $owner): QueryBuilder
     {
         return $this->createQueryBuilder('n')
-            ->where('n.owner = :user')
-            ->andWhere('n.soldOn IS '.($isSold ? 'NOT' : '').' NULL')
-            ->setParameter('user', $user)
-            ->orderBy('n.purchasedOn', \SortDirection::Ascending)
-            ->getQuery()->getResult();
+            ->where('n.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('n.purchasedOn', \SortDirection::Ascending);
     }
 
     //    /**

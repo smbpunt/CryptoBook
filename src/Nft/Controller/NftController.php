@@ -3,6 +3,7 @@
 namespace App\Nft\Controller;
 
 use App\Entity\User;
+use App\Nft\Calculator\NftProfitCalculator;
 use App\Nft\Entity\Nft;
 use App\Nft\Form\NftType;
 use App\Nft\Repository\NftRepository;
@@ -20,19 +21,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class NftController extends AbstractController
 {
     #[Route('/', name: 'app_nft_index', methods: ['GET'])]
-    public function index(NftRepository $nftRepository, #[CurrentUser] User $user): Response
+    public function index(NftRepository $nftRepository, NftProfitCalculator $profitCalculator, #[CurrentUser] User $user): Response
     {
-        $nfts = $nftRepository->findBySold($user, false);
-        $nfts_sold = $nftRepository->findBySold($user, true);
-        $total_benef = 0;
-        foreach ($nfts_sold as $nft) {
-            $total_benef += $nft->getBenefice();
-        }
+        $sold = $nftRepository->findSold($user);
 
         return $this->render('nft/index.html.twig', [
-            'nfts' => $nfts,
-            'nfts_sold' => $nfts_sold,
-            'total_benef' => $total_benef,
+            'nfts' => $nftRepository->findHeld($user),
+            'nfts_sold' => $sold,
+            'total_benef' => $profitCalculator->totalUsd($sold),
         ]);
     }
 

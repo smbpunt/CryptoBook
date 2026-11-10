@@ -7,6 +7,108 @@ parameters:
 			path: src/Controller/PositionController.php
 
 		-
+			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$amount has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/Deposit.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$depositedAt has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/Deposit.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$exchange has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/Deposit.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/Deposit.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$type has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/Deposit.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$deposits has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/DepositType.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/DepositType.php
+
+		-
+			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$libelle has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Deposit/Entity/DepositType.php
+
+		-
+			message: '#^Class App\\Deposit\\Form\\DepositType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Deposit/Form/DepositType.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositTypeRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositTypeRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositTypeRepository.php
+
+		-
+			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Deposit/Repository/DepositTypeRepository.php
+
+		-
 			message: '#^Property App\\Entity\\Blockchain\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -199,54 +301,6 @@ parameters:
 			path: src/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$amount has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$depositedAt has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$exchange has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\Deposit\:\:\$type has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/Deposit.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$deposits has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/DepositType.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/DepositType.php
-
-		-
-			message: '#^Property App\\Deposit\\Entity\\DepositType\:\:\$libelle has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Deposit/Entity/DepositType.php
-
-		-
 			message: '#^Property App\\Entity\\Exchange\:\:\$deposits has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -331,126 +385,6 @@ parameters:
 			path: src/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$coin has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$dapp has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$loanedAt has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$nbCoins has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Loan/Entity/Loan.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$blockchain has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$collection has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$cryptocurrency has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$num has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$percentSaleFees has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceCrypto has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceSoldCrypto has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceSoldUsd has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceUsd has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$purchasedOn has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$rank has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$soldOn has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
-			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$supply has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/Nft/Entity/Nft.php
-
-		-
 			message: '#^Method App\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
 			identifier: missingType.generics
 			count: 1
@@ -515,54 +449,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: src/Entity/Position.php
-
-		-
-			message: '#^Method App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:getLinks\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Method App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:setLinks\(\) has parameter \$links with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$coin has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$libelle has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$links has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$note has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$type has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
 
 		-
 			message: '#^Property App\\Entity\\StrategyDca\:\:\$farmingToDcaUsd has no type specified\.$#'
@@ -727,24 +613,6 @@ parameters:
 			path: src/Entity/StrategyPosition.php
 
 		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$id has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/TypeProject.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$libelle has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/TypeProject.php
-
-		-
-			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$projectMonitorings has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: src/ProjectMonitoring/Entity/TypeProject.php
-
-		-
 			message: '#^Method App\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -841,34 +709,10 @@ parameters:
 			path: src/Form/DcaToPositionType.php
 
 		-
-			message: '#^Class App\\Deposit\\Form\\DepositType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Deposit/Form/DepositType.php
-
-		-
-			message: '#^Class App\\Loan\\Form\\LoanType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Loan/Form/LoanType.php
-
-		-
-			message: '#^Class App\\Nft\\Form\\NftType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Nft/Form/NftType.php
-
-		-
 			message: '#^Class App\\Form\\PositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Form/PositionType.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Form\\ProjectMonitoringType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/ProjectMonitoring/Form/ProjectMonitoringType.php
 
 		-
 			message: '#^Class App\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
@@ -919,10 +763,310 @@ parameters:
 			path: src/Form/VenteType.php
 
 		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$coin has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$dapp has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$loanedAt has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$nbCoins has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loan/Entity/Loan.php
+
+		-
+			message: '#^Class App\\Loan\\Form\\LoanType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Loan/Form/LoanType.php
+
+		-
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Loan/Repository/LoanRepository.php
+
+		-
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Loan/Repository/LoanRepository.php
+
+		-
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Loan/Repository/LoanRepository.php
+
+		-
+			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Loan/Repository/LoanRepository.php
+
+		-
 			message: '#^Method App\\Menu\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Menu/MenuBuilder.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$blockchain has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$collection has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$cryptocurrency has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$num has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$percentSaleFees has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceCrypto has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceSoldCrypto has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceSoldUsd has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$priceUsd has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$purchasedOn has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$rank has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$soldOn has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Property App\\Nft\\Entity\\Nft\:\:\$supply has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Nft/Entity/Nft.php
+
+		-
+			message: '#^Class App\\Nft\\Form\\NftType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Nft/Form/NftType.php
+
+		-
+			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Nft/Repository/NftRepository.php
+
+		-
+			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Nft/Repository/NftRepository.php
+
+		-
+			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Nft/Repository/NftRepository.php
+
+		-
+			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Nft/Repository/NftRepository.php
+
+		-
+			message: '#^Method App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:getLinks\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Method App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:setLinks\(\) has parameter \$links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$coin has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$libelle has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$links has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$note has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\ProjectMonitoring\:\:\$type has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/ProjectMonitoring.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/TypeProject.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$libelle has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/TypeProject.php
+
+		-
+			message: '#^Property App\\ProjectMonitoring\\Entity\\TypeProject\:\:\$projectMonitorings has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/ProjectMonitoring/Entity/TypeProject.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Form\\ProjectMonitoringType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/ProjectMonitoring/Form/ProjectMonitoringType.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
+
+		-
+			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
 
 		-
 			message: '#^Class App\\Repository\\BlockchainRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
@@ -1027,54 +1171,6 @@ parameters:
 			path: src/Repository/DappRepository.php
 
 		-
-			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositTypeRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositTypeRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositTypeRepository.php
-
-		-
-			message: '#^Class App\\Deposit\\Repository\\DepositTypeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Deposit/Repository/DepositTypeRepository.php
-
-		-
 			message: '#^Class App\\Repository\\ExchangeRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1123,60 +1219,6 @@ parameters:
 			path: src/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Loan/Repository/LoanRepository.php
-
-		-
-			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Loan/Repository/LoanRepository.php
-
-		-
-			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Loan/Repository/LoanRepository.php
-
-		-
-			message: '#^Class App\\Loan\\Repository\\LoanRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Loan/Repository/LoanRepository.php
-
-		-
-			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Nft/Repository/NftRepository.php
-
-		-
-			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Nft/Repository/NftRepository.php
-
-		-
-			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Nft/Repository/NftRepository.php
-
-		-
-			message: '#^Class App\\Nft\\Repository\\NftRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Nft/Repository/NftRepository.php
-
-		-
-			message: '#^Method App\\Nft\\Repository\\NftRepository\:\:findBySold\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Nft/Repository/NftRepository.php
-
-		-
 			message: '#^Class App\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1199,30 +1241,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Repository/PositionRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\ProjectMonitoringRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/ProjectMonitoringRepository.php
 
 		-
 			message: '#^Class App\\Repository\\ResetPasswordRequestRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
@@ -1343,30 +1361,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Repository/StrategyPositionRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
-
-		-
-			message: '#^Class App\\ProjectMonitoring\\Repository\\TypeProjectRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
 
 		-
 			message: '#^Class App\\Repository\\UserRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
