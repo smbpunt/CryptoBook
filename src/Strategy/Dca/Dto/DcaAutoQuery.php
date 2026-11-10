@@ -2,7 +2,7 @@
 
 namespace App\Strategy\Dca\Dto;
 
-use App\Strategy\Dca\Form\DcaAutoType;
+use App\Strategy\Dca\Enum\DcaRecurrence;
 use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -22,8 +22,7 @@ final readonly class DcaAutoQuery
         #[Assert\Positive]
         public int $coinId,
         #[SerializedName('t')]
-        #[Assert\Choice(choices: DcaAutoType::RECURRENCES)]
-        public string $recurrence,
+        public DcaRecurrence $recurrence,
         #[SerializedName('nb')]
         #[Assert\Range(min: 1, max: self::MAX_COUNT)]
         public int $count,

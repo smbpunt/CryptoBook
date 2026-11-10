@@ -3,6 +3,7 @@
 namespace App\Strategy\Dca\Repository;
 
 use App\Strategy\Dca\Entity\StrategyDca;
+use App\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,6 +29,11 @@ class StrategyDcaRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findOneByOwner(User $owner): ?StrategyDca
+    {
+        return $this->findOneBy(['owner' => $owner]);
     }
 
     public function remove(StrategyDca $entity, bool $flush = false): void

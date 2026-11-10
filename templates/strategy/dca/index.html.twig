@@ -6,7 +6,7 @@
 
 {% block body %}
     {% if dca is not null %}
-        {% set totalFarmingUsd = fiatToDcaUsd + dca.farmingToDcaUsd %}
+        {% set totalFarmingUsd = amountUsd %}
 
         <twig:App:PageHeader title="Mon DCA">
             <twig:Dialog id="dca_generate">

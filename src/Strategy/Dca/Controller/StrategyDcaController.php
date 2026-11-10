@@ -3,17 +3,18 @@
 namespace App\Strategy\Dca\Controller;
 
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
-use App\FiatCurrency\Converter\FiatConverter;
-use App\Position\Repository\PositionRepository;
-use App\Service\DcaService;
+use App\Position\Entity\Position;
+use App\Strategy\Dca\Calculator\DcaAmountCalculator;
 use App\Strategy\Dca\Dto\DcaAutoQuery;
 use App\Strategy\Dca\Entity\StrategyDca;
 use App\Strategy\Dca\Form\DcaAutoType;
 use App\Strategy\Dca\Form\DcaToPositionType;
 use App\Strategy\Dca\Form\StrategyDcaType;
+use App\Strategy\Dca\Generator\DcaAutoPositionGenerator;
+use App\Strategy\Dca\Generator\DcaPositionGenerator;
 use App\Strategy\Dca\Repository\StrategyDcaRepository;
 use App\User\Entity\User;
-use App\User\Resolver\FavoriteCurrencyResolver;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,30 +25,26 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route('/strategy/dca')]
 class StrategyDcaController extends AbstractController
 {
-    #[Route('/', name: 'app_strategy_dca_index', methods: ['GET'])]
-    public function index(StrategyDcaRepository $strategyDcaRepository, CryptocurrencyRepository $cryptocurrencyRepository, FiatConverter $fiatConverter, FavoriteCurrencyResolver $favoriteCurrencyResolver, #[CurrentUser] User $user): Response
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $dcaUser = $strategyDcaRepository->findOneBy([
-            'owner' => $user,
-        ]);
+    }
 
-        $form = $this->createForm(DcaAutoType::class);
+    #[Route('/', name: 'app_strategy_dca_index', methods: ['GET'])]
+    public function index(StrategyDcaRepository $strategyDcaRepository, DcaAmountCalculator $amountCalculator, #[CurrentUser] User $user): Response
+    {
+        $dca = $strategyDcaRepository->findOneByOwner($user);
 
         return $this->render('strategy/dca/index.html.twig', [
-            'dca' => $dcaUser,
-            'fiatToDcaUsd' => null === $dcaUser ? 0.0 : $fiatConverter->toUsd((float) $dcaUser->getFiatToDcaEur(), $favoriteCurrencyResolver->resolve($user)),
-            'form' => $form,
+            'dca' => $dca,
+            'amountUsd' => null === $dca ? 0.0 : $amountCalculator->amountUsd($dca),
+            'form' => $this->createForm(DcaAutoType::class),
         ]);
     }
 
     #[Route('/new', name: 'app_strategy_dca_new', methods: ['GET', 'POST'])]
     public function new(Request $request, StrategyDcaRepository $strategyDcaRepository, #[CurrentUser] User $user): Response
     {
-        $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $user,
-        ]);
-
-        if ($strategyDca) {
+        if (null !== $strategyDcaRepository->findOneByOwner($user)) {
             return $this->redirectToRoute('app_strategy_dca_edit');
         }
 
@@ -68,75 +65,34 @@ class StrategyDcaController extends AbstractController
     }
 
     #[Route('/generatePositions/{invested<\d+(\.\d+)?>?0}', name: 'app_strategy_dca_generate_positions', methods: ['GET', 'POST'])]
-    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, PositionRepository $positionRepository, DcaService $dcaService, CryptocurrencyRepository $cryptocurrencyRepository, float $invested, #[CurrentUser] User $user): Response
+    public function generatePositions(Request $request, StrategyDcaRepository $strategyDcaRepository, DcaAmountCalculator $amountCalculator, DcaPositionGenerator $generator, float $invested, #[CurrentUser] User $user): Response
     {
-        $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $user,
-        ]);
-
+        $strategyDca = $strategyDcaRepository->findOneByOwner($user);
         if (null === $strategyDca) {
             return $this->redirectToRoute('app_strategy_dca_new');
         }
 
-        $jeur = $cryptocurrencyRepository->findOneBy(['libelleCoingecko' => 'jarvis-synthetic-euro']);
-        $ratioUsdEur = (null !== $jeur && null !== $jeur->getPriceUsd()) ? $jeur->getPriceUsd() : 1.04;
-        $valueDca = $invested > 0 ? $invested : ($strategyDca->getFiatToDcaEur() * $ratioUsdEur + $strategyDca->getFarmingToDcaUsd());
+        $amountUsd = $invested > 0 ? $invested : $amountCalculator->amountUsd($strategyDca);
 
-        $positions = $dcaService->generatePositions($strategyDca, $user, $valueDca);
-
-        $form = $this->createForm(DcaToPositionType::class, null, [
-            'positions' => $positions,
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($positions as $position) {
-                $positionRepository->add($position, true);
-            }
-
-            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('strategy/dca/generatePositions.html.twig', [
-            'form_dca' => $form,
-        ]);
+        return $this->savePositions($request, $generator->generate($strategyDca, $user, $amountUsd));
     }
 
     #[Route('/dcaAuto', name: 'app_strategy_dca_dcaauto', methods: ['GET', 'POST'])]
-    public function dcaAuto(Request $request, PositionRepository $positionRepository, DcaService $dcaService, #[CurrentUser] User $user, #[MapQueryString(validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY)] ?DcaAutoQuery $query = null): Response
+    public function dcaAuto(Request $request, CryptocurrencyRepository $cryptocurrencyRepository, DcaAutoPositionGenerator $generator, #[CurrentUser] User $user, #[MapQueryString(validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY)] ?DcaAutoQuery $query = null): Response
     {
         if (null === $query) {
             return $this->redirectToRoute('app_strategy_dca_index');
         }
 
-        $positions = $dcaService->generateDcaAutoPositions($user, $query->coinId, $query->recurrence, $query->count, $query->total, $query->firstDate);
+        $coin = $cryptocurrencyRepository->find($query->coinId) ?? throw $this->createNotFoundException('Unknown coin.');
 
-        $form = $this->createForm(DcaToPositionType::class, null, [
-            'positions' => $positions,
-        ]);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($positions as $position) {
-                $positionRepository->add($position, true);
-            }
-
-            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('strategy/dca/generatePositions.html.twig', [
-            'form_dca' => $form,
-        ]);
+        return $this->savePositions($request, $generator->generate($user, $coin, $query->recurrence, $query->count, $query->total, $query->firstDate));
     }
 
     #[Route('/edit', name: 'app_strategy_dca_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, StrategyDcaRepository $strategyDcaRepository, #[CurrentUser] User $user): Response
     {
-        $strategyDca = $strategyDcaRepository->findOneBy([
-            'owner' => $user,
-        ]);
-
+        $strategyDca = $strategyDcaRepository->findOneByOwner($user);
         if (null === $strategyDca) {
             return $this->redirectToRoute('app_strategy_dca_new');
         }
@@ -153,6 +109,32 @@ class StrategyDcaController extends AbstractController
         return $this->render('strategy/dca/edit.html.twig', [
             'strategy_dca' => $strategyDca,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * Shows the generated positions to adjust them, and saves them in one flush.
+     *
+     * @param list<Position> $positions
+     */
+    private function savePositions(Request $request, array $positions): Response
+    {
+        $form = $this->createForm(DcaToPositionType::class, null, [
+            'positions' => $positions,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($positions as $position) {
+                $this->entityManager->persist($position);
+            }
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('strategy/dca/generatePositions.html.twig', [
+            'form_dca' => $form,
         ]);
     }
 }

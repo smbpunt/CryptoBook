@@ -4,22 +4,17 @@ namespace App\Strategy\Dca\Form;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Strategy\Dca\Dto\DcaAutoQuery;
+use App\Strategy\Dca\Enum\DcaRecurrence;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DcaAutoType extends AbstractType
 {
-    public const string HOURLY = 'h';
-    public const string DAILY = 'd';
-    public const string WEEKLY = 'w';
-    public const string MONTHLY = 'm';
-    public const array RECURRENCES = [self::HOURLY, self::DAILY, self::WEEKLY, self::MONTHLY];
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -33,14 +28,10 @@ class DcaAutoType extends AbstractType
             ->add('value', IntegerType::class, [
                 'required' => true,
             ])
-            ->add('type_recurr', ChoiceType::class, [
-                'choices' => [
-                    '---' => '',
-                    '4 Heures' => self::HOURLY,
-                    'Journalier' => self::DAILY,
-                    'Hebdomadaire' => self::WEEKLY,
-                    'Mensuel' => self::MONTHLY,
-                ],
+            ->add('type_recurr', EnumType::class, [
+                'class' => DcaRecurrence::class,
+                'choice_label' => static fn (DcaRecurrence $recurrence): string => $recurrence->label(),
+                'placeholder' => '---',
                 'required' => true,
             ])
             ->add('nb_recurr', IntegerType::class, [
