@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\ProjectMonitoring\Repository;
 
-use App\Entity\TypeProject;
+use App\ProjectMonitoring\Entity\TypeProject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

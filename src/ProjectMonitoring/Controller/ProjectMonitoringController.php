@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\ProjectMonitoring\Controller;
 
-use App\Entity\ProjectMonitoring;
 use App\Entity\User;
-use App\Form\ProjectMonitoringType;
-use App\Repository\ProjectMonitoringRepository;
+use App\ProjectMonitoring\Entity\ProjectMonitoring;
+use App\ProjectMonitoring\Form\ProjectMonitoringType;
+use App\ProjectMonitoring\Repository\ProjectMonitoringRepository;
 use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;

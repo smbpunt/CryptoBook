@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\TypeProject;
+use App\ProjectMonitoring\Entity\TypeProject;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Form;
+namespace App\ProjectMonitoring\Form;
 
 use App\Entity\Cryptocurrency;
-use App\Entity\ProjectMonitoring;
-use App\Entity\TypeProject;
+use App\ProjectMonitoring\Entity\ProjectMonitoring;
+use App\ProjectMonitoring\Entity\TypeProject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

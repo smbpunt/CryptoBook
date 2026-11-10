@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Nft\Controller;
 
-use App\Entity\Nft;
 use App\Entity\User;
-use App\Form\NftType;
-use App\Repository\NftRepository;
+use App\Nft\Entity\Nft;
+use App\Nft\Form\NftType;
+use App\Nft\Repository\NftRepository;
 use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;

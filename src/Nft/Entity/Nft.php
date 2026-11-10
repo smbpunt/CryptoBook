@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Nft\Entity;
 
+use App\Entity\Blockchain;
+use App\Entity\Cryptocurrency;
+use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;
-use App\Repository\NftRepository;
+use App\Entity\User;
+use App\Nft\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]

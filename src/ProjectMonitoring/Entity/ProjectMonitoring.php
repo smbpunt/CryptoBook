@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\ProjectMonitoring\Entity;
 
+use App\Entity\Cryptocurrency;
+use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;
-use App\Repository\ProjectMonitoringRepository;
+use App\Entity\User;
+use App\ProjectMonitoring\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectMonitoringRepository::class)]
