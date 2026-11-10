@@ -3,6 +3,12 @@ parameters:
 		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
+			count: 2
+			path: src/Controller/CryptobookController.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
 			count: 1
 			path: src/Controller/PositionController.php
 
@@ -1196,6 +1202,12 @@ parameters:
 
 		-
 			message: '#^Class App\\Repository\\PositionRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/PositionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\PositionRepository\:\:getSumCoinByUser\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Repository/PositionRepository.php

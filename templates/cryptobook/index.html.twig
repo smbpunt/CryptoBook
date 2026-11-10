@@ -4,7 +4,7 @@
 
 {% block body %}
     {% set fiat = app.user.favoriteFiatCurrency.symbol %}
-    {% set totalWalletUsd = wallet.totalUsd %}
+    {% set totalWalletUsd = totalUsd + totalStableUsd %}
     {% set resultatUsd = totalWalletUsd - totalDepositUsd %}
     {% set percent = totalDepositUsd > 0 ? totalWalletUsd * 100 / totalDepositUsd - 100 : 0 %}
     {% set totalYearFarmingEur = fiatRates.toFavoriteCurrency(totalYearFarmingUsd, app.user) %}
@@ -23,7 +23,7 @@
                             </twig:Table:Row>
                         </twig:Table:Header>
                         <twig:Table:Body>
-                            {% for label, usd in {'Investi': totalDepositUsd, 'Wallet crypto': wallet.cryptoUsd, 'Wallet stable': wallet.stableUsd, 'Total': totalWalletUsd} %}
+                            {% for label, usd in {'Investi': totalDepositUsd, 'Wallet crypto': totalUsd, 'Wallet stable': totalStableUsd, 'Total': totalWalletUsd} %}
                                 <twig:Table:Row>
                                     <twig:Table:Cell class="text-muted-foreground">{{ label }}</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ usd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
@@ -79,10 +79,10 @@
                     <twig:Card:Content>
                         <twig:Table>
                             <twig:Table:Body>
-                                {% for position in wallet.cryptoHoldings %}
+                                {% for position in positions %}
                                     <twig:Table:Row>
                                         <twig:Table:Cell class="w-8 text-center"><twig:App:CoinLogo url="{{ position.urlImgThumb }}" name="{{ position.libelle }}"/></twig:Table:Cell>
-                                        <twig:Table:Cell class="text-end tabular-nums">{{ position.quantity|round(2)|number_format(2, '.', ' ') }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ position.totalsum|round(2)|number_format(2, '.', ' ') }}</twig:Table:Cell>
                                         <twig:Table:Cell>{{ position.symbol|upper }}</twig:Table:Cell>
                                         <twig:Table:Cell class="text-end tabular-nums">{{ position.valueUsd|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                     </twig:Table:Row>
@@ -95,7 +95,7 @@
         </div>
 
         <div class="grid content-start gap-6">
-            {% if wallet.cryptoHoldings is not empty %}
+            {% if positions|length > 0 %}
                 <twig:Card>
                     <twig:Card:Header><twig:Card:Title>Mes positions</twig:Card:Title></twig:Card:Header>
                     <twig:Card:Content>
@@ -108,7 +108,7 @@
                     <twig:Card:Header><twig:Card:Title>Ratio Crypto/Stable</twig:Card:Title></twig:Card:Header>
                     <twig:Card:Content><canvas id="chart-ratio"></canvas></twig:Card:Content>
                 </twig:Card>
-                {% if wallet.stableHoldings|length > 1 %}
+                {% if positions_stable|length > 1 %}
                     <twig:Card>
                         <twig:Card:Header><twig:Card:Title>Mes positions stable</twig:Card:Title></twig:Card:Header>
                         <twig:Card:Content><canvas id="chart-stable"></canvas></twig:Card:Content>
@@ -119,9 +119,9 @@
     </div>
 
     <div id="id-array-positions" hidden
-         data-pie="{{ wallet.cryptoHoldings|json_encode }}"
-         data-piestable="{{ wallet.stableHoldings|json_encode }}"
-         data-crypto="{{ wallet.cryptoUsd }}"
-         data-stable="{{ wallet.stableUsd }}">
+         data-pie="{{ positions|json_encode }}"
+         data-piestable="{{ positions_stable|json_encode }}"
+         data-crypto="{{ totalUsd }}"
+         data-stable="{{ totalStableUsd }}">
     </div>
 {% endblock %}
