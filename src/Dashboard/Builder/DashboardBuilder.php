@@ -4,9 +4,10 @@ namespace App\Dashboard\Builder;
 
 use App\Dashboard\Dto\DashboardData;
 use App\Dashboard\Dto\DashboardHolding;
+use App\Deposit\Calculator\DepositTotalCalculator;
+use App\Deposit\Repository\DepositRepository;
 use App\Entity\User;
 use App\Repository\LoanRepository;
-use App\Service\DepositService;
 use App\Service\FarmingService;
 use App\Service\FiatExchangeRatesService;
 use App\Wallet\Calculator\WalletValueCalculator;
@@ -18,7 +19,8 @@ final readonly class DashboardBuilder
 {
     public function __construct(
         private WalletValueCalculator $walletValueCalculator,
-        private DepositService $depositService,
+        private DepositRepository $depositRepository,
+        private DepositTotalCalculator $depositTotalCalculator,
         private FarmingService $farmingService,
         private LoanRepository $loanRepository,
         private FiatExchangeRatesService $fiatRates,
@@ -34,7 +36,7 @@ final readonly class DashboardBuilder
             array_map(DashboardHolding::fromWalletHolding(...), $wallet->stableHoldings),
             $wallet->cryptoUsd,
             $wallet->stableUsd,
-            $this->depositService->getTotalDepositUsd($user),
+            $this->depositTotalCalculator->totalUsd($this->depositRepository->findByOwnerWithCurrency($user)),
             $this->loanRepository->getTotal($user),
             $this->farmingService->getTotalFarmingByYearUsd($user),
             (string) $this->fiatRates->getFavoriteCurrency($user)->getsymbol(),

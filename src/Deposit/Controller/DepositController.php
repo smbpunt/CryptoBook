@@ -2,12 +2,12 @@
 
 namespace App\Deposit\Controller;
 
+use App\Deposit\Calculator\DepositTotalCalculator;
 use App\Deposit\Entity\Deposit;
 use App\Deposit\Form\DepositType;
 use App\Deposit\Repository\DepositRepository;
 use App\Entity\User;
 use App\Security\Voter\OwnerVoter;
-use App\Service\DepositService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +21,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class DepositController extends AbstractController
 {
     #[Route('/', name: 'app_deposit_index', methods: ['GET'])]
-    public function index(DepositService $depositService, DepositRepository $depositRepository, #[CurrentUser] User $user): Response
+    public function index(DepositRepository $depositRepository, DepositTotalCalculator $totalCalculator, #[CurrentUser] User $user): Response
     {
-        $deposits = $depositRepository->findBy([
-            'owner' => $user,
-        ], [
-            'depositedAt' => \SortDirection::Ascending,
-        ]);
-
-        $totalUsd = $depositService->getTotalDepositUsd($user);
+        $deposits = $depositRepository->findByOwnerWithCurrency($user);
 
         return $this->render('deposit/index.html.twig', [
             'deposits' => $deposits,
-            'totalUsd' => $totalUsd,
+            'totalUsd' => $totalCalculator->totalUsd($deposits),
         ]);
     }
 

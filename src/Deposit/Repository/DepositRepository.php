@@ -6,7 +6,6 @@ use App\Deposit\Entity\Deposit;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Deposit>
@@ -42,7 +41,7 @@ class DepositRepository extends ServiceEntityRepository
     }
 
     /**
-     * Deposits of the user with their currency, in one query.
+     * Deposits of the user with their currency, in one query, oldest first.
      *
      * @return list<Deposit>
      */
@@ -53,22 +52,8 @@ class DepositRepository extends ServiceEntityRepository
             ->join('d.fiatCurrency', 'f')
             ->where('d.owner = :owner')
             ->setParameter('owner', $owner)
+            ->orderBy('d.depositedAt', \SortDirection::Ascending)
             ->getQuery()->getResult();
-    }
-
-    public function getTotal(UserInterface $user): float
-    {
-        $qb = $this->createQueryBuilder('d')
-            ->select('SUM(d.amount) as totalsum')
-            ->where('d.owner = :user')
-            ->groupBy('d.owner')
-            ->setParameter('user', $user);
-        try {
-            return $qb->getQuery()->getSingleScalarResult();
-        } catch (\Exception) {
-        }
-
-        return 0;
     }
 
     //    /**
