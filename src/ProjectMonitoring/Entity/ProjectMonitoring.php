@@ -9,6 +9,7 @@ use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
 use App\ProjectMonitoring\Repository\ProjectMonitoringRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectMonitoringRepository::class)]
 class ProjectMonitoring implements OwnedInterface
@@ -22,6 +23,7 @@ class ProjectMonitoring implements OwnedInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
     private $libelle;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'projectMonitorings')]
@@ -35,6 +37,7 @@ class ProjectMonitoring implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $type;
 
     public function __construct(User $owner)
@@ -52,7 +55,7 @@ class ProjectMonitoring implements OwnedInterface
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibelle(?string $libelle): self
     {
         $this->libelle = $libelle;
 

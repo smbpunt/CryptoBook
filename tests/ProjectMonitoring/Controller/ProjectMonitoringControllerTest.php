@@ -34,6 +34,17 @@ final class ProjectMonitoringControllerTest extends WebTestCase
         self::assertSame($this->data->typeProject->getId(), $project->getType()?->getId());
     }
 
+    public function testEmptyNameIsAFormError(): void
+    {
+        $this->client->request('GET', '/project/monitoring/new');
+        $this->client->submitForm('Ajouter', [
+            'project_monitoring[libelle]' => '',
+            'project_monitoring[type]' => (string) $this->data->typeProject->getId(),
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
     private function em(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);

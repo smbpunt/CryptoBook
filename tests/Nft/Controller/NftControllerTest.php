@@ -29,6 +29,14 @@ final class NftControllerTest extends WebTestCase
         self::assertSame(1, $this->em()->getRepository(Nft::class)->count(['owner' => $this->data->user, 'collection' => 'Apes']));
     }
 
+    public function testEmptyPriceIsAFormError(): void
+    {
+        $this->client->request('GET', '/nft/new');
+        $this->client->submitForm('Ajouter', ['nft[priceUsd]' => ''] + $this->validValues());
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
     public function testIndexShowsTheProfitOfTheSoldNfts(): void
     {
         // Bought 2 000 $, sold 3 000 $ with 10 % fees: 700 $. Bought 1 000 $, sold 500 $: -500 $.

@@ -10,6 +10,7 @@ use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
 use App\Nft\Repository\NftRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 class Nft implements OwnedInterface
@@ -23,6 +24,7 @@ class Nft implements OwnedInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
     private $collection;
 
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -35,9 +37,11 @@ class Nft implements OwnedInterface
     private $supply;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $priceCrypto;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $priceUsd;
 
     #[ORM\Column(type: 'float', nullable: true)]
@@ -57,10 +61,12 @@ class Nft implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'nfts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $blockchain;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'nfts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $cryptocurrency;
 
     public function __construct(User $owner)
@@ -79,7 +85,7 @@ class Nft implements OwnedInterface
         return $this->collection;
     }
 
-    public function setCollection(string $collection): self
+    public function setCollection(?string $collection): self
     {
         $this->collection = $collection;
 
@@ -127,7 +133,7 @@ class Nft implements OwnedInterface
         return $this->priceCrypto;
     }
 
-    public function setPriceCrypto(float $priceCrypto): self
+    public function setPriceCrypto(?float $priceCrypto): self
     {
         $this->priceCrypto = $priceCrypto;
 
@@ -139,7 +145,7 @@ class Nft implements OwnedInterface
         return $this->priceUsd;
     }
 
-    public function setPriceUsd(float $priceUsd): self
+    public function setPriceUsd(?float $priceUsd): self
     {
         $this->priceUsd = $priceUsd;
 
