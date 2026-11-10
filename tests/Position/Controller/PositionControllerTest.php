@@ -3,6 +3,8 @@
 namespace App\Tests\Position\Controller;
 
 use App\Position\Entity\Position;
+use App\Position\Entity\StrategyPosition;
+use App\Position\Entity\Vente;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -40,6 +42,30 @@ final class PositionControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/position/');
 
         self::assertSame(['Crypto (1)', 'Stable (1)', 'Fermée (1)'], $crawler->filter('[role="tab"]')->each(static fn (Crawler $tab): string => trim($tab->text())));
+    }
+
+    public function testInfosShowTheExitPlan(): void
+    {
+        // 0.5 BTC for 20 000 $: sell half at 100 000 $.
+        $this->data->position->addStrategy(new StrategyPosition()->setPercent(50)->setPriceSold(100000));
+        $this->persist($this->data->position);
+
+        $this->client->request('POST', "/position/{$this->data->position->getId()}/infos");
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('body', 'Récupéré : 25000 $');
+        self::assertSelectorTextContains('body', 'Gains/pertes : 5000 $ (25 %)');
+    }
+
+    public function testInfosShowTheSales(): void
+    {
+        $this->data->position->addVente(new Vente()->setSoldAt(new \DateTimeImmutable('2024-03-01'))->setPercent(20)->setPriceSold(60000));
+        $this->persist($this->data->position);
+
+        $crawler = $this->client->request('POST', "/position/{$this->data->position->getId()}/infos");
+
+        self::assertResponseIsSuccessful();
+        self::assertSame(['1', '01/03/2024', '20 %', '60000 $'], $crawler->filter('tbody tr')->first()->filter('td')->each(static fn (Crawler $cell): string => trim($cell->text())));
     }
 
     public function testEditPosition(): void

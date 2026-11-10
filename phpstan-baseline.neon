@@ -769,12 +769,6 @@ parameters:
 			path: src/Nft/Repository/NftRepository.php
 
 		-
-			message: '#^Method App\\Position\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Position/Entity/Position.php
-
-		-
 			message: '#^Property App\\Position\\Entity\\Position\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1

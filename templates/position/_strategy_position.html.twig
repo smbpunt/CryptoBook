@@ -20,9 +20,10 @@
             </twig:Table:Row>
         </twig:Table:Header>
         <twig:Table:Body>
-            {% for vente in position.ventesSortedByDate %}
+            {# loop is not visible inside a component: number the rows with the key. #}
+            {% for i, vente in position.ventesSortedByDate %}
                 <twig:Table:Row>
-                    <twig:Table:Cell class="text-end">{{ loop.index }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ i + 1 }}</twig:Table:Cell>
                     <twig:Table:Cell class="text-end">{{ vente.soldAt ? vente.soldAt|date('d/m/Y') }}</twig:Table:Cell>
                     <twig:Table:Cell class="text-end tabular-nums">{{ vente.percent }} %</twig:Table:Cell>
                     <twig:Table:Cell class="text-end tabular-nums">{{ vente.priceSold }} $</twig:Table:Cell>
@@ -59,9 +60,9 @@
             </twig:Table:Row>
         </twig:Table:Header>
         <twig:Table:Body>
-            {% for row in rows %}
+            {% for i, row in rows %}
                 <twig:Table:Row>
-                    <twig:Table:Cell class="text-end">{{ loop.index }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ i + 1 }}</twig:Table:Cell>
                     <twig:Table:Cell class="text-end tabular-nums">{{ row.strategy.priceSold }}</twig:Table:Cell>
                     <twig:Table:Cell class="text-end tabular-nums">{{ row.strategy.percent }} %</twig:Table:Cell>
                     <twig:Table:Cell class="text-end tabular-nums">{{ row.sold }}</twig:Table:Cell>

@@ -235,9 +235,12 @@ class Position implements OwnedInterface
             : 9999;
     }
 
-    public function getVentesSortedByDate(): Collection
+    /**
+     * @return list<Vente>
+     */
+    public function getVentesSortedByDate(): array
     {
-        return $this->ventes->matching(new Criteria(orderings: ['soldAt' => \SortDirection::Ascending]));
+        return array_values($this->ventes->matching(new Criteria(orderings: ['soldAt' => \SortDirection::Ascending]))->toArray());
     }
 
     #[ORM\PreFlush]
