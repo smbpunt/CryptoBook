@@ -10,7 +10,7 @@
     404: {icon: 'lucide:search-x', title: 'Page introuvable', text: "Cette page n'existe pas ou a été déplacée."},
     429: {icon: 'lucide:timer', title: 'Trop de requêtes', text: 'Patientez quelques instants avant de réessayer.'},
     500: {icon: 'lucide:server-crash', title: 'Erreur serveur', text: "Une erreur inattendue s'est produite. Réessayez dans quelques minutes."},
-    503: {icon: 'lucide:construction', title: 'Maintenance en cours', text: 'Cryptobook revient très vite.'},
+    503: {icon: 'lucide:construction', title: 'Maintenance en cours', text: 'CryptoBook revient très vite.'},
 } %}
 {% set page = pages[status_code] ?? (status_code >= 500 ? pages[500] : {
     icon: 'lucide:circle-alert',
@@ -21,6 +21,7 @@
 {% block title %}{{ status_code }} · {{ page.title }}{% endblock %}
 
 {% block header_nav %}{% endblock %}
+{% block header_account %}{% endblock %}
 
 {% block body %}
     <div class="flex min-h-[70vh] items-center justify-center">

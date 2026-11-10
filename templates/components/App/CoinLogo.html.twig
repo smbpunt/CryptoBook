@@ -5,7 +5,7 @@
     name
 -%}
 {%- if url -%}
-    <img src="{{ url }}" alt="Logo {{ name }}" {{ attributes.defaults({class: 'inline-block size-6 rounded-full'|tailwind_classes}) }}>
+    <img src="{{ url }}" alt="Logo {{ name }}" {{ attributes.defaults({class: 'inline-block size-6 max-w-none rounded-full'|tailwind_classes}) }}>
 {%- else -%}
     <twig:ux:icon name="lucide:coins" data-slot="coin-fallback" title="{{ name }}" aria-label="{{ name }}" class="{{ ('inline-block size-5 text-muted-foreground ' ~ attributes.render('class'))|tailwind_merge }}"/>
 {%- endif -%}

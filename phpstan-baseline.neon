@@ -565,12 +565,6 @@ parameters:
 			path: src/Security/Form/ResetPasswordRequestFormType.php
 
 		-
-			message: '#^Method App\\Shared\\Builder\\MenuBuilder\:\:createMainMenu\(\) has parameter \$options with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Shared/Builder/MenuBuilder.php
-
-		-
 			message: '#^Property App\\Strategy\\Dca\\Entity\\CoinPercentDca\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1

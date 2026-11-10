@@ -1,9 +1,28 @@
 import Chart from 'chart.js/auto';
 
-// Dark theme colors in hex: Chart.js 3 does not parse the oklch() tokens of app.css.
-Chart.defaults.color = '#a1a1a1';
-Chart.defaults.borderColor = '#2e2e2e';
-Chart.defaults.elements.arc.borderColor = '#171717';
+// Colors come from the CSS tokens of app.css (hex / rgba: Chart.js 3 does not parse oklch()),
+// read again on `theme:change` so the charts follow the light / dark switch.
+const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const charts = [];
+// Datasets whose colors are tokens: [chart, dataset index, slice index or null, token name].
+const tokenColors = [];
+
+const applyTheme = () => {
+    Chart.defaults.color = token('--muted-foreground');
+    Chart.defaults.borderColor = token('--border');
+    Chart.defaults.elements.arc.borderColor = token('--popover');
+    tokenColors.forEach(([chart, dataset, slice, name]) => {
+        const colors = chart.data.datasets[dataset].backgroundColor;
+        colors[slice] = token(name);
+    });
+    charts.forEach((chart) => {
+        chart.data.datasets.forEach((dataset) => { dataset.borderColor = token('--popover'); });
+        chart.options.color = token('--muted-foreground');
+        chart.update();
+    });
+};
+applyTheme();
+window.addEventListener('theme:change', applyTheme);
 
 const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 const element = document.getElementById('id-array-positions');
@@ -40,7 +59,7 @@ if (json_positions.length > 1) {
 
     labels.push("Autre(s)");
     datasets.push(String(percentOther));
-    rgbs.push(`rgb(255, 255, 255)`);
+    rgbs.push(token('--chart-5'));
 
     const data_crypto = {
         labels: labels,
@@ -53,7 +72,7 @@ if (json_positions.length > 1) {
 
 
     const canvas = document.getElementById('chart-pos').getContext('2d');
-    new Chart(canvas, {
+    const chartPos = new Chart(canvas, {
         type: 'doughnut',
         data: data_crypto,
         options: {
@@ -66,6 +85,8 @@ if (json_positions.length > 1) {
             }
         }
     });
+    charts.push(chartPos);
+    tokenColors.push([chartPos, 0, rgbs.length - 1, '--chart-5']);
 }
 
 if (stableTotal > 0) {
@@ -84,16 +105,18 @@ if (stableTotal > 0) {
                 percentCrypto, percentStableRounded
             ],
             backgroundColor: [
-                '#AAAAAA', '#505050'
+                token('--chart-1'), token('--chart-2'),
             ],
         }]
     };
 
     const canvas_ratio = document.getElementById('chart-ratio').getContext('2d');
-    new Chart(canvas_ratio, {
+    const chartRatio = new Chart(canvas_ratio, {
         type: 'pie',
         data: data_ratioStableCrypto
     });
+    charts.push(chartRatio);
+    tokenColors.push([chartRatio, 0, 0, '--chart-1'], [chartRatio, 0, 1, '--chart-2']);
 
 
     if (json_positions_stable.length > 1) {
@@ -125,10 +148,10 @@ if (stableTotal > 0) {
         };
 
         const canvas_stable = document.getElementById('chart-stable').getContext('2d');
-        new Chart(canvas_stable, {
+        charts.push(new Chart(canvas_stable, {
             type: 'pie',
             data: data_crypto_stable
-        });
+        }));
     }
 
 }

@@ -39,4 +39,6 @@ return [
     'choices.js/public/assets/styles/choices.min.css' => ['version' => '9.1.0', 'type' => 'css'],
     'shadcn/dist/tailwind.css' => ['version' => '4.23.0', 'type' => 'css'],
     'tw-animate-css/dist/tw-animate.css' => ['version' => '1.4.0', 'type' => 'css'],
+    '@fontsource-variable/inter/index.css' => ['version' => '5.3.0', 'type' => 'css'],
+    '@fontsource-variable/space-grotesk/index.css' => ['version' => '5.3.0', 'type' => 'css'],
 ];
