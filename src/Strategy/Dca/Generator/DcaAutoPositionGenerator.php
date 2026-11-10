@@ -18,16 +18,14 @@ final readonly class DcaAutoPositionGenerator
     public function generate(User $user, Cryptocurrency $coin, DcaRecurrence $recurrence, int $count, float $totalUsd, \DateTimeImmutable $firstDate): array
     {
         $positions = [];
-        $date = $firstDate;
         for ($i = 0; $i < $count; ++$i) {
             $positions[] = new Position($user)
-                ->setOpenedAt($date)
+                ->setOpenedAt($recurrence->dateAt($firstDate, $i))
                 ->setCoin($coin)
                 ->setEntryCost($totalUsd / $count)
                 ->setIsOpened(true)
                 ->setIsDca(true)
                 ->setDescription('DCA Auto');
-            $date = $date->add($recurrence->interval());
         }
 
         return $positions;

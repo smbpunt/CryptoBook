@@ -20,8 +20,8 @@ final class DcaAutoPositionGeneratorTest extends TestCase
         yield 'four hours' => [DcaRecurrence::FourHours, ['2024-01-31 10:00', '2024-01-31 14:00', '2024-01-31 18:00']];
         yield 'daily' => [DcaRecurrence::Daily, ['2024-01-31 10:00', '2024-02-01 10:00', '2024-02-02 10:00']];
         yield 'weekly' => [DcaRecurrence::Weekly, ['2024-01-31 10:00', '2024-02-07 10:00', '2024-02-14 10:00']];
-        // PHP date arithmetic: Jan 31 + 1 month overflows to March.
-        yield 'monthly' => [DcaRecurrence::Monthly, ['2024-01-31 10:00', '2024-03-02 10:00', '2024-04-02 10:00']];
+        // Same day of the month as the first purchase, or the last day of shorter months.
+        yield 'monthly' => [DcaRecurrence::Monthly, ['2024-01-31 10:00', '2024-02-29 10:00', '2024-03-31 10:00']];
     }
 
     /**

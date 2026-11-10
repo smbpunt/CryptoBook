@@ -20,8 +20,12 @@ final readonly class DcaAmountCalculator
      */
     public function amountUsd(StrategyDca $dca): float
     {
-        $eur = $this->fiatCurrencyRepository->getByFixerKey(FiatCurrency::KEY_EUR);
+        $fiatUsd = 0.0;
+        if ($dca->getFiatToDcaEur() > 0) {
+            $eur = $this->fiatCurrencyRepository->getByFixerKey(FiatCurrency::KEY_EUR);
+            $fiatUsd = $this->fiatConverter->toUsd($dca->getFiatToDcaEur(), $eur);
+        }
 
-        return $this->fiatConverter->toUsd((float) $dca->getFiatToDcaEur(), $eur) + (float) $dca->getFarmingToDcaUsd();
+        return $fiatUsd + (float) $dca->getFarmingToDcaUsd();
     }
 }
