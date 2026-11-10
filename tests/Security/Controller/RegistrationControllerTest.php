@@ -34,6 +34,13 @@ final class RegistrationControllerTest extends WebTestCase
         self::assertNotSame('secret123', $user->getPassword());
     }
 
+    public function testThePageDoesNotAnnounceAVerificationEmail(): void
+    {
+        $this->client->request('GET', '/register');
+
+        self::assertSelectorTextNotContains('body', 'vérifier votre adresse');
+    }
+
     public function testTheNewUserIsLoggedIn(): void
     {
         $this->client->request('GET', '/register');
