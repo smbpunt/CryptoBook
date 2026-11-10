@@ -31,4 +31,15 @@ final class ExitPlanCalculatorTest extends TestCase
         self::assertSame(500.0, $plan->resultUsd);
         self::assertSame(50.0, $plan->resultPercent);
     }
+
+    public function testResultPercentOfAFreePositionIsNull(): void
+    {
+        $position = new Position(new User())->setNbCoins(1)->setEntryCost(0)
+            ->addStrategy(new StrategyPosition()->setPercent(100)->setPriceSold(10));
+
+        $plan = new ExitPlanCalculator()->calculate($position);
+
+        self::assertSame(10.0, $plan->resultUsd);
+        self::assertNull($plan->resultPercent);
+    }
 }

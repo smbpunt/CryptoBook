@@ -30,7 +30,7 @@ final readonly class ExitPlanCalculator
             $remaining * 100 / $position->getNbCoins(),
             $recovered,
             $result,
-            $result * 100 / $position->getEntryCost(),
+            $position->getEntryCost() > 0 ? $result * 100 / $position->getEntryCost() : null,
         );
     }
 }

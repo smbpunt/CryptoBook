@@ -61,12 +61,12 @@ final class PositionTest extends TestCase
         self::assertSame(333.33, $this->position(nbCoins: 3, entryCost: 1000)->getEntryCoinValue());
     }
 
-    public function testPercentEvolutionFallbackWhenEntryCostIsZero(): void
+    public function testPercentEvolutionIsNullWhenEntryCostIsZero(): void
     {
         $position = $this->position(nbCoins: 1, entryCost: 0);
         $position->calculateRemainingCoins();
 
-        self::assertSame(9999.0, (float) $position->getPercentEvolution());
+        self::assertNull($position->getPercentEvolution());
     }
 
     private function position(float $nbCoins, float $entryCost, float $priceUsd = 1): Position

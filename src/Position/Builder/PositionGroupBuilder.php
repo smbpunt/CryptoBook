@@ -38,7 +38,8 @@ final readonly class PositionGroupBuilder
         $averageCost = 0.0;
         if ($quantity > 0) {
             foreach ($positions as $position) {
-                $averageCost += $position->getEntryCoinValue() * $position->getRemainingCoins() / $quantity;
+                // Raw entry price: getEntryCoinValue() rounds to the cent, 0 for the coins below.
+                $averageCost += $position->getEntryCost() / $position->getNbCoins() * $position->getRemainingCoins() / $quantity;
             }
         }
 

@@ -9,6 +9,7 @@ final readonly class ExitPlan
 {
     /**
      * @param list<ExitPlanStep> $steps
+     * @param float|null         $resultPercent null when the position cost nothing
      */
     public function __construct(
         public array $steps,
@@ -16,7 +17,7 @@ final readonly class ExitPlan
         public float $remainingPercent,
         public float $recoveredUsd,
         public float $resultUsd,
-        public float $resultPercent,
+        public ?float $resultPercent,
     ) {
     }
 }

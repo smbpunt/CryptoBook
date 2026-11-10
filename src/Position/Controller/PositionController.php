@@ -11,6 +11,7 @@ use App\User\Entity\User;
 use App\User\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Form\ClickableInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -51,8 +52,10 @@ class PositionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $positionRepository->add($position, true);
 
-            // TODO submit & next
-            return $this->redirectToRoute('app_position_index', [], Response::HTTP_SEE_OTHER);
+            $next = $form->get('submitAndNext');
+            \assert($next instanceof ClickableInterface);
+
+            return $this->redirectToRoute($next->isClicked() ? 'app_position_new' : 'app_position_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('position/new.html.twig', [

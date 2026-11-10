@@ -83,8 +83,9 @@
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end tabular-nums">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums {{ detail.percentEvolution > 0 ? 'text-positive' : 'text-negative' }}">
-                                                        {{ detail.percentEvolution <= -99.9 ? 'LUNA SPOTTED' : detail.percentEvolution|number_format(0, '.', ' ') ~ ' %' }}
+                                                    {% set evolution = detail.percentEvolution %}
+                                                    <twig:Table:Cell class="text-end tabular-nums {{ evolution is null or evolution > 0 ? 'text-positive' : 'text-negative' }}">
+                                                        {% if evolution is null %}+ ∞{% elseif evolution <= -99.9 %}LUNA SPOTTED{% else %}{{ evolution|number_format(0, '.', ' ') }} %{% endif %}
                                                     </twig:Table:Cell>
                                                     <twig:Table:Cell class="text-end">
                                                         <twig:App:RowActions

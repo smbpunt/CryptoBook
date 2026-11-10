@@ -86,7 +86,7 @@ class PositionRepository extends ServiceEntityRepository
     }
 
     /**
-     * Closed positions of the user, with their coin, biggest market cap first.
+     * Closed positions of the user, stable or not, with their coin, biggest market cap first.
      *
      * @return list<Position>
      */
@@ -94,7 +94,6 @@ class PositionRepository extends ServiceEntityRepository
     {
         return $this->createOwnedQueryBuilder($owner)
             ->andWhere('p.isOpened = false')
-            ->andWhere('c.isStable = false')
             ->getQuery()->getResult();
     }
 

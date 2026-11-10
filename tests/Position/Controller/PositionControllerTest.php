@@ -2,11 +2,13 @@
 
 namespace App\Tests\Position\Controller;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Position\Entity\Position;
 use App\Position\Entity\StrategyPosition;
 use App\Position\Entity\Vente;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -66,6 +68,102 @@ final class PositionControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSame(['1', '01/03/2024', '20 %', '60000 $'], $crawler->filter('tbody tr')->first()->filter('td')->each(static fn (Crawler $cell): string => trim($cell->text())));
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>, list<array<string, string>>}>
+     */
+    public static function invalidPositions(): iterable
+    {
+        yield 'no coins' => [['nbCoins' => '0'], []];
+        yield 'empty quantity' => [['nbCoins' => ''], []];
+        yield 'negative cost' => [['entryCost' => '-1'], []];
+        yield 'sale over 100 %' => [[], [['soldAt' => '2024-02-01', 'percent' => '150', 'priceSold' => '3000']]];
+        yield 'negative sale price' => [[], [['soldAt' => '2024-02-01', 'percent' => '50', 'priceSold' => '-1']]];
+    }
+
+    /**
+     * @param array<string, string>       $fields
+     * @param list<array<string, string>> $sales
+     */
+    #[DataProvider('invalidPositions')]
+    public function testInvalidPositionIsAFormError(array $fields, array $sales): void
+    {
+        $crawler = $this->client->request('GET', '/position/new');
+        $values = $crawler->selectButton('Valider')->form()->getPhpValues();
+        $values['position'] = $fields + ['coin' => (string) $this->data->eth->getId(), 'nbCoins' => '1', 'entryCost' => '1000'] + $values['position'];
+        $values['position']['ventes'] = $sales;
+
+        $this->client->request('POST', '/position/new', $values);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testExitPlanOverOneHundredPercentIsAFormError(): void
+    {
+        $crawler = $this->client->request('GET', "/position/{$this->data->position->getId()}/edit");
+        $values = $crawler->selectButton('Valider')->form()->getPhpValues();
+        $values['position']['strategies'] = [['percent' => '120', 'priceSold' => '100000']];
+
+        $this->client->request('POST', "/position/{$this->data->position->getId()}/edit", $values);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testInfosOfAFreePositionWithAnExitPlan(): void
+    {
+        $free = new Position($this->data->user)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(0)
+            ->addStrategy(new StrategyPosition()->setPercent(50)->setPriceSold(4000));
+        $this->persist($free);
+
+        $this->client->request('POST', "/position/{$free->getId()}/infos");
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('body', 'Gains/pertes : 2000 $ (+ ∞)');
+    }
+
+    public function testFreePositionShowsAnInfiniteEvolution(): void
+    {
+        $this->persist(new Position($this->data->user)->setCoin($this->data->eth)->setNbCoins(1)->setEntryCost(0));
+
+        $crawler = $this->client->request('GET', '/position/');
+
+        self::assertSame('+ ∞', trim($crawler->filter('[id^="detail-"]')->last()->filter('tbody tr td')->eq(6)->text()));
+    }
+
+    public function testAverageCostOfACoinUnderOneCent(): void
+    {
+        $shib = new Cryptocurrency()->setLibelleCoingecko('shiba-inu')->setLibelle('Shiba Inu')->setSymbol('shib')
+            ->setPriceUsd(0.00002)->setMcapUsd(1)->setIsStable(false);
+        $this->em()->persist($shib);
+        // 1 000 000 SHIB for 10 $: 0.00001 $ each, rounded to 0 by getEntryCoinValue().
+        $this->persist(new Position($this->data->user)->setCoin($shib)->setNbCoins(1_000_000)->setEntryCost(10));
+
+        $crawler = $this->client->request('GET', '/position/');
+
+        $row = self::cells($crawler->filterXPath("//tr[td[contains(normalize-space(.), ' SHIB')]]")->first());
+        self::assertSame('100 %', $row[5]);
+    }
+
+    public function testClosedStablePositionIsInTheClosedTab(): void
+    {
+        $this->persist(new Position($this->data->user)->setCoin($this->data->usdc)->setNbCoins(10)->setEntryCost(10)->setIsOpened(false));
+
+        $crawler = $this->client->request('GET', '/position/');
+
+        self::assertSame('Fermée (1)', trim($crawler->filter('[role="tab"]')->eq(2)->text()));
+    }
+
+    public function testSubmitAndNextOpensTheFormAgain(): void
+    {
+        $this->client->request('GET', '/position/new');
+        $this->client->submitForm('Valider & continuer', [
+            'position[coin]' => (string) $this->data->eth->getId(),
+            'position[nbCoins]' => '1',
+            'position[entryCost]' => '1000',
+        ]);
+
+        self::assertResponseRedirects('/position/new');
     }
 
     public function testEditPosition(): void

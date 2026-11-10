@@ -4,6 +4,7 @@ namespace App\Position\Entity;
 
 use App\Position\Repository\VenteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VenteRepository::class)]
 class Vente
@@ -17,9 +18,13 @@ class Vente
     private $soldAt;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
+    #[Assert\Range(min: 0, max: 100)]
     private $percent;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private $priceSold;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'ventes')]
@@ -48,7 +53,7 @@ class Vente
         return $this->percent;
     }
 
-    public function setPercent(float $percent): self
+    public function setPercent(?float $percent): self
     {
         $this->percent = $percent;
 
@@ -60,7 +65,7 @@ class Vente
         return $this->priceSold;
     }
 
-    public function setPriceSold(float $priceSold): self
+    public function setPriceSold(?float $priceSold): self
     {
         $this->priceSold = $priceSold;
 

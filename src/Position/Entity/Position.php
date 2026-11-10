@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -26,16 +27,21 @@ class Position implements OwnedInterface
     private $id;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin;
 
     #[ORM\Column(type: 'boolean')]
     private $isOpened;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private $entryCost;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -47,9 +53,11 @@ class Position implements OwnedInterface
     #[ORM\Column(type: 'boolean')]
     private $isDca;
 
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: Vente::class, cascade: ['persist'], orphanRemoval: true)]
     private $ventes;
 
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: StrategyPosition::class, cascade: ['persist'], orphanRemoval: true)]
     private $strategies;
 
@@ -74,7 +82,7 @@ class Position implements OwnedInterface
         return $this->nbCoins;
     }
 
-    public function setNbCoins(float $nbCoins): self
+    public function setNbCoins(?float $nbCoins): self
     {
         $this->nbCoins = $nbCoins;
 
@@ -110,7 +118,7 @@ class Position implements OwnedInterface
         return $this->entryCost;
     }
 
-    public function setEntryCost(float $entryCost): self
+    public function setEntryCost(?float $entryCost): self
     {
         $this->entryCost = $entryCost;
 
@@ -228,11 +236,17 @@ class Position implements OwnedInterface
         return $this->remainingCoins / $this->nbCoins;
     }
 
-    public function getPercentEvolution(): float
+    /**
+     * Evolution of the value of the coins left against their cost, null when they cost nothing.
+     */
+    public function getPercentEvolution(): ?float
     {
-        return ($this->entryCost > 0 && $this->getPercentRemainingCoins() > 0) // Pour la division par 0
-            ? (($this->getCurrentValue() - ($this->entryCost * $this->getPercentRemainingCoins())) / ($this->entryCost * $this->getPercentRemainingCoins())) * 100
-            : 9999;
+        $cost = $this->entryCost * $this->getPercentRemainingCoins();
+        if ($cost <= 0) {
+            return null;
+        }
+
+        return ($this->getCurrentValue() - $cost) / $cost * 100;
     }
 
     /**

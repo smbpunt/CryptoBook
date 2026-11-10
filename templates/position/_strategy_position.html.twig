@@ -65,6 +65,6 @@
         <p>Nombre de coins restants après ventes : {{ exitPlan.remainingCoins }}</p>
         <p>Pourcentage de coins restants : {{ exitPlan.remainingPercent }} %</p>
         <p>Récupéré : {{ exitPlan.recoveredUsd }} $</p>
-        <p class="{{ exitPlan.resultUsd > 0 ? 'text-positive' : 'text-negative' }}">Gains/pertes : {{ exitPlan.resultUsd }} $ ({{ exitPlan.resultPercent }} %)</p>
+        <p class="{{ exitPlan.resultUsd > 0 ? 'text-positive' : 'text-negative' }}">Gains/pertes : {{ exitPlan.resultUsd }} $ ({{ exitPlan.resultPercent is null ? '+ ∞' : exitPlan.resultPercent ~ ' %' }})</p>
     </div>
 {% endif %}

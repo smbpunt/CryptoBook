@@ -32,6 +32,14 @@ final class PositionGroupBuilderTest extends TestCase
         self::assertEqualsWithDelta(1500.0, $groups[1]->averageCost, 1e-9);
     }
 
+    public function testAverageCostOfACoinUnderOneCent(): void
+    {
+        $group = new PositionGroupBuilder()->build([$this->position($this->coin(1, 0.00002), 1_000_000, 10)])[0];
+
+        self::assertEqualsWithDelta(0.00001, $group->averageCost, 1e-12);
+        self::assertEqualsWithDelta(100.0, $group->evolutionPercent(), 1e-9);
+    }
+
     public function testNoPosition(): void
     {
         self::assertSame([], new PositionGroupBuilder()->build([]));
