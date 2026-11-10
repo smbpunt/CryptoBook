@@ -90,7 +90,8 @@ final class OwnershipTest extends WebTestCase
         $em->clear();
 
         $repository = self::getContainer()->get(StrategyDcaRepository::class);
-        $repository->remove($repository->findOneBy(['owner' => $userId]), true);
+        $em->remove($repository->findOneBy(['owner' => $userId]));
+        $em->flush();
         $em->clear();
 
         self::assertNull($repository->findOneBy(['owner' => $userId]));

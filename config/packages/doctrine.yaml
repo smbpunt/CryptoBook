@@ -15,11 +15,6 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: sequence
         auto_mapping: true
         mappings:
-            App:
-                type: attribute
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
             Blockchain:
                 type: attribute
                 is_bundle: false
@@ -30,6 +25,11 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Cryptocurrency/Entity'
                 prefix: 'App\Cryptocurrency\Entity'
+            Deposit:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Deposit/Entity'
+                prefix: 'App\Deposit\Entity'
             Exchange:
                 type: attribute
                 is_bundle: false
@@ -40,11 +40,6 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/FiatCurrency/Entity'
                 prefix: 'App\FiatCurrency\Entity'
-            Deposit:
-                type: attribute
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Deposit/Entity'
-                prefix: 'App\Deposit\Entity'
             Loan:
                 type: attribute
                 is_bundle: false

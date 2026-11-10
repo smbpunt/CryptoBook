@@ -21,15 +21,6 @@ class FiatCurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, FiatCurrency::class);
     }
 
-    public function save(FiatCurrency $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
     public function flush(): void
     {
         $this->getEntityManager()->flush();
@@ -48,38 +39,4 @@ class FiatCurrencyRepository extends ServiceEntityRepository
         return $this->findOneBy(['fixerKey' => $fixerKey])
             ?? throw new \LogicException(\sprintf('The %s currency is missing.', $fixerKey));
     }
-
-    public function remove(FiatCurrency $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    //    /**
-    //     * @return FiatCurrency[] Returns an array of FiatCurrency objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?FiatCurrency
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

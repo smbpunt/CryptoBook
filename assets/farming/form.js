@@ -1,4 +1,3 @@
-console.log('farming/form.js loaded');
 import Choices from "choices.js";
 import {BlockchainDapp} from "../blockchain-dapp.js";
 
