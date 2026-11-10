@@ -11,6 +11,7 @@ use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
 use App\Loan\Repository\LoanRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LoanRepository::class)]
 class Loan implements OwnedInterface
@@ -25,13 +26,16 @@ class Loan implements OwnedInterface
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class, inversedBy: 'loans')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $coin;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotNull]
     private $nbCoins;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class, inversedBy: 'loans')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private $dapp;
 
     private $blockchain;
@@ -66,7 +70,7 @@ class Loan implements OwnedInterface
         return $this->nbCoins;
     }
 
-    public function setNbCoins(float $nbCoins): self
+    public function setNbCoins(?float $nbCoins): self
     {
         $this->nbCoins = $nbCoins;
 

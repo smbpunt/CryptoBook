@@ -31,7 +31,7 @@ final class LoanControllerTest extends WebTestCase
 
         $crawler = $this->client->xmlHttpRequest('POST', '/loan/new', $values);
 
-        self::assertSame(1, $crawler->filter('#loan_dapp option[value="'.$this->data->aave->getId().'"]')->count());
+        self::assertCount(1, $crawler->filter('#loan_dapp option[value="'.$this->data->aave->getId().'"]'));
         self::assertSame(1, $this->countLoans());
     }
 
@@ -48,6 +48,21 @@ final class LoanControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/loan/');
         self::assertSame(2, $this->countLoans());
+    }
+
+    public function testEmptyQuantityIsAFormError(): void
+    {
+        $crawler = $this->client->request('GET', '/loan/new');
+        $values = $crawler->selectButton('Ajouter')->form()->getPhpValues();
+        $values['loan']['blockchain'] = (string) $this->data->ethereum->getId();
+        $values['loan']['dapp'] = (string) $this->data->aave->getId();
+        $values['loan']['nbCoins'] = '';
+        $values['loan']['coin'] = (string) $this->data->usdc->getId();
+
+        $this->client->request('POST', '/loan/new', $values);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertSame(1, $this->countLoans());
     }
 
     public function testIndexShowsTheTotal(): void
