@@ -109,34 +109,34 @@ parameters:
 			path: src/Deposit/Repository/DepositTypeRepository.php
 
 		-
-			message: '#^Property App\\Entity\\Blockchain\:\:\$coin has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Blockchain\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Blockchain.php
+			path: src/Blockchain/Entity/Blockchain.php
 
 		-
-			message: '#^Property App\\Entity\\Blockchain\:\:\$dapps has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Blockchain\:\:\$dapps has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Blockchain.php
+			path: src/Blockchain/Entity/Blockchain.php
 
 		-
-			message: '#^Property App\\Entity\\Blockchain\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Blockchain\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Blockchain.php
+			path: src/Blockchain/Entity/Blockchain.php
 
 		-
-			message: '#^Property App\\Entity\\Blockchain\:\:\$libelle has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Blockchain\:\:\$libelle has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Blockchain.php
+			path: src/Blockchain/Entity/Blockchain.php
 
 		-
-			message: '#^Property App\\Entity\\Blockchain\:\:\$nfts has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Blockchain\:\:\$nfts has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Blockchain.php
+			path: src/Blockchain/Entity/Blockchain.php
 
 		-
 			message: '#^Property App\\Entity\\CoinPercentDca\:\:\$coin has no type specified\.$#'
@@ -163,226 +163,226 @@ parameters:
 			path: src/Entity/CoinPercentDca.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$blockchains has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$blockchains has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$color has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$color has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$farmingStrategies has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$farmingStrategies has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$isStable has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$isStable has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$libelle has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$libelle has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$libelleCoingecko has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$libelleCoingecko has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$loans has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$loans has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$mcapUsd has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$mcapUsd has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$nfts has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$nfts has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$positions has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$positions has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$priceUsd has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$priceUsd has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$projectMonitorings has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$projectMonitorings has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$symbol has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$symbol has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$urlImgLarge has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$urlImgLarge has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$urlImgSmall has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$urlImgSmall has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Cryptocurrency\:\:\$urlImgThumb has no type specified\.$#'
+			message: '#^Property App\\Cryptocurrency\\Entity\\Cryptocurrency\:\:\$urlImgThumb has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Cryptocurrency.php
+			path: src/Cryptocurrency/Entity/Cryptocurrency.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$blockchain has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$farmingStrategies has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$farmingStrategies has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$libelle has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$libelle has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$loans has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$loans has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Dapp\:\:\$url has no type specified\.$#'
+			message: '#^Property App\\Blockchain\\Entity\\Dapp\:\:\$url has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Dapp.php
+			path: src/Blockchain/Entity/Dapp.php
 
 		-
-			message: '#^Property App\\Entity\\Exchange\:\:\$deposits has no type specified\.$#'
+			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$deposits has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Exchange.php
+			path: src/Exchange/Entity/Exchange.php
 
 		-
-			message: '#^Property App\\Entity\\Exchange\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Exchange.php
+			path: src/Exchange/Entity/Exchange.php
 
 		-
-			message: '#^Property App\\Entity\\Exchange\:\:\$libelle has no type specified\.$#'
+			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$libelle has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Exchange.php
+			path: src/Exchange/Entity/Exchange.php
 
 		-
-			message: '#^Property App\\Entity\\Exchange\:\:\$url has no type specified\.$#'
+			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$url has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/Exchange.php
+			path: src/Exchange/Entity/Exchange.php
 
 		-
-			message: '#^Method App\\Entity\\FiatCurrency\:\:getRates\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method App\\FiatCurrency\\Entity\\FiatCurrency\:\:getRates\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Method App\\Entity\\FiatCurrency\:\:setRates\(\) has parameter \$rates with no value type specified in iterable type array\.$#'
+			message: '#^Method App\\FiatCurrency\\Entity\\FiatCurrency\:\:setRates\(\) has parameter \$rates with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$KEY_EUR has no type specified\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$KEY_EUR has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$KEY_USD has no type specified\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$KEY_USD has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$deposits type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Deposit\\Entity\\Deposit\>\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$deposits type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Deposit\\Entity\\Deposit\>\.$#'
 			identifier: doctrine.associationType
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$deposits with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$deposits with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$rates type has no value type specified in iterable type array\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$rates type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$rates type mapping mismatch\: database can contain null but property expects array\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$rates type mapping mismatch\: database can contain null but property expects array\.$#'
 			identifier: doctrine.columnType
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$users type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\User\>\.$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$users type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\User\>\.$#'
 			identifier: doctrine.associationType
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
-			message: '#^Property App\\Entity\\FiatCurrency\:\:\$users with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			message: '#^Property App\\FiatCurrency\\Entity\\FiatCurrency\:\:\$users with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Entity/FiatCurrency.php
+			path: src/FiatCurrency/Entity/FiatCurrency.php
 
 		-
 			message: '#^Method App\\Entity\\Position\:\:getVentesSortedByDate\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
@@ -1069,28 +1069,28 @@ parameters:
 			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
 
 		-
-			message: '#^Class App\\Repository\\BlockchainRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\BlockchainRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/BlockchainRepository.php
+			path: src/Blockchain/Repository/BlockchainRepository.php
 
 		-
-			message: '#^Class App\\Repository\\BlockchainRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\BlockchainRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/BlockchainRepository.php
+			path: src/Blockchain/Repository/BlockchainRepository.php
 
 		-
-			message: '#^Class App\\Repository\\BlockchainRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\BlockchainRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/BlockchainRepository.php
+			path: src/Blockchain/Repository/BlockchainRepository.php
 
 		-
-			message: '#^Class App\\Repository\\BlockchainRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\BlockchainRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/BlockchainRepository.php
+			path: src/Blockchain/Repository/BlockchainRepository.php
 
 		-
 			message: '#^Class App\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
@@ -1117,106 +1117,106 @@ parameters:
 			path: src/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Cryptocurrency\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CryptocurrencyRepository.php
+			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Cryptocurrency\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CryptocurrencyRepository.php
+			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Cryptocurrency\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CryptocurrencyRepository.php
+			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Cryptocurrency\\Repository\\CryptocurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CryptocurrencyRepository.php
+			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
 
 		-
-			message: '#^Method App\\Repository\\CryptocurrencyRepository\:\:getSumCoinByUser\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method App\\Cryptocurrency\\Repository\\CryptocurrencyRepository\:\:getSumCoinByUser\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CryptocurrencyRepository.php
+			path: src/Cryptocurrency/Repository/CryptocurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\DappRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\DappRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/DappRepository.php
+			path: src/Blockchain/Repository/DappRepository.php
 
 		-
-			message: '#^Class App\\Repository\\DappRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\DappRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/DappRepository.php
+			path: src/Blockchain/Repository/DappRepository.php
 
 		-
-			message: '#^Class App\\Repository\\DappRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\DappRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/DappRepository.php
+			path: src/Blockchain/Repository/DappRepository.php
 
 		-
-			message: '#^Class App\\Repository\\DappRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Blockchain\\Repository\\DappRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/DappRepository.php
+			path: src/Blockchain/Repository/DappRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ExchangeRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Exchange\\Repository\\ExchangeRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ExchangeRepository.php
+			path: src/Exchange/Repository/ExchangeRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ExchangeRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Exchange\\Repository\\ExchangeRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ExchangeRepository.php
+			path: src/Exchange/Repository/ExchangeRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ExchangeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Exchange\\Repository\\ExchangeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ExchangeRepository.php
+			path: src/Exchange/Repository/ExchangeRepository.php
 
 		-
-			message: '#^Class App\\Repository\\ExchangeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Exchange\\Repository\\ExchangeRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/ExchangeRepository.php
+			path: src/Exchange/Repository/ExchangeRepository.php
 
 		-
-			message: '#^Class App\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\FiatCurrency\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/FiatCurrencyRepository.php
+			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\FiatCurrency\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/FiatCurrencyRepository.php
+			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\FiatCurrency\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/FiatCurrencyRepository.php
+			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\FiatCurrency\\Repository\\FiatCurrencyRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/FiatCurrencyRepository.php
+			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
 			message: '#^Class App\\Repository\\PositionRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'

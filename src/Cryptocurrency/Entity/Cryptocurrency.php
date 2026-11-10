@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Cryptocurrency\Entity;
 
+use App\Blockchain\Entity\Blockchain;
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
+use App\Entity\Position;
+use App\Entity\StrategyFarming;
 use App\Loan\Entity\Loan;
 use App\Nft\Entity\Nft;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;
-use App\Repository\CryptocurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

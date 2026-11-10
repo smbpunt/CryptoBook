@@ -2,7 +2,7 @@
 
 namespace App\Wallet\Calculator;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\User;
 use App\Repository\PositionRepository;
 use App\Wallet\Dto\WalletHolding;

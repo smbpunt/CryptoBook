@@ -2,10 +2,10 @@
 
 namespace App\Tests\Unit\Service;
 
-use App\Entity\FiatCurrency;
 use App\Entity\User;
+use App\FiatCurrency\Entity\FiatCurrency;
+use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use App\Fixer\Client\FixerClient;
-use App\Repository\FiatCurrencyRepository;
 use App\Service\FiatExchangeRatesService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;

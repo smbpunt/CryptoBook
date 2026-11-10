@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Coingecko\Client\CoingeckoClient;
 use App\Coingecko\Exception\CoingeckoUnavailableException;
-use App\Entity\Cryptocurrency;
-use App\Repository\CryptocurrencyRepository;
+use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 

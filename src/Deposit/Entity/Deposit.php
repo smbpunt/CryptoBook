@@ -3,11 +3,11 @@
 namespace App\Deposit\Entity;
 
 use App\Deposit\Repository\DepositRepository;
-use App\Entity\Exchange;
-use App\Entity\FiatCurrency;
 use App\Entity\OwnedInterface;
 use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
+use App\Exchange\Entity\Exchange;
+use App\FiatCurrency\Entity\FiatCurrency;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

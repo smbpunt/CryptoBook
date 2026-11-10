@@ -2,8 +2,8 @@
 
 namespace App\Nft\Entity;
 
-use App\Entity\Blockchain;
-use App\Entity\Cryptocurrency;
+use App\Blockchain\Entity\Blockchain;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;

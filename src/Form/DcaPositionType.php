@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Position;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

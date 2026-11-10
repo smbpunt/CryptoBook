@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;
 use App\Repository\StrategyFarmingRepository;

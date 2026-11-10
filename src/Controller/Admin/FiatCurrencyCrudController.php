@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\FiatCurrency;
+use App\FiatCurrency\Entity\FiatCurrency;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;

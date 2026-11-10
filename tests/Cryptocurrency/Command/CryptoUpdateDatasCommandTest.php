@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Command;
+namespace App\Tests\Cryptocurrency\Command;
 
-use App\Repository\CryptocurrencyRepository;
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

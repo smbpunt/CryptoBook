@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Position;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

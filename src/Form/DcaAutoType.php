@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dto\DcaAutoQuery;
-use App\Entity\Cryptocurrency;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

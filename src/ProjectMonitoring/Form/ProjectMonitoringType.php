@@ -2,7 +2,7 @@
 
 namespace App\ProjectMonitoring\Form;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;
 use App\ProjectMonitoring\Entity\TypeProject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

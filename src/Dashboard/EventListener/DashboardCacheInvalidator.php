@@ -2,12 +2,12 @@
 
 namespace App\Dashboard\EventListener;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dashboard\Cache\DashboardCache;
-use App\Entity\Cryptocurrency;
-use App\Entity\FiatCurrency;
 use App\Entity\OwnedInterface;
 use App\Entity\User;
 use App\Entity\Vente;
+use App\FiatCurrency\Entity\FiatCurrency;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;

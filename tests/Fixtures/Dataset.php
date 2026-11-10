@@ -2,19 +2,19 @@
 
 namespace App\Tests\Fixtures;
 
+use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Deposit\Entity\Deposit;
 use App\Deposit\Entity\DepositType;
-use App\Entity\Blockchain;
 use App\Entity\CoinPercentDca;
-use App\Entity\Cryptocurrency;
-use App\Entity\Dapp;
-use App\Entity\Exchange;
-use App\Entity\FiatCurrency;
 use App\Entity\Position;
 use App\Entity\StrategyDca;
 use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
 use App\Entity\User;
+use App\Exchange\Entity\Exchange;
+use App\FiatCurrency\Entity\FiatCurrency;
 use App\Loan\Entity\Loan;
 use App\Nft\Entity\Nft;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\EventListener;
+namespace App\Tests\Cryptocurrency\EventListener;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;

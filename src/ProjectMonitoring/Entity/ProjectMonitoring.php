@@ -2,7 +2,7 @@
 
 namespace App\ProjectMonitoring\Entity;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;

@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\CoinPercentDca;
-use App\Entity\Cryptocurrency;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Entity\Position;
 use App\Entity\User;
 use App\Form\PositionType;
-use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
 use App\Security\Voter\OwnerVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

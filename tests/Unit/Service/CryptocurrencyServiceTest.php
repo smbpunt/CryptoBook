@@ -3,8 +3,8 @@
 namespace App\Tests\Unit\Service;
 
 use App\Coingecko\Client\CoingeckoClient;
-use App\Entity\Cryptocurrency;
-use App\Repository\CryptocurrencyRepository;
+use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Service\CryptocurrencyService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;

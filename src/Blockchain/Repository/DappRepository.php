@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Blockchain\Repository;
 
-use App\Entity\Dapp;
+use App\Blockchain\Entity\Dapp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

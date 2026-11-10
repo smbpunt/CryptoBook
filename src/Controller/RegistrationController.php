@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\FiatCurrency;
 use App\Entity\User;
+use App\FiatCurrency\Entity\FiatCurrency;
+use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use App\Form\RegistrationFormType;
-use App\Repository\FiatCurrencyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

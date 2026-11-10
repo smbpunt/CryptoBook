@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Command;
+namespace App\Tests\FiatCurrency\Command;
 
-use App\Repository\FiatCurrencyRepository;
+use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;

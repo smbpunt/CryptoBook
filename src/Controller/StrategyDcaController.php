@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use App\Dto\DcaAutoQuery;
 use App\Entity\StrategyDca;
 use App\Entity\User;
 use App\Form\DcaAutoType;
 use App\Form\DcaToPositionType;
 use App\Form\StrategyDcaType;
-use App\Repository\CryptocurrencyRepository;
 use App\Repository\PositionRepository;
 use App\Repository\StrategyDcaRepository;
 use App\Service\DcaService;

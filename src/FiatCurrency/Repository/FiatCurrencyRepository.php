@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\FiatCurrency\Repository;
 
-use App\Entity\FiatCurrency;
+use App\FiatCurrency\Entity\FiatCurrency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

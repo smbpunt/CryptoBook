@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\Entity\FiatCurrency;
+use App\FiatCurrency\Entity\FiatCurrency;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

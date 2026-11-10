@@ -20,6 +20,26 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
+            Blockchain:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Blockchain/Entity'
+                prefix: 'App\Blockchain\Entity'
+            Cryptocurrency:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Cryptocurrency/Entity'
+                prefix: 'App\Cryptocurrency\Entity'
+            Exchange:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Exchange/Entity'
+                prefix: 'App\Exchange\Entity'
+            FiatCurrency:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/FiatCurrency/Entity'
+                prefix: 'App\FiatCurrency\Entity'
             Deposit:
                 type: attribute
                 is_bundle: false

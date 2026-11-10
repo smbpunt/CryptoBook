@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Repository\CoinPercentDcaRepository;
 use Doctrine\ORM\Mapping as ORM;
 

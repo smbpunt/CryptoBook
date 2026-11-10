@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\FiatCurrency\Command;
 
 use App\Fixer\Exception\FixerUnavailableException;
 use App\Service\FiatExchangeRatesService;

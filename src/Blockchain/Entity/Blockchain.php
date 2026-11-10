@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Blockchain\Entity;
 
+use App\Blockchain\Repository\BlockchainRepository;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Nft\Entity\Nft;
-use App\Repository\BlockchainRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

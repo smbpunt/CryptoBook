@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\FiatCurrency\Entity;
 
 use App\Deposit\Entity\Deposit;
-use App\Repository\FiatCurrencyRepository;
+use App\Entity\User;
+use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

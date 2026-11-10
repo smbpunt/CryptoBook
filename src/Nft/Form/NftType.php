@@ -2,8 +2,8 @@
 
 namespace App\Nft\Form;
 
-use App\Entity\Blockchain;
-use App\Entity\Cryptocurrency;
+use App\Blockchain\Entity\Blockchain;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Nft\Entity\Nft;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

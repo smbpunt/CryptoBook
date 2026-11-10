@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
-use App\Entity\FiatCurrency;
 use App\Entity\User;
+use App\FiatCurrency\Entity\FiatCurrency;
+use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use App\Fixer\Client\FixerClient;
 use App\Fixer\Exception\FixerUnavailableException;
-use App\Repository\FiatCurrencyRepository;
 
 final readonly class FiatExchangeRatesService
 {

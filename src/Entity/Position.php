@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;
 use App\Repository\PositionRepository;

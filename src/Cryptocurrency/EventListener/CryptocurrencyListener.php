@@ -1,8 +1,8 @@
 <?php
 
-namespace App\EventListener;
+namespace App\Cryptocurrency\EventListener;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Service\CryptocurrencyService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;

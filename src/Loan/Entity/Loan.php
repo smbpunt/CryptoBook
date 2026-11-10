@@ -2,9 +2,9 @@
 
 namespace App\Loan\Entity;
 
-use App\Entity\Blockchain;
-use App\Entity\Cryptocurrency;
-use App\Entity\Dapp;
+use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\OwnedInterface;
 use App\Entity\Trait\DescriptionTrait;
 use App\Entity\Trait\OwnerTrait;

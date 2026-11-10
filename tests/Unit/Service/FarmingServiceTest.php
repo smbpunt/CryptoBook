@@ -2,7 +2,7 @@
 
 namespace App\Tests\Unit\Service;
 
-use App\Entity\Cryptocurrency;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Entity\StrategyFarming;
 use App\Entity\StrategyLp;
 use App\Entity\User;
