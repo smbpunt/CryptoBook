@@ -289,166 +289,166 @@ parameters:
 			path: src/Deposit/Repository/DepositTypeRepository.php
 
 		-
-			message: '#^Property App\\Entity\\CoinPercentDca\:\:\$coin has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\CoinPercentDca\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/CoinPercentDca.php
+			path: src/Strategy/Dca/Entity/CoinPercentDca.php
 
 		-
-			message: '#^Property App\\Entity\\CoinPercentDca\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\CoinPercentDca\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/CoinPercentDca.php
+			path: src/Strategy/Dca/Entity/CoinPercentDca.php
 
 		-
-			message: '#^Property App\\Entity\\CoinPercentDca\:\:\$percent has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\CoinPercentDca\:\:\$percent has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/CoinPercentDca.php
+			path: src/Strategy/Dca/Entity/CoinPercentDca.php
 
 		-
-			message: '#^Property App\\Entity\\CoinPercentDca\:\:\$strategyDca has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\CoinPercentDca\:\:\$strategyDca has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/CoinPercentDca.php
+			path: src/Strategy/Dca/Entity/CoinPercentDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyDca\:\:\$farmingToDcaUsd has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\StrategyDca\:\:\$farmingToDcaUsd has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyDca.php
+			path: src/Strategy/Dca/Entity/StrategyDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyDca\:\:\$fiatToDcaEur has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\StrategyDca\:\:\$fiatToDcaEur has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyDca.php
+			path: src/Strategy/Dca/Entity/StrategyDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyDca\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\StrategyDca\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyDca.php
+			path: src/Strategy/Dca/Entity/StrategyDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyDca\:\:\$parts has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Dca\\Entity\\StrategyDca\:\:\$parts has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyDca.php
+			path: src/Strategy/Dca/Entity/StrategyDca.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$apr has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$apr has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$blockchain has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$coin has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$coin has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$dapp has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$dapp has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$enteredAt has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$enteredAt has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyFarming\:\:\$nbCoins has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Farming\\Entity\\StrategyFarming\:\:\$nbCoins has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyFarming.php
+			path: src/Strategy/Farming/Entity/StrategyFarming.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$apr has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$apr has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$blockchain has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$blockchain has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$coin1 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$coin1 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$coin2 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$coin2 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$dapp has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$dapp has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$id has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$id has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$lpDeposit has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$lpDeposit has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$nbCoin1 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$nbCoin1 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$nbCoin2 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$nbCoin2 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$priceCoin1 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$priceCoin1 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$priceCoin2 has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$priceCoin2 has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
-			message: '#^Property App\\Entity\\StrategyLp\:\:\$startAt has no type specified\.$#'
+			message: '#^Property App\\Strategy\\Lp\\Entity\\StrategyLp\:\:\$startAt has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
-			path: src/Entity/StrategyLp.php
+			path: src/Strategy/Lp/Entity/StrategyLp.php
 
 		-
 			message: '#^Property App\\Exchange\\Entity\\Exchange\:\:\$id has no type specified\.$#'
@@ -541,46 +541,46 @@ parameters:
 			path: src/FiatCurrency/Repository/FiatCurrencyRepository.php
 
 		-
-			message: '#^Class App\\Form\\CoinPercentDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Dca\\Form\\CoinPercentDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/CoinPercentDcaType.php
+			path: src/Strategy/Dca/Form/CoinPercentDcaType.php
 
 		-
-			message: '#^Class App\\Form\\DcaAutoType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Dca\\Form\\DcaAutoType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/DcaAutoType.php
+			path: src/Strategy/Dca/Form/DcaAutoType.php
 
 		-
-			message: '#^Class App\\Form\\DcaPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Dca\\Form\\DcaPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/DcaPositionType.php
+			path: src/Strategy/Dca/Form/DcaPositionType.php
 
 		-
-			message: '#^Class App\\Form\\DcaToPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Dca\\Form\\DcaToPositionType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/DcaToPositionType.php
+			path: src/Strategy/Dca/Form/DcaToPositionType.php
 
 		-
-			message: '#^Class App\\Form\\StrategyDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Dca\\Form\\StrategyDcaType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/StrategyDcaType.php
+			path: src/Strategy/Dca/Form/StrategyDcaType.php
 
 		-
-			message: '#^Class App\\Form\\StrategyFarmingType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Farming\\Form\\StrategyFarmingType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/StrategyFarmingType.php
+			path: src/Strategy/Farming/Form/StrategyFarmingType.php
 
 		-
-			message: '#^Class App\\Form\\StrategyLpType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			message: '#^Class App\\Strategy\\Lp\\Form\\StrategyLpType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
-			path: src/Form/StrategyLpType.php
+			path: src/Strategy/Lp/Form/StrategyLpType.php
 
 		-
 			message: '#^Property App\\Loan\\Entity\\Loan\:\:\$blockchain has no type specified\.$#'
@@ -1093,100 +1093,100 @@ parameters:
 			path: src/ProjectMonitoring/Repository/TypeProjectRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CoinPercentDcaRepository.php
+			path: src/Strategy/Dca/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CoinPercentDcaRepository.php
+			path: src/Strategy/Dca/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CoinPercentDcaRepository.php
+			path: src/Strategy/Dca/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\CoinPercentDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/CoinPercentDcaRepository.php
+			path: src/Strategy/Dca/Repository/CoinPercentDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyDcaRepository.php
+			path: src/Strategy/Dca/Repository/StrategyDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyDcaRepository.php
+			path: src/Strategy/Dca/Repository/StrategyDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyDcaRepository.php
+			path: src/Strategy/Dca/Repository/StrategyDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Dca\\Repository\\StrategyDcaRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyDcaRepository.php
+			path: src/Strategy/Dca/Repository/StrategyDcaRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Farming\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyFarmingRepository.php
+			path: src/Strategy/Farming/Repository/StrategyFarmingRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Farming\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyFarmingRepository.php
+			path: src/Strategy/Farming/Repository/StrategyFarmingRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Farming\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyFarmingRepository.php
+			path: src/Strategy/Farming/Repository/StrategyFarmingRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Farming\\Repository\\StrategyFarmingRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyFarmingRepository.php
+			path: src/Strategy/Farming/Repository/StrategyFarmingRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Lp\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyLpRepository.php
+			path: src/Strategy/Lp/Repository/StrategyLpRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Lp\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyLpRepository.php
+			path: src/Strategy/Lp/Repository/StrategyLpRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Lp\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#1 \$criteria with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyLpRepository.php
+			path: src/Strategy/Lp/Repository/StrategyLpRepository.php
 
 		-
-			message: '#^Class App\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
+			message: '#^Class App\\Strategy\\Lp\\Repository\\StrategyLpRepository has PHPDoc tag @method for method findOneBy\(\) parameter \#2 \$orderBy with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Repository/StrategyLpRepository.php
+			path: src/Strategy/Lp/Repository/StrategyLpRepository.php
 
 		-
 			message: '#^Class App\\Security\\Form\\ChangePasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'

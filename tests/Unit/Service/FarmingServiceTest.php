@@ -3,11 +3,11 @@
 namespace App\Tests\Unit\Service;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
-use App\Entity\StrategyFarming;
-use App\Entity\StrategyLp;
-use App\Repository\StrategyFarmingRepository;
-use App\Repository\StrategyLpRepository;
 use App\Service\FarmingService;
+use App\Strategy\Farming\Entity\StrategyFarming;
+use App\Strategy\Farming\Repository\StrategyFarmingRepository;
+use App\Strategy\Lp\Entity\StrategyLp;
+use App\Strategy\Lp\Repository\StrategyLpRepository;
 use App\User\Entity\User;
 use PHPUnit\Framework\TestCase;
 

@@ -4,10 +4,10 @@ namespace App\Tests\Unit\Service;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Cryptocurrency\Repository\CryptocurrencyRepository;
-use App\Entity\CoinPercentDca;
-use App\Entity\StrategyDca;
-use App\Form\DcaAutoType;
 use App\Service\DcaService;
+use App\Strategy\Dca\Entity\CoinPercentDca;
+use App\Strategy\Dca\Entity\StrategyDca;
+use App\Strategy\Dca\Form\DcaAutoType;
 use App\User\Entity\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

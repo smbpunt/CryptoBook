@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Repository\StrategyFarmingRepository;
-use App\Repository\StrategyLpRepository;
+use App\Strategy\Farming\Repository\StrategyFarmingRepository;
+use App\Strategy\Lp\Repository\StrategyLpRepository;
 use App\User\Entity\User;
 
 final readonly class FarmingService

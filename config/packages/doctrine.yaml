@@ -70,6 +70,21 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Security/Entity'
                 prefix: 'App\Security\Entity'
+            StrategyDca:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Dca/Entity'
+                prefix: 'App\Strategy\Dca\Entity'
+            StrategyFarming:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Farming/Entity'
+                prefix: 'App\Strategy\Farming\Entity'
+            StrategyLp:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Lp/Entity'
+                prefix: 'App\Strategy\Lp\Entity'
             User:
                 type: attribute
                 is_bundle: false

@@ -3,7 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Deposit\Repository\DepositRepository;
-use App\Repository\StrategyDcaRepository;
+use App\Strategy\Dca\Repository\StrategyDcaRepository;
 use App\Tests\Fixtures\Dataset;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\User;
