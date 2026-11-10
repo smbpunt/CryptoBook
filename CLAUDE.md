@@ -16,7 +16,7 @@ Versions exactes dans `composer.json`, recettes Flex appliquées dans `symfony.l
 ## Architecture
 
 - Authentification par formulaire (`App\Security\Authenticator\UserAuthenticator`), mot de passe oublié via `symfonycasts/reset-password-bundle`
-- Doctrine ORM 3 + PostgreSQL, Twig, AssetMapper, Stimulus, EasyAdmin 5, KnpMenu
+- Doctrine ORM 3 + PostgreSQL, Twig, AssetMapper, Stimulus, Turbo, EasyAdmin 5, KnpMenu
 - UI : Tailwind CSS 4 (`symfonycasts/tailwind-bundle`) + kit shadcn du UX Toolkit. Composants du kit dans `templates/components/` (installés via `bin/console ux:install <nom> --kit shadcn`, modifiables, pas de mise à jour automatique), composants applicatifs dans `templates/components/App/`. Thème de formulaire : `templates/form/shadcn_layout.html.twig` (option `addon` pour un suffixe `$`/`%` ; les `DateType` en `single_text` s'affichent avec le `DatePicker` du kit, qui envoie une date `Y-m-d`). Icônes : `<twig:ux:icon name="lucide:…"/>`, puis `bin/console ux:icons:lock`.
 - Thèmes clair et sombre : classe `.dark` sur `<html>`, posée avant le CSS par le script inline de `base.html.twig` (`localStorage.theme`, sinon `prefers-color-scheme`), basculée par `theme_controller.js` qui émet `theme:change` sur `window`. Aucune couleur en dur : tokens de `assets/styles/app.css` (`:root` / `.dark`). En plus de ceux de shadcn : `--brand` (orange, aplats), `--brand-text` (orange lisible), `--positive` / `--negative`, `--shadow-card`. Couleurs de graphique en hex (Chart.js ne lit pas `oklch()`). Polices auto-hébergées (`@fontsource-variable`) : Inter (`font-sans`), Space Grotesk (`font-display`), montants en `tabular-nums`.
 - Menus KnpMenu (`src/Shared/Builder/MenuBuilder.php`) : `main` (onglets du header) et `account` (popover du bouton compte, `templates/shared/account_menu.html.twig`).
@@ -50,7 +50,8 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 - CSS : `make tailwind` (ou `make tailwind c=--watch`) compile `assets/styles/app.css` vers `var/tailwind/`, requis avant d'afficher l'application.
 - Le service `php` remplace `DATABASE_URL` par le service `database` (Postgres 16) ; la base `app_test` est créée au premier démarrage. `.env` pointe toujours sur `127.0.0.1` pour un usage depuis l'hôte.
 - PHP de l'hôte en 8.5, projet en 8.4 : ne pas lancer `composer update` sur l'hôte, il résout les dépendances pour la mauvaise version.
-- Front en AssetMapper + importmap (pas de Node) : paquets JS via `bin/console importmap:require`, scripts de page déclarés comme entrypoints dans `importmap.php`.
+- Front en AssetMapper + importmap (pas de Node) : paquets JS via `bin/console importmap:require`. Un seul entrypoint, `app` : avec Turbo, l'importmap ne change pas d'une page à l'autre et un module ne s'exécute qu'une fois. Le JS de page est un contrôleur Stimulus (`assets/controllers/`, `/* stimulusFetch: 'lazy' */`), qui nettoie dans `disconnect()` ou sur `turbo:before-cache` ce qu'il ajoute au DOM.
+- Turbo Drive : redirection après un POST en 303, formulaire invalide en 422 (`render()` reçoit le formulaire). Liens hors Turbo en `data-turbo="false"` : Admin (layout EasyAdmin), Déconnexion (sinon préchargée au survol).
 - En cas d'erreur : lire `var/log/dev.log` et le profiler (`/_profiler`) avant de modifier le code.
 - `.env` est versionné et ne contient que des valeurs par défaut. Les secrets (`APP_SECRET`, `FIXER_API_KEY`) vont dans `.env.local` (ignoré par git).
 

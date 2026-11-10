@@ -22,7 +22,8 @@
     {% endblock %}
 
     {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {# A single entrypoint: with Turbo, the importmap cannot change from one page to the next. Page scripts are Stimulus controllers. #}
+        {{ importmap('app') }}
     {% endblock %}
 </head>
 <body class="min-h-screen font-sans antialiased">

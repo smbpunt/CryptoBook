@@ -36,6 +36,7 @@ class StrategyFarmingType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Choisir une crypto',
                 'class' => Cryptocurrency::class,
+                'attr' => ['class' => 'js-select2'],
             ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,

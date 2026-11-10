@@ -13,7 +13,7 @@
             {% endif %}
             {% if app.user %}
                 <p class="text-sm text-muted-foreground">
-                    Connecté en tant que {{ app.user.userIdentifier }}, <a class="underline" href="{{ path('app_logout') }}">se déconnecter</a>
+                    Connecté en tant que {{ app.user.userIdentifier }}, <a class="underline" href="{{ path('app_logout') }}" data-turbo="false">se déconnecter</a>
                 </p>
             {% endif %}
 

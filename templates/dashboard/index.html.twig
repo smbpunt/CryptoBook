@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block importmap %}{{ importmap(['app', 'home']) }}{% endblock %}
-
 {% block body %}
     {% set fiat = dashboard.currencySymbol %}
     {% set resultatUsd = dashboard.totalUsd - dashboard.depositUsd %}
@@ -117,7 +115,7 @@
         </div>
     </div>
 
-    <div id="id-array-positions" hidden
+    <div id="id-array-positions" hidden data-controller="allocation-chart"
          data-pie="{{ dashboard.cryptoHoldings|map(h => {libelle: h.name, color: h.color, percent: h.percent})|json_encode }}"
          data-piestable="{{ dashboard.stableHoldings|map(h => {libelle: h.name, color: h.color, percent: h.percent})|json_encode }}"
          data-crypto="{{ dashboard.cryptoUsd }}"

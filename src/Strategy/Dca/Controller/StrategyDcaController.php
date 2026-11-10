@@ -45,7 +45,7 @@ class StrategyDcaController extends AbstractController
     public function new(Request $request, StrategyDcaRepository $strategyDcaRepository, #[CurrentUser] User $user): Response
     {
         if (null !== $strategyDcaRepository->findOneByOwner($user)) {
-            return $this->redirectToRoute('app_strategy_dca_edit');
+            return $this->redirectToRoute('app_strategy_dca_edit', [], Response::HTTP_SEE_OTHER);
         }
 
         $strategyDca = new StrategyDca($user);
@@ -69,13 +69,13 @@ class StrategyDcaController extends AbstractController
     {
         $strategyDca = $strategyDcaRepository->findOneByOwner($user);
         if (null === $strategyDca) {
-            return $this->redirectToRoute('app_strategy_dca_new');
+            return $this->redirectToRoute('app_strategy_dca_new', [], Response::HTTP_SEE_OTHER);
         }
 
         $amountUsd = $invested > 0 ? $invested : $amountCalculator->amountUsd($strategyDca);
         // Nothing to split: the index shows why (no amount, or no EUR rate).
         if (null === $amountUsd || $amountUsd <= 0) {
-            return $this->redirectToRoute('app_strategy_dca_index');
+            return $this->redirectToRoute('app_strategy_dca_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->savePositions($request, $generator->generate($strategyDca, $user, $amountUsd));
@@ -85,7 +85,7 @@ class StrategyDcaController extends AbstractController
     public function dcaAuto(Request $request, CryptocurrencyRepository $cryptocurrencyRepository, DcaAutoPositionGenerator $generator, #[CurrentUser] User $user, #[MapQueryString(validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY)] ?DcaAutoQuery $query = null): Response
     {
         if (null === $query) {
-            return $this->redirectToRoute('app_strategy_dca_index');
+            return $this->redirectToRoute('app_strategy_dca_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $coin = $cryptocurrencyRepository->find($query->coinId) ?? throw $this->createNotFoundException('Unknown coin.');
@@ -98,7 +98,7 @@ class StrategyDcaController extends AbstractController
     {
         $strategyDca = $strategyDcaRepository->findOneByOwner($user);
         if (null === $strategyDca) {
-            return $this->redirectToRoute('app_strategy_dca_new');
+            return $this->redirectToRoute('app_strategy_dca_new', [], Response::HTTP_SEE_OTHER);
         }
 
         $form = $this->createForm(StrategyDcaType::class, $strategyDca);

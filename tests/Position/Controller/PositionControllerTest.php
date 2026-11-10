@@ -111,7 +111,7 @@ final class PositionControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(422);
         self::assertSame('vente', $crawler->filter('[data-slot="tabs"]')->attr('data-tabs-active-tab-value'));
-        self::assertSelectorExists('.ventes-wrapper [data-slot="form-message"]');
+        self::assertSelectorExists('#tab-vente-description [data-collection-target="items"] [data-slot="form-message"]');
     }
 
     public function testExitPlanOverOneHundredPercentIsAFormError(): void
@@ -123,7 +123,7 @@ final class PositionControllerTest extends WebTestCase
         $this->client->request('POST', "/position/{$this->data->position->getId()}/edit", $values);
 
         self::assertResponseStatusCodeSame(422);
-        self::assertSelectorExists('.strategies-wrapper [data-slot="form-message"]');
+        self::assertSelectorExists('#tab-strategy-description [data-collection-target="items"] [data-slot="form-message"]');
     }
 
     public function testInfosOfAFreePositionWithAnExitPlan(): void

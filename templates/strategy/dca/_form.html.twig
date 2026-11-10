@@ -1,8 +1,8 @@
 {% import _self as formMacros %}
 
 {% macro part_prototype(part) %}
-    <tr class="js-item border-b">
-        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" class="js-remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+    <tr class="border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
         <td class="p-2">{{ form_widget(part.percent) }}{{ form_errors(part.percent) }}</td>
         <td class="p-2">{{ form_widget(part.coin) }}{{ form_errors(part.coin) }}</td>
     </tr>
@@ -14,25 +14,27 @@
         {{ form_row(form.farmingToDcaUsd, {label: 'Provenance Stable', addon: '$'}) }}
     </div>
 
-    <twig:Button variant="outline" class="add_item_link mb-2" data-wrapper="parts-wrapper">
-        <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une allocation
-    </twig:Button>
-    <table class="mb-4 w-full max-w-2xl text-sm">
-        <thead class="border-b">
-            <tr>
-                <th class="w-12"></th>
-                <th class="h-10 px-2 text-start font-medium">%</th>
-                <th class="h-10 px-2 text-start font-medium">Coin</th>
-            </tr>
-        </thead>
-        <tbody class="parts-wrapper"
-               data-index="{{ form.parts|length }}"
-               data-prototype="{{ formMacros.part_prototype(form.parts.vars.prototype)|e('html_attr') }}">
-        {% for part in form.parts %}
-            {{ formMacros.part_prototype(part) }}
-        {% endfor %}
-        </tbody>
-    </table>
+    <div data-controller="collection"
+         data-collection-index-value="{{ form.parts is empty ? 0 : max(form.parts.children|keys) + 1 }}"
+         data-collection-prototype-value="{{ formMacros.part_prototype(form.parts.vars.prototype)|e('html_attr') }}">
+        <twig:Button variant="outline" class="mb-2" data-action="collection#add">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une allocation
+        </twig:Button>
+        <table class="mb-4 w-full max-w-2xl text-sm">
+            <thead class="border-b">
+                <tr>
+                    <th class="w-12"></th>
+                    <th class="h-10 px-2 text-start font-medium">%</th>
+                    <th class="h-10 px-2 text-start font-medium">Coin</th>
+                </tr>
+            </thead>
+            <tbody data-collection-target="items">
+            {% for part in form.parts %}
+                {{ formMacros.part_prototype(part) }}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <div class="mb-4">{{ form_errors(form.parts) }}</div>
 
     <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
