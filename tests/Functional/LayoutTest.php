@@ -4,6 +4,7 @@ namespace App\Tests\Functional;
 
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -27,6 +28,28 @@ final class LayoutTest extends WebTestCase
             ['Préférences', 'Déconnexion'],
             $crawler->filter('[data-slot="popover-content"] li')->each(static fn ($li): string => trim($li->text())),
         );
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function subPages(): iterable
+    {
+        yield 'position form' => ['/position/new', 'Positions'];
+        yield 'LP form, under farming' => ['/strategy/lp/new', 'Farming'];
+    }
+
+    #[DataProvider('subPages')]
+    public function testSubPageKeepsItsTabCurrent(string $url, string $tab): void
+    {
+        $client = self::createClient();
+        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $client->loginUser($data->user);
+
+        $client->request('GET', $url);
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextSame('nav[aria-label="Navigation principale"] [aria-current="page"]', $tab);
     }
 
     public function testAnonymousPageHasNoHardCodedThemeNorMainMenu(): void

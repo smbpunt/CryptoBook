@@ -75,11 +75,12 @@
                 <twig:Card>
                     <twig:Card:Header><twig:Card:Title>Wallet crypto</twig:Card:Title></twig:Card:Header>
                     <twig:Card:Content>
-                        <twig:Table>
+                        {# Tighter cells: long quantities (memecoins) overflow the card otherwise. Replaced in PR 3. #}
+                        <twig:Table class="[&_td]:px-1">
                             <twig:Table:Body>
                                 {% for holding in dashboard.cryptoHoldings %}
                                     <twig:Table:Row>
-                                        <twig:Table:Cell class="w-8 text-center"><twig:App:CoinLogo url="{{ holding.thumbUrl }}" name="{{ holding.name }}"/></twig:Table:Cell>
+                                        <twig:Table:Cell class="w-6 ps-0! text-center"><twig:App:CoinLogo url="{{ holding.thumbUrl }}" name="{{ holding.name }}"/></twig:Table:Cell>
                                         <twig:Table:Cell class="text-end tabular-nums">{{ holding.quantity|round(2)|number_format(2, '.', ' ') }}</twig:Table:Cell>
                                         <twig:Table:Cell>{{ holding.symbol|upper }}</twig:Table:Cell>
                                         <twig:Table:Cell class="text-end tabular-nums">{{ holding.valueUsd|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
