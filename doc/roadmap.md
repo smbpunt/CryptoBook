@@ -10,20 +10,13 @@
   - Turbo avec un seul entrypoint : les scripts de page sont des contrôleurs Stimulus (`collection`, `dependent-select`, `row-toggle`, `dca`…) ;
   - dashboard de la maquette, avec le graphique du wallet en `symfony/ux-chartjs` (Chart.js 4).
 - Calendrier : les `DateType` utilisent le DatePicker du kit shadcn, flatpickr n'est plus chargé.
+- Ménage du front : contrôleurs Stimulus inutilisés (`hello`, démos `calendar-display` et `input-group-display` du kit) supprimés.
 
 ## À faire
 
 Un point = une PR vers `dev`.
 
-### 1. Ménage du front
-
-Des restes sans aucun usage, à supprimer sans risque. Indépendant du reste.
-
-- `assets/vendor/flatpickr`, `bootstrap`, `@popperjs` : ignorés par git et absents d'`importmap.php`, un `rm -rf` suffit.
-- `assets/vendor/installed.php` : entrée `chart.js/auto` 3.9.1, reste de l'ancien graphique.
-- `assets/controllers/hello_controller.js` : utilisé nulle part.
-
-### 2. Choices.js → Symfony UX Autocomplete
+### 1. Choices.js → Symfony UX Autocomplete
 
 C'est le plus gros gain : Choices.js 9.1.0 date de 2019, et il demande un contournement dans le thème de formulaire et du CSS à part.
 
@@ -34,9 +27,9 @@ C'est le plus gros gain : Choices.js 9.1.0 date de 2019, et il demande un contou
 - CSS de Tom Select repris avec les tokens, comme aujourd'hui pour Choices.
 - Corrige le bug de `doc/bug.md` : un select requis vide bloque l'envoi sans afficher de message (le vrai `<select>` est masqué par Choices).
 
-### 3. Pages : listes, titres, auth
+### 2. Pages : listes, titres, auth
 
-Finit la refonte de l'UI hors formulaires. En parallèle du point 2.
+Finit la refonte de l'UI hors formulaires. En parallèle du point 1.
 
 - `App:PageHeader` : titre en `font-display`, à la taille du dashboard.
 - Listes (dépôts, emprunts, NFT, positions, projets, farming, DCA) : tableau dans une carte, en-tête comme le dashboard, montants au format français (filtres `amount`, `percent`…, il reste environ 40 `number_format`), `App:Delta` pour les variations.
@@ -44,9 +37,9 @@ Finit la refonte de l'UI hors formulaires. En parallèle du point 2.
 - `<title>` homogènes, page d'erreur.
 - Mobile : aucune page ne défile horizontalement aujourd'hui. Dashboard à revérifier à 390 px.
 
-### 4. Pages : formulaires
+### 3. Pages : formulaires
 
-Après le point 2, pour styler Tom Select et non Choices.
+Après le point 1, pour styler Tom Select et non Choices.
 
 - Champs, autocomplete, DatePicker et erreurs, dans les deux thèmes.
 - « Valider & continuer » en `variant="secondary"`.
