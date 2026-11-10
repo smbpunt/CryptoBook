@@ -2,14 +2,14 @@
 
 Couvre la refonte de l'UI de `roadmap.md`. Maquette : https://claude.ai/artifact/2g7JtSLYbx78MeF4pJtwHT (dashboard, clair et sombre).
 
-## Découpage : 4 PR
+## Découpage
 
 Les deux phases sont menées comme un seul chantier. La première ligne de la maquette (valeur totale, variation 24 h, plus haut) ne vit que des snapshots : intégrer le dashboard sans le graphique laisserait un tiers de la page vide, et faire le graphique avant obligerait à le poser dans l'ancienne UI, sans Turbo, pour le refaire ensuite.
 
 - **PR 1 — Fondations.** Thème clair/sombre, couleurs, typo, layout, navigation. Toutes les pages changent d'allure par les tokens et les composants du kit.
 - **PR 2 — Turbo.** Un seul entrypoint, les scripts de page deviennent des contrôleurs Stimulus. Prérequis du Turbo Frame.
 - **PR 3 — Dashboard + graphique.** La maquette, avec ses données réelles. Commits back d'abord (invisibles, testés), front ensuite.
-- **PR 4 — Reste des pages.** Listes, formulaires, auth, mobile.
+- **Reste des pages** : points 3 et 4 de `roadmap.md`.
 
 Chaque PR est déployable seule. Hors périmètre : EasyAdmin, e-mail de reset.
 
@@ -167,7 +167,7 @@ Le dashboard est le seul à croiser snapshots et dépôts : aucune règle Deptra
 - `DashboardCacheInvalidator` : un snapshot invalide son propriétaire seulement.
 - `SmokeTest` : `/history/30d`.
 
-## PR 4 — Reste des pages
+## Reste des pages (points 3 et 4 de `roadmap.md`)
 
 - `App:PageHeader` : titre en `font-display`, taille de la maquette.
 - Listes (dépôts, emprunts, NFT, positions, projets, farming, DCA) : tableau dans une carte, `overflow-x-auto`, montants en `tabular-nums`, `App:Delta` pour les pourcentages.
