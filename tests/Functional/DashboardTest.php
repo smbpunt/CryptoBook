@@ -18,17 +18,24 @@ final class DashboardTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
-        $usdByLabel = [];
-        $crawler->filterXPath("//*[normalize-space()='Bilan']/ancestor::*[.//table][1]//tr")->each(static function (Crawler $row) use (&$usdByLabel): void {
-            $cells = $row->filter('td');
-            if ($cells->count() >= 2) {
-                $usdByLabel[trim($cells->eq(0)->text())] = trim($cells->eq(1)->text());
-            }
-        });
-
-        self::assertSame('25 000 $', $usdByLabel['Wallet crypto']);
-        self::assertSame('1 000 $', $usdByLabel['Wallet stable']);
-        self::assertSame('26 000 $', $usdByLabel['Total']);
+        // Migration rates: 1 EUR = 1.073941 USD, 1 USD = 0.930795 EUR. 1 000 € deposited = 1 073.94 $.
+        self::assertSame([
+            'Investi' => ['1 074 $', '1 000 €'],
+            'Wallet crypto' => ['25 000 $', '23 270 €'],
+            'Wallet stable' => ['1 000 $', '931 €'],
+            'Total' => ['26 000 $', '24 201 €'],
+            'Résultat' => ['24 926 $', '23 201 €'],
+            'Résultat %' => ['2 321 %'],
+            'Total emprunt' => ['500 $', '465 €'],
+        ], self::rows($crawler, 'Bilan'));
+        // 2 ETH at 5 % + LP of 4 000 $ at 10 % = 600 $ a year.
+        self::assertSame([
+            'Jour' => ['2 $', '2 €'],
+            'Semaine' => ['12 $', '11 €'],
+            'Mois' => ['50 $', '47 €'],
+            'Année' => ['600 $', '558 €'],
+        ], self::rows($crawler, 'Farming'));
+        self::assertSelectorTextContains('table thead', '1.0739 $');
 
         $pie = json_decode((string) $crawler->filter('#id-array-positions')->attr('data-pie'), true);
         self::assertSame([['libelle' => 'Bitcoin', 'color' => null, 'percent' => 100]], $pie);
@@ -47,5 +54,19 @@ final class DashboardTest extends WebTestCase
         self::assertSame('[]', $data->attr('data-pie'));
         self::assertSame('0', $data->attr('data-crypto'));
         self::assertSelectorNotExists('#chart-pos');
+    }
+
+    /**
+     * @return array<string, list<string>> cells of each row of the card, keyed by the label
+     */
+    private static function rows(Crawler $crawler, string $card): array
+    {
+        $rows = [];
+        $crawler->filterXPath("//*[@data-slot='card-title'][normalize-space()='{$card}']/ancestor::*[.//table][1]//tbody/tr")->each(static function (Crawler $row) use (&$rows): void {
+            $cells = $row->filter('td')->each(static fn (Crawler $cell): string => trim($cell->text()));
+            $rows[array_shift($cells)] = $cells;
+        });
+
+        return $rows;
     }
 }

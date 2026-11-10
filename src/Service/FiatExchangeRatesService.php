@@ -32,8 +32,10 @@ final readonly class FiatExchangeRatesService
             $currency->setRates($this->fixerClient->getLatestRates((string) $currency->getFixerKey(), $symbols));
             $currency->setUpdatedAt(new \DateTimeImmutable());
 
-            $this->fiatCurrencyRepository->save($currency, true);
+            $this->fiatCurrencyRepository->save($currency);
         }
+        // One flush: the rates change together, and the dashboard cache is invalidated once.
+        $this->fiatCurrencyRepository->flush();
     }
 
     /**
@@ -71,7 +73,10 @@ final readonly class FiatExchangeRatesService
         return $amountUsd * $usd->getRates()[$to->getFixerKey()];
     }
 
-    private function getFavoriteCurrency(User $user): FiatCurrency
+    /**
+     * Favorite currency of the user, USD when none is set.
+     */
+    public function getFavoriteCurrency(User $user): FiatCurrency
     {
         return $user->getFavoriteFiatCurrency()
             ?? $this->fiatCurrencyRepository->findOneBy(['fixerKey' => FiatCurrency::$KEY_USD]);

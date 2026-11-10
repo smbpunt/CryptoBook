@@ -3,11 +3,9 @@
 {% block importmap %}{{ importmap(['app', 'home']) }}{% endblock %}
 
 {% block body %}
-    {% set fiat = app.user.favoriteFiatCurrency.symbol %}
-    {% set totalWalletUsd = wallet.totalUsd %}
-    {% set resultatUsd = totalWalletUsd - totalDepositUsd %}
-    {% set percent = totalDepositUsd > 0 ? totalWalletUsd * 100 / totalDepositUsd - 100 : 0 %}
-    {% set totalYearFarmingEur = fiatRates.toFavoriteCurrency(totalYearFarmingUsd, app.user) %}
+    {% set fiat = dashboard.currencySymbol %}
+    {% set resultatUsd = dashboard.totalUsd - dashboard.depositUsd %}
+    {% set percent = dashboard.depositUsd > 0 ? dashboard.totalUsd * 100 / dashboard.depositUsd - 100 : 0 %}
 
     <div class="grid gap-6 lg:grid-cols-2">
         <div class="grid content-start gap-6 md:grid-cols-2">
@@ -18,22 +16,22 @@
                         <twig:Table:Header>
                             <twig:Table:Row>
                                 <twig:Table:Head/>
-                                <twig:Table:Head class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</twig:Table:Head>
+                                <twig:Table:Head class="text-end">{{ dashboard.usdPerFavorite|round(4) }} $</twig:Table:Head>
                                 <twig:Table:Head class="text-end">1 {{ fiat }}</twig:Table:Head>
                             </twig:Table:Row>
                         </twig:Table:Header>
                         <twig:Table:Body>
-                            {% for label, usd in {'Investi': totalDepositUsd, 'Wallet crypto': wallet.cryptoUsd, 'Wallet stable': wallet.stableUsd, 'Total': totalWalletUsd} %}
+                            {% for label, usd in {'Investi': dashboard.depositUsd, 'Wallet crypto': dashboard.cryptoUsd, 'Wallet stable': dashboard.stableUsd, 'Total': dashboard.totalUsd} %}
                                 <twig:Table:Row>
                                     <twig:Table:Cell class="text-muted-foreground">{{ label }}</twig:Table:Cell>
                                     <twig:Table:Cell class="text-end tabular-nums">{{ usd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(usd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end tabular-nums">{{ dashboard.toFavorite(usd)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
                                 </twig:Table:Row>
                             {% endfor %}
                             <twig:Table:Row class="{{ resultatUsd > 0 ? 'text-positive' : 'text-negative' }}">
                                 <twig:Table:Cell class="text-muted-foreground">Résultat</twig:Table:Cell>
                                 <twig:Table:Cell class="text-end tabular-nums">{{ resultatUsd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(resultatUsd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ dashboard.toFavorite(resultatUsd)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
                             </twig:Table:Row>
                             <twig:Table:Row>
                                 <twig:Table:Cell class="text-muted-foreground">Résultat %</twig:Table:Cell>
@@ -41,8 +39,8 @@
                             </twig:Table:Row>
                             <twig:Table:Row>
                                 <twig:Table:Cell class="text-muted-foreground">Total emprunt</twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">{{ totalLoanUsd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">{{ fiatRates.toFavoriteCurrency(totalLoanUsd, app.user)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ dashboard.loanUsd|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                <twig:Table:Cell class="text-end tabular-nums">{{ dashboard.toFavorite(dashboard.loanUsd)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
                             </twig:Table:Row>
                         </twig:Table:Body>
                     </twig:Table>
@@ -57,7 +55,7 @@
                             <twig:Table:Header>
                                 <twig:Table:Row>
                                     <twig:Table:Head/>
-                                    <twig:Table:Head class="text-end">{{ fiatRates.usdRateFromFavoriteCurrency(app.user)|round(4) }} $</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">{{ dashboard.usdPerFavorite|round(4) }} $</twig:Table:Head>
                                     <twig:Table:Head class="text-end">1 {{ fiat }}</twig:Table:Head>
                                 </twig:Table:Row>
                             </twig:Table:Header>
@@ -65,8 +63,8 @@
                                 {% for label, divisor in {'Jour': 365, 'Semaine': 52, 'Mois': 12, 'Année': 1} %}
                                     <twig:Table:Row>
                                         <twig:Table:Cell class="text-muted-foreground">{{ label }}</twig:Table:Cell>
-                                        <twig:Table:Cell class="text-end tabular-nums">{{ (totalYearFarmingUsd / divisor)|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
-                                        <twig:Table:Cell class="text-end tabular-nums">{{ (totalYearFarmingEur / divisor)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (dashboard.yearFarmingUsd / divisor)|round|number_format(0, '.', ' ') }} $</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end tabular-nums">{{ (dashboard.toFavorite(dashboard.yearFarmingUsd) / divisor)|round|number_format(0, '.', ' ') }} {{ fiat }}</twig:Table:Cell>
                                     </twig:Table:Row>
                                 {% endfor %}
                             </twig:Table:Body>
@@ -79,11 +77,11 @@
                     <twig:Card:Content>
                         <twig:Table>
                             <twig:Table:Body>
-                                {% for holding in wallet.cryptoHoldings %}
+                                {% for holding in dashboard.cryptoHoldings %}
                                     <twig:Table:Row>
-                                        <twig:Table:Cell class="w-8 text-center"><twig:App:CoinLogo url="{{ holding.coin.urlImgThumb }}" name="{{ holding.coin.libelle }}"/></twig:Table:Cell>
+                                        <twig:Table:Cell class="w-8 text-center"><twig:App:CoinLogo url="{{ holding.thumbUrl }}" name="{{ holding.name }}"/></twig:Table:Cell>
                                         <twig:Table:Cell class="text-end tabular-nums">{{ holding.quantity|round(2)|number_format(2, '.', ' ') }}</twig:Table:Cell>
-                                        <twig:Table:Cell>{{ holding.coin.symbol|upper }}</twig:Table:Cell>
+                                        <twig:Table:Cell>{{ holding.symbol|upper }}</twig:Table:Cell>
                                         <twig:Table:Cell class="text-end tabular-nums">{{ holding.valueUsd|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
                                     </twig:Table:Row>
                                 {% endfor %}
@@ -95,7 +93,7 @@
         </div>
 
         <div class="grid content-start gap-6">
-            {% if wallet.cryptoHoldings|length > 1 %}
+            {% if dashboard.cryptoHoldings|length > 1 %}
                 <twig:Card>
                     <twig:Card:Header><twig:Card:Title>Mes positions</twig:Card:Title></twig:Card:Header>
                     <twig:Card:Content>
@@ -108,7 +106,7 @@
                     <twig:Card:Header><twig:Card:Title>Ratio Crypto/Stable</twig:Card:Title></twig:Card:Header>
                     <twig:Card:Content><canvas id="chart-ratio"></canvas></twig:Card:Content>
                 </twig:Card>
-                {% if wallet.stableHoldings|length > 1 %}
+                {% if dashboard.stableHoldings|length > 1 %}
                     <twig:Card>
                         <twig:Card:Header><twig:Card:Title>Mes positions stable</twig:Card:Title></twig:Card:Header>
                         <twig:Card:Content><canvas id="chart-stable"></canvas></twig:Card:Content>
@@ -119,9 +117,9 @@
     </div>
 
     <div id="id-array-positions" hidden
-         data-pie="{{ wallet.cryptoHoldings|map(h => {libelle: h.coin.libelle, color: h.coin.color, percent: h.percent})|json_encode }}"
-         data-piestable="{{ wallet.stableHoldings|map(h => {libelle: h.coin.libelle, color: h.coin.color, percent: h.percent})|json_encode }}"
-         data-crypto="{{ wallet.cryptoUsd }}"
-         data-stable="{{ wallet.stableUsd }}">
+         data-pie="{{ dashboard.cryptoHoldings|map(h => {libelle: h.name, color: h.color, percent: h.percent})|json_encode }}"
+         data-piestable="{{ dashboard.stableHoldings|map(h => {libelle: h.name, color: h.color, percent: h.percent})|json_encode }}"
+         data-crypto="{{ dashboard.cryptoUsd }}"
+         data-stable="{{ dashboard.stableUsd }}">
     </div>
 {% endblock %}
