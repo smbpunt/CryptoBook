@@ -3,6 +3,7 @@
 namespace App\FiatCurrency\Converter;
 
 use App\FiatCurrency\Entity\FiatCurrency;
+use App\FiatCurrency\Exception\MissingRateException;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
 
 /**
@@ -14,21 +15,23 @@ final readonly class FiatConverter
     {
     }
 
+    /**
+     * @throws MissingRateException
+     */
     public function toUsd(float $amount, FiatCurrency $from): float
     {
-        if (FiatCurrency::KEY_USD === $from->getFixerKey()) {
-            return $amount;
-        }
-
-        return $amount * $from->getRates()[FiatCurrency::KEY_USD];
+        return $amount * $from->rateTo(FiatCurrency::KEY_USD);
     }
 
+    /**
+     * @throws MissingRateException
+     */
     public function fromUsd(float $amountUsd, FiatCurrency $to): float
     {
         if (FiatCurrency::KEY_USD === $to->getFixerKey()) {
             return $amountUsd;
         }
 
-        return $amountUsd * $this->fiatCurrencyRepository->getUsd()->getRates()[$to->getFixerKey()];
+        return $amountUsd * $this->fiatCurrencyRepository->getUsd()->rateTo((string) $to->getFixerKey());
     }
 }

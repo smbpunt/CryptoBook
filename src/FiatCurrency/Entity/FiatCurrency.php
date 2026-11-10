@@ -2,6 +2,7 @@
 
 namespace App\FiatCurrency\Entity;
 
+use App\FiatCurrency\Exception\MissingRateException;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -96,10 +97,18 @@ class FiatCurrency implements \Stringable
         return $this;
     }
 
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    /**
+     * Value of one unit of this currency in the other one.
+     *
+     * @throws MissingRateException
+     */
+    public function rateTo(string $fixerKey): float
     {
-        $this->updatedAt = new \DateTimeImmutable();
+        if ($fixerKey === $this->fixerKey) {
+            return 1.0;
+        }
+
+        return $this->rates[$fixerKey] ?? throw MissingRateException::between((string) $this->fixerKey, $fixerKey);
     }
 
     public function __toString(): string

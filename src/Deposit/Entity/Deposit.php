@@ -8,6 +8,7 @@ use App\Entity\Trait\OwnerTrait;
 use App\Entity\User;
 use App\Exchange\Entity\Exchange;
 use App\FiatCurrency\Entity\FiatCurrency;
+use App\FiatCurrency\Exception\MissingRateException;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -82,9 +83,12 @@ class Deposit implements OwnedInterface
         return $this->amount;
     }
 
-    public function getAmountUsd(): ?float
+    /**
+     * @throws MissingRateException
+     */
+    public function getAmountUsd(): float
     {
-        return FiatCurrency::KEY_USD == $this->fiatCurrency->getFixerKey() ? $this->amount : $this->amount * $this->fiatCurrency->getRates()[FiatCurrency::KEY_USD];
+        return $this->amount * $this->fiatCurrency->rateTo(FiatCurrency::KEY_USD);
     }
 
     public function setAmount(?float $amount): self
