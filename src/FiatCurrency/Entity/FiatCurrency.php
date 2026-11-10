@@ -37,7 +37,8 @@ class FiatCurrency implements \Stringable
     #[Assert\Length(max: 5)]
     private ?string $symbol = null;
 
-    #[ORM\Column(nullable: true)]
+    /** @var array<string, float> */
+    #[ORM\Column]
     private array $rates = [];
 
     public function getId(): ?int
@@ -93,12 +94,18 @@ class FiatCurrency implements \Stringable
         return $this;
     }
 
+    /**
+     * @return array<string, float>
+     */
     public function getRates(): array
     {
         return $this->rates;
     }
 
-    public function setRates(?array $rates): self
+    /**
+     * @param array<string, float> $rates
+     */
+    public function setRates(array $rates): self
     {
         $this->rates = $rates;
 
