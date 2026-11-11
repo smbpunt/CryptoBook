@@ -1,21 +1,22 @@
-<div class="grid gap-1 text-sm">
-    {% if position.openedAt %}<p>Ouverte le : {{ position.openedAt|date('d/m/Y') }}</p>{% endif %}
-    <p>Nombre de coins acheté : {{ position.nbCoins }} {{ position.coin.symbol|upper }}</p>
+{% set symbol = position.coin.symbol|upper %}
+<div class="grid gap-1 text-sm tabular-nums">
+    {% if position.openedAt %}<p>Ouverte le {{ position.openedAt|day }}</p>{% endif %}
+    <p>Achetés : {{ position.nbCoins|quantity }} {{ symbol }}</p>
     {% if position.remainingCoins != position.nbCoins %}
-        <p>Nombre de coins restant : {{ position.remainingCoins }} {{ position.coin.symbol|upper }}</p>
+        <p>Restants : {{ position.remainingCoins|quantity }} {{ symbol }}</p>
     {% endif %}
-    <p>Valeur actuelle : {{ position.currentValue|round(2)|number_format(2, '.', ' ') }} $</p>
+    <p>Valeur actuelle : {{ position.currentValue|amount('$', 2) }}</p>
     {% if position.description is not empty %}<p>Description : {{ position.description }}</p>{% endif %}
 </div>
 
 {% if position.ventesSortedByDate|length > 0 %}
-    <h3 class="mt-2 font-medium">Ventes</h3>
+    <h3 class="mt-2 font-display font-semibold">Ventes</h3>
     <twig:Table>
         <twig:Table:Header>
             <twig:Table:Row>
                 <twig:Table:Head class="text-end">Vente</twig:Table:Head>
-                <twig:Table:Head class="text-end">Date</twig:Table:Head>
-                <twig:Table:Head class="text-end">%</twig:Table:Head>
+                <twig:Table:Head>Date</twig:Table:Head>
+                <twig:Table:Head class="text-end">Part vendue</twig:Table:Head>
                 <twig:Table:Head class="text-end">Prix</twig:Table:Head>
             </twig:Table:Row>
         </twig:Table:Header>
@@ -24,9 +25,9 @@
             {% for i, vente in position.ventesSortedByDate %}
                 <twig:Table:Row>
                     <twig:Table:Cell class="text-end">{{ i + 1 }}</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end">{{ vente.soldAt ? vente.soldAt|date('d/m/Y') }}</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ vente.percent }} %</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ vente.priceSold }} $</twig:Table:Cell>
+                    <twig:Table:Cell>{{ vente.soldAt ? vente.soldAt|day : '—' }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ vente.percent|percent }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ vente.priceSold|price('$') }}</twig:Table:Cell>
                 </twig:Table:Row>
             {% endfor %}
         </twig:Table:Body>
@@ -34,37 +35,36 @@
 {% endif %}
 
 {% if exitPlan is not null %}
-    <h3 class="mt-2 font-medium">Stratégie</h3>
-    <p class="text-sm text-muted-foreground">Nombre de ventes prévues : {{ exitPlan.steps|length }}</p>
+    <h3 class="mt-2 font-display font-semibold">Stratégie</h3>
+    <p class="text-sm text-muted-foreground">Ventes prévues : {{ exitPlan.steps|length }}</p>
     <twig:Table>
         <twig:Table:Header>
             <twig:Table:Row>
                 <twig:Table:Head class="text-end">Vente</twig:Table:Head>
                 <twig:Table:Head class="text-end">Prix</twig:Table:Head>
-                <twig:Table:Head class="text-end">%</twig:Table:Head>
-                <twig:Table:Head class="text-end">Nombre vendu</twig:Table:Head>
-                <twig:Table:Head class="text-end">Argent récupéré</twig:Table:Head>
-                <twig:Table:Head class="text-end">Nombre restant</twig:Table:Head>
+                <twig:Table:Head class="text-end">Part</twig:Table:Head>
+                <twig:Table:Head class="text-end">Vendus</twig:Table:Head>
+                <twig:Table:Head class="text-end">Récupéré</twig:Table:Head>
+                <twig:Table:Head class="text-end">Restants</twig:Table:Head>
             </twig:Table:Row>
         </twig:Table:Header>
         <twig:Table:Body>
             {% for i, step in exitPlan.steps %}
                 <twig:Table:Row>
                     <twig:Table:Cell class="text-end">{{ i + 1 }}</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ step.sale.priceSold }}</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ step.sale.percent }} %</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ step.soldCoins }}</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ step.recoveredUsd }} $</twig:Table:Cell>
-                    <twig:Table:Cell class="text-end tabular-nums">{{ step.remainingCoins }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ step.sale.priceSold|price('$') }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ step.sale.percent|percent }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ step.soldCoins|quantity }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ step.recoveredUsd|amount('$', 2) }}</twig:Table:Cell>
+                    <twig:Table:Cell class="text-end">{{ step.remainingCoins|quantity }}</twig:Table:Cell>
                 </twig:Table:Row>
             {% endfor %}
         </twig:Table:Body>
     </twig:Table>
-    <h3 class="mt-2 font-medium">Prévision</h3>
-    <div class="grid gap-1 text-sm">
-        <p>Nombre de coins restants après ventes : {{ exitPlan.remainingCoins }}</p>
-        <p>Pourcentage de coins restants : {{ exitPlan.remainingPercent }} %</p>
-        <p>Récupéré : {{ exitPlan.recoveredUsd }} $</p>
-        <p class="{{ exitPlan.resultUsd > 0 ? 'text-positive' : 'text-negative' }}">Gains/pertes : {{ exitPlan.resultUsd }} $ ({{ exitPlan.resultPercent is null ? '+ ∞' : exitPlan.resultPercent ~ ' %' }})</p>
+    <h3 class="mt-2 font-display font-semibold">Prévision</h3>
+    <div class="grid gap-1 text-sm tabular-nums">
+        <p>Restants après les ventes : {{ exitPlan.remainingCoins|quantity }} {{ symbol }} ({{ exitPlan.remainingPercent|percent }})</p>
+        <p>Récupéré : {{ exitPlan.recoveredUsd|amount('$') }}</p>
+        <p class="{{ exitPlan.resultUsd < 0 ? 'text-negative' : (exitPlan.resultUsd > 0 ? 'text-positive') }}">Résultat : {{ exitPlan.resultUsd|signed_amount('$') }} ({{ exitPlan.resultPercent is null ? '+∞' : exitPlan.resultPercent|signed_percent }})</p>
     </div>
 {% endif %}

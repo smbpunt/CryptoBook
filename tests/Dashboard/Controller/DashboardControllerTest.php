@@ -58,7 +58,7 @@ final class DashboardControllerTest extends WebTestCase
 
         self::assertSame(['BTC', '100,0 %'], self::texts($crawler, '#dashboard-allocation + div li > span:not([aria-hidden])'));
         self::assertSame(['USDC', '931 €', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-allocation"] h3 + ul li > span:not([aria-hidden])'));
-        self::assertSame(['BTCBitcoin', '0,5000', '46 557 €', '23 279 €', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-holdings"] tbody td', true));
+        self::assertSame(['BTCBitcoin', '0,5', '46 557 €', '23 279 €', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-holdings"] tbody td', true));
     }
 
     public function testEmptyHistory(): void

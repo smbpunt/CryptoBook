@@ -63,7 +63,7 @@ final class ResetPasswordControllerTest extends WebTestCase
 
     private function submitNewPassword(KernelBrowser $client, string $password): void
     {
-        $client->submitForm('Réinitialiser le mot de passe', [
+        $client->submitForm('Enregistrer', [
             'change_password_form[plainPassword][first]' => $password,
             'change_password_form[plainPassword][second]' => $password,
         ]);

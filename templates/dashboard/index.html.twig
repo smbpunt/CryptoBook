@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Tableau de bord{% endblock %}
+
 {% block body %}
     {% set lastRecordedAt = dashboard.snapshotStats.lastRecordedAt %}
     <div class="mb-5 flex flex-wrap items-end justify-between gap-4">

@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Suivi Projet{% endblock %}
+{% block title %}Modifier le projet{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Edition d'un projet"/>
+    <twig:App:PageHeader title="Modifier le projet"/>
     <twig:Card><twig:Card:Content>
-        {{ include('project_monitoring/_form.html.twig', {button_label: 'Modifier'}) }}
+        {{ include('project_monitoring/_form.html.twig', {button_label: 'Enregistrer'}) }}
     </twig:Card:Content></twig:Card>
 {% endblock %}

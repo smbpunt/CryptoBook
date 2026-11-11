@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - DCA{% endblock %}
+{% block title %}DCA{% endblock %}
 
 {% block body %}
     {% if dca is not null %}
-        <twig:App:PageHeader title="Mon DCA"
+        <twig:App:PageHeader title="DCA"
                              data-controller="dca"
                              data-dca-generate-url-value="{{ path('app_strategy_dca_generate_positions') }}"
                              data-dca-auto-url-value="{{ path('app_strategy_dca_dcaauto') }}">
             <twig:Dialog id="dca_generate">
                 <twig:Dialog:Trigger>
-                    <twig:Button {{ ...dialog_trigger_attrs }}>Générer mes positions</twig:Button>
+                    <twig:Button class="h-11 px-4" {{ ...dialog_trigger_attrs }}><twig:ux:icon name="lucide:list-plus"/>Générer mes positions</twig:Button>
                 </twig:Dialog:Trigger>
                 <twig:Dialog:Content>
                     <twig:Dialog:Header>
@@ -32,7 +32,7 @@
 
             <twig:Dialog id="dca_auto">
                 <twig:Dialog:Trigger>
-                    <twig:Button {{ ...dialog_trigger_attrs }}>DCA Auto</twig:Button>
+                    <twig:Button variant="outline" class="h-11 px-4" {{ ...dialog_trigger_attrs }}>DCA Auto</twig:Button>
                 </twig:Dialog:Trigger>
                 <twig:Dialog:Content>
                     <twig:Dialog:Header>
@@ -52,44 +52,54 @@
                 </twig:Dialog:Content>
             </twig:Dialog>
 
-            <twig:Button as="a" variant="outline" href="{{ path('app_strategy_dca_edit') }}">Modifier mon DCA</twig:Button>
+            <twig:Button as="a" variant="outline" href="{{ path('app_strategy_dca_edit') }}" class="h-11 px-4">Modifier</twig:Button>
         </twig:App:PageHeader>
 
-        <div class="mb-6 grid grid-cols-3 gap-4 md:max-w-2xl">
-            <twig:App:Stat label="FIAT">{{ dca.fiatToDcaEur|number_format(2, '.', ' ') }} €</twig:App:Stat>
-            <twig:App:Stat label="Farming">{{ dca.farmingToDcaUsd|number_format(2, '.', ' ') }} $</twig:App:Stat>
-            <twig:App:Stat label="Total">{{ amountUsd is null ? 'Taux EUR indisponible' : '~ ' ~ amountUsd|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:App:Stat>
+        <div class="mb-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
+            <twig:App:Stat label="Depuis le fiat" icon="lucide:euro">{{ dca.fiatToDcaEur|amount('€', 2) }}</twig:App:Stat>
+            <twig:App:Stat label="Depuis le farming" icon="lucide:sprout">{{ dca.farmingToDcaUsd|amount('$', 2) }}</twig:App:Stat>
+            <twig:App:Stat label="À investir" icon="lucide:wallet" hint="{{ amountUsd is null ? 'Taux EUR indisponible' : 'au taux EUR du jour' }}">
+                {{- amountUsd is null ? '—' : amountUsd|amount('$', 2) -}}
+            </twig:App:Stat>
         </div>
 
-        <twig:Table>
-            <twig:Table:Header>
-                <twig:Table:Row>
-                    <twig:Table:Head>Coin</twig:Table:Head>
-                    <twig:Table:Head class="text-end">%</twig:Table:Head>
-                    <twig:Table:Head class="text-end">Dollar à investir</twig:Table:Head>
-                    <twig:Table:Head class="text-end">Nombre</twig:Table:Head>
-                </twig:Table:Row>
-            </twig:Table:Header>
-            <twig:Table:Body>
-                {% for part in dca.parts %}
-                    {% set amount = amountUsd is null ? null : amountUsd * part.percent / 100 %}
+        <twig:App:ListCard title="Allocation" titleId="dca-allocation">
+            <twig:Table>
+                <twig:Table:Header>
                     <twig:Table:Row>
-                        <twig:Table:Cell>{{ part.coin.symbol|upper }}</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ part.percent }} %</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is null ? '—' : amount|round(2)|number_format(2, '.', ' ') ~ ' $' }}</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ amount is not null and part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|round(6) : '—' }}</twig:Table:Cell>
+                        <twig:Table:Head>Actif</twig:Table:Head>
+                        <twig:Table:Head class="text-end">Part</twig:Table:Head>
+                        <twig:Table:Head class="text-end">À investir</twig:Table:Head>
+                        <twig:Table:Head class="text-end">Quantité</twig:Table:Head>
                     </twig:Table:Row>
-                {% else %}
-                    <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucune allocation.</twig:Table:Cell></twig:Table:Row>
-                {% endfor %}
-            </twig:Table:Body>
-        </twig:Table>
+                </twig:Table:Header>
+                <twig:Table:Body>
+                    {% for part in dca.parts %}
+                        {% set amount = amountUsd is null ? null : amountUsd * part.percent / 100 %}
+                        <twig:Table:Row>
+                            <twig:Table:Cell>
+                                <span class="flex items-center gap-2.5">
+                                    <twig:App:CoinLogo url="{{ part.coin.urlImgThumb }}" name="{{ part.coin.libelle }}" class="size-7"/>
+                                    <span class="font-semibold">{{ part.coin.symbol|upper }}</span>
+                                </span>
+                            </twig:Table:Cell>
+                            <twig:Table:Cell class="text-end text-muted-foreground">{{ part.percent|percent }}</twig:Table:Cell>
+                            <twig:Table:Cell class="text-end font-semibold">{{ amount is null ? '—' : amount|amount('$', 2) }}</twig:Table:Cell>
+                            <twig:Table:Cell class="text-end">{{ amount is not null and part.coin.priceUsd > 0 ? (amount / part.coin.priceUsd)|quantity : '—' }}</twig:Table:Cell>
+                        </twig:Table:Row>
+                    {% else %}
+                        <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucune allocation.</twig:Table:Cell></twig:Table:Row>
+                    {% endfor %}
+                </twig:Table:Body>
+            </twig:Table>
+        </twig:App:ListCard>
     {% else %}
-        <twig:App:PageHeader title="Mon DCA">
-            <twig:Button as="a" href="{{ path('app_strategy_dca_new') }}">Créer mon DCA</twig:Button>
+        <twig:App:PageHeader title="DCA">
+            <twig:Button as="a" href="{{ path('app_strategy_dca_new') }}" class="h-11 px-4"><twig:ux:icon name="lucide:plus"/>Créer mon DCA</twig:Button>
         </twig:App:PageHeader>
         <twig:Empty class="border">
             <twig:Empty:Header>
+                <twig:Empty:Media variant="icon"><twig:ux:icon name="lucide:repeat"/></twig:Empty:Media>
                 <twig:Empty:Title>Aucune stratégie DCA définie</twig:Empty:Title>
             </twig:Empty:Header>
         </twig:Empty>

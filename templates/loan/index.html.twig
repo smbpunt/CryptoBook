@@ -1,57 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Emprunts{% endblock %}
+{% block title %}Emprunts{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Mes emprunts" description="Emprunt total : {{ total|number_format(0, '.', ' ') }} $">
-        <twig:Button as="a" href="{{ path('app_loan_new') }}">
-            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter un emprunt
+    <twig:App:PageHeader title="Emprunts">
+        <twig:Button as="a" href="{{ path('app_loan_new') }}" class="h-11 px-4">
+            <twig:ux:icon name="lucide:plus"/>Nouvel emprunt
         </twig:Button>
     </twig:App:PageHeader>
 
+    <div class="mb-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5 lg:max-w-[calc(50%-10px)]">
+        <twig:App:Stat label="Emprunt total" icon="lucide:landmark">{{ total|amount('$') }}</twig:App:Stat>
+        <twig:App:Stat label="Emprunts" icon="lucide:list">{{ loans|length }}</twig:App:Stat>
+    </div>
+
     <twig:App:InfoDialog>
-        <twig:Table>
-            <twig:Table:Header>
-                <twig:Table:Row>
-                    <twig:Table:Head class="w-10"/>
-                    <twig:Table:Head>Blockchain</twig:Table:Head>
-                    <twig:Table:Head>Dapp</twig:Table:Head>
-                    <twig:Table:Head class="text-end">Coin</twig:Table:Head>
-                    <twig:Table:Head class="text-end">Valeur ($)</twig:Table:Head>
-                    <twig:Table:Head class="text-end">Actions</twig:Table:Head>
-                </twig:Table:Row>
-            </twig:Table:Header>
-            <twig:Table:Body>
-                {% for loan in loans %}
-                    {% set dapp = loan.dapp %}
+        <twig:App:ListCard title="En cours" titleId="loan-list">
+            <twig:Table>
+                <twig:Table:Header>
                     <twig:Table:Row>
-                        <twig:Table:Cell>
-                            <twig:App:InfoButton url="{{ path('app_loan_ajax_infos', {id: loan.id}) }}"/>
-                        </twig:Table:Cell>
-                        <twig:Table:Cell>{{ dapp is not null and dapp.blockchain is not null ? dapp.blockchain }}</twig:Table:Cell>
-                        <twig:Table:Cell>
-                            {% if dapp is not null and dapp.url is not empty %}
-                                <a class="underline-offset-4 hover:underline" href="{{ dapp.url }}">{{ dapp }}</a>
-                            {% elseif dapp is not null %}
-                                {{ dapp }}
-                            {% endif %}
-                        </twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ loan.nbCoins }} {{ loan.coin.symbol|upper }}</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end tabular-nums">{{ loan.currentValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                        <twig:Table:Cell class="text-end">
-                            <twig:App:RowActions
-                                editUrl="{{ path('app_loan_edit', {id: loan.id}) }}"
-                                deleteUrl="{{ path('app_loan_delete', {id: loan.id}) }}"
-                                tokenId="delete{{ loan.id }}"
-                            />
-                        </twig:Table:Cell>
+                        <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                        <twig:Table:Head>Actif</twig:Table:Head>
+                        <twig:Table:Head class="text-end">Quantité</twig:Table:Head>
+                        <twig:Table:Head class="text-end">Valeur</twig:Table:Head>
+                        <twig:Table:Head>Dapp</twig:Table:Head>
+                        <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
                     </twig:Table:Row>
-                {% else %}
-                    <twig:Table:Row>
-                        <twig:Table:Cell colspan="6" class="py-6 text-center text-muted-foreground">Aucun emprunt.</twig:Table:Cell>
-                    </twig:Table:Row>
-                {% endfor %}
-            </twig:Table:Body>
-        </twig:Table>
+                </twig:Table:Header>
+                <twig:Table:Body>
+                    {% for loan in loans %}
+                        <twig:Table:Row>
+                            <twig:Table:Cell>
+                                <twig:App:InfoButton url="{{ path('app_loan_ajax_infos', {id: loan.id}) }}"/>
+                            </twig:Table:Cell>
+                            <twig:Table:Cell>
+                                <span class="flex items-center gap-2.5">
+                                    <twig:App:CoinLogo url="{{ loan.coin.urlImgThumb }}" name="{{ loan.coin.libelle }}" class="size-7"/>
+                                    <span class="font-semibold">{{ loan.coin.symbol|upper }}</span>
+                                </span>
+                            </twig:Table:Cell>
+                            <twig:Table:Cell class="text-end">{{ loan.nbCoins|quantity }}</twig:Table:Cell>
+                            <twig:Table:Cell class="text-end font-semibold">{{ loan.currentValue|amount('$', 2) }}</twig:Table:Cell>
+                            <twig:Table:Cell><twig:App:Dapp :dapp="loan.dapp"/></twig:Table:Cell>
+                            <twig:Table:Cell class="w-px text-end">
+                                <twig:App:RowActions
+                                    editUrl="{{ path('app_loan_edit', {id: loan.id}) }}"
+                                    deleteUrl="{{ path('app_loan_delete', {id: loan.id}) }}"
+                                    tokenId="delete{{ loan.id }}"
+                                />
+                            </twig:Table:Cell>
+                        </twig:Table:Row>
+                    {% else %}
+                        <twig:Table:Row>
+                            <twig:Table:Cell colspan="6" class="py-6 text-center text-muted-foreground">Aucun emprunt.</twig:Table:Cell>
+                        </twig:Table:Row>
+                    {% endfor %}
+                </twig:Table:Body>
+            </twig:Table>
+        </twig:App:ListCard>
     </twig:App:InfoDialog>
 {% endblock %}

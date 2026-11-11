@@ -54,7 +54,7 @@
                 </twig:Button>
                 <table class="w-full max-w-2xl text-sm">
                     <thead class="border-b">
-                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
+                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">%</th><th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">Prix</th></tr>
                     </thead>
                     <tbody data-collection-target="items">
                     {% for strategy in form.strategies %}
@@ -75,7 +75,7 @@
                 </twig:Button>
                 <table class="w-full max-w-3xl text-sm">
                     <thead class="border-b">
-                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start font-medium">Date</th><th class="h-10 px-2 text-start font-medium">%</th><th class="h-10 px-2 text-start font-medium">Prix</th></tr>
+                        <tr><th class="w-12"></th><th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">Date</th><th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">%</th><th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">Prix</th></tr>
                     </thead>
                     <tbody data-collection-target="items">
                     {% for vente in form.ventes %}
@@ -88,7 +88,7 @@
     </twig:Tabs>
 
     <div class="flex items-center justify-between gap-2">
-        {{ form_widget(form.submit, {label: 'Valider'}) }}
-        {{ form_widget(form.submitAndNext, {label: 'Valider & continuer', attr: {class: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}}) }}
+        {{ form_widget(form.submit, {label: 'Valider', attr: {class: 'h-11 px-5'}}) }}
+        {{ form_widget(form.submitAndNext, {label: 'Valider & continuer', attr: {variant: 'secondary', class: 'h-11 px-5'}}) }}
     </div>
 {{ form_end(form) }}

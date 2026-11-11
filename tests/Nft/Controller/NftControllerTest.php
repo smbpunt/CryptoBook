@@ -45,7 +45,7 @@ final class NftControllerTest extends WebTestCase
 
         $this->client->request('GET', '/nft/');
 
-        self::assertSelectorTextContains('main', 'Résultat : 500 $');
+        self::assertSelectorTextContains('main', "Résultat des ventes +500\u{00A0}$");
     }
 
     /**

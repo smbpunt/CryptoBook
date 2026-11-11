@@ -32,8 +32,8 @@ final class StrategyFarmingControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/strategy/farming/');
 
         self::assertResponseIsSuccessful();
-        // Total, then the crypto, stable and LP tabs.
-        self::assertSame(['700 $', '200 $', '100 $', '400.00 $'], $this->yearlyStats($crawler));
+        // Total, then crypto, stable and LP.
+        self::assertSame(["1,92\u{00A0}$ / jour · 13,46\u{00A0}$ / sem. · 700,00\u{00A0}$ / an", "200,00\u{00A0}$ / an", "100,00\u{00A0}$ / an", "400,00\u{00A0}$ / an"], $this->yearlyStats($crawler));
     }
 
     public function testLpLiveValueAndRewardsUseTheCurrentPrices(): void
@@ -46,9 +46,9 @@ final class StrategyFarmingControllerTest extends WebTestCase
 
         $row = $crawler->filter('[data-slot="tabs-content"]')->last()->filter('tbody tr')->first()->filter('td')
             ->each(static fn (Crawler $cell): string => trim($cell->text()));
-        // Investi, Live, then the rewards of a day, a month and a year.
-        self::assertSame(['4 000.00 $', '5 000.00 $', '1.37 $', '41.67 $', '500.00 $'], \array_slice($row, -6, 5));
-        self::assertSame('500.00 $', $this->yearlyStats($crawler)[3]);
+        // Invested, value, APR, then the rewards of a day, a month and a year.
+        self::assertSame(["4\u{202F}000,00\u{00A0}$", "5\u{202F}000,00\u{00A0}$", "10,0\u{00A0}%", "1,37\u{00A0}$", "41,67\u{00A0}$", "500,00\u{00A0}$"], \array_slice($row, 2, 6));
+        self::assertSame("500,00\u{00A0}$ / an", $this->yearlyStats($crawler)[3]);
     }
 
     public function testCreateFarming(): void
@@ -84,7 +84,7 @@ final class StrategyFarmingControllerTest extends WebTestCase
     private function postFarming(string $nbCoins): void
     {
         $crawler = $this->client->request('GET', '/strategy/farming/new');
-        $values = $crawler->selectButton('Créer')->form()->getPhpValues();
+        $values = $crawler->selectButton('Ajouter')->form()->getPhpValues();
         $values['strategy_farming'] = [
             'coin' => (string) $this->data->eth->getId(),
             'nbCoins' => $nbCoins,
@@ -116,11 +116,11 @@ final class StrategyFarmingControllerTest extends WebTestCase
     }
 
     /**
-     * @return list<string> the "Année" stat of each yield block
+     * @return list<string> the hint of each revenue card: total, crypto, stable, LP
      */
     private function yearlyStats(Crawler $crawler): array
     {
-        return $crawler->filterXPath("//*[@data-slot='card-description'][normalize-space()='Année']/following-sibling::*[1]")
+        return $crawler->filter('main [data-slot="card-header"] > p')
             ->each(static fn (Crawler $value): string => trim($value->text()));
     }
 
