@@ -2,10 +2,9 @@
 
 namespace App\Strategy\Dca\Form;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Strategy\Dca\Dto\DcaAutoQuery;
 use App\Strategy\Dca\Enum\DcaRecurrence;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -20,11 +19,8 @@ class DcaAutoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
-                'placeholder' => 'Choisir une crypto',
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
                 'mapped' => false,
             ])
             ->add('value', IntegerType::class, [

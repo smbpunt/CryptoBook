@@ -22,8 +22,7 @@ final class NftControllerTest extends WebTestCase
 
     public function testCreateNft(): void
     {
-        $this->client->request('GET', '/nft/new');
-        $this->client->submitForm('Ajouter', $this->validValues());
+        $this->submitNewForm($this->validValues());
 
         self::assertResponseRedirects('/nft/');
         self::assertSame(1, $this->em()->getRepository(Nft::class)->count(['owner' => $this->data->user, 'collection' => 'Apes']));
@@ -31,8 +30,7 @@ final class NftControllerTest extends WebTestCase
 
     public function testEmptyPriceIsAFormError(): void
     {
-        $this->client->request('GET', '/nft/new');
-        $this->client->submitForm('Ajouter', ['nft[priceUsd]' => ''] + $this->validValues());
+        $this->submitNewForm(['nft[priceUsd]' => ''] + $this->validValues());
 
         self::assertResponseStatusCodeSame(422);
     }
@@ -48,6 +46,16 @@ final class NftControllerTest extends WebTestCase
         $this->client->request('GET', '/nft/');
 
         self::assertSelectorTextContains('main', 'Résultat : 500 $');
+    }
+
+    /**
+     * @param array<string, string> $values
+     */
+    private function submitNewForm(array $values): void
+    {
+        $crawler = $this->client->request('GET', '/nft/new');
+        // The coin select only holds the selected option: Tom Select adds the one picked from the endpoint.
+        $this->client->submit($crawler->selectButton('Ajouter')->form()->disableValidation()->setValues($values));
     }
 
     /**

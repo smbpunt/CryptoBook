@@ -2,9 +2,8 @@
 
 namespace App\Position\Form;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Position\Entity\Position;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -47,11 +46,8 @@ class PositionType extends AbstractType
                 'required' => false,
                 'empty_data' => '',
             ])
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
-                'placeholder' => 'Choisir une crypto',
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
             ])
             ->add('ventes', CollectionType::class, [
                 'entry_type' => VenteType::class,

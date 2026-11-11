@@ -4,7 +4,7 @@ namespace App\Strategy\Farming\Form;
 
 use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Strategy\Farming\Entity\StrategyFarming;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -35,16 +35,13 @@ class StrategyFarmingType extends AbstractType
                 'empty_data' => '',
             ])
             ->add('apr')
-            ->add('coin', EntityType::class, [
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'placeholder' => 'Choisir une crypto',
-                'class' => Cryptocurrency::class,
-                'attr' => ['class' => 'js-select2'],
             ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,
                 'class' => Blockchain::class,
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
 
         $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null): void {
@@ -54,7 +51,7 @@ class StrategyFarmingType extends AbstractType
                 'required' => true,
                 'choices' => $dapps,
                 'placeholder' => 'Veuillez choisir une blockchain',
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
         };
 

@@ -4,7 +4,7 @@ namespace App\Strategy\Lp\Form;
 
 use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Strategy\Lp\Entity\StrategyLp;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -39,20 +39,16 @@ class StrategyLpType extends AbstractType
             ->add('nbCoin2')
             ->add('lpDeposit')
             ->add('apr')
-            ->add('coin1', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin1', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
             ])
-            ->add('coin2', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin2', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
             ])
             ->add('blockchain', EntityType::class, [
                 'required' => false,
                 'class' => Blockchain::class,
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
                 'placeholder' => 'Veuillez choisir une blockchain',
             ]);
 
@@ -63,7 +59,7 @@ class StrategyLpType extends AbstractType
                 'required' => true,
                 'choices' => $dapps,
                 'placeholder' => 'Veuillez choisir une blockchain',
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
         };
 

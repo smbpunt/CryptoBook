@@ -149,12 +149,13 @@ final class PositionControllerTest extends WebTestCase
 
     public function testSubmitAndNextOpensTheFormAgain(): void
     {
-        $this->client->request('GET', '/position/new');
-        $this->client->submitForm('Valider & continuer', [
+        $crawler = $this->client->request('GET', '/position/new');
+        // The coin select only holds the selected option: Tom Select adds the one picked from the endpoint.
+        $this->client->submit($crawler->selectButton('Valider & continuer')->form()->disableValidation()->setValues([
             'position[coin]' => (string) $this->data->eth->getId(),
             'position[nbCoins]' => '1',
             'position[entryCost]' => '1000',
-        ]);
+        ]));
 
         self::assertResponseRedirects('/position/new');
     }
@@ -205,7 +206,7 @@ final class PositionControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/position/new');
 
         // Sales are a JS collection: post the raw values with one sale added.
-        $form = $crawler->selectButton('Valider')->form([
+        $form = $crawler->selectButton('Valider')->form()->disableValidation()->setValues([
             'position[coin]' => (string) $this->data->eth->getId(),
             'position[nbCoins]' => '4',
             'position[entryCost]' => '1000',

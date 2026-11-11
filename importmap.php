@@ -26,8 +26,6 @@ return [
     'app' => ['path' => './assets/app.js', 'entrypoint' => true],
     '@hotwired/stimulus' => ['version' => '3.2.2'],
     '@symfony/stimulus-bundle' => ['path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js'],
-    'choices.js' => ['version' => '9.1.0'],
-    'choices.js/public/assets/styles/choices.min.css' => ['version' => '9.1.0', 'type' => 'css'],
     'shadcn/dist/tailwind.css' => ['version' => '4.23.0', 'type' => 'css'],
     'tw-animate-css/dist/tw-animate.css' => ['version' => '1.4.0', 'type' => 'css'],
     '@fontsource-variable/inter/index.css' => ['version' => '5.3.0', 'type' => 'css'],
@@ -35,4 +33,8 @@ return [
     '@hotwired/turbo' => ['version' => '8.0.23'],
     'chart.js' => ['version' => '4.6.1'],
     '@kurkle/color' => ['version' => '0.3.4'],
+    'tom-select' => ['version' => '2.7.0'],
+    '@orchidjs/sifter' => ['version' => '1.1.0'],
+    '@orchidjs/unicode-variants' => ['version' => '1.2.2'],
+    'tom-select/dist/css/tom-select.css' => ['version' => '2.7.0', 'type' => 'css'],
 ];
