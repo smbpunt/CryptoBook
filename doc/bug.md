@@ -1,13 +1,11 @@
 # Bugs
 
-## DCA Auto : pas d'erreur visible sur la crypto manquante
+## Dapp : erreur « should not be null » après un changement de blockchain
 
-Sur `/strategy/dca/`, dialogue « DCA Auto » : valider sans choisir de crypto bloque bien le formulaire, mais aucun message ne s'affiche sur le champ.
+Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ Dapp affiche `This value should not be null.`
 
-- Choices.js masque le vrai `<select>` : `reportValidity()` (`dca_controller.js`) ne peut pas le cibler.
-- Console : `An invalid form control with name='dca_auto[coin]' is not focusable.`
-- Déjà présent avant Turbo (Choices était chargé par `select2.js`).
-- Touche tout select `js-select2` requis validé côté navigateur.
+- `dependent_select_controller.js` poste le formulaire sans la dapp et recopie tout le bloc du champ, erreur de la réponse 422 comprise.
+- Déjà présent avec Choices.js.
 
 ## DatePicker coupé par la carte
 
