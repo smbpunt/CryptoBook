@@ -2,7 +2,7 @@
 
 namespace App\ProjectMonitoring\Form;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\ProjectMonitoring\Entity\ProjectMonitoring;
 use App\ProjectMonitoring\Entity\TypeProject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -38,16 +38,13 @@ class ProjectMonitoringType extends AbstractType
                 'prototype' => true,
                 'by_reference' => false,
             ])
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => false,
-                'attr' => ['class' => 'js-select2'],
-                'placeholder' => 'Choisir une crypto',
             ])
             ->add('type', EntityType::class, [
                 'class' => TypeProject::class,
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
     }
 

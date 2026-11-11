@@ -74,6 +74,23 @@ final class LoanControllerTest extends WebTestCase
         self::assertSame(1, $this->countLoans());
     }
 
+    public function testRejectedAutocompleteSelectIsMarkedInvalid(): void
+    {
+        $crawler = $this->client->request('GET', '/loan/new');
+        $values = $crawler->selectButton('Ajouter')->form()->getPhpValues();
+        $values['loan']['blockchain'] = (string) $this->data->ethereum->getId();
+        $values['loan']['dapp'] = '';
+        $values['loan']['nbCoins'] = '100';
+        $values['loan']['coin'] = (string) $this->data->usdc->getId();
+
+        $this->client->request('POST', '/loan/new', $values);
+
+        // The Tom Select control takes the error style from the hidden <select> (app.css).
+        self::assertResponseStatusCodeSame(422);
+        self::assertSelectorExists('#loan_dapp[aria-invalid="true"][data-controller~="symfony--ux-autocomplete--autocomplete"]');
+        self::assertSelectorNotExists('#loan_coin[aria-invalid]');
+    }
+
     public function testIndexShowsTheTotal(): void
     {
         $this->client->request('GET', '/loan/');

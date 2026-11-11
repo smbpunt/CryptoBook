@@ -27,12 +27,12 @@ final class StimulusControllersTest extends WebTestCase
             // The ux-chartjs `chart` controller runs after `wallet-chart`, which configures it.
             '/' => ['canvas[data-controller="wallet-chart symfony--ux-chartjs--chart"]'],
             '/position/' => ['table[data-controller="row-toggle"] button[data-action="row-toggle#toggle"][aria-controls^="detail-"]'],
-            // The form theme adds `choices` to every `js-select2` select: checked once here.
-            '/position/new' => ['select[data-controller~="choices"]', '[data-controller="collection"] [data-collection-target="items"]', 'button[data-action="collection#add"]'],
+            // The `autocomplete` option adds the ux-autocomplete controller (Tom Select): checked once here.
+            '/position/new' => ['#position_coin[data-controller~="symfony--ux-autocomplete--autocomplete"]', '[data-controller="collection"] [data-collection-target="items"]', 'button[data-action="collection#add"]'],
             "/position/{$d->position->getId()}/edit" => ['[data-controller="collection"]'],
-            // `choices` and `dependent-select` on the same select.
-            '/loan/new' => ['form[data-controller="dependent-select"] select[data-action="dependent-select#refresh"][data-controller~="choices"]', '#id-dapp[data-dependent-select-target="field"]'],
-            '/strategy/farming/new' => ['form[data-controller="dependent-select"] #strategy_farming_blockchain[data-action="dependent-select#refresh"][data-controller~="choices"]', '#id-dapp[data-dependent-select-target="field"]', '#strategy_farming_coin[data-controller~="choices"]'],
+            // Tom Select and `dependent-select` on the same select: Tom Select fires `change` on the <select>.
+            '/loan/new' => ['form[data-controller="dependent-select"] select[data-action="dependent-select#refresh"][data-controller~="symfony--ux-autocomplete--autocomplete"]', '#id-dapp[data-dependent-select-target="field"] select[data-controller~="symfony--ux-autocomplete--autocomplete"]'],
+            '/strategy/farming/new' => ['form[data-controller="dependent-select"] #strategy_farming_blockchain[data-action="dependent-select#refresh"][data-controller~="symfony--ux-autocomplete--autocomplete"]', '#id-dapp[data-dependent-select-target="field"]', '#strategy_farming_coin[data-controller~="symfony--ux-autocomplete--autocomplete"]'],
             '/strategy/lp/new' => ['form[data-controller="dependent-select"]', '#id-dapp[data-dependent-select-target="field"]'],
             '/project/monitoring/new' => ['[data-controller="collection"]'],
             '/strategy/dca/' => ['[data-controller="dca"] button[data-action="dca#generate"]', 'form[data-dca-target="autoForm"] button[data-action="dca#auto"]'],

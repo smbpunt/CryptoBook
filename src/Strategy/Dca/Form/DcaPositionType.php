@@ -2,9 +2,8 @@
 
 namespace App\Strategy\Dca\Form;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Position\Entity\Position;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -31,10 +30,8 @@ class DcaPositionType extends AbstractType
             ->add('entryCost', NumberType::class, [
                 'required' => true,
             ])
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
             ]);
     }
 

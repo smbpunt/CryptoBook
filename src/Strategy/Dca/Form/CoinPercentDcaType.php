@@ -2,9 +2,8 @@
 
 namespace App\Strategy\Dca\Form;
 
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Strategy\Dca\Entity\CoinPercentDca;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,11 +17,8 @@ class CoinPercentDcaType extends AbstractType
     {
         $builder
             ->add('percent')
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
-                'placeholder' => 'Choisir une crypto',
             ]);
     }
 

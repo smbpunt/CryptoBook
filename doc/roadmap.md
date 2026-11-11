@@ -11,25 +11,15 @@
   - dashboard de la maquette, avec le graphique du wallet en `symfony/ux-chartjs` (Chart.js 4).
 - Calendrier : les `DateType` utilisent le DatePicker du kit shadcn, flatpickr n'est plus chargé.
 - Ménage du front : contrôleurs Stimulus inutilisés (`hello`, démos `calendar-display` et `input-group-display` du kit) supprimés.
+- Selects : Choices.js remplacé par `symfony/ux-autocomplete` (Tom Select), cryptos en AJAX (`CryptocurrencyAutocompleteField`). `dependent_select_controller.js` est conservé : ux-autocomplete n'a pas de filtre dépendant d'un autre champ sans JS.
 
 ## À faire
 
 Un point = une PR vers `dev`.
 
-### 1. Choices.js → Symfony UX Autocomplete
+### 1. Pages : listes, titres, auth
 
-C'est le plus gros gain : Choices.js 9.1.0 date de 2019, et il demande un contournement dans le thème de formulaire et du CSS à part.
-
-- Aujourd'hui : classe `js-select2` (19 occurrences), `choices_controller.js`, environ 14 règles CSS dans `app.css`, contournement dans `form/shadcn_layout.html.twig` (`choice_widget_collapsed`).
-- `symfony/ux-autocomplete` (Tom Select, compatible AssetMapper) : `'autocomplete' => true` sur les `EntityType`.
-- Liste des cryptos, qui est longue : autocomplete AJAX avec `#[AsEntityAutocompleteField]`.
-- Blockchain → dapp (loan, farming, LP) : remplacer `dependent_select_controller.js` par une option `filter` sur la blockchain si elle suffit, sinon garder le contrôleur.
-- CSS de Tom Select repris avec les tokens, comme aujourd'hui pour Choices.
-- Corrige le bug de `doc/bug.md` : un select requis vide bloque l'envoi sans afficher de message (le vrai `<select>` est masqué par Choices).
-
-### 2. Pages : listes, titres, auth
-
-Finit la refonte de l'UI hors formulaires. En parallèle du point 1.
+Finit la refonte de l'UI hors formulaires.
 
 - `App:PageHeader` : titre en `font-display`, à la taille du dashboard.
 - Listes (dépôts, emprunts, NFT, positions, projets, farming, DCA) : tableau dans une carte, en-tête comme le dashboard, montants au format français (filtres `amount`, `percent`…, il reste environ 40 `number_format`), `App:Delta` pour les variations.
@@ -37,9 +27,7 @@ Finit la refonte de l'UI hors formulaires. En parallèle du point 1.
 - `<title>` homogènes, page d'erreur.
 - Mobile : aucune page ne défile horizontalement aujourd'hui. Dashboard à revérifier à 390 px.
 
-### 3. Pages : formulaires
-
-Après le point 1, pour styler Tom Select et non Choices.
+### 2. Pages : formulaires
 
 - Champs, autocomplete, DatePicker et erreurs, dans les deux thèmes.
 - « Valider & continuer » en `variant="secondary"`.

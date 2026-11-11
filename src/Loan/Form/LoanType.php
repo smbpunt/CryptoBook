@@ -4,7 +4,7 @@ namespace App\Loan\Form;
 
 use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Loan\Entity\Loan;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -30,11 +30,8 @@ class LoanType extends AbstractType
                 'required' => false,
                 'input' => 'datetime_immutable',
             ])
-            ->add('coin', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
-                'placeholder' => 'Choisir une crypto',
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -43,7 +40,7 @@ class LoanType extends AbstractType
             ->add('blockchain', EntityType::class, [
                 'required' => false,
                 'class' => Blockchain::class,
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
 
         $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null): void {
@@ -53,7 +50,7 @@ class LoanType extends AbstractType
                 'required' => true,
                 'choices' => $dapps,
                 'placeholder' => 'Veuillez choisir une blockchain',
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ]);
         };
 

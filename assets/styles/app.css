@@ -188,44 +188,74 @@
 }
 
 /*
- * Third-party widget (Choices.js) restyled with the shadcn tokens.
+ * Third-party widget (Tom Select, from symfony/ux-autocomplete) restyled with the shadcn tokens.
+ * Built on the unthemed `tom-select.css`, drawn like the kit NativeSelect.
  */
 
-/* Unlayered on purpose: Choices.js ships unlayered CSS, which would beat any @layer rule. */
-.choices {
-    @apply mb-0 w-full text-sm;
+/* Unlayered on purpose: Tom Select ships unlayered CSS, which would beat any @layer rule. */
+.ts-wrapper {
+    @apply w-full text-sm;
 }
-/* A NativeSelect enhanced by Choices.js: drop the native chevron, Choices draws its own. */
-[data-slot='native-select-wrapper']:has(.choices) {
-    @apply w-full;
+/* `.ts-wrapper` prefix: beats `.full .ts-control` of Tom Select. */
+.ts-wrapper .ts-control,
+.ts-wrapper.single.input-active .ts-control {
+    @apply min-h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm text-foreground transition-colors dark:bg-input/30 dark:hover:bg-input/50;
 }
-[data-slot='native-select-wrapper']:has(.choices) > [data-slot='native-select-icon'] {
-    @apply hidden;
+.ts-wrapper .ts-control input,
+.ts-dropdown {
+    @apply text-sm text-foreground;
 }
-.choices__inner {
-    @apply min-h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm dark:bg-input/30;
+.ts-control input::placeholder {
+    @apply text-muted-foreground;
 }
-.choices.is-focused .choices__inner,
-.choices.is-open .choices__inner {
-    @apply rounded-lg border-ring ring-3 ring-ring/50;
+.ts-wrapper.focus .ts-control {
+    @apply border-ring ring-3 ring-ring/50;
 }
-.choices__list--single {
-    @apply p-0;
+/* Rejected by the server, or by the browser once the user tried to submit. Not `.ts-wrapper.invalid`, set from the start on an empty required select. */
+select[aria-invalid='true'] + .ts-wrapper .ts-control,
+select:user-invalid + .ts-wrapper .ts-control {
+    @apply border-destructive ring-3 ring-destructive/20 dark:border-destructive/50 dark:ring-destructive/40;
 }
-.choices__list--dropdown,
-.choices__list[aria-expanded] {
-    @apply z-50 mt-1 rounded-lg border border-border bg-popover text-popover-foreground shadow-md;
+.ts-wrapper.disabled .ts-control {
+    @apply bg-transparent opacity-50;
 }
-.choices__list--dropdown .choices__item--selectable.is-highlighted,
-.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+/* Chevron of the NativeSelect (lucide chevron-down). */
+.ts-wrapper.single .ts-control {
+    --ts-pr-caret: 2rem;
+}
+.ts-wrapper.single .ts-control::after {
+    @apply pointer-events-none absolute end-2.5 top-1/2 size-4 -translate-y-1/2 bg-muted-foreground;
+    content: '';
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ts-wrapper.single.dropdown-active .ts-control::after {
+    @apply rotate-180;
+}
+.plugin-clear_button .clear-button {
+    @apply text-muted-foreground;
+}
+.ts-dropdown {
+    @apply z-50 mt-1 overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-md;
+}
+.ts-dropdown .option,
+.ts-dropdown .no-results,
+.ts-dropdown .create,
+.ts-dropdown .optgroup-header {
+    @apply rounded-md px-2 py-1.5;
+}
+.ts-dropdown .optgroup-header {
+    @apply bg-transparent text-xs text-muted-foreground;
+}
+.ts-dropdown .active {
     @apply bg-accent text-accent-foreground;
 }
-.choices__input {
-    @apply bg-transparent text-foreground;
+.ts-dropdown [data-selectable] .highlight {
+    @apply bg-brand/20;
 }
-.choices[data-type*='select-one'] .choices__input {
-    @apply border-border bg-popover;
+.ts-dropdown .no-results,
+.ts-dropdown .create {
+    @apply text-muted-foreground;
 }
-.choices[data-type*='select-one']::after {
-    border-color: var(--muted-foreground) transparent transparent;
+.ts-dropdown .spinner::after {
+    border-color: var(--muted-foreground) transparent;
 }

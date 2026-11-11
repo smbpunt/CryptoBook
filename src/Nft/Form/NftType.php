@@ -3,7 +3,7 @@
 namespace App\Nft\Form;
 
 use App\Blockchain\Entity\Blockchain;
-use App\Cryptocurrency\Entity\Cryptocurrency;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
 use App\Nft\Entity\Nft;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -46,13 +46,10 @@ class NftType extends AbstractType
             ->add('blockchain', EntityType::class, [
                 'class' => Blockchain::class,
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
+                'autocomplete' => true,
             ])
-            ->add('cryptocurrency', EntityType::class, [
-                'class' => Cryptocurrency::class,
+            ->add('cryptocurrency', CryptocurrencyAutocompleteField::class, [
                 'required' => true,
-                'attr' => ['class' => 'js-select2'],
-                'placeholder' => 'Choisir une crypto',
             ]);
     }
 
