@@ -17,11 +17,11 @@ Prérequis de la bascule. La prod tourne encore sur l'ancien code : aucun snapsh
 
 - Site et base créés par le step 19 (`--site=cryptobook --with-db`) : Caddy, `serverVersion` aligné sur le Postgres installé
 - `deploy.php` Deployer et job CI repris du template, avec les étapes propres au projet : `importmap:install`, `tailwind:build`, `asset-map:compile`
-- Code sur GitHub, GitLab en miroir : le pipeline déploie depuis le miroir
-- Un seul PHP, le 8.5 embarqué dans FrankenPHP (`frankenphp php-cli`) pour le web, Deployer et le worker. Le PHP 8.4 du VPS ne fait pas tourner l'app
+- Code sur GitLab (`smbai/cryptobook`), GitHub en miroir
+- PHP 8.5 partout : FrankenPHP pour le web, PHP système pour Deployer, la CLI et le worker
 - Unité systemd du worker adaptée au layout Deployer (`deployer`, `current`), redémarrée à chaque déploiement
 - Audit root avant tout : extensions du binaire (`intl`, `pdo_pgsql`, `zip`, `pcntl`), version de Postgres
-- Sauvegarde locale (`pg_dump` quotidien, avec rotation) et ping de vie externe après chaque snapshot horaire, sauf si le framework les fournit déjà
+- Sauvegarde quotidienne par l'étape 17 du framework (multi-sites)
 - Staging sur VPS1, alimenté par un dump de la prod actuelle : sert de répétition de la bascule
 
 Spec : `doc/specs/vps-deploy-staging.md`
@@ -74,9 +74,15 @@ Indépendant du reste.
 - 2 ou 3 propositions à valider avant l'intégration
 - PNG de secours et icône pour iOS
 
+### 7. Ping de vie
+
+Après la bascule.
+
+- Contrôle horaire d'un `wallet_snapshot` récent, envoyé à un dead-man's-switch externe
+- Alerte si le ping manque
+
 ## Hors périmètre
 
-- Pipeline CI : `make ci` la prépare, elle viendra plus tard.
 - Bascule $ / monnaie préférée sur les autres pages (positions, prêts, NFT, stratégies), qui restent en $.
 - Copie externe des sauvegardes.
 - Previews par branche.
