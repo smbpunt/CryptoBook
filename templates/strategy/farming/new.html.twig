@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Farming{% endblock %}
+{% block title %}Nouveau farming{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Ajouter une stratégie de farming"/>
+    <twig:App:PageHeader title="Nouveau farming"/>
     <twig:Card><twig:Card:Content>
-        {{ include('strategy/farming/_form.html.twig', {button_label: 'Créer'}) }}
+        {{ include('strategy/farming/_form.html.twig', {button_label: 'Ajouter'}) }}
     </twig:Card:Content></twig:Card>
 {% endblock %}

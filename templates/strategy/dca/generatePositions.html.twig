@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - DCA{% endblock %}
+{% block title %}Générer les positions DCA{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Générer vos positions DCA"/>
+    <twig:App:PageHeader title="Générer les positions DCA"/>
 
     {{ form_start(form_dca) }}
         <div class="grid gap-4">
@@ -13,6 +13,6 @@
                 </twig:Card:Content></twig:Card>
             {% endfor %}
         </div>
-        <twig:Button type="submit" class="mt-4">{{ button_label|default('Valider') }}</twig:Button>
+        <twig:Button type="submit" class="mt-5 h-11 px-5">{{ button_label|default('Valider') }}</twig:Button>
     {{ form_end(form_dca) }}
 {% endblock %}

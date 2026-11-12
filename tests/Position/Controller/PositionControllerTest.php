@@ -33,7 +33,7 @@ final class PositionControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         $row = self::cells($crawler->filter('[data-slot="tabs-content"]')->first()->filter('tbody tr')->first());
-        self::assertSame(['(2)', '', '', '1 BTC', '~ 70000 $', '-28.57 %', '~ 50000 $'], $row);
+        self::assertSame(['', 'BTC 2 positions', '1', "70\u{202F}000\u{00A0}$", "50\u{202F}000\u{00A0}$", "\u{2212}28,6\u{00A0}%", "50\u{202F}000\u{00A0}$"], $row);
     }
 
     public function testStableAndClosedTabs(): void
@@ -44,7 +44,7 @@ final class PositionControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/position/');
 
-        self::assertSame(['Crypto (1)', 'Stable (1)', 'Fermée (2)'], $crawler->filter('[role="tab"]')->each(static fn (Crawler $tab): string => trim($tab->text())));
+        self::assertSame(['Crypto (1)', 'Stable (1)', 'Fermées (2)'], $crawler->filter('[role="tab"]')->each(static fn (Crawler $tab): string => trim($tab->text())));
     }
 
     public function testInfosShowTheExitPlan(): void
@@ -56,8 +56,8 @@ final class PositionControllerTest extends WebTestCase
         $this->client->request('POST', "/position/{$this->data->position->getId()}/infos");
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('body', 'Récupéré : 25000 $');
-        self::assertSelectorTextContains('body', 'Gains/pertes : 5000 $ (25 %)');
+        self::assertSelectorTextContains('body', "Récupéré : 25\u{202F}000\u{00A0}$");
+        self::assertSelectorTextContains('body', "Résultat : +5\u{202F}000\u{00A0}$ (+25,0\u{00A0}%)");
     }
 
     public function testInfosShowTheSales(): void
@@ -68,7 +68,7 @@ final class PositionControllerTest extends WebTestCase
         $crawler = $this->client->request('POST', "/position/{$this->data->position->getId()}/infos");
 
         self::assertResponseIsSuccessful();
-        self::assertSame(['1', '01/03/2024', '20 %', '60000 $'], $crawler->filter('tbody tr')->first()->filter('td')->each(static fn (Crawler $cell): string => trim($cell->text())));
+        self::assertSame(['1', '1 mars 2024', "20,0\u{00A0}%", "60\u{202F}000\u{00A0}$"], $crawler->filter('tbody tr')->first()->filter('td')->each(static fn (Crawler $cell): string => trim($cell->text())));
     }
 
     /**
@@ -135,7 +135,7 @@ final class PositionControllerTest extends WebTestCase
         $this->client->request('POST', "/position/{$free->getId()}/infos");
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('body', 'Gains/pertes : 2000 $ (+ ∞)');
+        self::assertSelectorTextContains('body', "Résultat : +2\u{202F}000\u{00A0}$ (+∞)");
     }
 
     public function testFreePositionShowsAnInfiniteEvolution(): void
@@ -144,7 +144,7 @@ final class PositionControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/position/');
 
-        self::assertSame('+ ∞', trim($crawler->filter('[id^="detail-"]')->last()->filter('tbody tr td')->eq(6)->text()));
+        self::assertSame('+∞', trim($crawler->filter('[id^="detail-"]')->last()->filter('tbody tr td')->eq(6)->text()));
     }
 
     public function testSubmitAndNextOpensTheFormAgain(): void

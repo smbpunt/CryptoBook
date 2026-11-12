@@ -16,7 +16,7 @@ final class ErrorPageTest extends WebTestCase
         $client->request('GET', '/does-not-exist');
 
         self::assertResponseStatusCodeSame(404);
-        self::assertSelectorTextContains('[data-slot="empty-title"]', 'Page introuvable');
+        self::assertSelectorTextContains('h1', 'Page introuvable');
         self::assertSelectorNotExists('nav[aria-label="Navigation principale"]');
     }
 

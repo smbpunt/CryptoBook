@@ -95,7 +95,7 @@ final class LoanControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/loan/');
 
-        self::assertSelectorTextContains('main', 'Emprunt total : 500 $');
+        self::assertSelectorTextContains('main', "Emprunt total 500\u{00A0}$");
     }
 
     private function countLoans(): int

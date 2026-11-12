@@ -26,14 +26,14 @@ final class DepositControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         // Migration rates: 1 EUR = 1.073941 USD.
-        self::assertSelectorTextContains('main', '1 074 $');
-        self::assertSelectorTextContains('main', '1 000 €');
+        self::assertSelectorTextContains('main', "1\u{202F}000\u{00A0}€");
+        self::assertSelectorTextContains('main', "soit 1\u{202F}074\u{00A0}$");
     }
 
     public function testEditDeposit(): void
     {
         $this->client->request('GET', "/deposit/{$this->data->deposit->getId()}/edit");
-        $this->client->submitForm('Modifier', ['deposit[amount]' => '1500']);
+        $this->client->submitForm('Enregistrer', ['deposit[amount]' => '1500']);
 
         self::assertResponseRedirects('/deposit/');
         $this->em()->clear();

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Préférences{% endblock %}
+{% block title %}Préférences{% endblock %}
 
 {% block body %}
     <twig:App:PageHeader title="Préférences"/>
@@ -9,7 +9,7 @@
         <twig:Card:Content>
             {{ form_start(form) }}
                 {{ form_row(form.favoriteFiatCurrency, {label: 'Monnaie FIAT préférée'}) }}
-                <twig:Button type="submit">{{ button_label|default('Enregistrer') }}</twig:Button>
+                <twig:Button type="submit" class="h-11 px-5">Enregistrer</twig:Button>
             {{ form_end(form) }}
         </twig:Card:Content>
     </twig:Card>

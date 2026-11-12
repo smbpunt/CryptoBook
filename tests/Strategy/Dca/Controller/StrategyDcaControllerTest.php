@@ -28,8 +28,8 @@ final class StrategyDcaControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         // 100 € at 1.073941 $: 107.39 $, 60 % in BTC at 50 000 $.
-        self::assertSelectorTextContains('main', '~ 107.39 $');
-        self::assertSame(['BTC', '60 %', '64.44 $', '0.001289'], $crawler->filter('main tbody tr')->first()->filter('td')
+        self::assertSelectorTextContains('main', "À investir 107,39\u{00A0}$");
+        self::assertSame(['BTC', "60,0\u{00A0}%", "64,44\u{00A0}$", '0,00128873'], $crawler->filter('main tbody tr')->first()->filter('td')
             ->each(static fn (Crawler $cell): string => trim($cell->text())));
     }
 
@@ -55,13 +55,13 @@ final class StrategyDcaControllerTest extends WebTestCase
 
         $this->client->request('GET', '/strategy/dca/');
 
-        self::assertSelectorTextContains('main', '100.00 €');
+        self::assertSelectorTextContains('main', "100,00\u{00A0}€");
     }
 
     public function testPartsMustSumToOneHundredPercent(): void
     {
         $crawler = $this->client->request('GET', '/strategy/dca/edit');
-        $values = $crawler->selectButton('Modifier')->form()->getPhpValues();
+        $values = $crawler->selectButton('Enregistrer')->form()->getPhpValues();
         $values['strategy_dca']['parts'] = [
             ['coin' => (string) $this->data->btc->getId(), 'percent' => '60'],
             ['coin' => (string) $this->data->eth->getId(), 'percent' => '30'],
@@ -148,7 +148,7 @@ final class StrategyDcaControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->admin);
         $crawler = $this->client->request('GET', '/strategy/dca/new');
-        $values = $crawler->selectButton('Save')->form()->getPhpValues();
+        $values = $crawler->selectButton('Créer')->form()->getPhpValues();
         $values['strategy_dca']['fiatToDcaEur'] = '50';
         $values['strategy_dca']['farmingToDcaUsd'] = '10';
         $values['strategy_dca']['parts'] = [
@@ -166,7 +166,7 @@ final class StrategyDcaControllerTest extends WebTestCase
     public function testEditStrategy(): void
     {
         $this->client->request('GET', '/strategy/dca/edit');
-        $this->client->submitForm('Modifier', ['strategy_dca[fiatToDcaEur]' => '250']);
+        $this->client->submitForm('Enregistrer', ['strategy_dca[fiatToDcaEur]' => '250']);
 
         self::assertResponseRedirects('/strategy/dca/');
         $this->em()->clear();

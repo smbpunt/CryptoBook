@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Emprunts{% endblock %}
+{% block title %}Modifier l’emprunt{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Modifier emprunt"/>
+    <twig:App:PageHeader title="Modifier l’emprunt"/>
     <twig:Card><twig:Card:Content>
-        {{ include('loan/_form.html.twig', {button_label: 'Modifier'}) }}
+        {{ include('loan/_form.html.twig', {button_label: 'Enregistrer'}) }}
     </twig:Card:Content></twig:Card>
 {% endblock %}

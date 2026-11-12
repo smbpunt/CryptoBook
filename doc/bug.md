@@ -1,19 +1,11 @@
 # Bugs
 
-## Dapp : erreur « should not be null » après un changement de blockchain
+## Dapp : erreur « Ce champ est obligatoire » après un changement de blockchain
 
-Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ Dapp affiche `This value should not be null.`
+Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ Dapp affiche `Ce champ est obligatoire.`
 
 - `dependent_select_controller.js` poste le formulaire sans la dapp et recopie tout le bloc du champ, erreur de la réponse 422 comprise.
 - Déjà présent avec Choices.js.
-
-## DatePicker coupé par la carte
-
-Sur les formulaires dans une carte (ex. `/strategy/farming/new`), le calendrier du DatePicker passe sous le bas de la carte : les dernières semaines sont invisibles.
-
-- `Card` a `overflow-hidden` (`templates/components/Card.html.twig`), le contenu du popover est en `absolute`.
-- `overflow-hidden` ne sert qu'aux images en premier ou dernier enfant, déjà arrondies par `*:[img:first-child]:rounded-t-[22px]`.
-- Touchera aussi la liste déroulante de Tom Select (roadmap, point 1).
 
 ## Repéré pendant la refacto, non corrigé
 

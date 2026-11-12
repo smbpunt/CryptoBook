@@ -14,7 +14,7 @@
     data-tab-id="{{ value }}"
     role="tabpanel"
     aria-labelledby="{{ _tab_id }}"
-    data-active="{{ open ? 'true' : 'false' }}"
+    {{ open ? 'data-active' }}
     data-state="{{ open ? 'active' : 'inactive' }}"
     {{ attributes.defaults({
         class: 'flex-1 text-sm outline-none data-[state=inactive]:hidden'|tailwind_classes,

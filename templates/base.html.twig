@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
 
-    <title>{% block title %}CryptoBook{% endblock %}</title>
+    {# Pages give their own name only: "Positions · CryptoBook". #}
+    <title>{% block title %}{% endblock %}{{ block('title') is not empty ? ' · ' }}CryptoBook</title>
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
 
     {# Before any CSS, so the page never flashes in the wrong theme. Kept in sync by theme_controller.js. #}
@@ -28,7 +29,8 @@
 </head>
 <body class="min-h-screen font-sans antialiased">
 <header class="sticky top-0 z-40 border-b border-border bg-background/70 backdrop-blur-lg">
-    <div class="mx-auto flex max-w-[85rem] flex-wrap items-center gap-x-7 px-6 pt-2 lg:pt-0">
+    {# 60 px high like the tabs, also without them (logged out, error pages). The tabs sit on the bottom border: no bottom padding then. #}
+    <div class="mx-auto flex min-h-15 max-w-[85rem] flex-wrap items-center gap-x-7 px-6 py-2 has-[>nav]:pb-0 lg:py-0">
         <a class="flex min-h-11 items-center rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50" href="{{ path('home') }}">
             <twig:App:Logo/>
         </a>

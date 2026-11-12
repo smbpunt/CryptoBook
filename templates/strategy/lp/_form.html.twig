@@ -20,5 +20,5 @@
         {{ form_row(form.lpDeposit, {label: 'Nombre dans la LP (pas obligatoire)'}) }}
     </div>
     {{ form_row(form.description, {label: 'Description', attr: {placeholder: 'ex: Farming sur telle Dapp/Exchange, avec yield optimizer untel...', rows: 3}}) }}
-    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
 {{ form_end(form) }}

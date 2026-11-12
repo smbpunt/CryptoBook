@@ -1,46 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Suivi Projet{% endblock %}
+{% block title %}Projets{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Mes projets à suivre">
-        <twig:Button as="a" href="{{ path('app_project_monitoring_new') }}">
-            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter un projet
+    <twig:App:PageHeader title="Projets">
+        <twig:Button as="a" href="{{ path('app_project_monitoring_new') }}" class="h-11 px-4">
+            <twig:ux:icon name="lucide:plus"/>Nouveau projet
         </twig:Button>
     </twig:App:PageHeader>
 
-    <twig:Table>
-        <twig:Table:Header>
-            <twig:Table:Row>
-                <twig:Table:Head>Nom</twig:Table:Head>
-                <twig:Table:Head>Crypto</twig:Table:Head>
-                <twig:Table:Head>Liens</twig:Table:Head>
-                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
-            </twig:Table:Row>
-        </twig:Table:Header>
-        <twig:Table:Body>
-            {% for project_monitoring in project_monitorings %}
+    <twig:App:ListCard title="Projets à suivre" titleId="project-list">
+        <twig:Table>
+            <twig:Table:Header>
                 <twig:Table:Row>
-                    <twig:Table:Cell class="font-medium">{{ project_monitoring.libelle }}</twig:Table:Cell>
-                    <twig:Table:Cell>{{ project_monitoring.coin ? project_monitoring.coin }}</twig:Table:Cell>
-                    <twig:Table:Cell>
-                        <ul class="grid gap-1">
-                            {% for link in project_monitoring.links %}
-                                <li><a class="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline" href="{{ link }}">{{ link }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </twig:Table:Cell>
-                    <twig:Table:Cell class="text-end">
-                        <twig:App:RowActions
-                            editUrl="{{ path('app_project_monitoring_edit', {id: project_monitoring.id}) }}"
-                            deleteUrl="{{ path('app_project_monitoring_delete', {id: project_monitoring.id}) }}"
-                            tokenId="delete{{ project_monitoring.id }}"
-                        />
-                    </twig:Table:Cell>
+                    <twig:Table:Head>Projet</twig:Table:Head>
+                    <twig:Table:Head>Crypto</twig:Table:Head>
+                    <twig:Table:Head>Liens</twig:Table:Head>
+                    <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
                 </twig:Table:Row>
-            {% else %}
-                <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucun projet.</twig:Table:Cell></twig:Table:Row>
-            {% endfor %}
-        </twig:Table:Body>
-    </twig:Table>
+            </twig:Table:Header>
+            <twig:Table:Body>
+                {% for project_monitoring in project_monitorings %}
+                    {% set coin = project_monitoring.coin %}
+                    <twig:Table:Row>
+                        <twig:Table:Cell class="font-semibold">{{ project_monitoring.libelle }}</twig:Table:Cell>
+                        <twig:Table:Cell>
+                            {% if coin %}
+                                <span class="flex items-center gap-2.5">
+                                    <twig:App:CoinLogo url="{{ coin.urlImgThumb }}" name="{{ coin.libelle }}" class="size-7"/>
+                                    <span>{{ coin }}</span>
+                                </span>
+                            {% endif %}
+                        </twig:Table:Cell>
+                        <twig:Table:Cell class="whitespace-normal">
+                            <ul class="grid gap-1">
+                                {% for link in project_monitoring.links %}
+                                    <li><a class="break-all text-muted-foreground underline-offset-4 hover:text-foreground hover:underline" target="_blank" rel="noopener" href="{{ link }}">{{ link }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </twig:Table:Cell>
+                        <twig:Table:Cell class="w-px text-end">
+                            <twig:App:RowActions
+                                editUrl="{{ path('app_project_monitoring_edit', {id: project_monitoring.id}) }}"
+                                deleteUrl="{{ path('app_project_monitoring_delete', {id: project_monitoring.id}) }}"
+                                tokenId="delete{{ project_monitoring.id }}"
+                            />
+                        </twig:Table:Cell>
+                    </twig:Table:Row>
+                {% else %}
+                    <twig:Table:Row><twig:Table:Cell colspan="4" class="py-6 text-center text-muted-foreground">Aucun projet.</twig:Table:Cell></twig:Table:Row>
+                {% endfor %}
+            </twig:Table:Body>
+        </twig:Table>
+    </twig:App:ListCard>
 {% endblock %}

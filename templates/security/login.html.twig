@@ -3,7 +3,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <twig:App:AuthCard title="Veuillez vous connecter">
+    <twig:App:AuthCard title="Connexion" description="Accédez à votre portefeuille.">
         <twig:Form method="post" class="space-y-4">
             {% if error %}
                 <twig:Alert variant="destructive">
@@ -32,7 +32,7 @@
             </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <twig:Button type="submit" class="w-full">Se connecter</twig:Button>
+            <twig:Button type="submit" class="h-11 w-full">Se connecter</twig:Button>
             <p class="text-center text-sm text-muted-foreground">
                 Pas de compte ? <a href="{{ path('app_register') }}" class="underline underline-offset-4">S'inscrire</a>
             </p>

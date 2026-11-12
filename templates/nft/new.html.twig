@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - NFTs{% endblock %}
+{% block title %}Nouveau NFT{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Ajouter un NFT"/>
+    <twig:App:PageHeader title="Nouveau NFT"/>
     <twig:Card><twig:Card:Content>
         {{ include('nft/_form.html.twig', {button_label: 'Ajouter'}) }}
     </twig:Card:Content></twig:Card>

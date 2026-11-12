@@ -1,158 +1,163 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Positions{% endblock %}
+{% block title %}Positions{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Mes positions">
-        <twig:Button as="a" href="{{ path('app_position_new') }}">
-            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une position
+    <twig:App:PageHeader title="Positions">
+        <twig:Button as="a" href="{{ path('app_position_new') }}" class="h-11 px-4">
+            <twig:ux:icon name="lucide:plus"/>Nouvelle position
         </twig:Button>
     </twig:App:PageHeader>
 
     <twig:App:InfoDialog>
         <twig:Tabs defaultValue="crypto">
-            <twig:Tabs:List>
-                <twig:Tabs:Trigger value="crypto">Crypto ({{ groups|length }})</twig:Tabs:Trigger>
-                <twig:Tabs:Trigger value="stable">Stable ({{ positions_stable|length }})</twig:Tabs:Trigger>
-                <twig:Tabs:Trigger value="closed">Fermée ({{ positions_closed|length }})</twig:Tabs:Trigger>
-            </twig:Tabs:List>
+            <twig:App:ListCard title="Portefeuille" titleId="position-list">
+                <twig:block name="actions">
+                    <twig:Tabs:List aria-label="Type de position">
+                        <twig:Tabs:Trigger value="crypto">Crypto ({{ groups|length }})</twig:Tabs:Trigger>
+                        <twig:Tabs:Trigger value="stable">Stable ({{ positions_stable|length }})</twig:Tabs:Trigger>
+                        <twig:Tabs:Trigger value="closed">Fermées ({{ positions_closed|length }})</twig:Tabs:Trigger>
+                    </twig:Tabs:List>
+                </twig:block>
 
-            <twig:Tabs:Content value="crypto">
-                <twig:Table data-controller="row-toggle">
-                    <twig:Table:Header>
-                        <twig:Table:Row>
-                            <twig:Table:Head class="w-8"/>
-                            <twig:Table:Head class="w-10"/>
-                            <twig:Table:Head class="w-10"/>
-                            <twig:Table:Head class="text-end">Nombre actuel</twig:Table:Head>
-                            <twig:Table:Head class="text-end">Coût moyen du coin</twig:Table:Head>
-                            <twig:Table:Head class="text-end">% moyen</twig:Table:Head>
-                            <twig:Table:Head class="text-end">Valeur actuelle</twig:Table:Head>
-                        </twig:Table:Row>
-                    </twig:Table:Header>
-                    <twig:Table:Body>
-                        {% for group in groups %}
-                            {% set coin = group.coin %}
-                            {% set percent = group.evolutionPercent %}
-                            <twig:Table:Row>
-                                <twig:Table:Cell class="text-center text-muted-foreground">({{ group.positions|length }})</twig:Table:Cell>
-                                <twig:Table:Cell>
-                                    <twig:Button variant="ghost" size="icon-sm" data-action="row-toggle#toggle" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Détail des positions">
-                                        <twig:ux:icon name="lucide:chevrons-up-down"/>
-                                    </twig:Button>
-                                </twig:Table:Cell>
-                                <twig:Table:Cell class="text-center">
-                                    <twig:App:CoinLogo url="{{ coin.urlImgThumb }}" name="{{ coin.libelle }}"/>
-                                </twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">{{ group.quantity|round(8) }} {{ coin.symbol|upper }}</twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums {{ group.averageCost < coin.priceUsd ? 'text-positive' : 'text-negative' }}">
-                                    ~ {{ group.averageCost|round(2) }} $
-                                </twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums {{ percent is null or percent > 0 ? 'text-positive' : 'text-negative' }}">
-                                    {{ percent is null ? '+ ∞' : percent|round(2) ~ ' %' }}
-                                </twig:Table:Cell>
-                                <twig:Table:Cell class="text-end tabular-nums">~ {{ group.valueUsd|round(2) }} $</twig:Table:Cell>
-                            </twig:Table:Row>
-                            <tr id="detail-{{ coin.id }}" class="hidden bg-muted/30">
-                                <td colspan="7" class="p-2">
-                                    <twig:Table>
-                                        <twig:Table:Header>
-                                            <twig:Table:Row>
-                                                <twig:Table:Head class="w-10"/>
-                                                <twig:Table:Head class="text-center">Ouvert le</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Nombre actuel/départ</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Coût d'entrée</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Prix d'entrée</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Valeur actuelle</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Évolution %</twig:Table:Head>
-                                                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
-                                            </twig:Table:Row>
-                                        </twig:Table:Header>
-                                        <twig:Table:Body>
-                                            {% for detail in group.positions %}
-                                                <twig:Table:Row>
-                                                    <twig:Table:Cell>
-                                                        <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: detail.id}) }}"/>
-                                                    </twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-center" title="{{ detail.openedAt ? detail.openedAt|date('d/m/Y H:i') : 'Date d\'ouverture' }}">
-                                                        {{ detail.openedAt ? detail.openedAt|date('d/m/Y') }}
-                                                    </twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.remainingCoins }}/{{ detail.nbCoins }}</twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end tabular-nums">{{ detail.currentValue|round(2)|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                                    {% set evolution = detail.percentEvolution %}
-                                                    <twig:Table:Cell class="text-end tabular-nums {{ evolution is null or evolution > 0 ? 'text-positive' : 'text-negative' }}">
-                                                        {% if evolution is null %}+ ∞{% elseif evolution <= -99.9 %}LUNA SPOTTED{% else %}{{ evolution|number_format(0, '.', ' ') }} %{% endif %}
-                                                    </twig:Table:Cell>
-                                                    <twig:Table:Cell class="text-end">
-                                                        <twig:App:RowActions
-                                                            editUrl="{{ path('app_position_edit', {id: detail.id}) }}"
-                                                            deleteUrl="{{ path('app_position_delete', {id: detail.id}) }}"
-                                                            tokenId="delete{{ detail.id }}"
-                                                        />
-                                                    </twig:Table:Cell>
-                                                </twig:Table:Row>
-                                            {% endfor %}
-                                        </twig:Table:Body>
-                                    </twig:Table>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <twig:Table:Row>
-                                <twig:Table:Cell colspan="7" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
-                            </twig:Table:Row>
-                        {% endfor %}
-                    </twig:Table:Body>
-                </twig:Table>
-            </twig:Tabs:Content>
-
-            {% for tab, list in {stable: positions_stable, closed: positions_closed} %}
-                <twig:Tabs:Content value="{{ tab }}">
-                    <twig:Table>
+                <twig:Tabs:Content value="crypto">
+                    <twig:Table data-controller="row-toggle">
                         <twig:Table:Header>
                             <twig:Table:Row>
-                                <twig:Table:Head class="w-10"/>
-                                <twig:Table:Head class="w-10"/>
-                                <twig:Table:Head>Coin</twig:Table:Head>
-                                <twig:Table:Head class="text-center">Ouvert le</twig:Table:Head>
-                                <twig:Table:Head class="text-end">{{ tab == 'stable' ? 'Nombre achetés' : 'Nombre' }}</twig:Table:Head>
-                                <twig:Table:Head class="text-end">{{ tab == 'stable' ? 'Coût' : 'Coût d\'entrée' }}</twig:Table:Head>
-                                <twig:Table:Head class="text-end">Prix d'entrée</twig:Table:Head>
-                                <twig:Table:Head class="text-end">Actions</twig:Table:Head>
+                                <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                                <twig:Table:Head>Actif</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Quantité</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Coût moyen</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Prix</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Résultat</twig:Table:Head>
+                                <twig:Table:Head class="text-end">Valeur</twig:Table:Head>
                             </twig:Table:Row>
                         </twig:Table:Header>
                         <twig:Table:Body>
-                            {% for position in list %}
+                            {% for group in groups %}
+                                {% set coin = group.coin %}
+                                {% set coinPrice = coin.priceUsd ?? 0 %}
                                 <twig:Table:Row>
                                     <twig:Table:Cell>
-                                        <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: position.id}) }}"/>
+                                        <twig:Button variant="ghost" size="icon" data-action="row-toggle#toggle" aria-expanded="false" aria-controls="detail-{{ coin.id }}" aria-label="Positions {{ coin.symbol|upper }}">
+                                            <twig:ux:icon name="lucide:chevrons-up-down"/>
+                                        </twig:Button>
                                     </twig:Table:Cell>
-                                    <twig:Table:Cell class="text-center">
-                                        <twig:App:CoinLogo url="{{ position.coin.urlImgThumb }}" name="{{ position.coin.libelle }}"/>
+                                    <twig:Table:Cell>
+                                        <span class="flex items-center gap-2.5">
+                                            <twig:App:CoinLogo url="{{ coin.urlImgThumb }}" name="{{ coin.libelle }}" class="size-7"/>
+                                            <span>
+                                                <span class="block font-semibold">{{ coin.symbol|upper }}</span>
+                                                <span class="block text-xs text-muted-foreground">{{ group.positions|length }} position{{ group.positions|length > 1 ? 's' }}</span>
+                                            </span>
+                                        </span>
                                     </twig:Table:Cell>
-                                    <twig:Table:Cell>{{ position.coin.symbol|upper }}</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-center">{{ position.openedAt ? position.openedAt|date('d/m/Y') }}</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.nbCoins|number_format(2, '.', ' ') }}</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.entryCost|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end tabular-nums">{{ position.entryCoinValue|number_format(2, '.', ' ') }} $</twig:Table:Cell>
-                                    <twig:Table:Cell class="text-end">
-                                        <twig:App:RowActions
-                                            editUrl="{{ path('app_position_edit', {id: position.id}) }}"
-                                            deleteUrl="{{ path('app_position_delete', {id: position.id}) }}"
-                                            tokenId="delete{{ position.id }}"
-                                        />
-                                    </twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end">{{ group.quantity|quantity }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end text-muted-foreground">{{ group.averageCost|price('$') }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end text-muted-foreground">{{ coinPrice|price('$') }}</twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end"><twig:App:Delta :value="group.evolutionPercent" :infinite="true"/></twig:Table:Cell>
+                                    <twig:Table:Cell class="text-end font-semibold">{{ group.valueUsd|amount('$') }}</twig:Table:Cell>
                                 </twig:Table:Row>
+                                <tr id="detail-{{ coin.id }}" class="hidden border-b border-border bg-muted/40">
+                                    <td colspan="7" class="px-2 pb-3">
+                                        <twig:Table>
+                                            <twig:Table:Header>
+                                                <twig:Table:Row class="hover:bg-transparent">
+                                                    <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                                                    <twig:Table:Head>Ouverte le</twig:Table:Head>
+                                                    <twig:Table:Head class="text-end">Restant / acheté</twig:Table:Head>
+                                                    <twig:Table:Head class="text-end">Coût d’entrée</twig:Table:Head>
+                                                    <twig:Table:Head class="text-end">Prix d’entrée</twig:Table:Head>
+                                                    <twig:Table:Head class="text-end">Valeur</twig:Table:Head>
+                                                    <twig:Table:Head class="text-end">Résultat</twig:Table:Head>
+                                                    <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
+                                                </twig:Table:Row>
+                                            </twig:Table:Header>
+                                            <twig:Table:Body>
+                                                {% for detail in group.positions %}
+                                                    {% set evolution = detail.percentEvolution %}
+                                                    <twig:Table:Row class="hover:bg-transparent">
+                                                        <twig:Table:Cell>
+                                                            <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: detail.id}) }}"/>
+                                                        </twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-muted-foreground" title="{{ detail.openedAt ? detail.openedAt|date('d/m/Y H:i') }}">{{ detail.openedAt ? detail.openedAt|day : '—' }}</twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-end">{{ detail.remainingCoins|quantity }} / {{ detail.nbCoins|quantity }}</twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-end">{{ detail.entryCost|amount('$', 2) }}</twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-end text-muted-foreground">{{ detail.entryCoinValue|price('$') }}</twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-end font-semibold">{{ detail.currentValue|amount('$', 2) }}</twig:Table:Cell>
+                                                        <twig:Table:Cell class="text-end">
+                                                            <twig:App:Delta :value="evolution" :decimals="0" :infinite="true" :label="evolution is not null and evolution <= -99.9 ? 'LUNA SPOTTED' : null"/>
+                                                        </twig:Table:Cell>
+                                                        <twig:Table:Cell class="w-px text-end">
+                                                            <twig:App:RowActions
+                                                                editUrl="{{ path('app_position_edit', {id: detail.id}) }}"
+                                                                deleteUrl="{{ path('app_position_delete', {id: detail.id}) }}"
+                                                                tokenId="delete{{ detail.id }}"
+                                                            />
+                                                        </twig:Table:Cell>
+                                                    </twig:Table:Row>
+                                                {% endfor %}
+                                            </twig:Table:Body>
+                                        </twig:Table>
+                                    </td>
+                                </tr>
                             {% else %}
                                 <twig:Table:Row>
-                                    <twig:Table:Cell colspan="8" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
+                                    <twig:Table:Cell colspan="7" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
                                 </twig:Table:Row>
                             {% endfor %}
                         </twig:Table:Body>
                     </twig:Table>
                 </twig:Tabs:Content>
-            {% endfor %}
+
+                {% for tab, list in {stable: positions_stable, closed: positions_closed} %}
+                    <twig:Tabs:Content value="{{ tab }}">
+                        <twig:Table>
+                            <twig:Table:Header>
+                                <twig:Table:Row>
+                                    <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                                    <twig:Table:Head>Actif</twig:Table:Head>
+                                    <twig:Table:Head>Ouverte le</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Quantité</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Coût d’entrée</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Prix d’entrée</twig:Table:Head>
+                                    <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
+                                </twig:Table:Row>
+                            </twig:Table:Header>
+                            <twig:Table:Body>
+                                {% for position in list %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell>
+                                            <twig:App:InfoButton url="{{ path('app_position_ajax_infos', {id: position.id}) }}"/>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell>
+                                            <span class="flex items-center gap-2.5">
+                                                <twig:App:CoinLogo url="{{ position.coin.urlImgThumb }}" name="{{ position.coin.libelle }}" class="size-7"/>
+                                                <span class="font-semibold">{{ position.coin.symbol|upper }}</span>
+                                            </span>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell class="text-muted-foreground">{{ position.openedAt ? position.openedAt|day : '—' }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end">{{ position.nbCoins|quantity }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end font-semibold">{{ position.entryCost|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end text-muted-foreground">{{ position.entryCoinValue|price('$') }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="w-px text-end">
+                                            <twig:App:RowActions
+                                                editUrl="{{ path('app_position_edit', {id: position.id}) }}"
+                                                deleteUrl="{{ path('app_position_delete', {id: position.id}) }}"
+                                                tokenId="delete{{ position.id }}"
+                                            />
+                                        </twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% else %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell colspan="7" class="py-6 text-center text-muted-foreground">Aucune position.</twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% endfor %}
+                            </twig:Table:Body>
+                        </twig:Table>
+                    </twig:Tabs:Content>
+                {% endfor %}
+            </twig:App:ListCard>
         </twig:Tabs>
     </twig:App:InfoDialog>
 {% endblock %}

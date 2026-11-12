@@ -1,0 +1,16 @@
+{%- props
+    ## object|null The dapp (Dapp entity): its name, linked when it has a URL, over its blockchain.
+    dapp = null
+-%}
+{%- if dapp is not null -%}
+<span {{ attributes.defaults({class: 'block'}) }}>
+    <span class="block">
+        {%- if dapp.url is not empty -%}
+            <a class="underline-offset-4 hover:underline" target="_blank" rel="noopener" href="{{ dapp.url }}">{{ dapp|capitalize }}</a>
+        {%- else -%}
+            {{ dapp|capitalize }}
+        {%- endif -%}
+    </span>
+    {%- if dapp.blockchain is not null %}<span class="block text-xs text-muted-foreground">{{ dapp.blockchain|capitalize }}</span>{% endif -%}
+</span>
+{%- endif -%}

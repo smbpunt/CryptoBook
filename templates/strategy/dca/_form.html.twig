@@ -24,8 +24,8 @@
             <thead class="border-b">
                 <tr>
                     <th class="w-12"></th>
-                    <th class="h-10 px-2 text-start font-medium">%</th>
-                    <th class="h-10 px-2 text-start font-medium">Coin</th>
+                    <th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">%</th>
+                    <th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">Coin</th>
                 </tr>
             </thead>
             <tbody data-collection-target="items">
@@ -37,5 +37,5 @@
     </div>
     <div class="mb-4">{{ form_errors(form.parts) }}</div>
 
-    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
 {{ form_end(form) }}

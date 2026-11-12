@@ -4,11 +4,15 @@
     ## string|null Optional subtitle below the title.
     description = null
 -%}
-<div {{ attributes.defaults({class: 'mb-6 flex flex-wrap items-end justify-between gap-4'|tailwind_classes}) }}>
-    <div class="grid gap-1">
-        <h1 class="text-2xl font-semibold tracking-tight">{{ title }}</h1>
+{%- set _content -%}{%- block content %}{% endblock -%}{%- endset -%}
+{# Same title as the dashboard. Actions are `h-11 px-4` buttons, like the dashboard ones. #}
+<div {{ attributes.defaults({class: 'mb-5 flex flex-wrap items-end justify-between gap-4'|tailwind_classes}) }}>
+    <div class="grid min-w-0 gap-1.5">
+        <h1 class="font-display text-[clamp(1.875rem,6vw,2.25rem)] leading-[1.1] font-semibold tracking-[-0.035em]">{{ title }}</h1>
         {% if description %}<p class="text-sm text-muted-foreground">{{ description }}</p>{% endif %}
     </div>
-    {##- Page actions (buttons, links). -#}
-    <div class="flex flex-wrap items-center gap-2">{% block content %}{% endblock %}</div>
+    {%- if _content|trim is not empty %}
+        {##- Page actions (buttons, links). -#}
+        <div class="flex flex-wrap items-center gap-2">{{ _content }}</div>
+    {%- endif %}
 </div>

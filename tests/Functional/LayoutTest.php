@@ -61,7 +61,7 @@ final class LayoutTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('', (string) $crawler->filter('html')->attr('class'));
         self::assertSelectorExists('meta[name="color-scheme"][content="light dark"]');
-        self::assertPageTitleSame('Connexion');
+        self::assertPageTitleSame('Connexion · CryptoBook');
         self::assertSelectorExists('svg[role="img"][aria-label="CryptoBook"]');
         self::assertSelectorNotExists('nav[aria-label="Navigation principale"]');
     }

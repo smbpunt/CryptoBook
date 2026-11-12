@@ -39,8 +39,8 @@
                                     </span>
                                 </span>
                             </td>
-                            <td class="px-2 text-right tabular-nums">{{ holding.quantity|decimal(holding.quantity >= 1000 ? 0 : (holding.quantity >= 1 ? 2 : 4)) }}</td>
-                            <td class="px-2 text-right text-muted-foreground tabular-nums">{{ price|amount(symbol, price >= 1000 ? 0 : (price >= 1 ? 2 : 4)) }}</td>
+                            <td class="px-2 text-right tabular-nums">{{ holding.quantity|quantity }}</td>
+                            <td class="px-2 text-right text-muted-foreground tabular-nums">{{ price|price(symbol) }}</td>
                             <td class="px-2 text-right font-semibold tabular-nums">{{ dashboard.toFavorite(holding.valueUsd)|amount(symbol) }}</td>
                             <td class="pl-4">
                                 <span class="flex items-center gap-2.5">

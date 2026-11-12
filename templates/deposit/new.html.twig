@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Dépôts{% endblock %}
+{% block title %}Nouveau dépôt{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Ajouter un dépôt"/>
+    <twig:App:PageHeader title="Nouveau dépôt"/>
     <twig:Card><twig:Card:Content>
         {{ include('deposit/_form.html.twig', {button_label: 'Ajouter'}) }}
     </twig:Card:Content></twig:Card>
