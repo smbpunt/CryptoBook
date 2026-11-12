@@ -31,6 +31,8 @@ Page d'accueil :
 - Pages de connexion, d'inscription et de mot de passe oublié inchangées
 - Référencement minimal : titre, meta description, Open Graph, `robots.txt`. Le staging reste en noindex
 
+Spec : `doc/specs/homepage-favicon.md`
+
 ### 2. Wallet crypto du dashboard limité aux plus grosses lignes
 
 Indépendant du reste, peut passer en premier. La card liste tout le wallet, miettes comprises, et dépasse largement la card « Répartition » à côté.
