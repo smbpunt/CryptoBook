@@ -1,0 +1,42 @@
+<section id="dashboard" aria-labelledby="home-dashboard" class="flex scroll-mt-24 flex-wrap items-center gap-x-22 gap-y-12 pt-[clamp(5.5rem,11vw,10rem)]">
+    {% include 'home/_feature_text.html.twig' with {
+        id: 'home-dashboard',
+        eyebrow: 'Tableau de bord',
+        title: "L'essentiel, dès l'ouverture.",
+        text: 'Valeur totale, montant investi, part de crypto et de stablecoins : la première page répond aux questions que vous vous posez en arrivant.',
+        points: ['Une mesure de votre portefeuille toutes les heures', "L'historique sur la période de votre choix", 'Les montants affichés dans votre devise'],
+    } only %}
+    <div role="img" aria-label="Indicateurs du tableau de bord : 31 500,00 € investis, répartition de 78 % en crypto et 22 % en stablecoins, et poids de chaque actif." class="flex min-w-0 flex-[1.25_1_440px] flex-col gap-4">
+        <div class="flex flex-wrap gap-4">
+            <twig:App:Stat label="Investi" icon="lucide:coins" hint="Dépôts fiat cumulés · {{ 34020|amount('$', 2) }}" class="min-w-0 flex-[1_1_220px]">
+                {{- 31500|amount('€', 2) -}}
+            </twig:App:Stat>
+            <twig:App:Stat label="Crypto / stable" icon="lucide:chart-pie" class="min-w-0 flex-[1_1_220px]">
+                {{- 78|percent(0) }} <span class="font-medium text-muted-foreground">/ {{ 22|percent(0) }}</span>
+                <twig:block name="footer">
+                    <div class="mt-3 flex h-2 gap-[3px]">
+                        <div class="rounded-full bg-chart-1" style="width: 78%"></div>
+                        <div class="flex-auto rounded-full bg-brand"></div>
+                    </div>
+                    <p class="mt-2 flex justify-between gap-2 text-[13px] text-muted-foreground tabular-nums">
+                        <span>{{ 33242.30|amount('€', 2) }}</span>
+                        <span>{{ 9376.10|amount('€', 2) }}</span>
+                    </p>
+                </twig:block>
+            </twig:App:Stat>
+        </div>
+        <twig:Card class="gap-0 p-[22px]">
+            <p class="mb-1.5 font-display text-lg font-semibold tracking-[-0.02em]">Wallet crypto</p>
+            {% for row in [{coin: coins.btc, percent: 67.2}, {coin: coins.eth, percent: 25.1}, {coin: coins.sol, percent: 7.7}] %}
+                <div class="flex items-center gap-3 border-b border-border py-[11px] last:border-b-0 last:pb-0">
+                    {% include 'home/_coin_badge.html.twig' with {coin: row.coin, size: 'size-7'} only %}
+                    <span class="w-12 font-semibold">{{ row.coin.symbol }}</span>
+                    <span class="h-1.5 flex-auto overflow-hidden rounded-full bg-muted">
+                        <span class="block h-full rounded-full" style="width: {{ row.percent }}%; background: {{ row.coin.color }}"></span>
+                    </span>
+                    <span class="w-14 text-right text-[13px] text-muted-foreground tabular-nums">{{ row.percent|percent }}</span>
+                </div>
+            {% endfor %}
+        </twig:Card>
+    </div>
+</section>

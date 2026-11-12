@@ -1,4 +1,4 @@
-.PHONY: worktree-guard setup-worktree teardown-worktree import\:dump-db
+.PHONY: worktree-guard setup-worktree teardown-worktree import\:dump-db icons
 
 ## ---- DX (worktrees) ----
 
@@ -80,3 +80,12 @@ import\:dump-db: ## Import a pg_dump (tar) into the dev database, f="path/to/dum
 	@$(DOCKER_COMP) exec -T database psql -U app -d app -c "ANALYZE;" \
 		-c "SELECT pg_size_pretty(pg_database_size('app')) AS size;" \
 		-c "SELECT relname AS table, reltuples::bigint AS rows FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' ORDER BY reltuples DESC, relname LIMIT 10;"
+
+## ---- Icons ----
+
+icons: ## Regenerate the PNG icons from assets/images/favicon.svg
+	@docker run --rm -v "$(CURDIR)/assets/images":/w -w /w alpine:3.22 sh -c '\
+		apk add --no-cache rsvg-convert >/dev/null && \
+		rsvg-convert -w 32 -h 32 favicon.svg -o favicon-32.png && \
+		rsvg-convert -w 180 -h 180 -b "#17171C" favicon.svg -o apple-touch-icon.png && \
+		rsvg-convert -w 512 -h 512 -b "#17171C" favicon.svg -o icon-512.png'

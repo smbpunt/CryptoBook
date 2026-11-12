@@ -1,0 +1,51 @@
+<section id="positions" aria-labelledby="home-positions" class="flex scroll-mt-24 flex-row-reverse flex-wrap items-center gap-x-22 gap-y-12 pt-[clamp(5.5rem,11vw,10rem)]">
+    {% include 'home/_feature_text.html.twig' with {
+        id: 'home-positions',
+        eyebrow: 'Positions',
+        title: 'Chaque achat, ligne par ligne.',
+        text: "Une position, c'est une crypto, une quantité et un coût d'entrée. CryptoBook calcule sa valeur au prix du moment et vous dit où vous en êtes.",
+        points: ['Le gain ou la perte de chaque position', "Les ventes partielles et ce qu'il vous reste", 'Les positions ouvertes séparées des positions closes'],
+    } only %}
+    <twig:Card role="img" aria-label="Liste des positions : Bitcoin en hausse de 51,0 %, Ethereum en hausse de 17,5 %, Solana en baisse de 11,9 %." class="min-w-0 flex-[1.25_1_440px] gap-0 p-[22px]">
+        <div class="flex items-center justify-between gap-3">
+            <p class="font-display text-lg font-semibold tracking-[-0.02em]">Positions ouvertes</p>
+            <span class="text-[13px] text-muted-foreground">3 positions</span>
+        </div>
+        <div class="mt-2 overflow-x-auto">
+            <table class="w-full min-w-[520px] border-collapse max-[37.5rem]:min-w-0 text-sm">
+                <thead>
+                    <tr class="text-left text-xs text-muted-foreground [&>th]:border-b [&>th]:border-border [&>th]:py-2.5 [&>th]:font-medium">
+                        <th scope="col" class="pr-2">Actif</th>
+                        <th scope="col" class="px-2 text-right max-[37.5rem]:hidden">Quantité</th>
+                        <th scope="col" class="px-2 text-right max-[37.5rem]:hidden">Coût d'entrée</th>
+                        <th scope="col" class="px-2 text-right">Valeur</th>
+                        <th scope="col" class="pl-2 text-right">Résultat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in [
+                        {coin: coins.btc, quantity: 0.285, cost: 14800, value: 22349.70, result: 51.0},
+                        {coin: coins.eth, quantity: 3.1, cost: 7100, value: 8339, result: 17.5},
+                        {coin: coins.sol, quantity: 14.5, cost: 2900, value: 2553.60, result: -11.9},
+                    ] %}
+                        <tr class="[&>td]:border-b [&>td]:border-border [&>td]:py-3 last:[&>td]:border-b-0 last:[&>td]:pb-0">
+                            <td class="pr-2">
+                                <span class="flex items-center gap-2.5">
+                                    {% include 'home/_coin_badge.html.twig' with {coin: row.coin, size: 'size-7'} only %}
+                                    <span>
+                                        <span class="block font-semibold">{{ row.coin.symbol }}</span>
+                                        <span class="block text-xs text-muted-foreground">{{ row.coin.name }}</span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td class="px-2 text-right tabular-nums max-[37.5rem]:hidden">{{ row.quantity|quantity }}</td>
+                            <td class="px-2 text-right text-muted-foreground tabular-nums max-[37.5rem]:hidden">{{ row.cost|amount('€', 2) }}</td>
+                            <td class="px-2 text-right font-semibold tabular-nums">{{ row.value|amount('€', 2) }}</td>
+                            <td class="pl-2 text-right"><twig:App:Delta :value="row.result"/></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </twig:Card>
+</section>

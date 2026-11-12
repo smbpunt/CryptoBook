@@ -35,6 +35,7 @@ final class LayoutTest extends WebTestCase
      */
     public static function subPages(): iterable
     {
+        yield 'dashboard' => ['/dashboard', 'Tableau de bord'];
         yield 'position form' => ['/position/new', 'Positions'];
         yield 'LP form, under farming' => ['/strategy/lp/new', 'Farming'];
     }
@@ -76,5 +77,31 @@ final class LayoutTest extends WebTestCase
         self::assertSelectorExists('button[data-controller="theme"]');
         self::assertSelectorNotExists('nav[aria-label="Navigation principale"]');
         self::assertSelectorNotExists('button[aria-label="Compte"]');
+    }
+
+    public function testEveryPageDeclaresTheFavicons(): void
+    {
+        $client = self::createClient();
+
+        $crawler = $client->request('GET', '/login');
+
+        // A missing file falls back to "/images/…", without the AssetMapper prefix and digest.
+        self::assertMatchesRegularExpression('#^/assets/images/favicon-[\w-]+\.svg$#', (string) $crawler->filter('link[rel="icon"][type="image/svg+xml"]')->attr('href'));
+        self::assertMatchesRegularExpression('#^/assets/images/favicon-32-[\w-]+\.png$#', (string) $crawler->filter('link[rel="icon"][sizes="32x32"]')->attr('href'));
+        self::assertMatchesRegularExpression('#^/assets/images/apple-touch-icon-[\w-]+\.png$#', (string) $crawler->filter('link[rel="apple-touch-icon"]')->attr('href'));
+    }
+
+    public function testAdminKeepsTheFaviconAndLinksBackToTheDashboard(): void
+    {
+        $client = self::createClient();
+        $data = Dataset::load(self::getContainer()->get(EntityManagerInterface::class));
+        $client->loginUser($data->admin);
+
+        $crawler = $client->request('GET', '/admin/cryptocurrency');
+
+        self::assertResponseIsSuccessful();
+        self::assertMatchesRegularExpression('#^/assets/images/favicon-[\w-]+\.svg$#', (string) $crawler->filter('link[rel="shortcut icon"]')->attr('href'));
+        // EasyAdmin routes the link through itself: "/admin?routeName=…".
+        self::assertStringContainsString('routeName=app_dashboard_index', (string) $crawler->selectLink('Retour')->attr('href'));
     }
 }

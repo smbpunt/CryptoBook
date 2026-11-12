@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi de portefeuille crypto{% endblock %}
+
+{% block meta %}
+    {% set description = "CryptoBook suit vos positions, vos dépôts en euros ou en dollars et l'évolution de votre portefeuille crypto, heure par heure." %}
+    <meta name="description" content="{{ description }}">
+    <link rel="canonical" href="{{ url('home') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CryptoBook">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="CryptoBook · Suivi de portefeuille crypto">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:url" content="{{ url('home') }}">
+    <meta property="og:image" content="{{ absolute_url(asset('images/icon-512.png')) }}">
+    <meta name="twitter:card" content="summary">
+{% endblock %}
+
+{% block page_width %}max-w-[75rem]{% endblock %}
+
+{#
+ # One row at every width, centered by min-h-15: no vertical padding, even when the anchors are hidden (below 901 px).
+ # Below 528 px, a tighter row without the theme switch: the theme stays as last chosen, or follows the system.
+ #}
+{% block header_class %}has-[>nav]:py-0 max-[33rem]:gap-x-1 max-[33rem]:px-4{% endblock %}
+
+{% block header_logo %}<twig:App:Logo label="CryptoBook" class="max-[33rem]:[&>span]:text-lg max-[22.5rem]:[&>span]:hidden"/>{% endblock %}
+
+{% block theme_toggle %}<twig:App:ThemeToggle class="max-[33rem]:hidden"/>{% endblock %}
+
+{% block header_nav %}
+    <nav class="hidden min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] min-[56.3125rem]:block" aria-label="Sections de la page">
+        <ul class="flex gap-0.5 whitespace-nowrap">
+            {% for anchor, label in {dashboard: 'Tableau de bord', positions: 'Positions', cryptos: 'Cryptos', deposits: 'Dépôts'} %}
+                <li>
+                    <a href="#{{ anchor }}" class="relative inline-flex min-h-15 items-center px-3.5 text-sm font-medium text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset">{{ label }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block header_account %}
+    <div class="flex items-center gap-1">
+        <twig:Button as="a" variant="ghost" href="{{ path('app_login') }}" class="h-11 px-4 text-[15px] max-[33rem]:px-2 max-[33rem]:text-sm">Connexion</twig:Button>
+        <twig:Button as="a" href="{{ path('app_register') }}" class="h-11 px-5 text-[15px] max-[33rem]:px-3 max-[33rem]:text-sm">S'inscrire</twig:Button>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {# Example figures, hard-coded: the page runs no query. #}
+    {% set coins = {
+        btc: {symbol: 'BTC', name: 'Bitcoin', letter: 'B', color: '#F7931A', dark: true},
+        eth: {symbol: 'ETH', name: 'Ethereum', letter: 'E', color: '#627EEA', dark: false},
+        sol: {symbol: 'SOL', name: 'Solana', letter: 'S', color: '#0E9F8E', dark: false},
+        etc: {symbol: 'ETC', name: 'Ethereum Classic', letter: 'E', color: '#2F7D4A', dark: false},
+        ethfi: {symbol: 'ETHFI', name: 'ether.fi', letter: 'e', color: '#5B4BC4', dark: false},
+    } %}
+    {% include 'home/_hero.html.twig' %}
+    {% include 'home/_dashboard.html.twig' %}
+    {% include 'home/_positions.html.twig' %}
+    {% include 'home/_cryptos.html.twig' %}
+    {% include 'home/_deposits.html.twig' %}
+    {% include 'home/_cta.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+    <footer class="border-t border-border">
+        <div class="mx-auto flex {{ block('page_width') }} flex-wrap items-center justify-between gap-x-8 gap-y-4 px-6 pt-7 pb-9 text-sm text-muted-foreground">
+            <p class="flex items-center gap-2.5">
+                <twig:App:Logo :wordmark="false" size="size-6"/>
+                <span>© {{ 'now'|date('Y') }} CryptoBook · Prix : CoinGecko · Taux de change : Fixer</span>
+            </p>
+            <nav aria-label="Accès au compte">
+                <ul class="flex flex-wrap gap-x-2">
+                    {% for route, label in {app_login: 'Connexion', app_register: 'Inscription', app_forgot_password_request: 'Mot de passe oublié'} %}
+                        <li><a href="{{ path(route) }}" class="inline-flex min-h-11 items-center rounded-lg px-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    </footer>
+{% endblock %}

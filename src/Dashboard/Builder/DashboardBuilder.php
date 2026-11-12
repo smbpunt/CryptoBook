@@ -46,6 +46,7 @@ final readonly class DashboardBuilder
             $this->depositTotalCalculator->totalUsd($this->depositRepository->findByOwnerWithCurrency($user)),
             $this->loanRepository->sumValueUsd($user),
             $this->farmingOverviewBuilder->build($user)->totalYearlyUsd(),
+            (string) $currency->getFixerKey(),
             (string) $currency->getSymbol(),
             $this->fiatConverter->toUsd(1.0, $currency),
             $this->fiatConverter->fromUsd(1.0, $currency),

@@ -7,7 +7,10 @@
 
     {# Pages give their own name only: "Positions · CryptoBook". #}
     <title>{% block title %}{% endblock %}{{ block('title') is not empty ? ' · ' }}CryptoBook</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
+    {% block meta %}{% endblock %}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
     {# Before any CSS, so the page never flashes in the wrong theme. Kept in sync by theme_controller.js. #}
     <script>
@@ -30,9 +33,9 @@
 <body class="min-h-screen font-sans antialiased">
 <header class="sticky top-0 z-40 border-b border-border bg-background/70 backdrop-blur-lg">
     {# 60 px high like the tabs, also without them (logged out, error pages). The tabs sit on the bottom border: no bottom padding then. #}
-    <div class="mx-auto flex min-h-15 max-w-[85rem] flex-wrap items-center gap-x-7 px-6 py-2 has-[>nav]:pb-0 lg:py-0">
+    <div class="mx-auto flex min-h-15 {% block page_width %}max-w-[85rem]{% endblock %} flex-wrap items-center gap-x-7 px-6 py-2 has-[>nav]:pb-0 lg:py-0 {% block header_class %}{% endblock %}">
         <a class="flex min-h-11 items-center rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50" href="{{ path('home') }}">
-            <twig:App:Logo/>
+            {% block header_logo %}<twig:App:Logo/>{% endblock %}
         </a>
         {% block header_nav %}
             {# Inside the block so error pages (which empty it) skip the menus: security is not available on 404 pages. #}
@@ -44,7 +47,7 @@
             {% endif %}
         {% endblock %}
         <div class="ml-auto flex items-center gap-2">
-            <twig:App:ThemeToggle/>
+            {% block theme_toggle %}<twig:App:ThemeToggle/>{% endblock %}
             {% block header_account %}
                 <twig:Popover>
                     <twig:Popover:Trigger>
@@ -64,8 +67,9 @@
     </div>
 </header>
 
-<main class="mx-auto max-w-[85rem] px-6 py-8">
+<main class="mx-auto {{ block('page_width') }} px-6 py-8">
     {% block body %}{% endblock %}
 </main>
+{% block footer %}{% endblock %}
 </body>
 </html>

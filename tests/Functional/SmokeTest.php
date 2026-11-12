@@ -27,6 +27,7 @@ final class SmokeTest extends WebTestCase
      */
     public static function publicUrls(): iterable
     {
+        yield 'home' => ['/'];
         yield 'login' => ['/login'];
         yield 'register' => ['/register'];
         yield 'reset password' => ['/reset-password'];
@@ -53,7 +54,7 @@ final class SmokeTest extends WebTestCase
         $this->client->loginUser($d->user);
 
         $urls = [
-            '/',
+            '/dashboard',
             '/deposit/', '/deposit/new', "/deposit/{$d->deposit->getId()}/edit",
             '/loan/', '/loan/new', "/loan/{$d->loan->getId()}/edit",
             '/nft/', '/nft/new', "/nft/{$d->nft->getId()}/edit",

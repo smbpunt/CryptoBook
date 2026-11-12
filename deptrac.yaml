@@ -41,6 +41,10 @@ deptrac:
       collectors:
         - type: classLike
           value: ^App\\Fixer\\.*
+    - name: Home
+      collectors:
+        - type: classLike
+          value: ^App\\Home\\.*
     - name: Loan
       collectors:
         - type: classLike
@@ -88,6 +92,7 @@ deptrac:
     Exchange: [Shared]
     FiatCurrency: [Fixer, Shared]
     Fixer: [Shared]
+    Home: [Shared]
     Loan: [User, Cryptocurrency, Blockchain, Shared]
     Nft: [User, Cryptocurrency, Blockchain, Shared]
     Position: [User, Cryptocurrency, Shared]
@@ -96,4 +101,4 @@ deptrac:
     Shared: ~
     Strategy: [User, Cryptocurrency, Blockchain, Position, FiatCurrency, Shared]
     User: [FiatCurrency, Shared]
-    Wallet: [Position, User, Cryptocurrency, Shared]
+    Wallet: [Position, User, Cryptocurrency, Coingecko, Shared]

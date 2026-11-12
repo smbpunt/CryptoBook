@@ -19,6 +19,5 @@ Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ
 
 ## Repéré, non tranché
 
-- `vps.md` : le certificat du domaine final n'est obtenu qu'après le changement DNS, quelques minutes sans HTTPS valide pendant la bascule.
-- `vps.md` : le retour arrière après le changement DNS perd ce qui a été saisi sur le nouveau VPS.
 - Docker local en Postgres 16, serveurs et CI en 18.
+- `/favicon.ico` n'existe pas : un client qui le demande sans lire le HTML reçoit la page 404.

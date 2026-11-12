@@ -17,6 +17,7 @@ SYMFONY  = $(PHP) bin/console
 
 # --- Includes ---
 include make/docker.mk
+include make/qa.mk
 include make/dx.mk
 
 # --- Help ---

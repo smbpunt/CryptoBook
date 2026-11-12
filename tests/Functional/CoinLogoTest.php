@@ -17,7 +17,7 @@ final class CoinLogoTest extends WebTestCase
      */
     public static function pages(): iterable
     {
-        yield 'home' => ['/'];
+        yield 'dashboard' => ['/dashboard'];
         yield 'positions' => ['/position/'];
         yield 'farming' => ['/strategy/farming/'];
     }

@@ -22,12 +22,13 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('CryptoBook');
+            ->setTitle('CryptoBook')
+            ->setFaviconPath('images/favicon.svg');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToRoute('Retour', 'fa fa-chevron-circle-left', 'home');
+        yield MenuItem::linkToRoute('Retour', 'fa fa-chevron-circle-left', 'app_dashboard_index');
         yield MenuItem::linkTo(CryptocurrencyCrudController::class, 'Cryptocurrencies', 'fab fa-bitcoin');
         yield MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fas fa-user');
         yield MenuItem::linkTo(ExchangeCrudController::class, 'Exchange', 'fa fa-university');

@@ -2,13 +2,17 @@
 
 namespace App\Tests\Dashboard\Controller;
 
+use App\Dashboard\Cookie\DisplayCurrencyCookie;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Cookie as BrowserCookie;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 
 final class DashboardControllerTest extends WebTestCase
 {
@@ -33,7 +37,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->snapshot('2026-11-10 14:00', 30000);
         $this->client->loginUser($this->data->user);
 
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Dernier snapshot · 10 nov. 2026');
@@ -59,13 +63,113 @@ final class DashboardControllerTest extends WebTestCase
         self::assertSame(['BTC', '100,0 %'], self::texts($crawler, '#dashboard-allocation + div li > span:not([aria-hidden])'));
         self::assertSame(['USDC', '931 €', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-allocation"] h3 + ul li > span:not([aria-hidden])'));
         self::assertSame(['BTCBitcoin', '0,5', '46 557 €', '23 279 €', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-holdings"] tbody td', true));
+
+        self::assertSame(['EUR', 'USD'], self::texts($crawler, '[aria-label="Devise d’affichage"] button'));
+        self::assertSame('EUR', self::text($crawler, '[aria-label="Devise d’affichage"] [aria-pressed="true"]'));
+        self::assertNull($this->currencyCookie());
+    }
+
+    public function testShowsTheDashboardInUsd(): void
+    {
+        $this->snapshot('2026-11-09 12:00', 24000);
+        $this->snapshot('2026-11-10 14:00', 30000);
+        $this->client->loginUser($this->data->user);
+        $this->displayInUsd();
+
+        $crawler = $this->client->request('GET', '/dashboard');
+
+        self::assertResponseIsSuccessful();
+        self::assertSame('26 000 $', self::text($crawler, '#wallet-history-title + p'));
+        self::assertSame(['+8,3 %', '+2 000 $', 'depuis le 9 nov.'], self::texts($crawler, '#wallet-history-title ~ div > *'));
+
+        self::assertSame('+24 926 $', self::text($crawler, '[aria-labelledby="dashboard-result"] p'));
+        self::assertSame('+2 000 $', self::text($crawler, '[aria-labelledby="dashboard-day-change"] p'));
+        self::assertSame('30 000 $', self::text($crawler, '[aria-labelledby="dashboard-high"] p'));
+
+        $invested = '//*[@data-slot="card-description"][normalize-space()="Investi"]/following-sibling::*';
+        self::assertSame('1 074 $', self::normalize($crawler->filterXPath($invested.'[@data-slot="card-title"]')->text()));
+        self::assertStringNotContainsString('·', $crawler->filterXPath($invested.'[self::p]')->text());
+        self::assertStringContainsString('50 $ / mois', self::text($crawler, 'main'));
+
+        self::assertSame(['USDC', '1 000 $', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-allocation"] h3 + ul li > span:not([aria-hidden])'));
+        self::assertSame(['BTCBitcoin', '0,5', '50 000 $', '25 000 $', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-holdings"] tbody td', true));
+
+        // The chart in dollars: the first snapshot is 24 000 $ (22 347,6 € in euros).
+        $canvas = $crawler->filter('canvas[data-wallet-chart-currency-value="$"]');
+        self::assertCount(1, $canvas);
+        /** @var array{data: array{datasets: list<array{data: list<array{y: float}>}>}} $chart */
+        $chart = json_decode((string) $canvas->attr('data-symfony--ux-chartjs--chart-view-value'), true, flags: \JSON_THROW_ON_ERROR);
+        self::assertEqualsWithDelta(24000.0, $chart['data']['datasets'][0]['data'][0]['y'], 0.001);
+
+        self::assertSame('USD', self::text($crawler, '[aria-label="Devise d’affichage"] [aria-pressed="true"]'));
+        $this->assertCurrencyCookieExtended();
+    }
+
+    public function testChangeOfPeriodInUsdExtendsTheCookie(): void
+    {
+        $this->snapshot('2026-11-10 10:00', 24000);
+        $this->client->loginUser($this->data->user);
+        $this->displayInUsd();
+
+        $crawler = $this->client->request('GET', '/dashboard/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+
+        self::assertResponseIsSuccessful();
+        self::assertSame('26 000 $', self::text($crawler, '#wallet-history-title + p'));
+        self::assertSelectorExists('canvas[data-wallet-chart-currency-value="$"]');
+        $this->assertCurrencyCookieExtended();
+    }
+
+    public function testNoSwitchWhenTheFavoriteCurrencyIsUsd(): void
+    {
+        $this->client->loginUser($this->data->admin);
+        $this->displayInUsd();
+
+        $this->client->request('GET', '/dashboard');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('[aria-label="Devise d’affichage"]');
+        self::assertNull($this->currencyCookie());
+    }
+
+    public function testSwitchToUsd(): void
+    {
+        $this->client->loginUser($this->data->user);
+        $crawler = $this->client->request('GET', '/dashboard');
+
+        $this->client->submit($crawler->selectButton('USD')->form());
+
+        self::assertResponseRedirects('/dashboard', Response::HTTP_SEE_OTHER);
+        $this->assertCurrencyCookieExtended();
+        self::assertTrue($this->currencyCookie()?->isHttpOnly());
+    }
+
+    public function testSwitchBackToTheFavoriteCurrency(): void
+    {
+        $this->client->loginUser($this->data->user);
+        $this->displayInUsd();
+        $crawler = $this->client->request('GET', '/dashboard');
+
+        $this->client->submit($crawler->selectButton('EUR')->form());
+
+        self::assertResponseRedirects('/dashboard', Response::HTTP_SEE_OTHER);
+        self::assertTrue($this->currencyCookie()?->isCleared());
+        self::assertSame('/', $this->currencyCookie()->getPath());
+    }
+
+    public function testUnknownCurrencyIsNotFound(): void
+    {
+        $this->client->loginUser($this->data->user);
+
+        $this->client->request('POST', '/dashboard/currency/btc');
+
+        self::assertResponseStatusCodeSame(404);
     }
 
     public function testEmptyHistory(): void
     {
         $this->client->loginUser($this->data->admin);
 
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Aucun snapshot pour l’instant');
@@ -82,7 +186,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->snapshot('2026-11-10 10:00', 24000);
         $this->client->loginUser($this->data->user);
 
-        $crawler = $this->client->request('GET', '/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+        $crawler = $this->client->request('GET', '/dashboard/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
 
         self::assertResponseIsSuccessful();
         self::assertCount(1, $crawler->filter('body > turbo-frame#wallet-history'));
@@ -95,18 +199,46 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->user);
 
-        $this->client->request('GET', '/history/7d');
+        $this->client->request('GET', '/dashboard/history/7d');
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/dashboard');
     }
 
     public function testUnknownPeriodIsNotFound(): void
     {
         $this->client->loginUser($this->data->user);
 
-        $this->client->request('GET', '/history/2w');
+        $this->client->request('GET', '/dashboard/history/2w');
 
         self::assertResponseStatusCodeSame(404);
+    }
+
+    /**
+     * Set in the jar directly: the cookie of a response expires on the mocked clock, the jar on the real one.
+     */
+    private function displayInUsd(): void
+    {
+        $this->client->getCookieJar()->set(new BrowserCookie(DisplayCurrencyCookie::NAME, 'usd'));
+    }
+
+    private function currencyCookie(): ?Cookie
+    {
+        foreach ($this->client->getResponse()->headers->getCookies() as $cookie) {
+            if (DisplayCurrencyCookie::NAME === $cookie->getName()) {
+                return $cookie;
+            }
+        }
+
+        return null;
+    }
+
+    private function assertCurrencyCookieExtended(): void
+    {
+        $cookie = $this->currencyCookie();
+        self::assertSame('usd', $cookie?->getValue());
+        self::assertSame(new \DateTimeImmutable('2026-12-10 14:20 UTC')->getTimestamp(), $cookie->getExpiresTime());
+        // Path "/": unchanged since the dashboard moved to /dashboard, an existing cookie must stay clearable.
+        self::assertSame('/', $cookie->getPath());
     }
 
     private function snapshot(string $at, float $valueUsd): void

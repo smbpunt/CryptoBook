@@ -98,6 +98,20 @@ final class WalletSnapshotRepositoryTest extends KernelTestCase
         self::assertNull($this->repository->findStats($this->data->user, $this->now)->dayAgoUsd);
     }
 
+    public function testFirstRecordedAtByOwner(): void
+    {
+        $this->snapshots($this->data->user, ['2026-11-10 09:00' => 2.0, '2026-11-01 10:00' => 1.0]);
+        $this->snapshots($this->data->admin, ['2026-11-05 12:00' => 3.0]);
+        $withoutSnapshot = new User()->setEmail('other@example.com')->setPassword('x')->setFavoriteFiatCurrency($this->data->usd);
+        $this->em->persist($withoutSnapshot);
+        $this->em->flush();
+
+        self::assertEquals([
+            $this->data->user->getId() => new \DateTimeImmutable('2026-11-01 10:00 UTC'),
+            $this->data->admin->getId() => new \DateTimeImmutable('2026-11-05 12:00 UTC'),
+        ], $this->repository->findFirstRecordedAtByOwner());
+    }
+
     /**
      * @param array<string, float> $values by UTC date
      */

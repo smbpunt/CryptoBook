@@ -26,7 +26,7 @@ final class RegistrationControllerTest extends WebTestCase
     {
         $this->register('new@example.com', self::STRONG_PASSWORD);
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/dashboard');
         $user = $this->em()->getRepository(User::class)->findOneBy(['email' => 'new@example.com']);
         self::assertNotNull($user);
         self::assertSame('USD', $user->getFavoriteFiatCurrency()->getFixerKey());
