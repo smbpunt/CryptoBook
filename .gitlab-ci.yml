@@ -116,6 +116,22 @@ lint:symfony:
     - bin/console lint:yaml config --parse-tags
     - bin/console doctrine:schema:validate --skip-sync
 
+# Symfony Language Tools (beta): unknown routes, templates, services, options.
+# Same pinned version as the php image (docker/php/install-symfony-lsp.sh).
+lint:symfony-lsp:
+  extends: .lint_template
+  script:
+    - sh docker/php/install-symfony-lsp.sh
+    - mkdir -p var/reports/symfony-lsp
+    - symfony-lsp check --format=gitlab > var/reports/symfony-lsp/gl-code-quality-report.json
+  artifacts:
+    when: on_failure
+    reports:
+      codequality: var/reports/symfony-lsp/gl-code-quality-report.json
+    paths:
+      - var/reports/symfony-lsp/gl-code-quality-report.json
+    expire_in: 1 week
+
 lint:security:
   image: "php:${PHP_VERSION}-cli"
   stage: lint
