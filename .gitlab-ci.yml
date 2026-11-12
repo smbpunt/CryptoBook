@@ -256,6 +256,7 @@ deploy_production:
   environment: production
   resource_group: production
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
 
 rollback_dev:
@@ -279,6 +280,7 @@ rollback_production:
   script:
     - bash ci/rollback.sh
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
       when: manual
       allow_failure: true
