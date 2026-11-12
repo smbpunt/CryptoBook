@@ -77,4 +77,16 @@ final class LayoutTest extends WebTestCase
         self::assertSelectorNotExists('nav[aria-label="Navigation principale"]');
         self::assertSelectorNotExists('button[aria-label="Compte"]');
     }
+
+    public function testEveryPageDeclaresTheFavicons(): void
+    {
+        $client = self::createClient();
+
+        $crawler = $client->request('GET', '/login');
+
+        // A missing file falls back to "/images/…", without the AssetMapper prefix and digest.
+        self::assertMatchesRegularExpression('#^/assets/images/favicon-[\w-]+\.svg$#', (string) $crawler->filter('link[rel="icon"][type="image/svg+xml"]')->attr('href'));
+        self::assertMatchesRegularExpression('#^/assets/images/favicon-32-[\w-]+\.png$#', (string) $crawler->filter('link[rel="icon"][sizes="32x32"]')->attr('href'));
+        self::assertMatchesRegularExpression('#^/assets/images/apple-touch-icon-[\w-]+\.png$#', (string) $crawler->filter('link[rel="apple-touch-icon"]')->attr('href'));
+    }
 }
