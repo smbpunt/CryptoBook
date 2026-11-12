@@ -93,9 +93,9 @@ final class CoingeckoClientTest extends TestCase
         self::assertSame([], new CoingeckoClient($http)->getHourlyUsdPrices('unknown', 30));
     }
 
-    public function testGetHourlyUsdPricesFailsOnServerError(): void
+    public function testGetHourlyUsdPricesFailsOnOtherClientErrors(): void
     {
-        $http = new MockHttpClient(new MockResponse('', ['http_code' => 500]), self::BASE_URI);
+        $http = new MockHttpClient(new MockResponse('', ['http_code' => 401]), self::BASE_URI);
 
         $this->expectException(CoingeckoUnavailableException::class);
         new CoingeckoClient($http)->getHourlyUsdPrices('bitcoin', 30);

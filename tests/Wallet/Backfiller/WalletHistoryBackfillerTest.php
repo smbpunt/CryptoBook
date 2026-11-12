@@ -3,6 +3,7 @@
 namespace App\Tests\Wallet\Backfiller;
 
 use App\Coingecko\Exception\CoingeckoUnavailableException;
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\User\Entity\User;
@@ -67,8 +68,12 @@ final class WalletHistoryBackfillerTest extends KernelTestCase
         $this->pricesAre(['bitcoin' => [self::START => 40000]]);
         $this->em->persist(new WalletSnapshot($this->data->user, self::utc('2026-11-05 10:00'), 123.0));
         $this->em->flush();
+        // admin has no snapshot: the whole 30 days, and bitcoin is fetched once for both.
+        $this->open($this->data->admin, 0.1, $this->data->btc);
 
-        self::assertSame(596, $this->backfill()->snapshots);
+        self::assertEquals(new BackfillReport(users: 2, snapshots: 596 + 720, fetchedCoins: 1), $this->backfill());
+        self::assertSame(['bitcoin'], $this->requested);
+        self::assertCount(720, $this->snapshots($this->data->admin));
 
         $snapshots = $this->snapshots($this->data->user);
         self::assertCount(597, $snapshots);
@@ -122,13 +127,20 @@ final class WalletHistoryBackfillerTest extends KernelTestCase
 
     public function testCoingeckoFailureWritesNothing(): void
     {
-        $this->http->setResponseFactory(new MockResponse('', ['http_code' => 500]));
+        // bitcoin is fetched, ethereum fails: the bitcoin hours must not be written either.
+        $this->open($this->data->user, 1);
+        $this->http->setResponseFactory([
+            new JsonMockResponse(['prices' => [[self::utc(self::START)->getTimestamp() * 1000, 40000]]]),
+            new MockResponse('', ['http_code' => 500]),
+        ]);
 
         try {
             $this->backfill();
             self::fail('The CoinGecko failure must be thrown.');
         } catch (CoingeckoUnavailableException) {
         }
+
+        self::assertSame(2, $this->http->getRequestsCount());
 
         $this->em->clear();
         self::assertSame(0, self::getContainer()->get(WalletSnapshotRepository::class)->count());
@@ -171,9 +183,9 @@ final class WalletHistoryBackfillerTest extends KernelTestCase
         });
     }
 
-    private function open(User $owner, float $eth): void
+    private function open(User $owner, float $quantity, ?Cryptocurrency $coin = null): void
     {
-        $this->em->persist(new Position($owner)->setCoin($this->data->eth)->setNbCoins($eth)->setEntryCost(1));
+        $this->em->persist(new Position($owner)->setCoin($coin ?? $this->data->eth)->setNbCoins($quantity)->setEntryCost(1));
         $this->em->flush();
     }
 

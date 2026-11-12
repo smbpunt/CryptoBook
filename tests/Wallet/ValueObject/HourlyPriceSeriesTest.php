@@ -27,6 +27,13 @@ final class HourlyPriceSeriesTest extends TestCase
         self::assertSame(100.0, $series->at(self::hour('10:00')));
     }
 
+    public function testLastPointOfAnHourWins(): void
+    {
+        $series = HourlyPriceSeries::fromPoints([self::timestamp('13:58') => 100.0, self::timestamp('14:02') => 110.0]);
+
+        self::assertSame(110.0, $series->at(self::hour('14:00')));
+    }
+
     public function testEmptySeriesHasNoPrice(): void
     {
         self::assertNull(HourlyPriceSeries::fromPoints([])->at(self::hour('12:00')));
