@@ -15,6 +15,8 @@ final readonly class DashboardData
     /** @var list<AllocationSlice> */
     public array $allocation;
 
+    public TopHoldings $topHoldings;
+
     /**
      * @param list<DashboardHolding> $cryptoHoldings
      * @param list<DashboardHolding> $stableHoldings
@@ -38,6 +40,11 @@ final readonly class DashboardData
     ) {
         $this->totalUsd = $cryptoUsd + $stableUsd;
         $this->allocation = AllocationSlice::fromHoldings($cryptoHoldings);
+        $this->topHoldings = TopHoldings::fromHoldings(
+            $cryptoHoldings,
+            TopHoldings::rowsFor(\count($this->allocation), \count($stableHoldings)),
+            $cryptoUsd,
+        );
     }
 
     public function isUsd(): bool

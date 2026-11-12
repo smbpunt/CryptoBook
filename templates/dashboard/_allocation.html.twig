@@ -39,7 +39,7 @@
         <ul class="flex flex-col gap-2 text-[13px]">
             {% for holding in dashboard.stableHoldings %}
                 <li class="flex items-center gap-2.5">
-                    <span aria-hidden="true" class="size-2.5 shrink-0 rounded-full" style="background: {{ holding.color ?: 'var(--chart-' ~ (3 + loop.index0 % 3) ~ ')' }}"></span>
+                    <span aria-hidden="true" class="size-2.5 shrink-0 rounded-full" style="background: {{ holding.color }}"></span>
                     <span class="flex-auto font-medium">{{ holding.symbol|upper }}</span>
                     <span class="tabular-nums">{{ dashboard.toFavorite(holding.valueUsd)|amount(symbol) }}</span>
                     <span class="w-13 text-right text-muted-foreground tabular-nums">{{ holding.percent|percent }}</span>

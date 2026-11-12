@@ -2,7 +2,9 @@
 
 namespace App\Tests\Dashboard\Controller;
 
+use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dashboard\Cookie\DisplayCurrencyCookie;
+use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,6 +69,35 @@ final class DashboardControllerTest extends WebTestCase
         self::assertSame(['EUR', 'USD'], self::texts($crawler, '[aria-label="Devise d’affichage"] button'));
         self::assertSame('EUR', self::text($crawler, '[aria-label="Devise d’affichage"] [aria-pressed="true"]'));
         self::assertNull($this->currencyCookie());
+    }
+
+    public function testGroupsTheSmallestHoldingsInOthers(): void
+    {
+        // 25 000 $ of BTC + 8 coins at 1 $: 27 745 $. C5 to C8 are below 0.3 %: 6 slices (5 + "Autres") and
+        // 1 stablecoin, so 6 rows (counting the 9 holdings instead of the slices would give 7).
+        foreach ([800, 700, 600, 500, 50, 40, 30, 25] as $i => $quantity) {
+            $coin = new Cryptocurrency()->setLibelleCoingecko('coin-'.($i + 1))->setLibelle('Coin '.($i + 1))
+                ->setSymbol('c'.($i + 1))->setPriceUsd(1)->setMcapUsd(1000)->setIsStable(false);
+            $this->em->persist($coin);
+            $this->em->persist(new Position($this->data->user)->setCoin($coin)->setNbCoins($quantity)->setEntryCost($quantity));
+        }
+        $this->em->flush();
+        $this->client->loginUser($this->data->user);
+
+        $crawler = $this->client->request('GET', '/dashboard');
+
+        self::assertResponseIsSuccessful();
+        $rows = '[aria-labelledby="dashboard-holdings"] tbody tr';
+        self::assertSame(['BTC', 'C1', 'C2', 'C3', 'C4', 'Autres'], self::texts($crawler, $rows.' td:first-child .font-semibold'));
+        // C5 to C8 = 145 $ = 135 €, 0.52 % of the crypto wallet (0.50 % of the total with the stablecoin).
+        $others = $rows.'[data-slot="holdings-others"]';
+        self::assertSame(['Autres4actifs', '—', '—', '135 €', '0,5 %'], self::texts($crawler, $others.' td', true));
+        self::assertSame('width: 0.52%; background: var(--muted-foreground)', $crawler->filter($others.' td:last-child [style]')->attr('style'));
+        self::assertStringNotContainsString('C5', self::text($crawler, '[aria-labelledby="dashboard-holdings"]'));
+
+        // Coins without a color: the one derived from the symbol, on the weight bar and the stablecoin dot.
+        self::assertSame('width: 90.11%; background: hsl(68 65% 55%)', $crawler->filter($rows.':first-child td:last-child [style]')->attr('style'));
+        self::assertSame('background: hsl(234 65% 55%)', $crawler->filter('[aria-labelledby="dashboard-allocation"] h3 + ul [style]')->attr('style'));
     }
 
     public function testShowsTheDashboardInUsd(): void
