@@ -59,7 +59,7 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 ## Déploiement
 
 - Dépôt sur GitLab `smbai/cryptobook` (MR et CI, via `glab`), GitHub `smbpunt/CryptoBook` en miroir push.
-- Pipeline `.gitlab-ci.yml` (lint, analyse et tests avec Postgres 18 en parallèle, puis deploy) : un push sur `dev` déploie le staging `dev.cryptobook.fr` (VPS1), un tag `vX.Y.Z` sur `main` déploie la prod `cryptobook.fr` (VPS2). Retour arrière manuel du code seul (`rollback_*`), une migration se défait à la main. Pas de pipeline si seuls `doc/` et des fichiers `.md` changent (MR et push sur `dev`).
+- Pipeline `.gitlab-ci.yml` (lint, analyse et tests avec Postgres 18 en parallèle, puis deploy) : un push sur `dev` déploie le staging `dev.cryptobook.fr` (VPS1), un tag `vX.Y.Z` sur `main` déploie la prod `cryptobook.fr` (VPS2). Retour arrière manuel du code seul (`rollback_*`), une migration se défait à la main. Pas de pipeline si seuls `doc/` et des fichiers `.md` changent (MR et push sur `dev`). Pipeline planifiée hebdomadaire sur `dev` : `composer audit` seul (les autres jobs ont la règle `*not-scheduled`).
 - Deployer : `deploy.php` (assets, migrations, reload de FrankenPHP, arrêt du worker depuis la release précédente). `var/log` et `var/sessions` partagés, `var/cache` et `var/share` par release.
 - Web en FrankenPHP (PHP 8.5), CLI, Deployer et worker en PHP système 8.5 (`/usr/bin/php`).
 
@@ -67,7 +67,7 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 
 - `make ci` : vérification complète (composer, lints, PHP CS Fixer, Rector, PHPStan, Deptrac, Symfony Language Tools, PHPUnit). S'arrête au premier échec, `make -k ci` pour tout dérouler. Une étape seule : `make lint`, `make phpstan`… (`make help`).
 - `make fix` : Rector puis PHP CS Fixer.
-- Symfony Language Tools (`symfony-lsp check`, bêta) : binaire installé dans l'image `php`, version épinglée dans `docker/php/Dockerfile` (`make build` après un changement). Il démarre l'application en `dev` et signale routes, templates, services ou options inexistants.
+- Symfony Language Tools (`symfony-lsp check`, bêta) : binaire installé dans l'image `php`, version épinglée dans `docker/php/install-symfony-lsp.sh`, partagé avec le job `lint:symfony-lsp` de la CI (`make build` après un changement). Il démarre l'application en `dev` et signale routes, templates, services ou options inexistants.
 
 Tout est propre, sans baseline (PHPStan comme Symfony Language Tools) : corriger les erreurs, ne jamais les ignorer. Faux positif de `symfony-lsp` : `@symfony-lsp-ignore <code> (raison)` sur la ligne.
 
