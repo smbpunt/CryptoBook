@@ -13,7 +13,33 @@
 
 Un point = une PR vers `dev`.
 
-Rien de prévu.
+### 1. Graphique du wallet : axe recadré sur la valeur
+
+La courbe paraît plate : l'axe Y englobe aussi la ligne « Investi », souvent loin de la valeur.
+
+- Axe Y calculé sur le minimum et le maximum de la courbe « Valeur » de la période affichée, avec une petite marge
+- Recalculé à chaque changement de période
+- La ligne « Investi » ne s'affiche que si elle tombe dans la plage ; elle reste dans l'infobulle, avec le résultat
+
+Indépendant du reste.
+
+### 2. Règles de validation sur les entités
+
+Seules les positions et les ventes refusent les valeurs incohérentes : un emprunt, un farming, une LP, un NFT ou un dépôt acceptent des quantités ou des prix négatifs.
+
+- Quantités, prix, APR et montants : positifs (ou nuls quand zéro a un sens)
+- Dépôt : montant strictement positif, pas de retrait par un montant négatif
+- Pourcentages bornés, textes obligatoires non vides et limités à la taille de leur colonne, dates cohérentes entre elles (vente après achat)
+- Contraintes du Validator sur les entités, messages en français, sans contrainte en base ni migration
+- Une donnée existante hors règle n'est signalée qu'à sa prochaine modification
+
+Indépendant du point 1.
+
+### 3. Bugs de `doc/bug.md`
+
+À détailler avant de commencer : choisir les bugs à corriger et les découper en points.
+
+Ensuite : point avec les utilisateurs sur les fonctionnalités à retirer ou à ajouter.
 
 ## Hors périmètre
 
