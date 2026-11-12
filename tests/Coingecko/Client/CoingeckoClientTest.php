@@ -69,6 +69,38 @@ final class CoingeckoClientTest extends TestCase
         self::assertSame(0, $http->getRequestsCount());
     }
 
+    public function testGetHourlyUsdPricesKeysThePricesBySecond(): void
+    {
+        $response = new JsonMockResponse([
+            'prices' => [[1791892800000, 83280.5], ['x', 1], [1791896400000, 83000]],
+            'market_caps' => [[1791892800000, 1.6e12]],
+        ]);
+        $http = new MockHttpClient($response, self::BASE_URI);
+
+        $prices = new CoingeckoClient($http)->getHourlyUsdPrices('bitcoin', 30);
+
+        self::assertSame([1791892800 => 83280.5, 1791896400 => 83000.0], $prices);
+        $url = $response->getRequestUrl();
+        self::assertStringStartsWith(self::BASE_URI.'coins/bitcoin/market_chart?', $url);
+        parse_str((string) parse_url($url, \PHP_URL_QUERY), $query);
+        self::assertSame(['vs_currency' => 'usd', 'days' => '30'], $query);
+    }
+
+    public function testGetHourlyUsdPricesOfAnUnknownCoinIsEmpty(): void
+    {
+        $http = new MockHttpClient(new JsonMockResponse(['error' => 'coin not found'], ['http_code' => 404]), self::BASE_URI);
+
+        self::assertSame([], new CoingeckoClient($http)->getHourlyUsdPrices('unknown', 30));
+    }
+
+    public function testGetHourlyUsdPricesFailsOnServerError(): void
+    {
+        $http = new MockHttpClient(new MockResponse('', ['http_code' => 500]), self::BASE_URI);
+
+        $this->expectException(CoingeckoUnavailableException::class);
+        new CoingeckoClient($http)->getHourlyUsdPrices('bitcoin', 30);
+    }
+
     public function testHttpErrorsBecomeUnavailableException(): void
     {
         $http = new MockHttpClient(new MockResponse('', ['http_code' => 500]), self::BASE_URI);
