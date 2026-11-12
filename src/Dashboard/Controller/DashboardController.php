@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 
+#[Route('/dashboard')]
 final class DashboardController extends AbstractController
 {
     public function __construct(
@@ -27,7 +28,7 @@ final class DashboardController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'home')]
+    #[Route('', name: 'app_dashboard_index', methods: ['GET'])]
     public function index(Request $request, #[CurrentUser] User $user): Response
     {
         $displayed = $this->displayedDashboardResolver->resolve($request, $user);
@@ -51,7 +52,7 @@ final class DashboardController extends AbstractController
     public function history(HistoryPeriod $period, Request $request, #[CurrentUser] User $user): Response
     {
         if (!$request->headers->has('Turbo-Frame')) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_dashboard_index');
         }
 
         $displayed = $this->displayedDashboardResolver->resolve($request, $user);
@@ -72,7 +73,7 @@ final class DashboardController extends AbstractController
     #[IsCsrfTokenValid('dashboard-currency')]
     public function currency(DisplayCurrency $currency): Response
     {
-        $response = $this->redirectToRoute('home', status: Response::HTTP_SEE_OTHER);
+        $response = $this->redirectToRoute('app_dashboard_index', status: Response::HTTP_SEE_OTHER);
         $this->currencyCookie->write($response, $currency);
 
         return $response;

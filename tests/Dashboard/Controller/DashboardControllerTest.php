@@ -37,7 +37,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->snapshot('2026-11-10 14:00', 30000);
         $this->client->loginUser($this->data->user);
 
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Dernier snapshot · 10 nov. 2026');
@@ -76,7 +76,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->client->loginUser($this->data->user);
         $this->displayInUsd();
 
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSame('26 000 $', self::text($crawler, '#wallet-history-title + p'));
@@ -111,7 +111,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->client->loginUser($this->data->user);
         $this->displayInUsd();
 
-        $crawler = $this->client->request('GET', '/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+        $crawler = $this->client->request('GET', '/dashboard/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
 
         self::assertResponseIsSuccessful();
         self::assertSame('26 000 $', self::text($crawler, '#wallet-history-title + p'));
@@ -124,7 +124,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->client->loginUser($this->data->admin);
         $this->displayInUsd();
 
-        $this->client->request('GET', '/');
+        $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorNotExists('[aria-label="Devise d’affichage"]');
@@ -134,11 +134,11 @@ final class DashboardControllerTest extends WebTestCase
     public function testSwitchToUsd(): void
     {
         $this->client->loginUser($this->data->user);
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         $this->client->submit($crawler->selectButton('USD')->form());
 
-        self::assertResponseRedirects('/', Response::HTTP_SEE_OTHER);
+        self::assertResponseRedirects('/dashboard', Response::HTTP_SEE_OTHER);
         $this->assertCurrencyCookieExtended();
         self::assertTrue($this->currencyCookie()?->isHttpOnly());
     }
@@ -147,11 +147,11 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->user);
         $this->displayInUsd();
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         $this->client->submit($crawler->selectButton('EUR')->form());
 
-        self::assertResponseRedirects('/', Response::HTTP_SEE_OTHER);
+        self::assertResponseRedirects('/dashboard', Response::HTTP_SEE_OTHER);
         self::assertTrue($this->currencyCookie()?->isCleared());
         self::assertSame('/', $this->currencyCookie()->getPath());
     }
@@ -160,7 +160,7 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->user);
 
-        $this->client->request('POST', '/currency/btc');
+        $this->client->request('POST', '/dashboard/currency/btc');
 
         self::assertResponseStatusCodeSame(404);
     }
@@ -169,7 +169,7 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->admin);
 
-        $crawler = $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/dashboard');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Aucun snapshot pour l’instant');
@@ -186,7 +186,7 @@ final class DashboardControllerTest extends WebTestCase
         $this->snapshot('2026-11-10 10:00', 24000);
         $this->client->loginUser($this->data->user);
 
-        $crawler = $this->client->request('GET', '/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+        $crawler = $this->client->request('GET', '/dashboard/history/7d', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
 
         self::assertResponseIsSuccessful();
         self::assertCount(1, $crawler->filter('body > turbo-frame#wallet-history'));
@@ -199,16 +199,16 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->data->user);
 
-        $this->client->request('GET', '/history/7d');
+        $this->client->request('GET', '/dashboard/history/7d');
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/dashboard');
     }
 
     public function testUnknownPeriodIsNotFound(): void
     {
         $this->client->loginUser($this->data->user);
 
-        $this->client->request('GET', '/history/2w');
+        $this->client->request('GET', '/dashboard/history/2w');
 
         self::assertResponseStatusCodeSame(404);
     }
@@ -237,7 +237,7 @@ final class DashboardControllerTest extends WebTestCase
         $cookie = $this->currencyCookie();
         self::assertSame('usd', $cookie?->getValue());
         self::assertSame(new \DateTimeImmutable('2026-12-10 14:20 UTC')->getTimestamp(), $cookie->getExpiresTime());
-        // Sent back on every page: the dashboard is on "/".
+        // Path "/": unchanged since the dashboard moved to /dashboard, an existing cookie must stay clearable.
         self::assertSame('/', $cookie->getPath());
     }
 

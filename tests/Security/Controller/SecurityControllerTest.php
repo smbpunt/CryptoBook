@@ -24,7 +24,7 @@ final class SecurityControllerTest extends WebTestCase
         $this->client->request('GET', '/login');
         $this->client->submitForm('Se connecter', ['email' => 'user@example.com', 'password' => Dataset::PASSWORD]);
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/dashboard');
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
         $this->em()->clear();

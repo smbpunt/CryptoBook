@@ -1,0 +1,39 @@
+<section id="cryptos" aria-labelledby="home-cryptos" class="flex scroll-mt-24 flex-wrap items-center gap-x-22 gap-y-12 pt-[clamp(5.5rem,11vw,10rem)]">
+    {% include 'home/_feature_text.html.twig' with {
+        id: 'home-cryptos',
+        eyebrow: 'Vos cryptos',
+        title: 'Cherchez une crypto, saisissez une quantité.',
+        text: "Les prix et les données de marché viennent de CoinGecko et se mettent à jour tout seuls. Vous n'avez rien à ressaisir.",
+        points: ['Recherche par nom ou par symbole', 'Prix actualisés automatiquement', 'Ajout, modification et suppression en quelques clics'],
+    } only %}
+    <div role="img" aria-label="Formulaire d'ajout de position : la recherche « eth » propose Ethereum, Ethereum Classic et ether.fi." class="flex min-w-0 flex-[1.25_1_440px] justify-center">
+        <twig:Card class="w-full max-w-[460px] gap-0 p-[26px]">
+            <p class="font-display text-lg font-semibold tracking-[-0.02em]">Nouvelle position</p>
+            <p class="mt-5 mb-1.5 text-[13px] font-medium">Crypto</p>
+            <div class="flex min-h-11 items-center gap-2.5 rounded-xl border border-chart-1 px-3 ring-3 ring-chart-1/15">
+                <twig:ux:icon name="lucide:search" class="size-4 shrink-0 text-muted-foreground"/>
+                <span>eth</span><span class="-ml-2 h-[18px] w-[1.5px] bg-foreground"></span>
+            </div>
+            <div class="mt-1.5 rounded-xl border border-border bg-popover p-[5px] shadow-(--shadow-card)">
+                {% for coin in [coins.eth, coins.etc, coins.ethfi] %}
+                    <div class="flex items-center gap-2.5 rounded-lg px-2.5 py-[9px] {{ loop.first ? 'bg-muted font-medium' }}">
+                        {% include 'home/_coin_badge.html.twig' with {coin: coin, size: 'size-6'} only %}
+                        <span>{{ coin.name }}</span>
+                        <span class="ml-auto text-xs font-normal text-muted-foreground">{{ coin.symbol }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="mt-[18px] flex flex-wrap gap-3.5">
+                <div class="min-w-0 flex-[1_1_150px]">
+                    <p class="mb-1.5 text-[13px] font-medium">Quantité</p>
+                    <div class="flex min-h-11 items-center rounded-xl border border-border px-3 tabular-nums">{{ 3.1|quantity }}</div>
+                </div>
+                <div class="min-w-0 flex-[1_1_150px]">
+                    <p class="mb-1.5 text-[13px] font-medium">Coût d'entrée</p>
+                    <div class="flex min-h-11 items-center justify-between rounded-xl border border-border px-3 tabular-nums"><span>{{ 7100|decimal }}</span><span class="text-muted-foreground">€</span></div>
+                </div>
+            </div>
+            <twig:Button as="span" class="mt-5 h-11 w-full rounded-xl">Enregistrer</twig:Button>
+        </twig:Card>
+    </div>
+</section>

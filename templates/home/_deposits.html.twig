@@ -1,0 +1,36 @@
+<section id="deposits" aria-labelledby="home-deposits" class="flex scroll-mt-24 flex-row-reverse flex-wrap items-center gap-x-22 gap-y-12 pt-[clamp(5.5rem,11vw,10rem)]">
+    {% include 'home/_feature_text.html.twig' with {
+        id: 'home-deposits',
+        eyebrow: 'Dépôts en monnaie fiat',
+        title: 'Sachez combien vous avez vraiment investi.',
+        text: 'Notez chaque virement vers une plateforme. Le total déposé devient votre point de comparaison : le graphique le place face à la valeur de votre portefeuille.',
+        points: ['Dépôts en euros, en dollars ou dans une autre devise', 'Conversion au taux de change du jour', 'Un dépôt rattaché à sa plateforme'],
+    } only %}
+    <twig:Card role="img" aria-label="Liste des dépôts : quatre virements récents, 31 500,00 € déposés au total pour un portefeuille de 42 618,40 €, soit un résultat de +11 118,40 €." class="min-w-0 flex-[1.25_1_440px] gap-0 p-[22px]">
+        <p class="mb-1.5 font-display text-lg font-semibold tracking-[-0.02em]">Dépôts</p>
+        {% for deposit in [
+            {date: '3 nov. 2026', exchange: 'Kraken', amount: 500, currency: '€'},
+            {date: '2 oct. 2026', exchange: 'Kraken', amount: 500, currency: '€'},
+            {date: '14 sept. 2026', exchange: 'Coinbase', amount: 1200, currency: '$'},
+            {date: '1 sept. 2026', exchange: 'Kraken', amount: 500, currency: '€'},
+        ] %}
+            <div class="flex items-center gap-3 border-b border-border py-[13px]">
+                <span class="flex-[0_0_104px] text-muted-foreground tabular-nums">{{ deposit.date }}</span>
+                <span class="min-w-0 flex-auto">{{ deposit.exchange }}</span>
+                <span class="font-semibold tabular-nums">{{ deposit.amount|amount(deposit.currency, 2) }}</span>
+            </div>
+        {% endfor %}
+        <div class="mt-5 flex flex-wrap gap-x-3 gap-y-4">
+            {% for total in [
+                {label: 'Total déposé', value: 31500|amount('€', 2)},
+                {label: 'Valeur du wallet', value: 42618.40|amount('€', 2)},
+                {label: 'Résultat', value: 11118.40|signed_amount('€', 2), class: 'text-positive'},
+            ] %}
+                <div class="min-w-0 flex-[1_1_130px]">
+                    <p class="text-[13px] text-muted-foreground">{{ total.label }}</p>
+                    <p class="mt-1 font-display text-[22px] font-semibold tracking-[-0.03em] tabular-nums {{ total.class ?? '' }}">{{ total.value }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </twig:Card>
+</section>

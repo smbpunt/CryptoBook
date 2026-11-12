@@ -1,0 +1,11 @@
+{# Text column of a section: eyebrow, title (id for aria-labelledby), text and three points. #}
+<div class="min-w-0 flex-[1_1_380px]">
+    <p class="mb-3.5 text-sm font-semibold text-brand-text">{{ eyebrow }}</p>
+    <h2 id="{{ id }}" class="font-display text-[clamp(1.875rem,3.2vw,2.75rem)] leading-[1.1] font-semibold tracking-[-0.035em]">{{ title }}</h2>
+    <p class="mt-5 max-w-[460px] text-[17px] leading-[1.6] text-muted-foreground">{{ text }}</p>
+    <ul class="mt-8 max-w-[460px] text-[15px]">
+        {% for point in points %}
+            <li class="border-t border-border py-3.5 last:border-b">{{ point }}</li>
+        {% endfor %}
+    </ul>
+</div>

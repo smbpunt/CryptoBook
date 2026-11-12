@@ -25,7 +25,7 @@ final class StimulusControllersTest extends WebTestCase
 
         $pages = [
             // The ux-chartjs `chart` controller runs after `wallet-chart`, which configures it.
-            '/' => ['canvas[data-controller="wallet-chart symfony--ux-chartjs--chart"]'],
+            '/dashboard' => ['canvas[data-controller="wallet-chart symfony--ux-chartjs--chart"]'],
             '/position/' => ['table[data-controller="row-toggle"] button[data-action="row-toggle#toggle"][aria-controls^="detail-"]'],
             // The `autocomplete` option adds the ux-autocomplete controller (Tom Select): checked once here.
             '/position/new' => ['#position_coin[data-controller~="symfony--ux-autocomplete--autocomplete"]', '[data-controller="collection"] [data-collection-target="items"]', 'button[data-action="collection#add"]'],

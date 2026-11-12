@@ -20,3 +20,4 @@ Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ
 ## Repéré, non tranché
 
 - Docker local en Postgres 16, serveurs et CI en 18.
+- `/favicon.ico` n'existe pas : un client qui le demande sans lire le HTML reçoit la page 404.
