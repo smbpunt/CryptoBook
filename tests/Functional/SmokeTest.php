@@ -27,6 +27,7 @@ final class SmokeTest extends WebTestCase
      */
     public static function publicUrls(): iterable
     {
+        yield 'home' => ['/'];
         yield 'login' => ['/login'];
         yield 'register' => ['/register'];
         yield 'reset password' => ['/reset-password'];

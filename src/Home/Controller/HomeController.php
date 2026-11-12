@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     /**
-     * Logged in (session or remember me): straight to the dashboard.
+     * Public showcase with hard-coded example figures. Logged in (session or remember me): straight to the dashboard.
      */
     #[Route('/', name: 'home', methods: ['GET'])]
     public function index(): Response
@@ -18,6 +18,6 @@ final class HomeController extends AbstractController
             return $this->redirectToRoute('app_dashboard_index');
         }
 
-        return $this->redirectToRoute('app_login');
+        return $this->render('home/index.html.twig');
     }
 }
