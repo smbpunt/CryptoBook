@@ -29,6 +29,8 @@ Fixtures users log in with the password `password` (`make users:show` to list th
 
 - `make help`: list every target
 - `make test`: run PHPUnit (`c="--filter …"` to filter)
+- `make ci`: run every check (lints, static analysis, tests)
+- `make fix`: fix the code style (Rector, PHP CS Fixer)
 - `make tailwind c=--watch`: rebuild the CSS on change
 - `make scheduler`: run the price and rate updates on demand (no permanent worker in dev)
 - `make bash`: shell into the `php` container

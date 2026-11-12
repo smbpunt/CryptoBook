@@ -1,6 +1,8 @@
 # No pipeline when only doc/ and .md files change. Tags always run.
+# Scheduled pipeline (weekly, on dev): composer audit only.
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: &code-changes
         regexp: '\A(?!doc/)(?!.*\.md\z).*'
@@ -38,6 +40,14 @@ stages:
     - .php-cs-fixer.cache
   policy: pull-push
 
+.cache-phpstan: &cache-phpstan
+  key: phpstan-$CI_COMMIT_REF_SLUG
+  fallback_keys:
+    - phpstan-$CI_DEFAULT_BRANCH
+  paths:
+    - var/cache/phpstan/
+  policy: pull-push
+
 .cache-phpunit: &cache-phpunit
   key: phpunit-$CI_COMMIT_REF_SLUG
   paths:
@@ -47,6 +57,10 @@ stages:
 # =============================================================================
 # Templates
 # =============================================================================
+
+.not-scheduled: &not-scheduled
+  if: $CI_PIPELINE_SOURCE == "schedule"
+  when: never
 
 .base_template:
   image: "php:${PHP_VERSION}-cli"
@@ -64,6 +78,9 @@ stages:
   # Checks run in parallel, deploy jobs still wait for every stage.
   needs: []
   interruptible: true
+  rules:
+    - *not-scheduled
+    - when: on_success
 
 .lint_template:
   extends: .base_template
@@ -110,11 +127,31 @@ lint:php-cs-fixer:
 lint:symfony:
   extends: .lint_template
   script:
-    - composer validate --no-check-publish
+    - composer validate --strict --no-check-publish
     - bin/console lint:container
     - bin/console lint:twig templates
     - bin/console lint:yaml config --parse-tags
     - bin/console doctrine:schema:validate --skip-sync
+    # A config that only breaks in prod, caught before the deploy.
+    - bin/console lint:container --env=prod --no-debug
+    - bin/console lint:twig templates --env=prod --no-debug
+    - bin/console cache:warmup --env=prod --no-debug
+
+# Symfony Language Tools (beta): unknown routes, templates, services, options.
+# Same pinned version as the php image (docker/php/install-symfony-lsp.sh).
+lint:symfony-lsp:
+  extends: .lint_template
+  script:
+    - sh docker/php/install-symfony-lsp.sh
+    - mkdir -p var/reports/symfony-lsp
+    - symfony-lsp check --format=gitlab > var/reports/symfony-lsp/gl-code-quality-report.json
+  artifacts:
+    when: on_failure
+    reports:
+      codequality: var/reports/symfony-lsp/gl-code-quality-report.json
+    paths:
+      - var/reports/symfony-lsp/gl-code-quality-report.json
+    expire_in: 1 week
 
 lint:security:
   image: "php:${PHP_VERSION}-cli"
@@ -125,7 +162,7 @@ lint:security:
   before_script:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
-    - composer audit --locked
+    - composer audit --locked --abandoned=report
   needs: []
   interruptible: true
 
@@ -136,7 +173,18 @@ lint:security:
 # The dev container XML read by PHPStan is built by the cache:clear of composer install.
 analyze:phpstan:
   extends: .analyze_template
+  cache:
+    - <<: *cache-composer
+    - <<: *cache-phpstan
   script:
+    # The container is not a dependency of the result cache: a config-only change must clear it.
+    - |
+      hash=$(sha256sum var/cache/dev/App_KernelDevDebugContainer.xml)
+      if [ "$hash" != "$(cat var/cache/phpstan/container.sha256 2>/dev/null)" ]; then
+        vendor/bin/phpstan clear-result-cache
+        mkdir -p var/cache/phpstan
+        echo "$hash" > var/cache/phpstan/container.sha256
+      fi
     - mkdir -p var/reports/phpstan
     - vendor/bin/phpstan analyse --error-format=gitlab --memory-limit=1G > var/reports/phpstan/gl-code-quality-report.json
   artifacts:
@@ -199,6 +247,7 @@ deploy_dev:
   environment: dev
   resource_group: dev
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_BRANCH == "dev"
 
 deploy_production:
@@ -207,6 +256,7 @@ deploy_production:
   environment: production
   resource_group: production
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
 
 rollback_dev:
@@ -217,6 +267,7 @@ rollback_dev:
   script:
     - bash ci/rollback.sh
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_BRANCH == "dev"
       when: manual
       allow_failure: true
@@ -229,6 +280,7 @@ rollback_production:
   script:
     - bash ci/rollback.sh
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
       when: manual
       allow_failure: true
