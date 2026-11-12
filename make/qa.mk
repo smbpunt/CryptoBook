@@ -1,8 +1,8 @@
-.PHONY: ci fix test-db composer-check lint cs-fixer rector phpstan deptrac
+.PHONY: ci fix test-db composer-check lint cs-fixer rector phpstan deptrac symfony-lsp
 
 ## ---- Quality ----
 
-ci: tailwind test-db composer-check lint cs-fixer rector phpstan deptrac test ## Run every check: composer, lints, PHP CS Fixer, Rector, PHPStan, Deptrac, PHPUnit. `make -k ci` to keep going after a failure
+ci: tailwind test-db composer-check lint cs-fixer rector phpstan deptrac symfony-lsp test ## Run every check: composer, lints, PHP CS Fixer, Rector, PHPStan, Deptrac, Symfony Language Tools, PHPUnit. `make -k ci` to keep going after a failure
 
 fix: ## Fix the code: Rector, then PHP CS Fixer
 	@echo "==> Rector"
@@ -41,3 +41,9 @@ phpstan: ## Run PHPStan
 deptrac: ## Check the dependencies between features (Deptrac)
 	@echo "==> Deptrac"
 	@$(EXEC) vendor/bin/deptrac analyse
+
+symfony-lsp: ## Run the Symfony Language Tools diagnostics (beta)
+	@echo "==> Symfony Language Tools"
+	@$(EXEC) sh -c 'command -v symfony-lsp >/dev/null \
+		|| { echo "symfony-lsp not found in the php image: run \"make build\", then \"make up\"."; exit 1; }; \
+		exec symfony-lsp check'
