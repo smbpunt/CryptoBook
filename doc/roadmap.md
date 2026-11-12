@@ -24,15 +24,19 @@ Prérequis de la bascule. La prod tourne encore sur l'ancien code : aucun snapsh
 - Sauvegarde locale (`pg_dump` quotidien, avec rotation) et ping de vie externe après chaque snapshot horaire, sauf si le framework les fournit déjà
 - Staging sur VPS1, alimenté par un dump de la prod actuelle : sert de répétition de la bascule
 
+Spec : `doc/specs/vps-deploy-staging.md`
+
 ### 2. Bascule de la prod vers VPS2
 
-Release `0.2.0` (`dev` vers `main`, 116 commits) et migration des données.
+Release `v0.2.0` (`dev` vers `main`, commits du point 1) et migration des données.
 
 - VPS2 préparé par le step 19 et déployé par le même pipeline que le staging
 - Bascule avec une courte coupure : dump final de l'ancien VPS, restauration, migrations, changement DNS
 - Après la restauration : comparer le nombre de lignes par table entre l'ancienne et la nouvelle base
 - Worker de prod activé seulement après la bascule (sinon deux machines appellent Fixer)
 - L'ancien VPS reste intact pour le retour arrière, coupé 2 semaines, puis résilié
+
+Spec : `doc/specs/prod-cutover.md`
 
 ### 3. Historique rétroactif sur 30 jours
 
