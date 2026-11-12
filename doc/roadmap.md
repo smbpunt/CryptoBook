@@ -6,34 +6,14 @@
 - **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler, historique rétroactif sur 30 jours (`wallet:backfill`).
 - **Dashboard** : cache par utilisateur, graphique de l'historique par période, bascule entre le $ et la monnaie préférée.
 - **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
+- **Page d'accueil** : page publique sur `/`, dashboard sur `/dashboard`, nouveau logo et favicon, référencement minimal.
 - **Déploiement** : dépôt sur GitLab (GitHub en miroir), Deployer + GitLab CI, staging `dev.cryptobook.fr` sur VPS1, prod `cryptobook.fr` sur VPS2 (`v0.2.0`), données de l'ancienne prod migrées, worker du Scheduler en systemd, pas de pipeline pour un changement de doc seule, jobs de vérification en parallèle.
 
 ## À faire
 
 Un point = une PR vers `dev`.
 
-### 1. Nouveau favicon et page d'accueil publique
-
-Indépendant du reste. Un visiteur non connecté tombe aujourd'hui sur le formulaire de connexion, sans rien savoir de l'application. La page d'accueil affiche le logo : favicon et page dans la même PR.
-
-Favicon :
-
-- Icône SVG aux couleurs de l'application, lisible en clair et en sombre
-- 2 ou 3 propositions à valider avant l'intégration
-- PNG de secours et icône pour iOS
-
-Page d'accueil :
-
-- `/` devient une page publique, d'après la maquette : https://claude.ai/artifact/YLUF213hoKirnQg19f8dzj
-- Sections de la maquette : accroche avec graphique, tableau de bord, positions, cryptos, dépôts, appel à créer un compte
-- Chiffres d'exemple en dur, thèmes clair et sombre
-- Le dashboard passe sur `/dashboard`. Connecté, `/` y redirige
-- Pages de connexion, d'inscription et de mot de passe oublié inchangées
-- Référencement minimal : titre, meta description, Open Graph, `robots.txt`. Le staging reste en noindex
-
-Spec : `doc/specs/homepage-favicon.md`
-
-### 2. Wallet crypto du dashboard limité aux plus grosses lignes
+### 1. Wallet crypto du dashboard limité aux plus grosses lignes
 
 Indépendant du reste, peut passer en premier. La card liste tout le wallet, miettes comprises, et dépasse largement la card « Répartition » à côté.
 
