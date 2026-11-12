@@ -3,8 +3,11 @@
 namespace App\Dashboard\Controller;
 
 use App\Dashboard\Cache\DashboardCache;
+use App\Dashboard\Cookie\DisplayCurrencyCookie;
 use App\Dashboard\Dto\DashboardData;
+use App\Dashboard\Enum\DisplayCurrency;
 use App\Dashboard\Factory\WalletHistoryChartFactory;
+use App\Dashboard\Resolver\DisplayedDashboardResolver;
 use App\User\Entity\User;
 use App\Wallet\Enum\HistoryPeriod;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,24 +15,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 
 final class DashboardController extends AbstractController
 {
     public function __construct(
         private readonly DashboardCache $dashboardCache,
         private readonly WalletHistoryChartFactory $chartFactory,
+        private readonly DisplayedDashboardResolver $displayedDashboardResolver,
+        private readonly DisplayCurrencyCookie $currencyCookie,
     ) {
     }
 
     #[Route('/', name: 'home')]
-    public function index(#[CurrentUser] User $user): Response
+    public function index(Request $request, #[CurrentUser] User $user): Response
     {
-        $dashboard = $this->dashboardCache->get($user);
+        $displayed = $this->displayedDashboardResolver->resolve($request, $user);
 
-        return $this->render('dashboard/index.html.twig', [
-            'dashboard' => $dashboard,
-            ...$this->historyVariables($user, $dashboard, HistoryPeriod::Month),
+        $response = $this->render('dashboard/index.html.twig', [
+            'dashboard' => $displayed->dashboard,
+            'displayCurrency' => $displayed->displayCurrency,
+            'favoriteCode' => $displayed->favoriteCode,
+            ...$this->historyVariables($user, $displayed->dashboard, HistoryPeriod::Month),
         ]);
+        $this->currencyCookie->extend($response, $displayed->displayCurrency);
+
+        return $response;
     }
 
     /**
@@ -43,12 +54,28 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        $dashboard = $this->dashboardCache->get($user);
+        $displayed = $this->displayedDashboardResolver->resolve($request, $user);
 
-        return $this->render('dashboard/_history.html.twig', [
-            'dashboard' => $dashboard,
-            ...$this->historyVariables($user, $dashboard, $period),
+        $response = $this->render('dashboard/_history.html.twig', [
+            'dashboard' => $displayed->dashboard,
+            ...$this->historyVariables($user, $displayed->dashboard, $period),
         ]);
+        $this->currencyCookie->extend($response, $displayed->displayCurrency);
+
+        return $response;
+    }
+
+    /**
+     * Keeps the display currency in a cookie, then back to the dashboard. Unknown currency: 404.
+     */
+    #[Route('/currency/{currency}', name: 'app_dashboard_currency', methods: ['POST'])]
+    #[IsCsrfTokenValid('dashboard-currency')]
+    public function currency(DisplayCurrency $currency): Response
+    {
+        $response = $this->redirectToRoute('home', status: Response::HTTP_SEE_OTHER);
+        $this->currencyCookie->write($response, $currency);
+
+        return $response;
     }
 
     /**

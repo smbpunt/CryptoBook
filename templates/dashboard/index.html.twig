@@ -17,7 +17,8 @@
             </p>
             <h1 class="font-display text-4xl leading-[1.1] font-semibold tracking-[-0.035em]">Tableau de bord</h1>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            {% if favoriteCode %}{{ include('dashboard/_currency_switch.html.twig') }}{% endif %}
             <twig:Button as="a" href="{{ path('app_position_new') }}" variant="outline" class="h-11 px-4">Ajouter une position</twig:Button>
             <twig:Button as="a" href="{{ path('app_deposit_new') }}" class="h-11 px-4"><twig:ux:icon name="lucide:plus"/>Nouveau dépôt</twig:Button>
         </div>

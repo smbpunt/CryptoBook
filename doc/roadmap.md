@@ -4,7 +4,7 @@
 
 - **Socle** : Symfony 8.1, PHP 8.5, code rangé par feature, outils qualité sans baseline.
 - **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler, historique rétroactif sur 30 jours (`wallet:backfill`).
-- **Dashboard** : cache par utilisateur, graphique de l'historique par période.
+- **Dashboard** : cache par utilisateur, graphique de l'historique par période, bascule entre le $ et la monnaie préférée.
 - **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
 - **Déploiement** : dépôt sur GitLab (GitHub en miroir), Deployer + GitLab CI, staging `dev.cryptobook.fr` sur VPS1, prod `cryptobook.fr` sur VPS2 (`v0.2.0`), données de l'ancienne prod migrées, worker du Scheduler en systemd, pas de pipeline pour un changement de doc seule, jobs de vérification en parallèle.
 
@@ -22,19 +22,7 @@ Indépendant du reste, peut passer en premier. Une seule commande pour tout vér
 
 Spec : `doc/specs/make-ci-symfony-lsp.md`
 
-### 2. Bascule entre le $ et la monnaie préférée
-
-Indépendant du reste.
-
-- Bouton sur le dashboard, qui convertit tout ce qu'il affiche : KPI, graphique, répartition, lignes
-- Monnaie préférée par défaut
-- Choix du $ gardé par appareil dans un cookie de 30 jours, prolongé à chaque visite. Sans visite, retour à la monnaie préférée
-- Rendu côté serveur : pas de clignotement, pas de conversion en JavaScript
-- Bouton masqué si la monnaie préférée est déjà le $
-
-Spec : `doc/specs/dashboard-currency-switch.md`
-
-### 3. Nouveau favicon et page d'accueil publique
+### 2. Nouveau favicon et page d'accueil publique
 
 Indépendant du reste. Un visiteur non connecté tombe aujourd'hui sur le formulaire de connexion, sans rien savoir de l'application. La page d'accueil affiche le logo : favicon et page dans la même PR.
 
@@ -53,7 +41,7 @@ Page d'accueil :
 - Pages de connexion, d'inscription et de mot de passe oublié inchangées
 - Référencement minimal : titre, meta description, Open Graph, `robots.txt`. Le staging reste en noindex
 
-### 4. Wallet crypto du dashboard limité aux plus grosses lignes
+### 3. Wallet crypto du dashboard limité aux plus grosses lignes
 
 Indépendant du reste, peut passer en premier. La card liste tout le wallet, miettes comprises, et dépasse largement la card « Répartition » à côté.
 

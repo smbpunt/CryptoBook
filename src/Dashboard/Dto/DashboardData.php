@@ -2,6 +2,7 @@
 
 namespace App\Dashboard\Dto;
 
+use App\FiatCurrency\Entity\FiatCurrency;
 use App\Wallet\Dto\WalletSnapshotStats;
 
 /**
@@ -26,6 +27,8 @@ final readonly class DashboardData
         public float $depositUsd,
         public float $loanUsd,
         public float $yearFarmingUsd,
+        /** ISO code of the favorite currency, e.g. EUR. */
+        public string $currencyCode,
         public string $currencySymbol,
         /** Value of one unit of the favorite currency, in USD. */
         public float $usdPerFavorite,
@@ -35,6 +38,24 @@ final readonly class DashboardData
     ) {
         $this->totalUsd = $cryptoUsd + $stableUsd;
         $this->allocation = AllocationSlice::fromHoldings($cryptoHoldings);
+    }
+
+    public function isUsd(): bool
+    {
+        return FiatCurrency::KEY_USD === $this->currencyCode;
+    }
+
+    /**
+     * The same dashboard, displayed in USD.
+     */
+    public function inUsd(): self
+    {
+        return clone ($this, [
+            'currencyCode' => FiatCurrency::KEY_USD,
+            'currencySymbol' => '$',
+            'usdPerFavorite' => 1.0,
+            'favoritePerUsd' => 1.0,
+        ]);
     }
 
     public function toFavorite(float $amountUsd): float
