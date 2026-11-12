@@ -1,13 +1,40 @@
 # CryptoBook
 
-En cours de développement.
-Cet outil permettra, à terme, d'avoir un visuel sur toutes ses positions en cryptomonnaies, d'avoir un recap de l'argent investi, de l'argent gagné, de calculer où farmer, d'avoir un recap de ses gains en NFT, et plein d'autres trucs super cool...
+Crypto portfolio tracker: positions, deposits, loans, NFTs, strategies (DCA, farming, LP) and project follow-up.
 
-TODO:
-- [x] Upgrade vers Symfony 6.2
-- [ ] Utiliser les Traits PHP
-- [ ] Internationaliser l'application pour les currencies
-- [ ] Nettoyer les controllers via les services
-- [ ] Changer le design des Positions - à réfléchir
-- [ ] Ajouter un système de dépenses dans les projets (qui serait comptabilisé dans le recap)
-- [ ] Internationaliser l'application pour les langues
+## Stack
+
+- **Symfony** 8.1, **PHP** 8.5, **PostgreSQL** 16
+- **Front**: Twig, AssetMapper, Stimulus, Turbo, Tailwind CSS 4, shadcn kit (UX Toolkit)
+- **Back-office**: EasyAdmin 5
+- **Data**: CoinGecko (crypto prices), Fixer (fiat rates), refreshed by Symfony Scheduler
+
+## Getting started
+
+Requires Docker. Put `APP_SECRET` and `FIXER_API_KEY` in `.env.local`.
+
+```bash
+make build
+make up
+docker compose exec php composer install
+make migrate
+make fixtures
+make tailwind
+make url
+```
+
+Fixtures users log in with the password `password` (`make users:show` to list them).
+
+## Commands
+
+- `make help`: list every target
+- `make test`: run PHPUnit (`c="--filter …"` to filter)
+- `make tailwind c=--watch`: rebuild the CSS on change
+- `make scheduler`: run the price and rate updates on demand (no permanent worker in dev)
+- `make bash`: shell into the `php` container
+
+## Documentation
+
+- `CLAUDE.md`: architecture, code organization and conventions
+- `doc/roadmap.md`: planned work
+- `doc/specs/`: deployment specs
