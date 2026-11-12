@@ -1,6 +1,8 @@
 # No pipeline when only doc/ and .md files change. Tags always run.
+# Scheduled pipeline (weekly, on dev): composer audit only.
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: &code-changes
         regexp: '\A(?!doc/)(?!.*\.md\z).*'
@@ -56,6 +58,10 @@ stages:
 # Templates
 # =============================================================================
 
+.not-scheduled: &not-scheduled
+  if: $CI_PIPELINE_SOURCE == "schedule"
+  when: never
+
 .base_template:
   image: "php:${PHP_VERSION}-cli"
   cache:
@@ -72,6 +78,9 @@ stages:
   # Checks run in parallel, deploy jobs still wait for every stage.
   needs: []
   interruptible: true
+  rules:
+    - *not-scheduled
+    - when: on_success
 
 .lint_template:
   extends: .base_template
@@ -230,6 +239,7 @@ deploy_dev:
   environment: dev
   resource_group: dev
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_BRANCH == "dev"
 
 deploy_production:
@@ -248,6 +258,7 @@ rollback_dev:
   script:
     - bash ci/rollback.sh
   rules:
+    - *not-scheduled
     - if: $CI_COMMIT_BRANCH == "dev"
       when: manual
       allow_failure: true
