@@ -53,7 +53,7 @@ final class SmokeTest extends WebTestCase
         $this->client->loginUser($d->user);
 
         $urls = [
-            '/',
+            '/dashboard',
             '/deposit/', '/deposit/new', "/deposit/{$d->deposit->getId()}/edit",
             '/loan/', '/loan/new', "/loan/{$d->loan->getId()}/edit",
             '/nft/', '/nft/new', "/nft/{$d->nft->getId()}/edit",

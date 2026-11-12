@@ -28,7 +28,7 @@ class MenuBuilder
         }
 
         // A tab stays current on its sub-pages (new, edit…): its routes share a prefix.
-        $menu->addChild('Tableau de bord', ['route' => 'home']);
+        $menu->addChild('Tableau de bord', ['route' => 'app_dashboard_index']);
         $menu->addChild('Positions', self::tab('app_position_index', '/^app_position_/'));
         $menu->addChild('Farming', self::tab('app_strategy_farming_index', '/^app_strategy_(farming|lp)_/'));
         $menu->addChild('Emprunts', self::tab('app_loan_index', '/^app_loan_/'));
