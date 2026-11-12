@@ -177,6 +177,14 @@ analyze:phpstan:
     - <<: *cache-composer
     - <<: *cache-phpstan
   script:
+    # The container is not a dependency of the result cache: a config-only change must clear it.
+    - |
+      hash=$(sha256sum var/cache/dev/App_KernelDevDebugContainer.xml)
+      if [ "$hash" != "$(cat var/cache/phpstan/container.sha256 2>/dev/null)" ]; then
+        vendor/bin/phpstan clear-result-cache
+        mkdir -p var/cache/phpstan
+        echo "$hash" > var/cache/phpstan/container.sha256
+      fi
     - mkdir -p var/reports/phpstan
     - vendor/bin/phpstan analyse --error-format=gitlab --memory-limit=1G > var/reports/phpstan/gl-code-quality-report.json
   artifacts:
