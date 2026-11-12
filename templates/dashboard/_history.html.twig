@@ -22,7 +22,7 @@
                     {% endif %}
                     <span class="text-muted-foreground">
                         {%- if not history.isEmpty %}{{ periodText }}{% endif -%}
-                        {%- if symbol != '$' %}{{ not history.isEmpty ? ' · ' }}soit {{ dashboard.totalUsd|amount('$') }}{% endif -%}
+                        {%- if not dashboard.isUsd %}{{ not history.isEmpty ? ' · ' }}soit {{ dashboard.totalUsd|amount('$') }}{% endif -%}
                     </span>
                 </div>
             </div>

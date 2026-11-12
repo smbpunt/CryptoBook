@@ -2,7 +2,7 @@
 {% set cryptoPercent = dashboard.cryptoPercent %}
 <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
     <twig:App:Stat label="Investi" icon="lucide:coins"
-                   hint="Dépôts fiat cumulés{{ symbol != '$' ? ' · ' ~ dashboard.depositUsd|amount('$') }}">
+                   hint="Dépôts fiat cumulés{{ not dashboard.isUsd ? ' · ' ~ dashboard.depositUsd|amount('$') }}">
         {{- dashboard.toFavorite(dashboard.depositUsd)|amount(symbol) -}}
     </twig:App:Stat>
 

@@ -1,0 +1,10 @@
+{# Display currency of the dashboard. One POST per segment: the choice is kept in a cookie, the page is rendered server-side. #}
+<div role="group" aria-label="Devise d’affichage" class="flex rounded-full bg-muted p-[3px]">
+    {% for value, code in {favorite: favoriteCode, usd: 'USD'} %}
+        <form method="post" action="{{ path('app_dashboard_currency', {currency: value}) }}" class="flex">
+            <input type="hidden" name="_token" value="{{ csrf_token('dashboard-currency') }}">
+            <button type="submit" aria-pressed="{{ displayCurrency.value == value ? 'true' : 'false' }}"
+                    class="inline-flex min-h-[38px] min-w-11 cursor-pointer items-center justify-center rounded-full px-3 text-[13px] font-semibold text-muted-foreground outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:bg-popover aria-pressed:text-foreground aria-pressed:shadow-[0_1px_2px_rgba(0,0,0,.08),0_0_0_1px_var(--border)]">{{ code }}</button>
+        </form>
+    {% endfor %}
+</div>
