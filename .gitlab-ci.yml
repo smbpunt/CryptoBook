@@ -1,0 +1,227 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+variables:
+  PHP_VERSION: "8.5"
+  COMPOSER_HOME: "$CI_PROJECT_DIR/.composer"
+  REPORTS_DIR: var/reports
+
+stages:
+  - lint
+  - analyze
+  - test
+  - deploy
+
+# =============================================================================
+# Cache definitions
+# =============================================================================
+
+.cache-composer: &cache-composer
+  key:
+    files:
+      - composer.lock
+  paths:
+    - vendor/
+    - .composer/
+  policy: pull-push
+
+.cache-cs-fixer: &cache-cs-fixer
+  key: cs-fixer-$CI_COMMIT_REF_SLUG
+  paths:
+    - .php-cs-fixer.cache
+  policy: pull-push
+
+.cache-phpunit: &cache-phpunit
+  key: phpunit-$CI_COMMIT_REF_SLUG
+  paths:
+    - .phpunit.cache
+  policy: pull-push
+
+# =============================================================================
+# Templates
+# =============================================================================
+
+.base_template:
+  image: "php:${PHP_VERSION}-cli"
+  cache:
+    - <<: *cache-composer
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git unzip > /dev/null
+    - curl -sSLf -o /usr/local/bin/install-php-extensions https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions
+    - chmod +x /usr/local/bin/install-php-extensions
+    - install-php-extensions intl pdo_pgsql zip
+    # 128M by default: too small for the dev cache warmup of composer install
+    - echo "memory_limit=512M" > "$PHP_INI_DIR/conf.d/memory-limit.ini"
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --no-interaction --no-progress --prefer-dist
+  interruptible: true
+
+.lint_template:
+  extends: .base_template
+  stage: lint
+
+.analyze_template:
+  extends: .base_template
+  stage: analyze
+
+.test_template:
+  extends: .base_template
+  stage: test
+
+.deploy_template:
+  image:
+    name: deployphp/deployer:v7
+    entrypoint: [""]
+  before_script:
+    - bash ci/check-env.sh
+    - source ci/setup-ssh.sh
+  script:
+    - bash ci/deploy.sh
+
+# =============================================================================
+# STAGE: LINT
+# =============================================================================
+
+lint:php-cs-fixer:
+  extends: .lint_template
+  cache:
+    - <<: *cache-composer
+    - <<: *cache-cs-fixer
+  script:
+    - mkdir -p var/reports/php-cs-fixer
+    - vendor/bin/php-cs-fixer fix --dry-run --diff --format=gitlab > var/reports/php-cs-fixer/gl-code-quality-report.json
+  artifacts:
+    when: on_failure
+    reports:
+      codequality: var/reports/php-cs-fixer/gl-code-quality-report.json
+    paths:
+      - var/reports/php-cs-fixer/gl-code-quality-report.json
+    expire_in: 1 week
+
+lint:symfony:
+  extends: .lint_template
+  script:
+    - composer validate --no-check-publish
+    - bin/console lint:container
+    - bin/console lint:twig templates
+    - bin/console lint:yaml config --parse-tags
+    - bin/console doctrine:schema:validate --skip-sync
+
+lint:security:
+  image: "php:${PHP_VERSION}-cli"
+  stage: lint
+  cache:
+    - <<: *cache-composer
+      policy: pull
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  script:
+    - composer audit --locked
+  interruptible: true
+
+# =============================================================================
+# STAGE: ANALYZE
+# =============================================================================
+
+# The dev container XML read by PHPStan is built by the cache:clear of composer install.
+analyze:phpstan:
+  extends: .analyze_template
+  script:
+    - mkdir -p var/reports/phpstan
+    - vendor/bin/phpstan analyse --error-format=gitlab --memory-limit=1G > var/reports/phpstan/gl-code-quality-report.json
+  artifacts:
+    when: on_failure
+    reports:
+      codequality: var/reports/phpstan/gl-code-quality-report.json
+    paths:
+      - var/reports/phpstan/gl-code-quality-report.json
+    expire_in: 1 week
+
+analyze:rector:
+  extends: .analyze_template
+  script:
+    - vendor/bin/rector process --dry-run
+
+analyze:deptrac:
+  extends: .analyze_template
+  script:
+    - vendor/bin/deptrac analyse
+
+# =============================================================================
+# STAGE: TEST
+# =============================================================================
+
+# tailwind:build is required: the AssetMapper compiler of the bundle is strict
+# and the smoke test renders app.css. The test database is app_test (dbname_suffix).
+test:phpunit:
+  extends: .test_template
+  cache:
+    - <<: *cache-composer
+    - <<: *cache-phpunit
+  services:
+    - name: postgres:18-alpine
+      alias: postgres
+  variables:
+    POSTGRES_DB: app
+    POSTGRES_USER: app
+    POSTGRES_PASSWORD: app
+    DATABASE_URL: "postgresql://app:app@postgres:5432/app?serverVersion=18&charset=utf8"
+  script:
+    - bin/console tailwind:build
+    - bin/console doctrine:database:create --env=test --if-not-exists -n
+    - bin/console doctrine:migrations:migrate --env=test -n
+    - bin/phpunit --log-junit var/reports/phpunit/junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: var/reports/phpunit/junit.xml
+    paths:
+      - var/reports/phpunit/
+    expire_in: 1 week
+
+# =============================================================================
+# STAGE: DEPLOY
+# =============================================================================
+
+deploy_dev:
+  extends: .deploy_template
+  stage: deploy
+  environment: dev
+  resource_group: dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+deploy_production:
+  extends: .deploy_template
+  stage: deploy
+  environment: production
+  resource_group: production
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+
+rollback_dev:
+  extends: .deploy_template
+  stage: deploy
+  environment: dev
+  resource_group: dev
+  script:
+    - bash ci/rollback.sh
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: manual
+      allow_failure: true
+
+rollback_production:
+  extends: .deploy_template
+  stage: deploy
+  environment: production
+  resource_group: production
+  script:
+    - bash ci/rollback.sh
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+      when: manual
+      allow_failure: true
