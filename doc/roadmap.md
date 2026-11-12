@@ -6,41 +6,24 @@
 - **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler.
 - **Dashboard** : cache par utilisateur, graphique de l'historique par période.
 - **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
+- **Déploiement** : dépôt sur GitLab (GitHub en miroir), Deployer + GitLab CI, staging `dev.cryptobook.fr` sur VPS1, prod `cryptobook.fr` sur VPS2 (`v0.2.0`), données de l'ancienne prod migrées, worker du Scheduler en systemd.
 
 ## À faire
 
 Un point = une PR vers `dev`.
 
-### 1. Déploiement par le framework FrankenPHP, staging sur VPS1
+### 1. Légère optimisation de la CI
 
-Prérequis de la bascule. La prod tourne encore sur l'ancien code : aucun snapshot n'y est enregistré, chaque heure d'attente est perdue. On reprend le framework existant (step 19, template `smbai/symfony`) plutôt que d'écrire un outillage maison.
+Indépendant du reste, à faire en premier. Une MR ou un push sur `dev` qui ne touche que de la doc lance toute la pipeline pour rien.
 
-- Site et base créés par le step 19 (`--site=cryptobook --with-db`) : Caddy, `serverVersion` aligné sur le Postgres installé
-- `deploy.php` Deployer et job CI repris du template, avec les étapes propres au projet : `importmap:install`, `tailwind:build`, `asset-map:compile`
-- Code sur GitLab (`smbai/cryptobook`), GitHub en miroir
-- PHP 8.5 partout : FrankenPHP pour le web, PHP système pour Deployer, la CLI et le worker
-- Unité systemd du worker adaptée au layout Deployer (`deployer`, `current`), redémarrée à chaque déploiement
-- Audit root avant tout : extensions du binaire (`intl`, `pdo_pgsql`, `zip`, `pcntl`), version de Postgres
-- Sauvegarde quotidienne par l'étape 17 du framework (multi-sites)
-- Staging sur VPS1, alimenté par un dump de la prod actuelle : sert de répétition de la bascule
+- Pas de pipeline si seuls `doc/` et des fichiers `.md` changent (MR et push sur `dev`)
+- Les tags de prod lancent toujours la pipeline
 
-Spec : `doc/specs/vps-deploy-staging.md`
+Spec : `doc/specs/ci-docs-only-skip.md`
 
-### 2. Bascule de la prod vers VPS2
+### 2. Historique rétroactif sur 30 jours
 
-Release `v0.2.0` (`dev` vers `main`, commits du point 1) et migration des données.
-
-- VPS2 préparé par le step 19 et déployé par le même pipeline que le staging
-- Bascule avec une courte coupure : dump final de l'ancien VPS, restauration, migrations, changement DNS
-- Après la restauration : comparer le nombre de lignes par table entre l'ancienne et la nouvelle base
-- Worker de prod activé seulement après la bascule (sinon deux machines appellent Fixer)
-- L'ancien VPS reste intact pour le retour arrière, coupé 2 semaines, puis résilié
-
-Spec : `doc/specs/prod-cutover.md`
-
-### 3. Historique rétroactif sur 30 jours
-
-Après la bascule : donne tout de suite un graphique rempli à chaque utilisateur, sans attendre un mois de snapshots.
+Donne tout de suite un graphique rempli à chaque utilisateur, sans attendre un mois de snapshots.
 
 - 30 jours, un point par heure, comme les snapshots réels
 - Wallet actuel appliqué sur toute la période : on ne reconstitue pas les achats et ventes passés
@@ -48,7 +31,9 @@ Après la bascule : donne tout de suite un graphique rempli à chaque utilisateu
 - Miettes : un coin n'est récupéré que si au moins un utilisateur en détient 5 $ ou plus. Un coin récupéré compte pour tous ses détenteurs
 - Les snapshots réels déjà enregistrés ne sont jamais écrasés
 
-### 4. `make ci` et Symfony Language Tools
+Spec : `doc/specs/wallet-history-backfill.md`
+
+### 3. `make ci` et Symfony Language Tools
 
 Indépendant du reste, peut passer en premier. Une seule commande pour tout vérifier pendant le développement, en prévision d'une future pipeline.
 
@@ -56,7 +41,9 @@ Indépendant du reste, peut passer en premier. Une seule commande pour tout vér
 - Ajout du contrôle Symfony Language Tools (`symfony-lsp check`), en bêta expérimentale
 - `CLAUDE.md` renvoie vers `make ci`
 
-### 5. Bascule entre le $ et la monnaie préférée
+Spec : `doc/specs/make-ci-symfony-lsp.md`
+
+### 4. Bascule entre le $ et la monnaie préférée
 
 Indépendant du reste.
 
@@ -66,23 +53,40 @@ Indépendant du reste.
 - Rendu côté serveur : pas de clignotement, pas de conversion en JavaScript
 - Bouton masqué si la monnaie préférée est déjà le $
 
-### 6. Nouveau favicon
+Spec : `doc/specs/dashboard-currency-switch.md`
 
-Indépendant du reste.
+### 5. Nouveau favicon et page d'accueil publique
+
+Indépendant du reste. Un visiteur non connecté tombe aujourd'hui sur le formulaire de connexion, sans rien savoir de l'application. La page d'accueil affiche le logo : favicon et page dans la même PR.
+
+Favicon :
 
 - Icône SVG aux couleurs de l'application, lisible en clair et en sombre
 - 2 ou 3 propositions à valider avant l'intégration
 - PNG de secours et icône pour iOS
 
-### 7. Ping de vie
+Page d'accueil :
 
-Après la bascule.
+- `/` devient une page publique, d'après la maquette : https://claude.ai/artifact/YLUF213hoKirnQg19f8dzj
+- Sections de la maquette : accroche avec graphique, tableau de bord, positions, cryptos, dépôts, appel à créer un compte
+- Chiffres d'exemple en dur, thèmes clair et sombre
+- Le dashboard passe sur `/dashboard`. Connecté, `/` y redirige
+- Pages de connexion, d'inscription et de mot de passe oublié inchangées
+- Référencement minimal : titre, meta description, Open Graph, `robots.txt`. Le staging reste en noindex
 
-- Contrôle horaire d'un `wallet_snapshot` récent, envoyé à un dead-man's-switch externe
-- Alerte si le ping manque
+### 6. Wallet crypto du dashboard limité aux plus grosses lignes
+
+Indépendant du reste, peut passer en premier. La card liste tout le wallet, miettes comprises, et dépasse largement la card « Répartition » à côté.
+
+- Les plus grosses lignes seulement, pour que la card fasse la hauteur de « Répartition »
+- Le reste regroupé dans une ligne « Autres » : nombre d'actifs et valeur cumulée
+- Détail complet par le lien « Voir les positions », pas de scroll dans la card
+- Même limite sur mobile, où les deux cards sont empilées
 
 ## Hors périmètre
 
+- Pages de connexion et d'inscription au style de la page d'accueil.
+- Sitemap.
 - Bascule $ / monnaie préférée sur les autres pages (positions, prêts, NFT, stratégies), qui restent en $.
 - Copie externe des sauvegardes.
 - Previews par branche.

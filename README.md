@@ -37,4 +37,3 @@ Fixtures users log in with the password `password` (`make users:show` to list th
 
 - `CLAUDE.md`: architecture, code organization and conventions
 - `doc/roadmap.md`: planned work
-- `doc/specs/`: deployment specs
