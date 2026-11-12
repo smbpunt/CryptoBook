@@ -1,0 +1,16 @@
+{%- props
+    ## string Card title, like "Wallet crypto" on the dashboard.
+    title,
+    ## string Id of the title, referenced by aria-labelledby.
+    titleId
+-%}
+{%- set _actions -%}{%- block actions %}{% endblock -%}{%- endset -%}
+{%- set _content -%}{%- block content %}{% endblock -%}{%- endset -%}
+{# A list page's table in a card: title on the left, `actions` (tabs list, link…) on the right. #}
+<twig:Card {{ ...attributes.defaults({class: 'min-w-0 gap-0 p-[22px]', 'aria-labelledby': titleId}) }}>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 id="{{ titleId }}" class="font-display text-lg font-semibold tracking-[-0.02em]">{{ title }}</h2>
+        {{- _actions -}}
+    </div>
+    <div class="mt-2 min-w-0">{{ _content }}</div>
+</twig:Card>

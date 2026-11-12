@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer mon DCA{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Créer mon DCA"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/dca/_form.html.twig', {button_label: 'Créer'}) }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

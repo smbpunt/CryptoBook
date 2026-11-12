@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <twig:App:AuthCard title="Inscription" description="Créez votre compte CryptoBook.">
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword) }}
+
+            <twig:Button type="submit" class="h-11 w-full">S'inscrire</twig:Button>
+            <p class="mt-4 text-center text-sm text-muted-foreground">
+                Déjà un compte ? <a href="{{ path('app_login') }}" class="underline underline-offset-4">Se connecter</a>
+            </p>
+        {{ form_end(registrationForm) }}
+    </twig:App:AuthCard>
+{% endblock %}

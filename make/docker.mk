@@ -1,4 +1,4 @@
-.PHONY: build up down logs bash url test tailwind migrate fixtures users\:show
+.PHONY: build up down logs bash url test tailwind scheduler migrate sf\:migrate fixtures users\:show
 
 ## ---- Docker ----
 
@@ -29,11 +29,19 @@ tailwind: ## Build the Tailwind CSS (var/tailwind/), pass c="--watch" to rebuild
 	@$(eval c ?=)
 	@$(SYMFONY) tailwind:build $(c)
 
+scheduler: ## Run the Scheduler worker in the foreground, Ctrl+C to stop (no permanent worker in dev: Fixer quota)
+	@$(PHP_CONT) php bin/console messenger:consume scheduler_default -vv
+
 ## ---- Database ----
 
 migrate: ## Run migrations on the dev and test databases
 	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --all-or-nothing --allow-no-migration
 	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --all-or-nothing --allow-no-migration --env=test
+
+sf\:migrate: ## Run migrations in the php container (asks for confirmation)
+	@read -p "Run migrations on the dev database? [y/N] " ans; \
+		case "$$ans" in y|Y|yes|YES) ;; *) echo "Aborted."; exit 1;; esac
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --all-or-nothing --allow-no-migration
 
 fixtures: ## Load fixtures into the dev database (purges it)
 	@$(SYMFONY) doctrine:fixtures:load --no-interaction

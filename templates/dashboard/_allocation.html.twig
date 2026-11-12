@@ -1,0 +1,50 @@
+{% set symbol = dashboard.currencySymbol %}
+{% set slices = dashboard.allocation %}
+<twig:Card class="min-w-0 flex-[1_1_340px] gap-0 p-[22px]" aria-labelledby="dashboard-allocation">
+    <h2 id="dashboard-allocation" class="font-display text-lg font-semibold tracking-[-0.02em]">Répartition</h2>
+    {% if slices is empty %}
+        <p class="mt-4 text-sm text-muted-foreground">Aucune crypto dans le wallet.</p>
+    {% else %}
+        {# A thin gap between slices, none for a single one. #}
+        {% set gap = slices|length > 1 ? 0.8 : 0 %}
+        <div class="mt-[18px] flex flex-wrap items-center gap-6">
+            <div class="relative size-[168px] shrink-0">
+                <svg viewBox="0 0 42 42" class="size-full -rotate-90" role="img" aria-label="Répartition du wallet crypto par actif">
+                    <circle cx="21" cy="21" r="15.9155" fill="none" stroke-width="5" class="stroke-muted"/>
+                    {% for slice in slices %}
+                        {% set length = slice.percent - min(gap, slice.percent / 2) %}
+                        <circle cx="21" cy="21" r="15.9155" fill="none" stroke-width="5"
+                                style="stroke: {{ slice.color }}; stroke-dasharray: {{ length|round(3) }} {{ (100 - length)|round(3) }}; stroke-dashoffset: {{ (-slice.offset)|round(3) }}"/>
+                    {% endfor %}
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span class="text-xs text-muted-foreground">Crypto</span>
+                    <span class="font-display text-[17px] font-semibold tabular-nums">{{ dashboard.toFavorite(dashboard.cryptoUsd)|amount(symbol) }}</span>
+                </div>
+            </div>
+            <ul class="flex min-w-40 flex-[1_1_160px] flex-col gap-2 text-[13px]">
+                {% for slice in slices %}
+                    <li class="flex items-center gap-2.5">
+                        <span aria-hidden="true" class="size-2.5 shrink-0 rounded-[3px]" style="background: {{ slice.color }}"></span>
+                        <span class="flex-auto font-medium">{{ slice.label }}</span>
+                        <span class="text-muted-foreground tabular-nums">{{ slice.percent|percent }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if dashboard.stableHoldings is not empty %}
+        <h3 class="mt-[22px] mb-2.5 border-t border-border pt-4 text-[13px] font-medium text-muted-foreground">Stablecoins</h3>
+        <ul class="flex flex-col gap-2 text-[13px]">
+            {% for holding in dashboard.stableHoldings %}
+                <li class="flex items-center gap-2.5">
+                    <span aria-hidden="true" class="size-2.5 shrink-0 rounded-full" style="background: {{ holding.color ?: 'var(--chart-' ~ (3 + loop.index0 % 3) ~ ')' }}"></span>
+                    <span class="flex-auto font-medium">{{ holding.symbol|upper }}</span>
+                    <span class="tabular-nums">{{ dashboard.toFavorite(holding.valueUsd)|amount(symbol) }}</span>
+                    <span class="w-13 text-right text-muted-foreground tabular-nums">{{ holding.percent|percent }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</twig:Card>

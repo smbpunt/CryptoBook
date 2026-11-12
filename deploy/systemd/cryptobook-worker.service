@@ -1,0 +1,29 @@
+# Scheduler worker (src/Shared/Schedule/MainSchedule.php) + async messages.
+#
+# Setup:
+#   sudo cp deploy/systemd/cryptobook-worker.service /etc/systemd/system/
+#   (adjust User, WorkingDirectory and the PHP path to the server, PHP 8.5 required)
+#   bin/console doctrine:migrations:migrate -n --env=prod
+#   sudo systemctl daemon-reload && sudo systemctl enable --now cryptobook-worker
+#   remove the crypto:* and fiat:* lines from the crontab
+#   bin/console wallet:snapshot --env=prod   # first point, without waiting for the next hour
+#
+# On every deployment: bin/console messenger:stop-workers --env=prod (systemd restarts the worker on the new code).
+# Logs: journalctl -u cryptobook-worker -f
+
+[Unit]
+Description=CryptoBook Messenger worker (scheduler + async)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/cryptobook
+Environment=APP_ENV=prod
+ExecStart=/usr/bin/php bin/console messenger:consume scheduler_default async --time-limit=3600
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

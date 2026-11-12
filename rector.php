@@ -15,10 +15,10 @@ return RectorConfig::configure()
         // Managed by the phpunit/phpunit recipe: avoid diffs on every recipes:update
         __DIR__.'/tests/bootstrap.php',
         // Keep Doctrine mapping on plain properties: promotion can widen types used to infer relations
-        ClassPropertyAssignToConstructorPromotionRector::class => [__DIR__.'/src/Entity'],
+        ClassPropertyAssignToConstructorPromotionRector::class => [__DIR__.'/src/*/Entity/*', __DIR__.'/src/*/*/Entity/*'],
     ])
     ->withPhpSets()
-    ->withPreparedSets(symfonyCodeQuality: true)
+    ->withPreparedSets(doctrineCodeQuality: true, symfonyCodeQuality: true)
     ->withComposerBased(twig: true, doctrine: true, phpunit: true, symfony: true)
     ->withAttributesSets(all: true)
     ->withTypeCoverageLevel(0)

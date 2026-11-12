@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Farming{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Farming">
+        <twig:Button as="a" variant="outline" href="{{ path('app_strategy_lp_new') }}" class="h-11 px-4"><twig:ux:icon name="lucide:plus"/>Nouvelle LP</twig:Button>
+        <twig:Button as="a" href="{{ path('app_strategy_farming_new') }}" class="h-11 px-4">
+            <twig:ux:icon name="lucide:plus"/>Nouveau farming
+        </twig:Button>
+    </twig:App:PageHeader>
+
+    {% if overview.totalYearlyUsd > 0 %}
+        <div class="mb-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
+            {% for kpi in [
+                {label: 'Revenus farming', icon: 'lucide:sprout', yearly: overview.totalYearlyUsd, detailed: true},
+                {label: 'Crypto', icon: 'lucide:coins', yearly: overview.cryptoYearlyUsd, detailed: false},
+                {label: 'Stable', icon: 'lucide:circle-dollar-sign', yearly: overview.stableYearlyUsd, detailed: false},
+                {label: 'LP', icon: 'lucide:droplets', yearly: overview.lpYearlyUsd, detailed: false},
+            ] %}
+                {# Cents for small yields: below 100 $ a month. #}
+                {% set decimals = kpi.yearly < 1200 ? 2 : 0 %}
+                {% set yearHint = kpi.yearly|amount('$', decimals) ~ ' / an' %}
+                <twig:App:Stat label="{{ kpi.label }}" icon="{{ kpi.icon }}" hint="{{ kpi.detailed ? (kpi.yearly / 365)|amount('$', 2) ~ ' / jour · ' ~ (kpi.yearly / 52)|amount('$', decimals) ~ ' / sem. · ' ~ yearHint : yearHint }}">
+                    {{- (kpi.yearly / 12)|amount('$', decimals) }} <span class="font-sans text-sm font-medium tracking-normal text-muted-foreground">/ mois</span>
+                </twig:App:Stat>
+            {% endfor %}
+        </div>
+
+        <twig:App:InfoDialog>
+            <twig:Tabs defaultValue="crypto">
+                <twig:App:ListCard title="Farmings" titleId="farming-list">
+                    <twig:block name="actions">
+                        <twig:Tabs:List aria-label="Type de farming">
+                            <twig:Tabs:Trigger value="crypto">Crypto ({{ overview.cryptoFarmings|length }})</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="stable">Stable ({{ overview.stableFarmings|length }})</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="lp">LP ({{ overview.lps|length }})</twig:Tabs:Trigger>
+                        </twig:Tabs:List>
+                    </twig:block>
+
+                    {% for tab, list in {crypto: overview.cryptoFarmings, stable: overview.stableFarmings} %}
+                        <twig:Tabs:Content value="{{ tab }}">
+                            <twig:Table>
+                                <twig:Table:Header>
+                                    <twig:Table:Row>
+                                        <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                                        <twig:Table:Head>Actif</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">Quantité</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">Valeur</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">APR</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">/ jour</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">/ mois</twig:Table:Head>
+                                        <twig:Table:Head class="text-end">/ an</twig:Table:Head>
+                                        <twig:Table:Head>Dapp</twig:Table:Head>
+                                        <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
+                                    </twig:Table:Row>
+                                </twig:Table:Header>
+                                <twig:Table:Body>
+                                    {% for strategy_farming in list %}
+                                        {% set rewards = strategy_farming.annualRewardsUsd %}
+                                        <twig:Table:Row>
+                                            <twig:Table:Cell>
+                                                <twig:App:InfoButton url="{{ path('app_strategy_farming_ajax_infos', {id: strategy_farming.id}) }}"/>
+                                            </twig:Table:Cell>
+                                            <twig:Table:Cell>
+                                                <span class="flex items-center gap-2.5">
+                                                    <twig:App:CoinLogo url="{{ strategy_farming.coin.urlImgThumb }}" name="{{ strategy_farming.coin.libelle }}" class="size-7"/>
+                                                    <span class="font-semibold">{{ strategy_farming.coin.symbol|upper }}</span>
+                                                </span>
+                                            </twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end">{{ strategy_farming.nbCoins|quantity }}</twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end font-semibold">{{ strategy_farming.valueUsd|amount('$', 2) }}</twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end">{{ strategy_farming.apr|percent }}</twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end text-muted-foreground">{{ (rewards / 365)|amount('$', 2) }}</twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end text-muted-foreground">{{ (rewards / 12)|amount('$', 2) }}</twig:Table:Cell>
+                                            <twig:Table:Cell class="text-end">{{ rewards|amount('$', 2) }}</twig:Table:Cell>
+                                            <twig:Table:Cell><twig:App:Dapp :dapp="strategy_farming.dapp"/></twig:Table:Cell>
+                                            <twig:Table:Cell class="w-px text-end">
+                                                <twig:App:RowActions
+                                                    editUrl="{{ path('app_strategy_farming_edit', {id: strategy_farming.id}) }}"
+                                                    deleteUrl="{{ path('app_strategy_farming_delete', {id: strategy_farming.id}) }}"
+                                                    tokenId="delete{{ strategy_farming.id }}"
+                                                />
+                                            </twig:Table:Cell>
+                                        </twig:Table:Row>
+                                    {% else %}
+                                        <twig:Table:Row>
+                                            <twig:Table:Cell colspan="10" class="py-6 text-center text-muted-foreground">Aucun farming.</twig:Table:Cell>
+                                        </twig:Table:Row>
+                                    {% endfor %}
+                                </twig:Table:Body>
+                            </twig:Table>
+                        </twig:Tabs:Content>
+                    {% endfor %}
+
+                    <twig:Tabs:Content value="lp">
+                        <twig:Table>
+                            <twig:Table:Header>
+                                <twig:Table:Row>
+                                    <twig:Table:Head class="w-px"><span class="sr-only">Détail</span></twig:Table:Head>
+                                    <twig:Table:Head>Paire</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Investi</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">Valeur</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">APR</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">/ jour</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">/ mois</twig:Table:Head>
+                                    <twig:Table:Head class="text-end">/ an</twig:Table:Head>
+                                    <twig:Table:Head>Dapp</twig:Table:Head>
+                                    <twig:Table:Head><span class="sr-only">Actions</span></twig:Table:Head>
+                                </twig:Table:Row>
+                            </twig:Table:Header>
+                            <twig:Table:Body>
+                                {% for strategy_farming in overview.lps %}
+                                    {% set rewards = strategy_farming.annualRewardsUsd %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell>
+                                            <twig:App:InfoButton url="{{ path('app_strategy_lp_ajax_infos', {id: strategy_farming.id}) }}"/>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell>
+                                            <span class="flex items-center gap-2.5">
+                                                <span class="flex -space-x-1.5">
+                                                    <twig:App:CoinLogo url="{{ strategy_farming.coin1.urlImgThumb }}" name="{{ strategy_farming.coin1.libelle }}" class="size-7"/>
+                                                    <twig:App:CoinLogo url="{{ strategy_farming.coin2.urlImgThumb }}" name="{{ strategy_farming.coin2.libelle }}" class="size-7"/>
+                                                </span>
+                                                <span class="font-semibold">{{ strategy_farming.coin1.symbol|upper }}/{{ strategy_farming.coin2.symbol|upper }}</span>
+                                            </span>
+                                        </twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end text-muted-foreground">{{ strategy_farming.investedUsd|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end font-semibold">{{ strategy_farming.valueUsd|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end">{{ strategy_farming.apr|percent }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end text-muted-foreground">{{ (rewards / 365)|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end text-muted-foreground">{{ (rewards / 12)|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell class="text-end">{{ rewards|amount('$', 2) }}</twig:Table:Cell>
+                                        <twig:Table:Cell><twig:App:Dapp :dapp="strategy_farming.dapp"/></twig:Table:Cell>
+                                        <twig:Table:Cell class="w-px text-end">
+                                            <twig:App:RowActions
+                                                editUrl="{{ path('app_strategy_lp_edit', {id: strategy_farming.id}) }}"
+                                                deleteUrl="{{ path('app_strategy_lp_delete', {id: strategy_farming.id}) }}"
+                                                tokenId="delete{{ strategy_farming.id }}"
+                                            />
+                                        </twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% else %}
+                                    <twig:Table:Row>
+                                        <twig:Table:Cell colspan="10" class="py-6 text-center text-muted-foreground">Aucune LP.</twig:Table:Cell>
+                                    </twig:Table:Row>
+                                {% endfor %}
+                            </twig:Table:Body>
+                        </twig:Table>
+                    </twig:Tabs:Content>
+                </twig:App:ListCard>
+            </twig:Tabs>
+        </twig:App:InfoDialog>
+    {% else %}
+        <twig:Empty class="border">
+            <twig:Empty:Header>
+                <twig:Empty:Media variant="icon"><twig:ux:icon name="lucide:sprout"/></twig:Empty:Media>
+                <twig:Empty:Title>Aucun farming</twig:Empty:Title>
+                <twig:Empty:Description>Ajoutez un farming ou une LP pour suivre ses revenus.</twig:Empty:Description>
+            </twig:Empty:Header>
+        </twig:Empty>
+    {% endif %}
+{% endblock %}

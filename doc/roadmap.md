@@ -1,60 +1,83 @@
 # Roadmap
 
-## 1. Historique de la valeur du wallet : collecte
+## Fait
 
-Enregistrer la valeur totale du wallet de chaque utilisateur au fil du temps. Les quantités passées ne se reconstruisent pas : chaque heure sans enregistrement est perdue.
+- **Socle** : Symfony 8.1, PHP 8.5, code rangé par feature, outils qualité sans baseline.
+- **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler.
+- **Dashboard** : cache par utilisateur, graphique de l'historique par période.
+- **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
 
-- Valeur totale = positions crypto + stables (comme le total actuel du dashboard)
-- Un snapshot par heure et par utilisateur, avec la valeur totale seule, en USD (convertie dans la devise favorite à l'affichage)
-- Pas de reconstitution du passé : l'historique commence au premier snapshot
-- On garde tous les snapshots, l'agrégation se fait à la lecture
-- Centraliser le calcul de la valeur dans une seule classe, utilisée par le dashboard et par les snapshots
-- Symfony Scheduler pour tout planifier : mise à jour des prix, puis snapshot, données CoinGecko, taux fiat. Il remplace les crons actuels
-- En prod (VPS) : worker du Scheduler lancé par un service systemd
+## À faire
 
-## 2. Cache du dashboard
+Un point = une PR vers `dev`.
 
-Le dashboard recalcule tout à chaque chargement, alors que les données ne changent qu'à la mise à jour des prix ou quand l'utilisateur modifie quelque chose.
+### 1. Déploiement par le framework FrankenPHP, staging sur VPS1
 
-- Mesurer d'abord dans le profiler : corriger les requêtes en trop avant de mettre du cache
-- Mettre en cache toutes les données du dashboard, par utilisateur
-- Cache sur le filesystem, sans infra en plus
-- Vider le cache à la mise à jour des prix ou des taux, et quand l'utilisateur modifie ses données
+Prérequis de la bascule. La prod tourne encore sur l'ancien code : aucun snapshot n'y est enregistré, chaque heure d'attente est perdue. On reprend le framework existant (step 19, template `smbai/symfony`) plutôt que d'écrire un outillage maison.
 
-## 3. Refacto SOLID + organisation par feature
+- Site et base créés par le step 19 (`--site=cryptobook --with-db`) : Caddy, `serverVersion` aligné sur le Postgres installé
+- `deploy.php` Deployer et job CI repris du template, avec les étapes propres au projet : `importmap:install`, `tailwind:build`, `asset-map:compile`
+- Code sur GitHub, GitLab en miroir : le pipeline déploie depuis le miroir
+- Un seul PHP, le 8.5 embarqué dans FrankenPHP (`frankenphp php-cli`) pour le web, Deployer et le worker. Le PHP 8.4 du VPS ne fait pas tourner l'app
+- Unité systemd du worker adaptée au layout Deployer (`deployer`, `current`), redémarrée à chaque déploiement
+- Audit root avant tout : extensions du binaire (`intl`, `pdo_pgsql`, `zip`, `pcntl`), version de Postgres
+- Sauvegarde locale (`pg_dump` quotidien, avec rotation) et ping de vie externe après chaque snapshot horaire, sauf si le framework les fournit déjà
+- Staging sur VPS1, alimenté par un dump de la prod actuelle : sert de répétition de la bascule
 
-Ranger le code par sujet métier (voir `CLAUDE.md`) et le nettoyer au passage.
+Spec : `doc/specs/vps-deploy-staging.md`
 
-- Une feature à la fois, une PR par feature
-- Dans chaque PR : d'abord déplacer les fichiers sans rien changer, ensuite refactorer
-- Commencer par une feature simple (`Deposit`, `Loan`), finir par `Strategy`
-- Vérifier que les tests couvrent la feature avant d'y toucher
-- Une feature par référentiel (`Cryptocurrency/`, `FiatCurrency/`, `Blockchain/`…)
-- Back-office EasyAdmin regroupé dans une feature `Admin/`
-- Objectifs :
-  - contrôleurs fins
-  - fin des classes `*Service`, découpées en classes à responsabilité unique
-  - voters pour vérifier le propriétaire
-  - DTO à la place des tableaux associatifs
-- Les montants restent en float
+### 2. Bascule de la prod vers VPS2
 
-## 4. Refonte de l'UI
+Release `v0.2.0` (`dev` vers `main`, commits du point 1) et migration des données.
 
-Donner une identité à l'application, qui reste aujourd'hui trop basique.
+- VPS2 préparé par le step 19 et déployé par le même pipeline que le staging
+- Bascule avec une courte coupure : dump final de l'ancien VPS, restauration, migrations, changement DNS
+- Après la restauration : comparer le nombre de lignes par table entre l'ancienne et la nouvelle base
+- Worker de prod activé seulement après la bascule (sinon deux machines appellent Fixer)
+- L'ancien VPS reste intact pour le retour arrière, coupé 2 semaines, puis résilié
 
-- Thème clair et sombre : suit le système par défaut, avec un bouton pour changer
-- Fond à dégradés colorés granuleux, discret, sur toutes les pages. Le contenu reste sur des cartes opaques (référence : `doc/grin.jpg`)
-- Accents orange (principal) et lavande (secondaire)
-- Typo sans-serif moderne, chiffres tabulaires pour les montants
-- Toute l'app : layout, navigation, dashboard, listes, formulaires, pages d'auth
-- Mobile : dashboard lisible sur téléphone, le reste suit les recommandations shadcn/Tailwind sans effort particulier
-- Ajouter Symfony UX Turbo (navigation sans rechargement complet) et vérifier qu'il fonctionne avec le JS existant
+Spec : `doc/specs/prod-cutover.md`
 
-## 5. Historique de la valeur du wallet : graphique
+### 3. Historique rétroactif sur 30 jours
 
-Afficher l'évolution de la valeur totale sur le dashboard, en pièce centrale de la nouvelle UI.
+Après la bascule : donne tout de suite un graphique rempli à chaque utilisateur, sans attendre un mois de snapshots.
 
-- Périodes : 24h, 7j, 30j, 1an, Tout (agrégées par jour au-delà de 24h)
-- Changement de période sans rechargement (Turbo Frame)
-- En plus de la courbe : ligne du total déposé, plus haut et plus bas de la période
-- `symfony/ux-chartjs` à la place du Chart.js 3 actuel
+- 30 jours, un point par heure, comme les snapshots réels
+- Wallet actuel appliqué sur toute la période : on ne reconstitue pas les achats et ventes passés
+- Prix historiques pris chez CoinGecko, un appel par coin
+- Miettes : un coin n'est récupéré que si au moins un utilisateur en détient 5 $ ou plus. Un coin récupéré compte pour tous ses détenteurs
+- Les snapshots réels déjà enregistrés ne sont jamais écrasés
+
+### 4. `make ci` et Symfony Language Tools
+
+Indépendant du reste, peut passer en premier. Une seule commande pour tout vérifier pendant le développement, en prévision d'une future pipeline.
+
+- `make ci` lance toute la vérification : composer, lints, PHP CS Fixer, Rector, PHPStan, Deptrac, PHPUnit
+- Ajout du contrôle Symfony Language Tools (`symfony-lsp check`), en bêta expérimentale
+- `CLAUDE.md` renvoie vers `make ci`
+
+### 5. Bascule entre le $ et la monnaie préférée
+
+Indépendant du reste.
+
+- Bouton sur le dashboard, qui convertit tout ce qu'il affiche : KPI, graphique, répartition, lignes
+- Monnaie préférée par défaut
+- Choix du $ gardé par appareil dans un cookie de 30 jours, prolongé à chaque visite. Sans visite, retour à la monnaie préférée
+- Rendu côté serveur : pas de clignotement, pas de conversion en JavaScript
+- Bouton masqué si la monnaie préférée est déjà le $
+
+### 6. Nouveau favicon
+
+Indépendant du reste.
+
+- Icône SVG aux couleurs de l'application, lisible en clair et en sombre
+- 2 ou 3 propositions à valider avant l'intégration
+- PNG de secours et icône pour iOS
+
+## Hors périmètre
+
+- Pipeline CI : `make ci` la prépare, elle viendra plus tard.
+- Bascule $ / monnaie préférée sur les autres pages (positions, prêts, NFT, stratégies), qui restent en $.
+- Copie externe des sauvegardes.
+- Previews par branche.
+- Mode worker de FrankenPHP.

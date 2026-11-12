@@ -1,13 +1,13 @@
-{{ form_start(form) }}
+{{ form_start(form, {attr: {'data-controller': 'dependent-select'}}) }}
     <div class="grid gap-x-4 md:grid-cols-3">
         {{ form_row(form.loanedAt, {label: 'Emprunté le'}) }}
         {{ form_row(form.nbCoins, {label: 'Nombre', attr: {placeholder: 'ex: 1000'}}) }}
         {{ form_row(form.coin, {label: 'Crypto'}) }}
     </div>
     <div class="grid gap-x-4 md:grid-cols-2">
-        {{ form_row(form.blockchain, {label: 'Blockchain'}) }}
-        <div id="id-dapp">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
+        {{ form_row(form.blockchain, {label: 'Blockchain', attr: form.blockchain.vars.attr|merge({'data-action': 'dependent-select#refresh'})}) }}
+        <div id="id-dapp" data-dependent-select-target="field">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
     </div>
     {{ form_row(form.description, {label: 'Description', attr: {placeholder: 'ex: Mon emprunt est sur telle Dapp/Exchange, ou sur la blockchain...', rows: 3}}) }}
-    <twig:Button type="submit">{{ button_label|default('Save') }}</twig:Button>
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
 {{ form_end(form) }}

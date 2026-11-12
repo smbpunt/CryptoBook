@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Suivi Projet{% endblock %}
-
-{% block importmap %}{{ importmap(['app', 'select2', 'collection']) }}{% endblock %}
+{% block title %}Nouveau projet{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Ajout d'un projet"/>
+    <twig:App:PageHeader title="Nouveau projet"/>
     <twig:Card><twig:Card:Content>
         {{ include('project_monitoring/_form.html.twig', {button_label: 'Ajouter'}) }}
     </twig:Card:Content></twig:Card>

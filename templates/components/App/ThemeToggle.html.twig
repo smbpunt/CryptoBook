@@ -1,0 +1,16 @@
+{#
+ # Light / dark switch. The icon shown is the theme you switch to; `theme_controller` keeps the label in sync.
+ #}
+<twig:Button
+    variant="outline"
+    size="icon-xl"
+    data-controller="theme"
+    data-action="theme#toggle"
+    data-theme-light-label-value="Passer au thème clair"
+    data-theme-dark-label-value="Passer au thème sombre"
+    aria-label="Changer de thème"
+    {{ ...attributes }}
+>
+    <twig:ux:icon name="lucide:sun" class="hidden size-4.5 dark:block"/>
+    <twig:ux:icon name="lucide:moon" class="size-4.5 dark:hidden"/>
+</twig:Button>

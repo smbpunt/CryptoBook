@@ -1,0 +1,24 @@
+{{ form_start(form, {attr: {'data-controller': 'dependent-select'}}) }}
+    {{ form_errors(form) }}
+    <div class="grid gap-x-4 md:grid-cols-2">
+        {{ form_row(form.blockchain, {label: 'Blockchain', attr: form.blockchain.vars.attr|merge({'data-action': 'dependent-select#refresh'})}) }}
+        <div id="id-dapp" data-dependent-select-target="field">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
+    </div>
+    <div class="grid gap-x-4 md:grid-cols-[2fr_1fr_1fr]">
+        {{ form_row(form.coin1, {label: 'Crypto 1'}) }}
+        {{ form_row(form.nbCoin1, {label: 'Nombre', attr: {placeholder: 'ex: 1'}}) }}
+        {{ form_row(form.priceCoin1, {label: 'Prix de la crypto', addon: '$', attr: {placeholder: 'ex: 60 000'}}) }}
+    </div>
+    <div class="grid gap-x-4 md:grid-cols-[2fr_1fr_1fr]">
+        {{ form_row(form.coin2, {label: 'Crypto 2'}) }}
+        {{ form_row(form.nbCoin2, {label: 'Nombre', attr: {placeholder: 'ex: 60 000'}}) }}
+        {{ form_row(form.priceCoin2, {label: 'Prix', addon: '$', attr: {placeholder: 'ex: 1'}}) }}
+    </div>
+    <div class="grid gap-x-4 md:grid-cols-[1fr_1fr_2fr]">
+        {{ form_row(form.startAt, {label: 'Date d\'entrée'}) }}
+        {{ form_row(form.apr, {label: '% APR', addon: '%', attr: {placeholder: 'ex: 10.01'}}) }}
+        {{ form_row(form.lpDeposit, {label: 'Nombre dans la LP (pas obligatoire)'}) }}
+    </div>
+    {{ form_row(form.description, {label: 'Description', attr: {placeholder: 'ex: Farming sur telle Dapp/Exchange, avec yield optimizer untel...', rows: 3}}) }}
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
+{{ form_end(form) }}

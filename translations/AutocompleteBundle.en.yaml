@@ -1,0 +1,5 @@
+# The interface is in French while the locale is `en`: Tom Select texts (symfony/ux-autocomplete) in French.
+'Loading more results...': 'Chargement…'
+'No results found': 'Aucun résultat'
+'No more results': 'Aucun autre résultat'
+'Add %placeholder%...': 'Ajouter %placeholder%…'

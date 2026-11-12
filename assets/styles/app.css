@@ -39,6 +39,10 @@
     /* App-specific semantic colors: gains / losses */
     --color-positive: var(--positive);
     --color-negative: var(--negative);
+    --color-brand: var(--brand);
+    --color-brand-text: var(--brand-text);
+    --font-sans: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Space Grotesk Variable', 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -49,30 +53,37 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    /* Native widgets (scrollbars, inputs, autofill) follow the app theme, not only the OS. */
+    color-scheme: light;
+    --background: #F4F2ED;
+    --foreground: #17171C;
+    --card: rgba(255, 255, 255, 0.72);
+    --card-foreground: #17171C;
+    --popover: #FFFFFF;
+    --popover-foreground: #17171C;
+    --primary: #17171C;
+    --primary-foreground: #FAFAF7;
+    --secondary: rgba(23, 23, 28, 0.055);
+    --secondary-foreground: #17171C;
+    --muted: rgba(23, 23, 28, 0.055);
+    --muted-foreground: #5C5C6A;
+    --accent: rgba(23, 23, 28, 0.055);
+    --accent-foreground: #17171C;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
+    --border: rgba(23, 23, 28, 0.09);
+    --input: rgba(23, 23, 28, 0.09);
     --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    /* Brand orange: --brand for fills (logo, chart), --brand-text where it must stay readable on the page. */
+    --brand: #F26B1D;
+    --brand-text: #C2410C;
+    /* Chart colors stay in hex: Chart.js cannot parse oklch(). */
+    --chart-1: #4F46E5;
+    --chart-2: var(--brand);
+    --chart-3: #0E9F8E;
+    --chart-4: #D9A21B;
+    --chart-5: #8B8B99;
+    --radius: 1rem;
+    --shadow-card: 0 1px 2px rgba(23, 23, 28, 0.04), 0 10px 28px -14px rgba(23, 23, 28, 0.16);
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -81,34 +92,42 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --positive: oklch(0.596 0.145 163.225);
-    --negative: oklch(0.666 0.179 58.318);
+    --positive: #137A43;
+    --negative: #B42318;
+    /* Page backdrop: diffuse halos + grain */
+    --halo-coral: rgba(255, 118, 88, 0.5);
+    --halo-blue: rgba(112, 137, 255, 0.4);
+    --halo-glow-opacity: 0.45;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    color-scheme: dark;
+    --background: #0C0C11;
+    --foreground: #ECECF2;
+    --card: rgba(22, 22, 31, 0.7);
+    --card-foreground: #ECECF2;
+    --popover: #1C1C27;
+    --popover-foreground: #ECECF2;
+    --primary: #ECECF2;
+    --primary-foreground: #111117;
+    --secondary: rgba(255, 255, 255, 0.06);
+    --secondary-foreground: #ECECF2;
+    --muted: rgba(255, 255, 255, 0.06);
+    --muted-foreground: #9D9DB0;
+    --accent: rgba(255, 255, 255, 0.06);
+    --accent-foreground: #ECECF2;
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.08);
     --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --brand: #FB923C;
+    --brand-text: #FB923C;
+    --chart-1: #A5A8FF;
+    --chart-2: var(--brand);
+    --chart-3: #2DD4BF;
+    --chart-4: #FACC15;
+    --chart-5: #6B6B7B;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 34px -16px rgba(0, 0, 0, 0.65);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -117,8 +136,11 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-    --positive: oklch(0.765 0.177 163.223);
-    --negative: oklch(0.828 0.189 84.429);
+    --positive: #4ADE80;
+    --negative: #FF8A7A;
+    --halo-coral: rgba(230, 98, 77, 0.32);
+    --halo-blue: rgba(90, 112, 235, 0.36);
+    --halo-glow-opacity: 0.45;
 }
 
 @layer base {
@@ -127,48 +149,113 @@
     }
     body {
         @apply bg-background text-foreground;
+        isolation: isolate;
+    }
+
+    /*
+     * Page backdrop, fixed to the viewport behind all content. Both layers draw the same halos
+     * (coral top right, blue bottom, centre left neutral):
+     * ::before = a soft, faded copy for the smooth glow;
+     * ::after = the full-strength copy cut by a fractal-noise mask, so the halo dissolves into grain.
+     */
+    body::before,
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+            radial-gradient(ellipse 55% 50% at 85% 0%, var(--halo-coral), transparent 75%),
+            radial-gradient(ellipse 50% 40% at 12% 100%, var(--halo-blue), transparent 75%),
+            radial-gradient(ellipse 40% 30% at 75% 85%, var(--halo-blue), transparent 80%);
+    }
+    body::before {
+        opacity: var(--halo-glow-opacity);
+    }
+    body::after {
+        /* Noise → alpha with a steep curve: ~1px dots covering part of the surface. */
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 0 0 0 -2.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        mask-size: 160px 160px;
+    }
+    /* Purely decorative: drop it when the user asks for more contrast or less transparency, and on paper. */
+    @media (prefers-contrast: more), (prefers-reduced-transparency: reduce), (forced-colors: active), print {
+        body::before,
+        body::after {
+            content: none;
+        }
     }
 }
 
 /*
- * Third-party widget (Choices.js) restyled with the shadcn tokens.
+ * Third-party widget (Tom Select, from symfony/ux-autocomplete) restyled with the shadcn tokens.
+ * Built on the unthemed `tom-select.css`, drawn like the kit NativeSelect.
  */
 
-/* Unlayered on purpose: Choices.js ships unlayered CSS, which would beat any @layer rule. */
-.choices {
-    @apply mb-0 w-full text-sm;
+/* Unlayered on purpose: Tom Select ships unlayered CSS, which would beat any @layer rule. */
+.ts-wrapper {
+    @apply w-full text-sm;
 }
-/* A NativeSelect enhanced by Choices.js: drop the native chevron, Choices draws its own. */
-[data-slot='native-select-wrapper']:has(.choices) {
-    @apply w-full;
+/* `.ts-wrapper` prefix: beats `.full .ts-control` of Tom Select. */
+.ts-wrapper .ts-control,
+.ts-wrapper.single.input-active .ts-control {
+    @apply min-h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm text-foreground transition-colors dark:bg-input/30 dark:hover:bg-input/50;
 }
-[data-slot='native-select-wrapper']:has(.choices) > [data-slot='native-select-icon'] {
-    @apply hidden;
+.ts-wrapper .ts-control input,
+.ts-dropdown {
+    @apply text-sm text-foreground;
 }
-.choices__inner {
-    @apply min-h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm dark:bg-input/30;
+.ts-control input::placeholder {
+    @apply text-muted-foreground;
 }
-.choices.is-focused .choices__inner,
-.choices.is-open .choices__inner {
-    @apply rounded-lg border-ring ring-3 ring-ring/50;
+.ts-wrapper.focus .ts-control {
+    @apply border-ring ring-3 ring-ring/50;
 }
-.choices__list--single {
-    @apply p-0;
+/* Rejected by the server, or by the browser once the user tried to submit. Not `.ts-wrapper.invalid`, set from the start on an empty required select. */
+select[aria-invalid='true'] + .ts-wrapper .ts-control,
+select:user-invalid + .ts-wrapper .ts-control {
+    @apply border-destructive ring-3 ring-destructive/20 dark:border-destructive/50 dark:ring-destructive/40;
 }
-.choices__list--dropdown,
-.choices__list[aria-expanded] {
-    @apply z-50 mt-1 rounded-lg border border-border bg-popover text-popover-foreground shadow-md;
+.ts-wrapper.disabled .ts-control {
+    @apply bg-transparent opacity-50;
 }
-.choices__list--dropdown .choices__item--selectable.is-highlighted,
-.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+/* Chevron of the NativeSelect (lucide chevron-down). */
+.ts-wrapper.single .ts-control {
+    --ts-pr-caret: 2rem;
+}
+.ts-wrapper.single .ts-control::after {
+    @apply pointer-events-none absolute end-2.5 top-1/2 size-4 -translate-y-1/2 bg-muted-foreground;
+    content: '';
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ts-wrapper.single.dropdown-active .ts-control::after {
+    @apply rotate-180;
+}
+.plugin-clear_button .clear-button {
+    @apply text-muted-foreground;
+}
+.ts-dropdown {
+    @apply z-50 mt-1 overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-md;
+}
+.ts-dropdown .option,
+.ts-dropdown .no-results,
+.ts-dropdown .create,
+.ts-dropdown .optgroup-header {
+    @apply rounded-md px-2 py-1.5;
+}
+.ts-dropdown .optgroup-header {
+    @apply bg-transparent text-xs text-muted-foreground;
+}
+.ts-dropdown .active {
     @apply bg-accent text-accent-foreground;
 }
-.choices__input {
-    @apply bg-transparent text-foreground;
+.ts-dropdown [data-selectable] .highlight {
+    @apply bg-brand/20;
 }
-.choices[data-type*='select-one'] .choices__input {
-    @apply border-border bg-popover;
+.ts-dropdown .no-results,
+.ts-dropdown .create {
+    @apply text-muted-foreground;
 }
-.choices[data-type*='select-one']::after {
-    border-color: var(--muted-foreground) transparent transparent;
+.ts-dropdown .spinner::after {
+    border-color: var(--muted-foreground) transparent;
 }

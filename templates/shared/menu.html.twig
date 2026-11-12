@@ -1,0 +1,26 @@
+{% extends 'knp_menu_base.html.twig' %}
+
+{#
+ # Main navigation: one level of tabs, the current page underlined in the brand color on the header border.
+ # The row scrolls horizontally on narrow screens.
+ #}
+{% block root %}
+    <ul class="flex gap-0.5 whitespace-nowrap">
+        {% for item in item.children|filter(item => item.displayed) %}
+            {% set current = matcher.isCurrent(item) or matcher.isAncestor(item, options.matchingDepth) %}
+            <li>
+                <a
+                    href="{{ item.uri }}"
+                    {% if current %}aria-current="page"{% endif %}
+                    class="{{ html_classes('relative inline-flex min-h-15 items-center px-3.5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset', {
+                        'font-semibold text-foreground': current,
+                        'font-medium text-muted-foreground hover:text-foreground': not current,
+                    }) }}"
+                >
+                    {{- item.label -}}
+                    {% if current %}<span aria-hidden="true" class="absolute inset-x-3.5 bottom-0 h-0.5 rounded-full bg-brand"></span>{% endif %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

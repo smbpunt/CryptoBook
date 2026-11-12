@@ -3,7 +3,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <twig:App:AuthCard title="Veuillez vous connecter">
+    <twig:App:AuthCard title="Connexion" description="Accédez à votre portefeuille.">
         <twig:Form method="post" class="space-y-4">
             {% if error %}
                 <twig:Alert variant="destructive">
@@ -13,7 +13,7 @@
             {% endif %}
             {% if app.user %}
                 <p class="text-sm text-muted-foreground">
-                    Connecté en tant que {{ app.user.userIdentifier }}, <a class="underline" href="{{ path('app_logout') }}">se déconnecter</a>
+                    Connecté en tant que {{ app.user.userIdentifier }}, <a class="underline" href="{{ path('app_logout') }}" data-turbo="false">se déconnecter</a>
                 </p>
             {% endif %}
 
@@ -22,11 +22,9 @@
                 <twig:Input type="email" id="inputEmail" name="email" value="{{ last_username }}" autocomplete="email" placeholder="name@example.com" required autofocus/>
             </twig:Form:Item>
             <twig:Form:Item>
-                <div class="flex items-center">
-                    <twig:Form:Label for="inputPassword">Mot de passe</twig:Form:Label>
-                    <a href="{{ path('app_forgot_password_request') }}" class="ml-auto text-sm underline-offset-4 hover:underline">Mot de passe oublié ?</a>
-                </div>
+                <twig:Form:Label for="inputPassword">Mot de passe</twig:Form:Label>
                 <twig:Input type="password" id="inputPassword" name="password" autocomplete="current-password" required/>
+                <a href="{{ path('app_forgot_password_request') }}" class="justify-self-end text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">Mot de passe oublié ?</a>
             </twig:Form:Item>
             <div class="flex items-center gap-2">
                 <twig:Checkbox id="remember_me" name="_remember_me"/>
@@ -34,7 +32,7 @@
             </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <twig:Button type="submit" class="w-full">Se connecter</twig:Button>
+            <twig:Button type="submit" class="h-11 w-full">Se connecter</twig:Button>
             <p class="text-center text-sm text-muted-foreground">
                 Pas de compte ? <a href="{{ path('app_register') }}" class="underline underline-offset-4">S'inscrire</a>
             </p>

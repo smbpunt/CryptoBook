@@ -1,0 +1,12 @@
+{%- props
+    ## string|null Accessible name; null when the logo sits next to text that already names it.
+    label = null
+-%}
+<span {{ attributes.defaults({class: 'inline-flex items-center gap-2.5 text-foreground'}) }}>
+    <svg class="size-7.5 shrink-0" viewBox="0 0 32 32" {% if label %}role="img" aria-label="{{ label }}"{% else %}aria-hidden="true"{% endif %}>
+        <rect x="2" y="6" width="22" height="24" rx="6" class="fill-brand"/>
+        <rect x="8" y="2" width="22" height="24" rx="6" class="fill-foreground"/>
+        <circle cx="19" cy="14" r="5" class="fill-none stroke-brand" stroke-width="2.6"/>
+    </svg>
+    <span class="font-display text-xl font-semibold tracking-[-0.03em]" {% if label %}aria-hidden="true"{% endif %}>Crypto<span class="text-brand-text">Book</span></span>
+</span>

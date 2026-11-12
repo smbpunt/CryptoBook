@@ -1,12 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - NFTs{% endblock %}
-
-{% block importmap %}{{ importmap(['app', 'select2']) }}{% endblock %}
+{% block title %}Modifier le NFT{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Modifier les informations"/>
+    <twig:App:PageHeader title="Modifier le NFT"/>
     <twig:Card><twig:Card:Content>
-        {{ include('nft/_form.html.twig', {button_label: 'Modifier'}) }}
+        {{ include('nft/_form.html.twig', {button_label: 'Enregistrer'}) }}
     </twig:Card:Content></twig:Card>
 {% endblock %}

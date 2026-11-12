@@ -1,0 +1,14 @@
+{%- props
+    ## float|null Signed percentage. Null shows "—".
+    value = null,
+    ## int Decimals of the percentage.
+    decimals = 1,
+    ## bool A null value is an infinite gain ("+∞"), e.g. coins that cost nothing.
+    infinite = false,
+    ## string|null Text shown instead of the percentage, the tone still follows the value.
+    label = null
+-%}
+{%- set tone = value is null ? (infinite ? 'bg-positive/10 text-positive' : 'bg-muted text-muted-foreground') : (value|round(decimals) < 0 ? 'bg-negative/10 text-negative' : 'bg-positive/10 text-positive') -%}
+<span data-slot="delta" {{ attributes.defaults({class: ('inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[13px] leading-none font-semibold whitespace-nowrap tabular-nums ' ~ tone)|tailwind_classes}) }}>
+    {{- label ?? (value is null ? (infinite ? '+∞' : '—') : value|signed_percent(decimals)) -}}
+</span>

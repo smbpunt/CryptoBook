@@ -1,47 +1,70 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
 
-    <title>{% block title %}SMB{% endblock %}</title>
+    {# Pages give their own name only: "Positions · CryptoBook". #}
+    <title>{% block title %}{% endblock %}{{ block('title') is not empty ? ' · ' }}CryptoBook</title>
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
+
+    {# Before any CSS, so the page never flashes in the wrong theme. Kept in sync by theme_controller.js. #}
+    <script>
+        (() => {
+            let theme = null;
+            try { theme = localStorage.getItem('theme'); } catch {}
+            const dark = theme ? theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.toggle('dark', dark);
+        })();
+    </script>
+
     {% block stylesheets %}
     {% endblock %}
 
     {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {# A single entrypoint: with Turbo, the importmap cannot change from one page to the next. Page scripts are Stimulus controllers. #}
+        {{ importmap('app') }}
     {% endblock %}
 </head>
-<body class="min-h-screen antialiased">
-<header class="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
-    <div class="mx-auto flex h-14 max-w-screen-2xl items-center gap-4 px-4">
-        <a class="flex items-center gap-2 font-semibold" href="{{ path('home') }}">
-            <twig:ux:icon name="lucide:wallet" class="size-5"/>
-            Cryptobook
+<body class="min-h-screen font-sans antialiased">
+<header class="sticky top-0 z-40 border-b border-border bg-background/70 backdrop-blur-lg">
+    {# 60 px high like the tabs, also without them (logged out, error pages). The tabs sit on the bottom border: no bottom padding then. #}
+    <div class="mx-auto flex min-h-15 max-w-[85rem] flex-wrap items-center gap-x-7 px-6 py-2 has-[>nav]:pb-0 lg:py-0">
+        <a class="flex min-h-11 items-center rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50" href="{{ path('home') }}">
+            <twig:App:Logo/>
         </a>
         {% block header_nav %}
-            {# Built once for both navs; inside the block so error pages (which empty it) skip it. #}
+            {# Inside the block so error pages (which empty it) skip the menus: security is not available on 404 pages. #}
             {% set main_menu = knp_menu_get('main') %}
-            <nav class="ml-auto hidden lg:block" aria-label="Navigation principale">
-                {{ knp_menu_render(main_menu) }}
-            </nav>
-            <details class="group relative ml-auto lg:hidden">
-                <summary class="list-none [&::-webkit-details-marker]:hidden">
-                    <span class="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg hover:bg-muted" aria-label="Menu">
-                        <twig:ux:icon name="lucide:menu" class="size-5 group-open:hidden"/>
-                        <twig:ux:icon name="lucide:x" class="hidden size-5 group-open:block"/>
-                    </span>
-                </summary>
-                <nav class="absolute right-0 mt-2 w-56 rounded-lg border bg-popover p-2 shadow-md" aria-label="Navigation principale">
-                    {{ knp_menu_render(main_menu, {direction: 'column'}) }}
+            {% if main_menu.children is not empty %}
+                <nav class="order-last -mx-1 w-full min-w-0 overflow-x-auto px-1 [scrollbar-width:none] lg:order-none lg:w-auto lg:flex-1" aria-label="Navigation principale">
+                    {{ knp_menu_render(main_menu) }}
                 </nav>
-            </details>
+            {% endif %}
         {% endblock %}
+        <div class="ml-auto flex items-center gap-2">
+            <twig:App:ThemeToggle/>
+            {% block header_account %}
+                <twig:Popover>
+                    <twig:Popover:Trigger>
+                        <twig:Button size="icon-xl" aria-label="Compte" {{ ...popover_trigger_attrs }}>
+                            <twig:ux:icon name="lucide:user-round" class="size-4.5"/>
+                        </twig:Button>
+                    </twig:Popover:Trigger>
+                    <twig:Popover:Content align="end" class="w-56 p-1.5" aria-label="Compte">
+                        {% if app.user %}
+                            <p class="truncate px-2.5 pt-1 pb-1.5 text-xs text-muted-foreground">{{ app.user.userIdentifier }}</p>
+                        {% endif %}
+                        {{ knp_menu_render('account', {template: 'shared/account_menu.html.twig'}) }}
+                    </twig:Popover:Content>
+                </twig:Popover>
+            {% endblock %}
+        </div>
     </div>
 </header>
 
-<main class="mx-auto max-w-screen-2xl px-4 py-6">
+<main class="mx-auto max-w-[85rem] px-6 py-8">
     {% block body %}{% endblock %}
 </main>
 </body>

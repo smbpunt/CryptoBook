@@ -1,0 +1,20 @@
+<div class="grid gap-1 text-sm tabular-nums">
+    {% if farming.enteredAt %}<p>Depuis le {{ farming.enteredAt|day }}</p>{% endif %}
+    <p>{{ farming.nbCoins|quantity }} {{ farming.coin.symbol|upper }} (~{{ farming.valueUsd|amount('$', 2) }})</p>
+    <p>APR : {{ farming.apr|percent }}</p>
+    {% if farming.description is not empty %}<p>Description : {{ farming.description }}</p>{% endif %}
+    <p>
+        {%- if farming.dapp.url is not empty -%}
+            <a class="underline underline-offset-4" target="_blank" rel="noopener" href="{{ farming.dapp.url }}">{{ farming.dapp }}</a>
+        {%- else -%}
+            {{ farming.dapp }}
+        {%- endif %} sur {{ farming.dapp.blockchain }}
+    </p>
+</div>
+<h3 class="mt-2 font-display font-semibold">Gains</h3>
+<div class="grid grid-cols-2 gap-1 text-sm sm:grid-cols-4 tabular-nums">
+    <p>Annuel : ~{{ farming.annualRewardsUsd|amount('$', 2) }}</p>
+    <p>Mensuel : ~{{ (farming.annualRewardsUsd/12)|amount('$', 2) }}</p>
+    <p>Hebdo : ~{{ (farming.annualRewardsUsd/52)|amount('$', 2) }}</p>
+    <p>Journalier : ~{{ (farming.annualRewardsUsd/365)|amount('$', 2) }}</p>
+</div>

@@ -1,0 +1,21 @@
+{% extends 'knp_menu_base.html.twig' %}
+
+{#
+ # Account menu: a vertical list of links with an icon, rendered inside the account popover.
+ #}
+{% block root %}
+    {% import 'knp_menu.html.twig' as knp_menu %}
+    <ul class="flex flex-col gap-0.5">
+        {% for item in item.children|filter(item => item.displayed) %}
+            <li>
+                <a
+                    href="{{ item.uri }}"{{ knp_menu.attributes(item.linkAttributes) }}
+                    class="flex min-h-10 items-center gap-2.5 rounded-md px-2.5 text-sm font-medium text-popover-foreground outline-none hover:bg-muted focus-visible:bg-muted"
+                >
+                    {% if item.extra('icon') %}{{ ux_icon(item.extra('icon'), {class: 'size-4 text-muted-foreground'}) }}{% endif %}
+                    {{ item.label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la LP{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Modifier la LP"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/lp/_form.html.twig', {button_label: 'Enregistrer'}) }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

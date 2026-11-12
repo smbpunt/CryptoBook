@@ -1,4 +1,4 @@
-.PHONY: worktree-guard setup-worktree teardown-worktree
+.PHONY: worktree-guard setup-worktree teardown-worktree import\:dump-db
 
 ## ---- DX (worktrees) ----
 
@@ -62,3 +62,21 @@ teardown-worktree: worktree-guard ## Run before deleting a worktree: removes con
 	@for s in $(WORKTREE_IMAGES); do \
 		docker image rm $(COMPOSE_PROJECT_NAME)-$$s >/dev/null 2>&1 && echo "Image : $(COMPOSE_PROJECT_NAME)-$$s removed" || true; \
 	done
+
+## ---- Database import ----
+
+f ?= prod.tar.gz
+
+import\:dump-db: ## Import a pg_dump (tar) into the dev database, f="path/to/dump.tar" (default prod.tar.gz)
+	@test -f "$(f)" || { echo "Dump not found: $(f)"; exit 1; }
+	@echo "Importing $(f) into database/app..."
+	@$(DOCKER_COMP) cp "$(f)" database:/tmp/import.tar
+	@$(DOCKER_COMP) exec -T database psql -U app -d postgres -c 'DROP DATABASE IF EXISTS app WITH (FORCE);' >/dev/null
+	@$(DOCKER_COMP) exec -T database psql -U app -d postgres -c 'CREATE DATABASE app OWNER app;' >/dev/null
+	@$(DOCKER_COMP) exec -T database pg_restore -U app -d app --no-owner --no-privileges --schema=public /tmp/import.tar
+	@$(DOCKER_COMP) exec -T database rm -f /tmp/import.tar
+	@echo ""
+	@echo "Import done. Database stats:"
+	@$(DOCKER_COMP) exec -T database psql -U app -d app -c "ANALYZE;" \
+		-c "SELECT pg_size_pretty(pg_database_size('app')) AS size;" \
+		-c "SELECT relname AS table, reltuples::bigint AS rows FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' ORDER BY reltuples DESC, relname LIMIT 10;"

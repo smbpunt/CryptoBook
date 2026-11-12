@@ -6,14 +6,24 @@
     ## string CSRF token id for the delete action.
     tokenId
 -%}
-<form method="post" action="{{ deleteUrl }}" onsubmit="return confirm('Supprimer cet élément ?');" {{ attributes.defaults({class: 'inline-flex'}) }}>
+{# Icon buttons: the tables are wide. Tooltip ids from the delete URL, unique in the page. #}
+{%- set _id = 'row-actions' ~ deleteUrl|replace({'/': '-'}) -%}
+<form method="post" action="{{ deleteUrl }}" onsubmit="return confirm('Supprimer cet élément ?');" {{ attributes.defaults({class: 'inline-flex gap-0.5'}) }}>
     <input type="hidden" name="_token" value="{{ csrf_token(tokenId) }}">
-    <twig:ButtonGroup>
-        <twig:Button as="a" variant="outline" size="sm" href="{{ editUrl }}">
-            <twig:ux:icon name="lucide:pencil" data-icon="inline-start"/> Modifier
-        </twig:Button>
-        <twig:Button type="submit" variant="outline" size="sm" class="text-destructive">
-            <twig:ux:icon name="lucide:trash-2" data-icon="inline-start"/> Supprimer
-        </twig:Button>
-    </twig:ButtonGroup>
+    <twig:Tooltip id="{{ _id }}-edit">
+        <twig:Tooltip:Trigger>
+            <twig:Button as="a" variant="ghost" size="icon" href="{{ editUrl }}" aria-label="Modifier" {{ ...tooltip_trigger_attrs }}>
+                <twig:ux:icon name="lucide:pencil"/>
+            </twig:Button>
+        </twig:Tooltip:Trigger>
+        <twig:Tooltip:Content>Modifier</twig:Tooltip:Content>
+    </twig:Tooltip>
+    <twig:Tooltip id="{{ _id }}-delete">
+        <twig:Tooltip:Trigger>
+            <twig:Button type="submit" variant="ghost" size="icon" class="text-negative hover:text-negative" aria-label="Supprimer" {{ ...tooltip_trigger_attrs }}>
+                <twig:ux:icon name="lucide:trash-2"/>
+            </twig:Button>
+        </twig:Tooltip:Trigger>
+        <twig:Tooltip:Content>Supprimer</twig:Tooltip:Content>
+    </twig:Tooltip>
 </form>

@@ -1,6 +1,12 @@
 <div class="grid gap-1 text-sm">
-    {% if loan.loanedAt %}<p>Depuis le : {{ loan.loanedAt|date('d/m/Y') }}</p>{% endif %}
-    <p>{{ loan.nbCoins }} {{ loan.coin.symbol|upper }} (~{{ loan.currentValue|round(2)|number_format(2, '.', ' ') }} $)</p>
-    <p><a class="underline underline-offset-4" href="{{ loan.dapp.url }}">{{ loan.dapp }}</a> sur {{ loan.dapp.blockchain }}</p>
+    {% if loan.loanedAt %}<p>Depuis le {{ loan.loanedAt|day }}</p>{% endif %}
+    <p class="tabular-nums">{{ loan.nbCoins|quantity }} {{ loan.coin.symbol|upper }} (~{{ loan.currentValue|amount('$', 2) }})</p>
+    <p>
+        {%- if loan.dapp.url is not empty -%}
+            <a class="underline underline-offset-4" target="_blank" rel="noopener" href="{{ loan.dapp.url }}">{{ loan.dapp }}</a>
+        {%- else -%}
+            {{ loan.dapp }}
+        {%- endif %} sur {{ loan.dapp.blockchain }}
+    </p>
     {% if loan.description is not empty %}<p>Description : {{ loan.description }}</p>{% endif %}
 </div>

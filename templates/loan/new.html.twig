@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Emprunts{% endblock %}
-
-{% block importmap %}{{ importmap(['app', 'select2', 'loan_form']) }}{% endblock %}
+{% block title %}Nouvel emprunt{% endblock %}
 
 {% block body %}
-    <twig:App:PageHeader title="Ajout d'un emprunt"/>
+    <twig:App:PageHeader title="Nouvel emprunt"/>
     <twig:Card><twig:Card:Content>
         {{ include('loan/_form.html.twig', {button_label: 'Ajouter'}) }}
     </twig:Card:Content></twig:Card>

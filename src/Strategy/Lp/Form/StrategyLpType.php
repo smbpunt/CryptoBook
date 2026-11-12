@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Strategy\Lp\Form;
+
+use App\Blockchain\Entity\Blockchain;
+use App\Blockchain\Entity\Dapp;
+use App\Cryptocurrency\Form\CryptocurrencyAutocompleteField;
+use App\Strategy\Lp\Entity\StrategyLp;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+/**
+ * @extends AbstractType<StrategyLp>
+ */
+class StrategyLpType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('startAt', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+                'input' => 'datetime_immutable',
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'empty_data' => '',
+            ])
+            ->add('priceCoin1')
+            ->add('priceCoin2')
+            ->add('nbCoin1')
+            ->add('nbCoin2')
+            ->add('lpDeposit')
+            ->add('apr')
+            ->add('coin1', CryptocurrencyAutocompleteField::class, [
+                'required' => true,
+            ])
+            ->add('coin2', CryptocurrencyAutocompleteField::class, [
+                'required' => true,
+            ])
+            ->add('blockchain', EntityType::class, [
+                'required' => false,
+                'class' => Blockchain::class,
+                'autocomplete' => true,
+                'placeholder' => 'Veuillez choisir une blockchain',
+            ]);
+
+        $formModifier = static function (FormInterface $form, ?Blockchain $blockchain = null): void {
+            $dapps = $blockchain?->getDapps() ?? [];
+            $form->add('dapp', EntityType::class, [
+                'class' => Dapp::class,
+                'required' => true,
+                'choices' => $dapps,
+                'placeholder' => 'Veuillez choisir une blockchain',
+                'autocomplete' => true,
+            ]);
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            static function (FormEvent $event) use ($formModifier): void {
+                /**
+                 * @var StrategyLp $data
+                 */
+                $data = $event->getData();
+                $blockchain = $data->getDapp()?->getBlockchain();
+                $formModifier($event->getForm(), $blockchain);
+            }
+        );
+
+        $builder->get('blockchain')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            static function (FormEvent $event) use ($formModifier): void {
+                $blockchain = $event->getForm()->getData();
+                $formModifier($event->getForm()->getParent(), $blockchain);
+            }
+        );
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => StrategyLp::class,
+        ]);
+    }
+}

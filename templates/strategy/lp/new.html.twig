@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle LP{% endblock %}
+
+{% block body %}
+    <twig:App:PageHeader title="Nouvelle LP"/>
+    <twig:Card><twig:Card:Content>
+        {{ include('strategy/lp/_form.html.twig', {button_label: 'Ajouter'}) }}
+    </twig:Card:Content></twig:Card>
+{% endblock %}

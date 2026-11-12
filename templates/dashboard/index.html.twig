@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+    {% set lastRecordedAt = dashboard.snapshotStats.lastRecordedAt %}
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <p class="mb-1.5 flex items-center gap-2 text-[13px] text-muted-foreground">
+                {% if lastRecordedAt %}
+                    <span aria-hidden="true" class="size-[7px] rounded-full bg-positive"></span>
+                    Dernier snapshot · {{ lastRecordedAt|format_datetime(timezone: 'Europe/Paris', pattern: 'd MMM yyyy, HH:mm', locale: 'fr') }}
+                {% else %}
+                    <span aria-hidden="true" class="size-[7px] rounded-full bg-muted-foreground"></span>
+                    Aucun snapshot pour l’instant
+                {% endif %}
+            </p>
+            <h1 class="font-display text-4xl leading-[1.1] font-semibold tracking-[-0.035em]">Tableau de bord</h1>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <twig:Button as="a" href="{{ path('app_position_new') }}" variant="outline" class="h-11 px-4">Ajouter une position</twig:Button>
+            <twig:Button as="a" href="{{ path('app_deposit_new') }}" class="h-11 px-4"><twig:ux:icon name="lucide:plus"/>Nouveau dépôt</twig:Button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-5">
+        <div class="flex flex-wrap items-stretch gap-5">
+            <div class="flex min-w-0 flex-[999_1_640px] flex-col">
+                {{ include('dashboard/_history.html.twig') }}
+            </div>
+            {{ include('dashboard/_side.html.twig') }}
+        </div>
+
+        {{ include('dashboard/_kpis.html.twig') }}
+
+        <div class="flex flex-wrap items-stretch gap-5">
+            {{ include('dashboard/_allocation.html.twig') }}
+            {{ include('dashboard/_holdings.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

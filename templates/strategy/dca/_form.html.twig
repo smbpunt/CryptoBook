@@ -1,0 +1,41 @@
+{% import _self as formMacros %}
+
+{% macro part_prototype(part) %}
+    <tr class="border-b">
+        <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
+        <td class="p-2">{{ form_widget(part.percent) }}{{ form_errors(part.percent) }}</td>
+        <td class="p-2">{{ form_widget(part.coin) }}{{ form_errors(part.coin) }}</td>
+    </tr>
+{% endmacro %}
+
+{{ form_start(form) }}
+    <div class="grid gap-x-4 md:grid-cols-4">
+        {{ form_row(form.fiatToDcaEur, {label: 'Provenance FIAT', addon: '€'}) }}
+        {{ form_row(form.farmingToDcaUsd, {label: 'Provenance Stable', addon: '$'}) }}
+    </div>
+
+    <div data-controller="collection"
+         data-collection-index-value="{{ form.parts is empty ? 0 : max(form.parts.children|keys) + 1 }}"
+         data-collection-prototype-value="{{ formMacros.part_prototype(form.parts.vars.prototype)|e('html_attr') }}">
+        <twig:Button variant="outline" class="mb-2" data-action="collection#add">
+            <twig:ux:icon name="lucide:plus" data-icon="inline-start"/> Ajouter une allocation
+        </twig:Button>
+        <table class="mb-4 w-full max-w-2xl text-sm">
+            <thead class="border-b">
+                <tr>
+                    <th class="w-12"></th>
+                    <th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">%</th>
+                    <th class="h-10 px-2 text-start text-xs font-medium text-muted-foreground">Coin</th>
+                </tr>
+            </thead>
+            <tbody data-collection-target="items">
+            {% for part in form.parts %}
+                {{ formMacros.part_prototype(part) }}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mb-4">{{ form_errors(form.parts) }}</div>
+
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
+{{ form_end(form) }}

@@ -1,0 +1,14 @@
+{{ form_start(form, {attr: {'data-controller': 'dependent-select'}}) }}
+    <div class="grid gap-x-4 md:grid-cols-4">
+        {{ form_row(form.enteredAt, {label: 'Date d\'entrée'}) }}
+        {{ form_row(form.apr, {label: '% APR', addon: '%'}) }}
+        {{ form_row(form.nbCoins, {label: 'Nombre'}) }}
+        {{ form_row(form.coin, {label: 'Crypto'}) }}
+    </div>
+    <div class="grid gap-x-4 md:grid-cols-2">
+        {{ form_row(form.blockchain, {label: 'Blockchain', attr: form.blockchain.vars.attr|merge({'data-action': 'dependent-select#refresh'})}) }}
+        <div id="id-dapp" data-dependent-select-target="field">{{ form_row(form.dapp, {label: 'Dapp'}) }}</div>
+    </div>
+    {{ form_row(form.description, {label: 'Description', attr: {placeholder: 'ex: Farming sur telle Dapp/Exchange, avec yield optimizer untel...', rows: 3}}) }}
+    <twig:Button type="submit" class="h-11 px-5">{{ button_label|default('Enregistrer') }}</twig:Button>
+{{ form_end(form) }}

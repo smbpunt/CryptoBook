@@ -15,11 +15,81 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: sequence
         auto_mapping: true
         mappings:
-            App:
+            Blockchain:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
+                dir: '%kernel.project_dir%/src/Blockchain/Entity'
+                prefix: 'App\Blockchain\Entity'
+            Cryptocurrency:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Cryptocurrency/Entity'
+                prefix: 'App\Cryptocurrency\Entity'
+            Deposit:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Deposit/Entity'
+                prefix: 'App\Deposit\Entity'
+            Exchange:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Exchange/Entity'
+                prefix: 'App\Exchange\Entity'
+            FiatCurrency:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/FiatCurrency/Entity'
+                prefix: 'App\FiatCurrency\Entity'
+            Loan:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Loan/Entity'
+                prefix: 'App\Loan\Entity'
+            Nft:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Nft/Entity'
+                prefix: 'App\Nft\Entity'
+            Position:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Position/Entity'
+                prefix: 'App\Position\Entity'
+            ProjectMonitoring:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/ProjectMonitoring/Entity'
+                prefix: 'App\ProjectMonitoring\Entity'
+            Security:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Security/Entity'
+                prefix: 'App\Security\Entity'
+            StrategyDca:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Dca/Entity'
+                prefix: 'App\Strategy\Dca\Entity'
+            StrategyFarming:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Farming/Entity'
+                prefix: 'App\Strategy\Farming\Entity'
+            StrategyLp:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Strategy/Lp/Entity'
+                prefix: 'App\Strategy\Lp\Entity'
+            User:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/User/Entity'
+                prefix: 'App\User\Entity'
+            Wallet:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Wallet/Entity'
+                prefix: 'App\Wallet\Entity'
 
 when@test:
     doctrine:

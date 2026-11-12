@@ -1,0 +1,37 @@
+{% set symbol = dashboard.currencySymbol %}
+{% set cryptoPercent = dashboard.cryptoPercent %}
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
+    <twig:App:Stat label="Investi" icon="lucide:coins"
+                   hint="Dépôts fiat cumulés{{ symbol != '$' ? ' · ' ~ dashboard.depositUsd|amount('$') }}">
+        {{- dashboard.toFavorite(dashboard.depositUsd)|amount(symbol) -}}
+    </twig:App:Stat>
+
+    {% if dashboard.yearFarmingUsd > 0 %}
+        {% set yearFarming = dashboard.toFavorite(dashboard.yearFarmingUsd) %}
+        <twig:App:Stat label="Revenus farming" icon="lucide:sprout"
+                       hint="{{ (yearFarming / 365)|amount(symbol) }} / jour · {{ (yearFarming / 52)|amount(symbol) }} / sem. · {{ yearFarming|amount(symbol) }} / an">
+            {{- (yearFarming / 12)|amount(symbol) }} <span class="font-sans text-sm font-medium tracking-normal text-muted-foreground">/ mois</span>
+        </twig:App:Stat>
+    {% endif %}
+
+    {% if dashboard.loanUsd > 0 %}
+        <twig:App:Stat label="Emprunts" icon="lucide:landmark"
+                       hint="{{ dashboard.totalUsd > 0 ? (dashboard.loanUsd * 100 / dashboard.totalUsd)|percent ~ ' de la valeur du wallet' : '' }}">
+            {{- dashboard.toFavorite(dashboard.loanUsd)|amount(symbol) -}}
+        </twig:App:Stat>
+    {% endif %}
+
+    <twig:App:Stat label="Crypto / stable" icon="lucide:chart-pie">
+        {{- cryptoPercent|percent(0) }} <span class="font-medium text-muted-foreground">/ {{ (dashboard.totalUsd > 0 ? 100 - cryptoPercent : 0)|percent(0) }}</span>
+        <twig:block name="footer">
+            <div aria-hidden="true" class="mt-3 flex h-2 gap-[3px]">
+                {% if dashboard.cryptoUsd > 0 %}<div class="rounded-full bg-chart-1" style="width: {{ cryptoPercent|round(2) }}%"></div>{% endif %}
+                <div class="flex-auto rounded-full {{ dashboard.stableUsd > 0 ? 'bg-brand' : 'bg-muted' }}"></div>
+            </div>
+            <p class="mt-2 flex justify-between gap-2 text-[13px] text-muted-foreground tabular-nums">
+                <span>{{ dashboard.toFavorite(dashboard.cryptoUsd)|amount(symbol) }}</span>
+                <span>{{ dashboard.toFavorite(dashboard.stableUsd)|amount(symbol) }}</span>
+            </p>
+        </twig:block>
+    </twig:App:Stat>
+</div>

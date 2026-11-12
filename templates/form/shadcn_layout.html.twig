@@ -40,7 +40,7 @@
                 <twig:Button
                     id="{{ id }}"
                     variant="outline"
-                    class="w-full justify-between font-normal data-[empty=true]:text-muted-foreground"
+                    class="w-full justify-between bg-transparent font-normal data-[empty=true]:text-muted-foreground"
                     :aria-invalid="valid ? false : 'true'"
                     :aria-describedby="help is not empty ? id ~ '_help' : false"
                     :disabled="disabled"
@@ -63,8 +63,9 @@
 {%- endblock -%}
 
 {%- block choice_widget_collapsed -%}
-    {%- if 'js-select2' in (attr.class|default('')) -%}
-        {# Enhanced by Choices.js, which replaces the element and is styled in app.css. #}
+    {%- if uses_autocomplete|default(false) -%}
+        {# `autocomplete` option (symfony/ux-autocomplete): Tom Select hides the <select> and draws its own control, styled in app.css. #}
+        {%- set attr = attr|merge(valid ? {} : {'aria-invalid': 'true'})|merge(help is not empty ? {'aria-describedby': id ~ '_help'} : {}) -%}
         {{- parent() -}}
     {%- else -%}
         {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
