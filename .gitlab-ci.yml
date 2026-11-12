@@ -1,8 +1,12 @@
+# No pipeline when only doc/ and .md files change. Tags always run.
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: &code-changes
+        regexp: '\A(?!doc/)(?!.*\.md\z).*'
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
     - if: $CI_COMMIT_BRANCH == "dev"
+      changes: *code-changes
 
 variables:
   PHP_VERSION: "8.5"
@@ -57,6 +61,8 @@ stages:
     - echo "memory_limit=512M" > "$PHP_INI_DIR/conf.d/memory-limit.ini"
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
     - composer install --no-interaction --no-progress --prefer-dist
+  # Checks run in parallel, deploy jobs still wait for every stage.
+  needs: []
   interruptible: true
 
 .lint_template:
@@ -120,6 +126,7 @@ lint:security:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
     - composer audit --locked
+  needs: []
   interruptible: true
 
 # =============================================================================
