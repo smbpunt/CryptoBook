@@ -16,3 +16,10 @@ Formulaires emprunt, farming et LP : après un retour arrière (Turbo), le champ
 - Dépôts convertis en USD au taux du jour : le total « Investi » bouge avec le change. Il faudrait stocker le taux à la date du dépôt.
 - DCA Auto : jusqu'à 1000 positions dans un seul formulaire.
 - Cache du dashboard : un calcul commencé avant un flush peut être enregistré après son invalidation. Données périmées jusqu'à la prochaine mise à jour des prix ou la fin du TTL.
+
+## Repéré, non tranché
+
+- Nouveau VPS : `var/log/prod.log` grossit sans rotation.
+- `vps.md` : le certificat du domaine final n'est obtenu qu'après le changement DNS, quelques minutes sans HTTPS valide pendant la bascule.
+- `vps.md` : le retour arrière après le changement DNS perd ce qui a été saisi sur le nouveau VPS.
+- Staging : worker actif ou non (le quota Fixer est partagé avec la prod), données rafraîchies depuis la prod ou figées.
