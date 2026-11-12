@@ -96,4 +96,4 @@ deptrac:
     Shared: ~
     Strategy: [User, Cryptocurrency, Blockchain, Position, FiatCurrency, Shared]
     User: [FiatCurrency, Shared]
-    Wallet: [Position, User, Cryptocurrency, Shared]
+    Wallet: [Position, User, Cryptocurrency, Coingecko, Shared]

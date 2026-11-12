@@ -5,6 +5,7 @@ namespace App\Coingecko\Client;
 use App\Coingecko\Dto\Coin;
 use App\Coingecko\Exception\CoingeckoUnavailableException;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -64,6 +65,39 @@ final readonly class CoingeckoClient
             $usd = self::float(\is_array($price) ? ($price['usd'] ?? null) : null);
             if (null !== $usd) {
                 $prices[(string) $id] = $usd;
+            }
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Hourly USD prices of a coin over the last days (CoinGecko returns hourly points between 2 and 90 days).
+     * Unknown coin: no price.
+     *
+     * @return array<int, float> price by Unix timestamp in seconds, in the order of the answer
+     *
+     * @throws CoingeckoUnavailableException
+     */
+    public function getHourlyUsdPrices(string $id, int $days): array
+    {
+        try {
+            $data = $this->get('coins/'.rawurlencode($id).'/market_chart', ['vs_currency' => 'usd', 'days' => (string) $days]);
+        } catch (CoingeckoUnavailableException $exception) {
+            $previous = $exception->getPrevious();
+            if ($previous instanceof ClientExceptionInterface && 404 === $previous->getResponse()->getStatusCode()) {
+                return [];
+            }
+
+            throw $exception;
+        }
+
+        $prices = [];
+        foreach (\is_array($data['prices'] ?? null) ? $data['prices'] : [] as $point) {
+            $timestampMs = \is_array($point) ? self::float($point[0] ?? null) : null;
+            $price = \is_array($point) ? self::float($point[1] ?? null) : null;
+            if (null !== $timestampMs && null !== $price) {
+                $prices[intdiv((int) $timestampMs, 1000)] = $price;
             }
         }
 
