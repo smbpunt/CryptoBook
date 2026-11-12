@@ -3,7 +3,12 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Files inside the project: var/sessions is a Deployer shared dir, sessions survive deployments.
+    session:
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        # Debian PHP disables the session GC (gc_probability=0) and cleans only its own save_path by cron
+        gc_probability: 1
 
     http_client:
         scoped_clients:

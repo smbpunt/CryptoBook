@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 CryptoBook, suivi de portefeuille crypto : positions, dépôts, prêts, NFT, stratégies (DCA, farming, LP) et suivi de projets. Symfony 8.1, PHP 8.5, PostgreSQL 16.
 
 - Prix et données des cryptos via l'API CoinGecko (client maison dans `src/Coingecko/`), taux de change fiat via l'API Fixer.
-- Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`, et snapshot horaire de la valeur des wallets : `wallet:snapshot`. Planifiées par Symfony Scheduler (`src/Shared/Schedule/MainSchedule.php`). En prod, worker `messenger:consume scheduler_default async` lancé par systemd (`deploy/systemd/`). En dev, pas de worker permanent (quota Fixer) : `make scheduler` à la demande.
+- Mise à jour des données par commandes : `crypto:updatePrices`, `crypto:updateDatas`, `fiat:updateRates`, et snapshot horaire de la valeur des wallets : `wallet:snapshot`. Planifiées par Symfony Scheduler (`src/Shared/Schedule/MainSchedule.php`). En prod, worker `messenger:consume scheduler_default async` lancé par systemd (`cryptobook-worker@prod`, `deploy/systemd/`). En dev, pas de worker permanent (quota Fixer) : `make scheduler` à la demande.
 - Back-office EasyAdmin dans `src/Admin/Controller/`.
 - Dashboard mis en cache par utilisateur (pool `dashboard.cache`, filesystem taggé), historique compris. Invalidé par un listener Doctrine (`src/Dashboard/EventListener/`) : prix et taux pour tous, données d'un utilisateur et ses snapshots pour lui seul.
 - Graphique du wallet : snapshots (USD, convertis au taux du jour) + dépôts cumulés, `symfony/ux-chartjs`. Changement de période dans le Turbo Frame `wallet-history`, rendu par la route `app_dashboard_history` (`/history/{period}`, enum `HistoryPeriod`). `wallet_chart_controller.js` complète la vue PHP (couleurs des tokens, formats `Intl`, infobulle) sur `chartjs:pre-connect` : il n'est pas lazy, pour écouter avant le contrôleur `chart` (lazy). Une modification hors Doctrine (SQL brut) demande `bin/console cache:pool:clear dashboard.cache`.
@@ -41,7 +41,7 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 
 ## Langue
 
-- Code, commentaires, messages de commit, descriptions de PR : en anglais. L'historique ancien est en français, ne pas le copier.
+- Code, commentaires, messages de commit, descriptions de MR : en anglais. L'historique ancien est en français, ne pas le copier.
 - Messages de commit en Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`, `build:`…).
 
 ## Environnement
@@ -55,6 +55,13 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 - Turbo Drive : redirection après un POST en 303, formulaire invalide en 422 (`render()` reçoit le formulaire). Liens hors Turbo en `data-turbo="false"` : Admin (layout EasyAdmin), Déconnexion (sinon préchargée au survol).
 - En cas d'erreur : lire `var/log/dev.log` et le profiler (`/_profiler`) avant de modifier le code.
 - `.env` est versionné et ne contient que des valeurs par défaut. Les secrets (`APP_SECRET`, `FIXER_API_KEY`) vont dans `.env.local` (ignoré par git).
+
+## Déploiement
+
+- Dépôt sur GitLab `smbai/cryptobook` (MR et CI, via `glab`), GitHub `smbpunt/CryptoBook` en miroir push.
+- Pipeline `.gitlab-ci.yml` (lint, analyse, tests avec Postgres 18, deploy) : un push sur `dev` déploie le staging `dev.cryptobook.fr` (VPS1), un tag `vX.Y.Z` sur `main` déploie la prod `cryptobook.fr` (VPS2). Retour arrière manuel du code seul (`rollback_*`), une migration se défait à la main.
+- Deployer : `deploy.php` (assets, migrations, reload de FrankenPHP, arrêt du worker depuis la release précédente). `var/log` et `var/sessions` partagés, `var/cache` et `var/share` par release.
+- Web en FrankenPHP (PHP 8.5), CLI, Deployer et worker en PHP système 8.5 (`/usr/bin/php`).
 
 ## Commandes qualité
 
