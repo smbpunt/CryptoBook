@@ -2,6 +2,20 @@
 
 {% block title %}Suivi de portefeuille crypto{% endblock %}
 
+{% block meta %}
+    {% set description = "CryptoBook suit vos positions, vos dépôts en euros ou en dollars et l'évolution de votre portefeuille crypto, heure par heure." %}
+    <meta name="description" content="{{ description }}">
+    <link rel="canonical" href="{{ url('home') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CryptoBook">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="CryptoBook · Suivi de portefeuille crypto">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:url" content="{{ url('home') }}">
+    <meta property="og:image" content="{{ absolute_url(asset('images/icon-512.png')) }}">
+    <meta name="twitter:card" content="summary">
+{% endblock %}
+
 {% block page_width %}max-w-[75rem]{% endblock %}
 
 {#

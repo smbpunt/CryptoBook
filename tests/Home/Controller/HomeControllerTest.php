@@ -69,6 +69,19 @@ final class HomeControllerTest extends WebTestCase
         }
     }
 
+    public function testCarriesTheSeoTags(): void
+    {
+        $client = self::createClient();
+
+        $crawler = $client->request('GET', '/');
+
+        self::assertNotEmpty($crawler->filter('meta[name="description"]')->attr('content'));
+        self::assertSame('http://localhost/', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        self::assertSame('http://localhost/', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        self::assertMatchesRegularExpression('#^http://localhost/assets/images/icon-512-[\w-]+\.png$#', (string) $crawler->filter('meta[property="og:image"]')->attr('content'));
+        self::assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
     /**
      * Narrow and regular no-break spaces as plain spaces, for readable assertions.
      */
