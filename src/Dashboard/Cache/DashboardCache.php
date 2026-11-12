@@ -19,7 +19,7 @@ final readonly class DashboardCache
 {
     private const string TAG_ALL = 'dashboard';
     /** The pool outlives deploys (var/share): bump it when a cached DTO changes, old entries would not unserialize. */
-    private const string VERSION = 'v3';
+    private const string VERSION = 'v4';
 
     public function __construct(
         private DashboardBuilder $builder,

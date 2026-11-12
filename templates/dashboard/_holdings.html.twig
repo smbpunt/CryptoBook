@@ -1,4 +1,5 @@
 {% set symbol = dashboard.currencySymbol %}
+{% set top = dashboard.topHoldings %}
 <twig:Card class="min-w-0 flex-[999_1_600px] gap-0 p-[22px]" aria-labelledby="dashboard-holdings">
     <div class="flex items-center justify-between gap-3">
         <h2 id="dashboard-holdings" class="font-display text-lg font-semibold tracking-[-0.02em]">Wallet crypto</h2>
@@ -27,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for holding in dashboard.cryptoHoldings %}
+                    {% for holding in top.holdings %}
                         {% set price = dashboard.toFavorite(holding.priceUsd) %}
                         <tr class="[&>td]:border-b [&>td]:border-border [&>td]:py-[11px] last:[&>td]:border-b-0">
                             <td class="pr-2">
@@ -45,13 +46,39 @@
                             <td class="pl-4">
                                 <span class="flex items-center gap-2.5">
                                     <span aria-hidden="true" class="h-1.5 flex-auto overflow-hidden rounded-full bg-muted">
-                                        <span class="block h-full rounded-full bg-chart-1" style="width: {{ holding.percent|round(2) }}%{{ holding.color ? '; background: ' ~ holding.color }}"></span>
+                                        <span class="block h-full rounded-full" style="width: {{ holding.percent|round(2) }}%; background: {{ holding.color }}"></span>
                                     </span>
                                     <span class="w-12 text-right text-[13px] text-muted-foreground tabular-nums">{{ holding.percent|percent }}</span>
                                 </span>
                             </td>
                         </tr>
                     {% endfor %}
+                    {% if top.othersCount > 0 %}
+                        <tr data-slot="holdings-others" class="[&>td]:border-b [&>td]:border-border [&>td]:py-[11px] last:[&>td]:border-b-0">
+                            <td class="pr-2">
+                                <span class="flex items-center gap-2.5">
+                                    <span aria-hidden="true" class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-muted">
+                                        <twig:ux:icon name="lucide:coins" class="size-4 text-muted-foreground"/>
+                                    </span>
+                                    <span>
+                                        <span class="block font-semibold">Autres</span>
+                                        <span class="block text-xs text-muted-foreground">{{ top.othersCount }} actifs</span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td class="px-2 text-right text-muted-foreground">—</td>
+                            <td class="px-2 text-right text-muted-foreground">—</td>
+                            <td class="px-2 text-right font-semibold tabular-nums">{{ dashboard.toFavorite(top.othersValueUsd)|amount(symbol) }}</td>
+                            <td class="pl-4">
+                                <span class="flex items-center gap-2.5">
+                                    <span aria-hidden="true" class="h-1.5 flex-auto overflow-hidden rounded-full bg-muted">
+                                        <span class="block h-full rounded-full" style="width: {{ top.othersPercent|round(2) }}%; background: var(--muted-foreground)"></span>
+                                    </span>
+                                    <span class="w-12 text-right text-[13px] text-muted-foreground tabular-nums">{{ top.othersPercent|percent }}</span>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
