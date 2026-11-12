@@ -37,6 +37,25 @@ class WalletSnapshotRepository extends ServiceEntityRepository
     }
 
     /**
+     * Oldest snapshot of each owner. Owners without a snapshot are left out.
+     *
+     * @return array<int, \DateTimeImmutable> keyed by owner id
+     */
+    public function findFirstRecordedAtByOwner(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $platform = $connection->getDatabasePlatform();
+        $dateType = Type::getType(Types::DATETIMETZ_IMMUTABLE);
+
+        $firsts = [];
+        foreach ($connection->fetchAllKeyValue('SELECT owner_id, MIN(recorded_at) FROM wallet_snapshot GROUP BY owner_id') as $ownerId => $recordedAt) {
+            $firsts[(int) $ownerId] = $dateType->convertToPHPValue($recordedAt, $platform);
+        }
+
+        return $firsts;
+    }
+
+    /**
      * Snapshots of the period, oldest first: every one for an hourly period, else the last one of each UTC day.
      *
      * @return list<SnapshotPoint>
