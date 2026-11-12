@@ -1,5 +1,7 @@
 parameters:
     level: 6
+    # Inside the project: kept between pipelines by the GitLab cache.
+    tmpDir: var/cache/phpstan
     treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: true
     paths:

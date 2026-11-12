@@ -38,6 +38,14 @@ stages:
     - .php-cs-fixer.cache
   policy: pull-push
 
+.cache-phpstan: &cache-phpstan
+  key: phpstan-$CI_COMMIT_REF_SLUG
+  fallback_keys:
+    - phpstan-$CI_DEFAULT_BRANCH
+  paths:
+    - var/cache/phpstan/
+  policy: pull-push
+
 .cache-phpunit: &cache-phpunit
   key: phpunit-$CI_COMMIT_REF_SLUG
   paths:
@@ -156,6 +164,9 @@ lint:security:
 # The dev container XML read by PHPStan is built by the cache:clear of composer install.
 analyze:phpstan:
   extends: .analyze_template
+  cache:
+    - <<: *cache-composer
+    - <<: *cache-phpstan
   script:
     - mkdir -p var/reports/phpstan
     - vendor/bin/phpstan analyse --error-format=gitlab --memory-limit=1G > var/reports/phpstan/gl-code-quality-report.json
