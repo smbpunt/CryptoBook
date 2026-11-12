@@ -16,15 +16,18 @@ test-db: ## Migrate the test database
 
 composer-check: ## Validate composer.json and audit the dependencies
 	@echo "==> Composer"
-	@$(COMPOSER) validate --no-check-publish
-	@$(COMPOSER) audit --locked
+	@$(COMPOSER) validate --strict --no-check-publish
+	@$(COMPOSER) audit --locked --abandoned=report
 
-lint: ## Lint the container, Twig, YAML and the Doctrine mapping (test database)
+lint: ## Lint the container, Twig, YAML, the Doctrine mapping (test database) and the prod cache warmup
 	@echo "==> Lint"
 	@$(SYMFONY) lint:container
 	@$(SYMFONY) lint:twig templates
 	@$(SYMFONY) lint:yaml config --parse-tags
 	@$(SYMFONY) doctrine:schema:validate --env=test
+	@$(SYMFONY) lint:container --env=prod --no-debug
+	@$(SYMFONY) lint:twig templates --env=prod --no-debug
+	@$(SYMFONY) cache:warmup --env=prod --no-debug
 
 cs-fixer: ## Check the code style (PHP CS Fixer, dry run)
 	@echo "==> PHP CS Fixer"

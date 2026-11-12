@@ -110,11 +110,15 @@ lint:php-cs-fixer:
 lint:symfony:
   extends: .lint_template
   script:
-    - composer validate --no-check-publish
+    - composer validate --strict --no-check-publish
     - bin/console lint:container
     - bin/console lint:twig templates
     - bin/console lint:yaml config --parse-tags
     - bin/console doctrine:schema:validate --skip-sync
+    # A config that only breaks in prod, caught before the deploy.
+    - bin/console lint:container --env=prod --no-debug
+    - bin/console lint:twig templates --env=prod --no-debug
+    - bin/console cache:warmup --env=prod --no-debug
 
 # Symfony Language Tools (beta): unknown routes, templates, services, options.
 # Same pinned version as the php image (docker/php/install-symfony-lsp.sh).
@@ -141,7 +145,7 @@ lint:security:
   before_script:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
-    - composer audit --locked
+    - composer audit --locked --abandoned=report
   needs: []
   interruptible: true
 
