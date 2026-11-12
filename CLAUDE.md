@@ -59,7 +59,7 @@ Le code est rangé par sujet métier, pas par type technique. Inspiré du DDD, s
 ## Déploiement
 
 - Dépôt sur GitLab `smbai/cryptobook` (MR et CI, via `glab`), GitHub `smbpunt/CryptoBook` en miroir push.
-- Pipeline `.gitlab-ci.yml` (lint, analyse, tests avec Postgres 18, deploy) : un push sur `dev` déploie le staging `dev.cryptobook.fr` (VPS1), un tag `vX.Y.Z` sur `main` déploie la prod `cryptobook.fr` (VPS2). Retour arrière manuel du code seul (`rollback_*`), une migration se défait à la main.
+- Pipeline `.gitlab-ci.yml` (lint, analyse et tests avec Postgres 18 en parallèle, puis deploy) : un push sur `dev` déploie le staging `dev.cryptobook.fr` (VPS1), un tag `vX.Y.Z` sur `main` déploie la prod `cryptobook.fr` (VPS2). Retour arrière manuel du code seul (`rollback_*`), une migration se défait à la main. Pas de pipeline si seuls `doc/` et des fichiers `.md` changent (MR et push sur `dev`).
 - Deployer : `deploy.php` (assets, migrations, reload de FrankenPHP, arrêt du worker depuis la release précédente). `var/log` et `var/sessions` partagés, `var/cache` et `var/share` par release.
 - Web en FrankenPHP (PHP 8.5), CLI, Deployer et worker en PHP système 8.5 (`/usr/bin/php`).
 
