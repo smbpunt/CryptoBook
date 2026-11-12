@@ -2,7 +2,7 @@
 
 ## Fait
 
-- **Socle** : Symfony 8.1, PHP 8.5, code rangé par feature, outils qualité sans baseline.
+- **Socle** : Symfony 8.1, PHP 8.5, code rangé par feature, outils qualité sans baseline, vérification complète par `make ci` (Symfony Language Tools compris).
 - **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler, historique rétroactif sur 30 jours (`wallet:backfill`).
 - **Dashboard** : cache par utilisateur, graphique de l'historique par période, bascule entre le $ et la monnaie préférée.
 - **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
@@ -12,17 +12,7 @@
 
 Un point = une PR vers `dev`.
 
-### 1. `make ci` et Symfony Language Tools
-
-Indépendant du reste, peut passer en premier. Une seule commande pour tout vérifier pendant le développement, en prévision d'une future pipeline.
-
-- `make ci` lance toute la vérification : composer, lints, PHP CS Fixer, Rector, PHPStan, Deptrac, PHPUnit
-- Ajout du contrôle Symfony Language Tools (`symfony-lsp check`), en bêta expérimentale
-- `CLAUDE.md` renvoie vers `make ci`
-
-Spec : `doc/specs/make-ci-symfony-lsp.md`
-
-### 2. Nouveau favicon et page d'accueil publique
+### 1. Nouveau favicon et page d'accueil publique
 
 Indépendant du reste. Un visiteur non connecté tombe aujourd'hui sur le formulaire de connexion, sans rien savoir de l'application. La page d'accueil affiche le logo : favicon et page dans la même PR.
 
@@ -41,7 +31,7 @@ Page d'accueil :
 - Pages de connexion, d'inscription et de mot de passe oublié inchangées
 - Référencement minimal : titre, meta description, Open Graph, `robots.txt`. Le staging reste en noindex
 
-### 3. Wallet crypto du dashboard limité aux plus grosses lignes
+### 2. Wallet crypto du dashboard limité aux plus grosses lignes
 
 Indépendant du reste, peut passer en premier. La card liste tout le wallet, miettes comprises, et dépasse largement la card « Répartition » à côté.
 
