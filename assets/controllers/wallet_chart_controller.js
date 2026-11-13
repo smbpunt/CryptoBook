@@ -3,6 +3,8 @@ import { Controller } from '@hotwired/stimulus';
 /*
  * Wallet history chart of the dashboard. Adds to the view built by WalletHistoryChartFactory what PHP cannot
  * serialize: colors read from the CSS tokens (hex, Chart.js does not parse oklch()), Intl formats, the tooltip.
+ * The Y axis is fitted to "Valeur" in PHP: the tooltip reads "Investi" on its points (`invested`), the second
+ * dataset only exists when that line falls inside the range.
  *
  * Not lazy on purpose: it must listen to `chartjs:pre-connect` before the (lazy) `chart` controller of
  * symfony/ux-chartjs, on the same canvas, builds the chart. It imports nothing but Stimulus.
@@ -61,6 +63,7 @@ export default class extends Controller {
 
         const number = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
         const thousands = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+        const cents = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const money = (amount) => `${amount < 0 ? '−' : ''}${number.format(Math.abs(amount))} ${this.currencyValue}`;
         const tick = new Intl.DateTimeFormat('fr-FR', DATE_FORMATS[this.unitValue] ?? DATE_FORMATS.day);
         const longDate = new Intl.DateTimeFormat('fr-FR', this.hourlyValue
@@ -72,28 +75,50 @@ export default class extends Controller {
             afterBuildTicks: (axis) => {
                 axis.ticks = [0, 1, 2, 3, 4].map((k) => ({ value: axis.min + ((axis.max - axis.min) * k) / 4 }));
             },
-            ticks: { autoSkip: false, maxRotation: 0, align: 'inner', callback: (ms) => tick.format(ms) },
+            // A span of 1 to 4 days gives the same day twice: only the first one is labelled.
+            ticks: {
+                autoSkip: false,
+                maxRotation: 0,
+                align: 'inner',
+                callback: (ms, index, ticks) => {
+                    const label = tick.format(ms);
+
+                    return index > 0 && tick.format(ticks[index - 1].value) === label ? '' : label;
+                },
+            },
         });
         options.scales.y.ticks = {
             ...options.scales.y.ticks,
-            callback: (amount) => (Math.abs(amount) >= 1000
-                ? `${thousands.format(amount / 1000)} k${this.currencyValue}`
-                : money(amount)),
+            // On a narrow axis, thousands would repeat the same label on every tick.
+            callback: (amount, index, ticks) => {
+                const step = ticks.length > 1 ? Math.abs(ticks[1].value - ticks[0].value) : 0;
+                if (step >= 100 && Math.abs(amount) >= 1000) {
+                    return `${thousands.format(amount / 1000)} k${this.currencyValue}`;
+                }
+
+                return step > 0 && step < 1 ? `${cents.format(amount)} ${this.currencyValue}` : money(amount);
+            },
         };
         options.plugins.tooltip = {
             displayColors: false,
             padding: 12,
             cornerRadius: 12,
             borderWidth: 1,
+            // Everything is read on the points of "Valeur": "Investi" may be out of the range, so not drawn.
+            filter: (item) => item.datasetIndex === 0,
             callbacks: {
                 title: (items) => longDate.format(items[0].parsed.x),
-                label: (item) => `${item.dataset.label} : ${money(item.parsed.y)}`,
+                label: (item) => {
+                    const label = `${item.dataset.label} : ${money(item.parsed.y)}`;
+
+                    return item.raw.invested === undefined ? label : [label, `Investi : ${money(item.raw.invested)}`];
+                },
                 afterBody: (items) => {
-                    const [wallet, invested] = [0, 1].map((index) => items.find((item) => item.datasetIndex === index)?.parsed.y);
-                    if (wallet === undefined || invested === undefined) {
+                    const { y, invested } = items[0].raw;
+                    if (invested === undefined) {
                         return '';
                     }
-                    const result = wallet - invested;
+                    const result = y - invested;
 
                     return `Résultat : ${result > 0 ? '+' : ''}${money(result)}`;
                 },

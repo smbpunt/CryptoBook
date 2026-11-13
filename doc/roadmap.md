@@ -4,7 +4,7 @@
 
 - **Socle** : Symfony 8.1, PHP 8.5, code rangé par feature, outils qualité sans baseline, vérification complète par `make ci` (Symfony Language Tools compris).
 - **Historique du wallet** : snapshot horaire de la valeur totale, planifié par Symfony Scheduler, historique rétroactif sur 30 jours (`wallet:backfill`).
-- **Dashboard** : cache par utilisateur, graphique de l'historique par période, bascule entre le $ et la monnaie préférée, wallet crypto limité aux plus grosses lignes.
+- **Dashboard** : cache par utilisateur, graphique de l'historique par période, bascule entre le $ et la monnaie préférée, wallet crypto limité aux plus grosses lignes, axe du graphique recadré sur la valeur.
 - **Refonte de l'UI** : thèmes clair et sombre, Turbo, kit shadcn, selects en `ux-autocomplete`.
 - **Page d'accueil** : page publique sur `/`, dashboard sur `/dashboard`, nouveau logo et favicon, référencement minimal.
 - **Déploiement** : dépôt sur GitLab (GitHub en miroir), Deployer + GitLab CI, staging `dev.cryptobook.fr` sur VPS1, prod `cryptobook.fr` sur VPS2 (`v0.2.0`), données de l'ancienne prod migrées, worker du Scheduler en systemd, pas de pipeline pour un changement de doc seule, jobs de vérification en parallèle.
@@ -13,17 +13,7 @@
 
 Un point = une PR vers `dev`.
 
-### 1. Graphique du wallet : axe recadré sur la valeur
-
-La courbe paraît plate : l'axe Y englobe aussi la ligne « Investi », souvent loin de la valeur.
-
-- Axe Y calculé sur le minimum et le maximum de la courbe « Valeur » de la période affichée, avec une petite marge
-- Recalculé à chaque changement de période
-- La ligne « Investi » ne s'affiche que si elle tombe dans la plage ; elle reste dans l'infobulle, avec le résultat
-
-Indépendant du reste.
-
-### 2. Règles de validation sur les entités
+### 1. Règles de validation sur les entités
 
 Seules les positions et les ventes refusent les valeurs incohérentes : un emprunt, un farming, une LP, un NFT ou un dépôt acceptent des quantités ou des prix négatifs.
 
@@ -33,9 +23,7 @@ Seules les positions et les ventes refusent les valeurs incohérentes : un empru
 - Contraintes du Validator sur les entités, messages en français, sans contrainte en base ni migration
 - Une donnée existante hors règle n'est signalée qu'à sa prochaine modification
 
-Indépendant du point 1.
-
-### 3. Bugs de `doc/bug.md`
+### 2. Bugs de `doc/bug.md`
 
 À détailler avant de commencer : choisir les bugs à corriger et les découper en points.
 

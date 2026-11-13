@@ -4,6 +4,7 @@ namespace App\Tests\Dashboard\Controller;
 
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Dashboard\Cookie\DisplayCurrencyCookie;
+use App\Deposit\Entity\Deposit;
 use App\Position\Entity\Position;
 use App\Tests\Fixtures\Dataset;
 use App\Wallet\Entity\WalletSnapshot;
@@ -126,11 +127,13 @@ final class DashboardControllerTest extends WebTestCase
         self::assertSame(['BTCBitcoin', '0,5', '50 000 $', '25 000 $', '100,0 %'], self::texts($crawler, '[aria-labelledby="dashboard-holdings"] tbody td', true));
 
         // The chart in dollars: the first snapshot is 24 000 $ (22 347,6 € in euros).
-        $canvas = $crawler->filter('canvas[data-wallet-chart-currency-value="$"]');
-        self::assertCount(1, $canvas);
-        /** @var array{data: array{datasets: list<array{data: list<array{y: float}>}>}} $chart */
-        $chart = json_decode((string) $canvas->attr('data-symfony--ux-chartjs--chart-view-value'), true, flags: \JSON_THROW_ON_ERROR);
+        self::assertCount(1, $crawler->filter('canvas[data-wallet-chart-currency-value="$"]'));
+        $chart = self::chart($crawler);
         self::assertEqualsWithDelta(24000.0, $chart['data']['datasets'][0]['data'][0]['y'], 0.001);
+        // Y axis on 24 000 to 30 000 $ with a 5 % margin: the 1 074 $ invested are out of it, not drawn.
+        self::assertSame([23700, 30300], [$chart['options']['scales']['y']['min'], $chart['options']['scales']['y']['max']]);
+        self::assertCount(1, $chart['data']['datasets']);
+        self::assertStringNotContainsString('Investi (dépôts cumulés)', self::text($crawler, 'turbo-frame#wallet-history'));
 
         self::assertSame('USD', self::text($crawler, '[aria-label="Devise d’affichage"] [aria-pressed="true"]'));
         $this->assertCurrencyCookieExtended();
@@ -147,7 +150,31 @@ final class DashboardControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('26 000 $', self::text($crawler, '#wallet-history-title + p'));
         self::assertSelectorExists('canvas[data-wallet-chart-currency-value="$"]');
+        $chart = self::chart($crawler);
+        self::assertSame([23900, 26100], [$chart['options']['scales']['y']['min'], $chart['options']['scales']['y']['max']]);
         $this->assertCurrencyCookieExtended();
+    }
+
+    public function testInvestedLineInsideTheRange(): void
+    {
+        // 1 000 € (1 073,94 $) since 2024, then 24 000 $ on 2026-11-10: inside the 23 700 to 30 300 $ axis.
+        $this->snapshot('2026-11-09 12:00', 24000);
+        $this->snapshot('2026-11-10 14:00', 30000);
+        $this->em->persist(new Deposit($this->data->user)->setAmount(24000)->setExchange($this->data->exchange)->setType($this->data->depositType)
+            ->setFiatCurrency($this->data->usd)->setDepositedAt(new \DateTimeImmutable('2026-11-10')));
+        $this->em->flush();
+        $this->client->loginUser($this->data->user);
+        $this->displayInUsd();
+
+        $crawler = $this->client->request('GET', '/dashboard');
+
+        self::assertResponseIsSuccessful();
+        $datasets = self::chart($crawler)['data']['datasets'];
+        self::assertCount(2, $datasets);
+        $invested = array_column($datasets[1]['data'], 'y');
+        self::assertNull($invested[0]);
+        self::assertEqualsWithDelta([25073.94, 25073.94], \array_slice($invested, 1), 0.01);
+        self::assertSelectorTextContains('turbo-frame#wallet-history', 'Investi (dépôts cumulés)');
     }
 
     public function testNoSwitchWhenTheFavoriteCurrencyIsUsd(): void
@@ -226,6 +253,19 @@ final class DashboardControllerTest extends WebTestCase
         self::assertSelectorExists('canvas[data-wallet-chart-hourly-value="true"]');
     }
 
+    public function testDateFormatFollowsTheSpanDisplayed(): void
+    {
+        // "1 an" with 26 hours of history: dates by day, not 5 times the same month.
+        $this->snapshot('2026-11-09 12:00', 24000);
+        $this->snapshot('2026-11-10 14:00', 30000);
+        $this->client->loginUser($this->data->user);
+
+        $this->client->request('GET', '/dashboard/history/1y', server: ['HTTP_TURBO_FRAME' => 'wallet-history']);
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('turbo-frame#wallet-history canvas[data-wallet-chart-unit-value="day"]');
+    }
+
     public function testDirectVisitOfAPeriodGoesToTheDashboard(): void
     {
         $this->client->loginUser($this->data->user);
@@ -276,6 +316,19 @@ final class DashboardControllerTest extends WebTestCase
     {
         $this->em->persist(new WalletSnapshot($this->data->user, new \DateTimeImmutable($at.' UTC'), $valueUsd));
         $this->em->flush();
+    }
+
+    /**
+     * Chart.js view of the wallet chart, as sent to the browser.
+     *
+     * @return array{data: array{datasets: list<array{data: list<array{x: int, y: ?float, invested?: float}>}>}, options: array{scales: array{y: array{min: float|int, max: float|int}}}}
+     */
+    private static function chart(Crawler $crawler): array
+    {
+        /** @var array{data: array{datasets: list<array{data: list<array{x: int, y: ?float, invested?: float}>}>}, options: array{scales: array{y: array{min: float|int, max: float|int}}}} $chart */
+        $chart = json_decode((string) $crawler->filter('turbo-frame#wallet-history canvas')->attr('data-symfony--ux-chartjs--chart-view-value'), true, flags: \JSON_THROW_ON_ERROR);
+
+        return $chart;
     }
 
     private static function text(Crawler $crawler, string $selector): string
