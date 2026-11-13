@@ -7,6 +7,7 @@ use App\Blockchain\Entity\Dapp;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Loan\Repository\LoanRepository;
 use App\Shared\Entity\DescriptionTrait;
+use App\Shared\Validator\NotInFuture;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
@@ -32,6 +33,7 @@ class Loan implements OwnedInterface
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\Positive]
     private ?float $nbCoins = null;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
@@ -42,6 +44,7 @@ class Loan implements OwnedInterface
     private ?Blockchain $blockchain = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $loanedAt = null;
 
     public function __construct(User $owner)

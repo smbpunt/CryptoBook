@@ -6,6 +6,7 @@ use App\Deposit\Repository\DepositRepository;
 use App\Exchange\Entity\Exchange;
 use App\FiatCurrency\Entity\FiatCurrency;
 use App\FiatCurrency\Exception\MissingRateException;
+use App\Shared\Validator\NotInFuture;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
@@ -24,6 +25,7 @@ class Deposit implements OwnedInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $depositedAt = null;
 
     #[ORM\ManyToOne(targetEntity: DepositType::class, inversedBy: 'deposits')]
@@ -33,6 +35,7 @@ class Deposit implements OwnedInterface
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\Positive]
     private ?float $amount = null;
 
     #[ORM\ManyToOne(targetEntity: Exchange::class)]

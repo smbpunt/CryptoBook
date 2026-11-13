@@ -6,12 +6,14 @@ use App\Blockchain\Entity\Blockchain;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Nft\Repository\NftRepository;
 use App\Shared\Entity\DescriptionTrait;
+use App\Shared\Validator\NotInFuture;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
 use App\User\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 class Nft implements OwnedInterface
@@ -19,45 +21,63 @@ class Nft implements OwnedInterface
     use DescriptionTrait;
     use OwnerTrait;
 
+    /** Upper bound of a PostgreSQL integer column. */
+    private const int MAX_INTEGER = 2_147_483_647;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $collection = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    #[Assert\PositiveOrZero]
+    #[Assert\LessThanOrEqual(self::MAX_INTEGER)]
     private ?int $num = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    #[Assert\Positive]
+    #[Assert\LessThanOrEqual(self::MAX_INTEGER)]
     private ?int $rank = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    #[Assert\Positive]
+    #[Assert\LessThanOrEqual(self::MAX_INTEGER)]
     private ?int $supply = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $priceCrypto = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $priceUsd = null;
 
     #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    #[Assert\PositiveOrZero]
     private ?float $priceSoldCrypto = null;
 
     #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    #[Assert\PositiveOrZero]
     private ?float $priceSoldUsd = null;
 
     #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    #[Assert\Range(min: 0, max: 100)]
     private ?float $percentSaleFees = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $purchasedOn = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'purchasedOn', message: 'La vente ne peut pas précéder l\'achat.')]
     private ?\DateTimeImmutable $soldOn = null;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class)]
@@ -240,5 +260,21 @@ class Nft implements OwnedInterface
     public function getBenefice(): float
     {
         return null === $this->soldOn ? 0 : $this->priceSoldUsd * (1 - ($this->percentSaleFees ?? 0.) / 100) - $this->priceUsd;
+    }
+
+    #[Assert\Callback]
+    public function validateSale(ExecutionContextInterface $context): void
+    {
+        if (null !== $this->soldOn && null === $this->priceSoldUsd) {
+            $context->buildViolation('Le prix de vente en dollars est obligatoire pour un NFT vendu.')
+                ->atPath('priceSoldUsd')
+                ->addViolation();
+        }
+
+        if (null === $this->soldOn && (null !== $this->priceSoldUsd || null !== $this->priceSoldCrypto)) {
+            $context->buildViolation('La date de vente est obligatoire quand un prix de vente est saisi.')
+                ->atPath('soldOn')
+                ->addViolation();
+        }
     }
 }

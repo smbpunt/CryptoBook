@@ -28,6 +28,7 @@ class StrategyFarmingType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('nbCoins')
             ->add('description', TextareaType::class, [

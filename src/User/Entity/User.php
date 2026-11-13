@@ -39,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?FiatCurrency $favoriteFiatCurrency = null;
 
     public function __construct()

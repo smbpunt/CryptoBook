@@ -26,6 +26,7 @@ class PositionType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('nbCoins', NumberType::class, [
                 'required' => true,

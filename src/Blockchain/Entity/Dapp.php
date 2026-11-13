@@ -5,8 +5,11 @@ namespace App\Blockchain\Entity;
 use App\Blockchain\Repository\DappRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DappRepository::class)]
+#[UniqueEntity(fields: ['libelle', 'blockchain'], errorPath: 'libelle')]
 class Dapp implements \Stringable
 {
     #[ORM\Id]
@@ -15,13 +18,19 @@ class Dapp implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelle = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Url]
+    #[Assert\Length(max: 255)]
     private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Blockchain::class, inversedBy: 'dapps')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?Blockchain $blockchain = null;
 
     public function getId(): ?int

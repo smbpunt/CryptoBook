@@ -29,6 +29,7 @@ class LoanType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('coin', CryptocurrencyAutocompleteField::class, [
                 'required' => true,

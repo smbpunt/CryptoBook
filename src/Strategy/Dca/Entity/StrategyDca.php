@@ -31,10 +31,12 @@ class StrategyDca implements OwnedInterface
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $fiatToDcaEur = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $farmingToDcaUsd = null;
 
     public function __construct(User $owner)
@@ -108,7 +110,7 @@ class StrategyDca implements OwnedInterface
     }
 
     #[Assert\Callback]
-    public function validatePartsSum(ExecutionContextInterface $context): void
+    public function validateParts(ExecutionContextInterface $context): void
     {
         $sum = 0.0;
         foreach ($this->parts as $part) {
@@ -120,6 +122,22 @@ class StrategyDca implements OwnedInterface
                 ->setParameter('{{ sum }}', (string) round($sum, 2))
                 ->atPath('parts')
                 ->addViolation();
+        }
+
+        $coins = [];
+        foreach ($this->parts as $part) {
+            $coin = $part->getCoin();
+            if (null === $coin) {
+                continue;
+            }
+            if (\in_array($coin, $coins, true)) {
+                $context->buildViolation('Une crypto ne peut apparaître qu\'une fois.')
+                    ->atPath('parts')
+                    ->addViolation();
+
+                return;
+            }
+            $coins[] = $coin;
         }
     }
 }

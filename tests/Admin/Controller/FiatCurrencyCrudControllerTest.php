@@ -70,6 +70,17 @@ final class FiatCurrencyCrudControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
+    public function testDuplicateCodeIsAFormError(): void
+    {
+        $this->fixerAnswers(new JsonMockResponse(['rates' => ['USD' => 1.07]]));
+
+        $this->create(['libelle' => 'Euro', 'fixerKey' => 'EUR', 'symbol' => '€']);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertSelectorTextContains('form[name="FiatCurrency"]', 'Cette valeur est déjà utilisée.');
+        self::assertSame(1, $this->em()->getRepository(FiatCurrency::class)->count(['fixerKey' => 'EUR']));
+    }
+
     public function testCodeIsReadOnlyOnEdit(): void
     {
         $crawler = $this->client->request('GET', "/admin/fiat-currency/{$this->data->eur->getId()}/edit");

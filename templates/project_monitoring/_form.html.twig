@@ -3,7 +3,7 @@
 {% macro links_prototype(link) %}
     <tr class="border-b">
         <td class="w-12 p-2"><twig:Button variant="outline" size="icon-sm" data-action="collection#remove" aria-label="Retirer"><twig:ux:icon name="lucide:minus"/></twig:Button></td>
-        <td class="p-2">{{ form_widget(link) }}</td>
+        <td class="p-2">{{ form_widget(link) }}{{ form_errors(link) }}</td>
     </tr>
 {% endmacro %}
 

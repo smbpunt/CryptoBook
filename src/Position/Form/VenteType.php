@@ -20,6 +20,7 @@ class VenteType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('percent')
             ->add('priceSold');

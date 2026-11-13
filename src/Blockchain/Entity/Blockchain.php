@@ -8,8 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlockchainRepository::class)]
+#[UniqueEntity('libelle')]
 class Blockchain implements \Stringable
 {
     #[ORM\Id]
@@ -18,10 +21,13 @@ class Blockchain implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelle = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?Cryptocurrency $coin = null;
 
     /** @var Collection<int, Dapp> */

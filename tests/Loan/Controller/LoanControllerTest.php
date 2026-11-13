@@ -7,16 +7,21 @@ use App\Blockchain\Entity\Dapp;
 use App\Loan\Entity\Loan;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 final class LoanControllerTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     private KernelBrowser $client;
     private Dataset $data;
 
     protected function setUp(): void
     {
+        self::mockTime('2026-03-10 12:00 UTC');
         $this->client = self::createClient();
         $this->data = Dataset::load($this->em());
         $this->client->loginUser($this->data->user);
@@ -39,6 +44,9 @@ final class LoanControllerTest extends WebTestCase
 
         $crawler = $this->client->xmlHttpRequest('POST', '/loan/new', $values);
 
+        // The dapp is not chosen yet: the reload skips the validation, no error under the field.
+        self::assertResponseIsSuccessful();
+        self::assertCount(0, $crawler->filter('#id-dapp [data-slot="form-message"]'));
         self::assertCount(1, $crawler->filter('#loan_dapp option[value="'.$this->data->aave->getId().'"]'));
         self::assertCount(0, $crawler->filter('#loan_dapp option[value="'.$quickswap->getId().'"]'));
         self::assertSame(1, $this->countLoans());
@@ -71,6 +79,37 @@ final class LoanControllerTest extends WebTestCase
         $this->client->request('POST', '/loan/new', $values);
 
         self::assertResponseStatusCodeSame(422);
+        self::assertSame(1, $this->countLoans());
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>, string}>
+     */
+    public static function invalidLoans(): iterable
+    {
+        yield 'no coins' => [['nbCoins' => '0'], 'strictement positive'];
+        yield 'in the future' => [['loanedAt' => '2026-03-12'], 'La date ne peut pas être dans le futur.'];
+    }
+
+    /**
+     * @param array<string, string> $fields
+     */
+    #[DataProvider('invalidLoans')]
+    public function testInvalidLoanIsAFormError(array $fields, string $message): void
+    {
+        $crawler = $this->client->request('GET', '/loan/new');
+        $values = $crawler->selectButton('Ajouter')->form()->getPhpValues();
+        $values['loan'] = $fields + [
+            'blockchain' => (string) $this->data->ethereum->getId(),
+            'dapp' => (string) $this->data->aave->getId(),
+            'nbCoins' => '100',
+            'coin' => (string) $this->data->usdc->getId(),
+        ] + $values['loan'];
+
+        $this->client->request('POST', '/loan/new', $values);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertAnySelectorTextContains('[data-slot="form-message"]', $message);
         self::assertSame(1, $this->countLoans());
     }
 

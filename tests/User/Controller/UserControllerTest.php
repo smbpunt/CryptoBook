@@ -31,6 +31,21 @@ final class UserControllerTest extends WebTestCase
         self::assertSame('USD', $user->getFavoriteFiatCurrency()->getFixerKey());
     }
 
+    public function testPreferencesWithoutCurrencyIsAFormError(): void
+    {
+        $this->client->loginUser($this->data->user);
+        $crawler = $this->client->request('GET', '/user/preferences');
+        $values = $crawler->selectButton('Enregistrer')->form()->getPhpValues();
+        $values['user_preferences']['favoriteFiatCurrency'] = '';
+
+        $this->client->request('POST', '/user/preferences', $values);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertAnySelectorTextContains('[data-slot="form-message"]', 'Ce champ est obligatoire.');
+        $this->em()->clear();
+        self::assertSame('EUR', $this->em()->find(User::class, $this->data->user->getId())?->getFavoriteFiatCurrency()?->getFixerKey());
+    }
+
     private function em(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);

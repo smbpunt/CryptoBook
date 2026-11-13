@@ -3,9 +3,11 @@
 namespace App\Position\Entity;
 
 use App\Position\Repository\VenteRepository;
+use App\Shared\Validator\NotInFuture;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: VenteRepository::class)]
 class Vente
@@ -16,11 +18,13 @@ class Vente
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $soldAt = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    #[Assert\Range(min: 0, max: 100)]
+    #[Assert\Positive]
+    #[Assert\LessThanOrEqual(100)]
     private ?float $percent = null;
 
     #[ORM\Column(type: Types::FLOAT)]
@@ -83,5 +87,23 @@ class Vente
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * Compared by day: a DCA position has a time, a sale does not.
+     */
+    #[Assert\Callback]
+    public function validateSoldAfterPurchase(ExecutionContextInterface $context): void
+    {
+        $openedAt = $this->position?->getOpenedAt();
+        if (null === $this->soldAt || null === $openedAt) {
+            return;
+        }
+
+        if ($this->soldAt->format('Y-m-d') < $openedAt->format('Y-m-d')) {
+            $context->buildViolation('La vente ne peut pas précéder l\'achat.')
+                ->atPath('soldAt')
+                ->addViolation();
+        }
     }
 }

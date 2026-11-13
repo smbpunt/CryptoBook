@@ -41,7 +41,10 @@ class StrategyFarmingController extends AbstractController
     public function new(Request $request, StrategyFarmingRepository $strategyFarmingRepository, #[CurrentUser] User $user): Response
     {
         $strategyFarming = new StrategyFarming($user);
-        $form = $this->createForm(StrategyFarmingType::class, $strategyFarming);
+        $form = $this->createForm(StrategyFarmingType::class, $strategyFarming, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
@@ -60,7 +63,10 @@ class StrategyFarmingController extends AbstractController
     #[IsGranted(OwnerVoter::OWNER, 'strategyFarming')]
     public function edit(Request $request, StrategyFarming $strategyFarming, StrategyFarmingRepository $strategyFarmingRepository): Response
     {
-        $form = $this->createForm(StrategyFarmingType::class, $strategyFarming);
+        $form = $this->createForm(StrategyFarmingType::class, $strategyFarming, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {

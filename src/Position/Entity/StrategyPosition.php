@@ -17,12 +17,13 @@ class StrategyPosition
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    #[Assert\Range(min: 0, max: 100)]
+    #[Assert\Positive]
+    #[Assert\LessThanOrEqual(100)]
     private ?float $percent = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
-    #[Assert\PositiveOrZero]
+    #[Assert\Positive]
     private ?float $priceSold = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'strategies')]

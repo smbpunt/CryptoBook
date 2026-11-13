@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TypeProjectRepository::class)]
+#[UniqueEntity('libelle')]
 class TypeProject implements \Stringable
 {
     #[ORM\Id]
@@ -17,6 +20,8 @@ class TypeProject implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelle = null;
 
     /** @var Collection<int, ProjectMonitoring> */
