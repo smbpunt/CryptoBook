@@ -34,6 +34,7 @@ class NftType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('soldOn', DateType::class, [
                 'widget' => 'single_text',

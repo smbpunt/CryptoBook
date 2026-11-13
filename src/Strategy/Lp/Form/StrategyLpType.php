@@ -28,6 +28,7 @@ class StrategyLpType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
+                'default_today' => true,
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,

@@ -4,7 +4,8 @@ import { Controller } from '@hotwired/stimulus';
 /*
  * Reloads a field whose choices depend on another one (dapp ← blockchain). Set on the <form>.
  * Posts the form without the dependent field, then swaps the field with the one of the response.
- * The controller sees `X-Requested-With` (Request::isXmlHttpRequest()) and does not save the entity.
+ * The controller sees `X-Requested-With` (Request::isXmlHttpRequest()): it skips the validation, so the
+ * swapped field carries no error, and does not save the entity.
  */
 export default class extends Controller {
     static targets = ['field'];
@@ -31,7 +32,7 @@ export default class extends Controller {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 signal: abort.signal,
             });
-            // The form is invalid without the dependent field: a 422 still carries the new choices.
+            // The validation is skipped: a 422 only comes from an unreadable field, and still carries the new choices.
             if (!response.ok && response.status !== 422) {
                 throw new Error(`HTTP ${response.status}`);
             }

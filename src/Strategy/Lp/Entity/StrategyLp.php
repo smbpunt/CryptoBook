@@ -6,6 +6,7 @@ use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Shared\Entity\DescriptionTrait;
+use App\Shared\Validator\NotInFuture;
 use App\Strategy\Lp\Repository\StrategyLpRepository;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
@@ -13,6 +14,7 @@ use App\User\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: StrategyLpRepository::class)]
 class StrategyLp implements OwnedInterface
@@ -33,6 +35,7 @@ class StrategyLp implements OwnedInterface
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
+    #[Assert\NotIdenticalTo(propertyPath: 'coin1', message: 'Les deux cryptos doivent être différentes.')]
     private ?Cryptocurrency $coin2 = null;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
@@ -43,29 +46,36 @@ class StrategyLp implements OwnedInterface
     private ?Blockchain $blockchain = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\Positive]
     private ?float $priceCoin1 = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\Positive]
     private ?float $priceCoin2 = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $nbCoin1 = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $nbCoin2 = null;
 
     #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    #[Assert\Positive]
     private ?float $lpDeposit = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $apr = null;
 
     public function __construct(User $owner)
@@ -233,5 +243,18 @@ class StrategyLp implements OwnedInterface
     public function getAnnualRewardsUsd(): float
     {
         return $this->getApr() * $this->getValueUsd() / 100;
+    }
+
+    /**
+     * A concentrated LP out of its range holds a single coin: one quantity may be zero, not both.
+     */
+    #[Assert\Callback]
+    public function validateQuantities(ExecutionContextInterface $context): void
+    {
+        if (null !== $this->nbCoin1 && null !== $this->nbCoin2 && $this->nbCoin1 <= 0 && $this->nbCoin2 <= 0) {
+            $context->buildViolation('Au moins une des deux quantités doit être supérieure à zéro.')
+                ->atPath('nbCoin1')
+                ->addViolation();
+        }
     }
 }

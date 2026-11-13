@@ -10,15 +10,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class PositionControllerTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     private KernelBrowser $client;
     private Dataset $data;
 
     protected function setUp(): void
     {
+        self::mockTime('2026-03-10 12:00 UTC');
         $this->client = self::createClient();
         $this->data = Dataset::load($this->em());
         $this->client->loginUser($this->data->user);
@@ -72,32 +76,40 @@ final class PositionControllerTest extends WebTestCase
     }
 
     /**
-     * @return iterable<string, array{array<string, string>, list<array<string, string>>}>
+     * @return iterable<string, array{array<string, string>, list<array<string, string>>, list<array<string, string>>, string}>
      */
     public static function invalidPositions(): iterable
     {
-        yield 'no coins' => [['nbCoins' => '0'], []];
-        yield 'empty quantity' => [['nbCoins' => ''], []];
-        yield 'negative cost' => [['entryCost' => '-1'], []];
-        yield 'negative sale price' => [[], [['soldAt' => '2024-02-01', 'percent' => '50', 'priceSold' => '-1']]];
+        yield 'no coins' => [['nbCoins' => '0'], [], [], 'strictement positive'];
+        yield 'empty quantity' => [['nbCoins' => ''], [], [], 'Ce champ est obligatoire.'];
+        yield 'negative cost' => [['entryCost' => '-1'], [], [], 'supérieure ou égale à zéro'];
+        yield 'negative sale price' => [[], [['soldAt' => '2024-02-01', 'percent' => '50', 'priceSold' => '-1']], [], 'supérieure ou égale à zéro'];
+        yield 'sale of 0 %' => [[], [['soldAt' => '2024-02-01', 'percent' => '0', 'priceSold' => '3000']], [], 'strictement positive'];
+        yield 'sale in the future' => [[], [['soldAt' => '2026-03-12', 'percent' => '50', 'priceSold' => '3000']], [], 'La date ne peut pas être dans le futur.'];
+        yield 'sale before the purchase' => [['openedAt' => '2024-03-01'], [['soldAt' => '2024-02-01', 'percent' => '50', 'priceSold' => '3000']], [], 'La vente ne peut pas précéder l\'achat.'];
+        yield 'exit plan at a zero price' => [[], [], [['percent' => '50', 'priceSold' => '0']], 'strictement positive'];
+        yield 'exit plan step of 0 %' => [[], [], [['percent' => '0', 'priceSold' => '3000']], 'strictement positive'];
     }
 
     /**
      * @param array<string, string>       $fields
      * @param list<array<string, string>> $sales
+     * @param list<array<string, string>> $strategies
      */
     #[DataProvider('invalidPositions')]
-    public function testInvalidPositionIsAFormError(array $fields, array $sales): void
+    public function testInvalidPositionIsAFormError(array $fields, array $sales, array $strategies, string $message): void
     {
         $crawler = $this->client->request('GET', '/position/new');
         $values = $crawler->selectButton('Valider')->form()->getPhpValues();
-        $values['position'] = $fields + ['coin' => (string) $this->data->eth->getId(), 'nbCoins' => '1', 'entryCost' => '1000'] + $values['position'];
+        $values['position'] = $fields + ['coin' => (string) $this->data->eth->getId(), 'nbCoins' => '1', 'entryCost' => '1000', 'openedAt' => '2024-01-01'] + $values['position'];
         $values['position']['ventes'] = $sales;
+        $values['position']['strategies'] = $strategies;
 
         $this->client->request('POST', '/position/new', $values);
 
         self::assertResponseStatusCodeSame(422);
-        self::assertSelectorExists('form [data-slot="form-message"]');
+        self::assertAnySelectorTextContains('form [data-slot="form-message"]', $message);
+        self::assertSame(0, $this->em()->getRepository(Position::class)->count(['owner' => $this->data->user, 'coin' => $this->data->eth]));
     }
 
     public function testInvalidSaleOpensTheSaleTabWithItsError(): void

@@ -6,6 +6,7 @@ use App\Position\Entity\Position;
 use App\Strategy\Dca\Entity\StrategyDca;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -71,6 +72,39 @@ final class StrategyDcaControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(422);
         self::assertSelectorTextContains('form', 'Les allocations doivent faire 100 %');
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>, list<array{string, string}>, string}>
+     */
+    public static function invalidStrategies(): iterable
+    {
+        yield 'negative amount' => [['fiatToDcaEur' => '-1'], [['btc', '60'], ['eth', '40']], 'supérieure ou égale à zéro'];
+        yield 'coin twice' => [[], [['btc', '50'], ['btc', '50']], 'Une crypto ne peut apparaître qu\'une fois.'];
+    }
+
+    /**
+     * @param array<string, string>       $fields
+     * @param list<array{string, string}> $parts  coin of the Dataset and percent
+     */
+    #[DataProvider('invalidStrategies')]
+    public function testInvalidStrategyIsAFormError(array $fields, array $parts, string $message): void
+    {
+        $crawler = $this->client->request('GET', '/strategy/dca/edit');
+        $values = $crawler->selectButton('Enregistrer')->form()->getPhpValues();
+        $values['strategy_dca'] = $fields + $values['strategy_dca'];
+        $values['strategy_dca']['parts'] = array_map(fn (array $part): array => [
+            'coin' => (string) $this->data->{$part[0]}->getId(),
+            'percent' => $part[1],
+        ], $parts);
+
+        $this->client->request('POST', '/strategy/dca/edit', $values);
+
+        self::assertResponseStatusCodeSame(422);
+        // An error on the parts collection is an alert, not a field message.
+        self::assertSelectorTextContains('form', $message);
+        $this->em()->clear();
+        self::assertSame(100.0, $this->em()->find(StrategyDca::class, $this->data->dca->getId())?->getFiatToDcaEur());
     }
 
     public function testIndexWithoutEurRate(): void

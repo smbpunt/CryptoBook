@@ -328,9 +328,9 @@ class AppFixtures extends Fixture
                 $nft->setBlockchain($eth_chain)
                     ->setCryptocurrency($eth)
                     ->setCollection($faker->name())
-                    ->setSupply($faker->randomNumber(5))
-                    ->setNum($faker->randomNumber(4))
-                    ->setRank($faker->randomNumber(4))
+                    ->setSupply($faker->numberBetween(1, 99999))
+                    ->setNum($faker->numberBetween(0, 9999))
+                    ->setRank($faker->numberBetween(1, 9999))
                     ->setPurchasedOn(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
                     ->setPriceCrypto($faker->randomFloat(3, 0.1, 1))
                     ->setPriceUsd($faker->randomFloat(2, 300, 3000));

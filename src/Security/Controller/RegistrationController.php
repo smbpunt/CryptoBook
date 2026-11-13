@@ -19,7 +19,7 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FiatCurrencyRepository $fiatCurrencyRepository, Security $security): Response
     {
-        $user = new User();
+        $user = new User()->setFavoriteFiatCurrency($fiatCurrencyRepository->getUsd());
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -31,8 +31,6 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
-            $user->setFavoriteFiatCurrency($fiatCurrencyRepository->getUsd());
 
             $entityManager->persist($user);
             $entityManager->flush();

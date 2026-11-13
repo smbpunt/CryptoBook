@@ -32,7 +32,10 @@ class StrategyLpController extends AbstractController
     public function new(Request $request, StrategyLpRepository $strategyLpRepository, #[CurrentUser] User $user): Response
     {
         $strategyLp = new StrategyLp($user);
-        $form = $this->createForm(StrategyLpType::class, $strategyLp);
+        $form = $this->createForm(StrategyLpType::class, $strategyLp, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
@@ -51,7 +54,10 @@ class StrategyLpController extends AbstractController
     #[IsGranted(OwnerVoter::OWNER, 'strategyLp')]
     public function edit(Request $request, StrategyLp $strategyLp, StrategyLpRepository $strategyLpRepository): Response
     {
-        $form = $this->createForm(StrategyLpType::class, $strategyLp);
+        $form = $this->createForm(StrategyLpType::class, $strategyLp, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {

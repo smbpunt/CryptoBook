@@ -47,7 +47,10 @@ class LoanController extends AbstractController
     public function new(Request $request, LoanRepository $loanRepository, #[CurrentUser] User $user): Response
     {
         $loan = new Loan($user);
-        $form = $this->createForm(LoanType::class, $loan);
+        $form = $this->createForm(LoanType::class, $loan, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
@@ -66,7 +69,10 @@ class LoanController extends AbstractController
     #[IsGranted(OwnerVoter::OWNER, 'loan')]
     public function edit(Request $request, Loan $loan, LoanRepository $loanRepository): Response
     {
-        $form = $this->createForm(LoanType::class, $loan);
+        $form = $this->createForm(LoanType::class, $loan, [
+            // A dependent select reload posts an incomplete form: no error to show, it is never saved.
+            'validation_groups' => $request->isXmlHttpRequest() ? false : null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {

@@ -5,9 +5,11 @@ namespace App\FiatCurrency\Entity;
 use App\FiatCurrency\Exception\MissingRateException;
 use App\FiatCurrency\Repository\FiatCurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FiatCurrencyRepository::class)]
+#[UniqueEntity('fixerKey')]
 class FiatCurrency implements \Stringable
 {
     public const string KEY_USD = 'USD';

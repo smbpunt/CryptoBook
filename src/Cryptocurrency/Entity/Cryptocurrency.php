@@ -6,6 +6,7 @@ use App\Cryptocurrency\Repository\CryptocurrencyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
 #[UniqueEntity('libelleCoingecko', message: 'Cette cryptomonnaie existe déjà.')]
@@ -17,6 +18,8 @@ class Cryptocurrency implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelleCoingecko = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -41,6 +44,7 @@ class Cryptocurrency implements \Stringable
     private ?string $symbol = null;
 
     #[ORM\Column(type: Types::STRING, length: 10, nullable: true)]
+    #[Assert\CssColor(Assert\CssColor::HEX_LONG)]
     private ?string $color = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]

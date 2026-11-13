@@ -6,6 +6,7 @@ use App\Blockchain\Entity\Blockchain;
 use App\Blockchain\Entity\Dapp;
 use App\Cryptocurrency\Entity\Cryptocurrency;
 use App\Shared\Entity\DescriptionTrait;
+use App\Shared\Validator\NotInFuture;
 use App\Strategy\Farming\Repository\StrategyFarmingRepository;
 use App\User\Entity\OwnedInterface;
 use App\User\Entity\OwnerTrait;
@@ -32,18 +33,22 @@ class StrategyFarming implements OwnedInterface
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\Positive]
     private ?float $nbCoins = null;
 
     #[ORM\ManyToOne(targetEntity: Dapp::class)]
+    #[Assert\NotNull]
     private ?Dapp $dapp = null;
 
     private ?Blockchain $blockchain = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?float $apr = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[NotInFuture]
     private ?\DateTimeImmutable $enteredAt = null;
 
     public function __construct(User $owner)

@@ -5,16 +5,21 @@ namespace App\Tests\Deposit\Controller;
 use App\Deposit\Entity\Deposit;
 use App\Tests\Fixtures\Dataset;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 final class DepositControllerTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     private KernelBrowser $client;
     private Dataset $data;
 
     protected function setUp(): void
     {
+        self::mockTime('2026-03-10 12:00 UTC');
         $this->client = self::createClient();
         $this->data = Dataset::load($this->em());
         $this->client->loginUser($this->data->user);
@@ -55,13 +60,7 @@ final class DepositControllerTest extends WebTestCase
 
     public function testCreateDeposit(): void
     {
-        $this->client->request('GET', '/deposit/new');
-        $this->client->submitForm('Ajouter', [
-            'deposit[amount]' => '250',
-            'deposit[exchange]' => (string) $this->data->exchange->getId(),
-            'deposit[fiatCurrency]' => (string) $this->data->usd->getId(),
-            'deposit[type]' => (string) $this->data->depositType->getId(),
-        ]);
+        $this->submitNewForm([]);
 
         self::assertResponseRedirects('/deposit/');
         $deposits = $this->em()->getRepository(Deposit::class)->findBy(['owner' => $this->data->user, 'amount' => 250]);
@@ -69,6 +68,57 @@ final class DepositControllerTest extends WebTestCase
         self::assertSame($this->data->usd->getId(), $deposits[0]->getFiatCurrency()->getId());
         self::assertSame($this->data->exchange->getId(), $deposits[0]->getExchange()->getId());
         self::assertSame($this->data->depositType->getId(), $deposits[0]->getType()->getId());
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>, string}>
+     */
+    public static function invalidDeposits(): iterable
+    {
+        yield 'zero amount' => [['deposit[amount]' => '0'], 'strictement positive'];
+        yield 'negative amount' => [['deposit[amount]' => '-50'], 'strictement positive'];
+        yield 'in the future' => [['deposit[depositedAt]' => '2026-03-12'], 'La date ne peut pas être dans le futur.'];
+    }
+
+    /**
+     * @param array<string, string> $fields
+     */
+    #[DataProvider('invalidDeposits')]
+    public function testInvalidDepositIsAFormError(array $fields, string $message): void
+    {
+        $this->submitNewForm($fields);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertAnySelectorTextContains('[data-slot="form-message"]', $message);
+        self::assertSame(1, $this->countDeposits());
+    }
+
+    public function testDepositDatedTomorrowIsAccepted(): void
+    {
+        // PHP runs in UTC: tomorrow is accepted so that the French "today" is never refused.
+        $this->submitNewForm(['deposit[depositedAt]' => '2026-03-11']);
+
+        self::assertResponseRedirects('/deposit/');
+        self::assertSame(2, $this->countDeposits());
+    }
+
+    /**
+     * @param array<string, string> $fields
+     */
+    private function submitNewForm(array $fields): void
+    {
+        $this->client->request('GET', '/deposit/new');
+        $this->client->submitForm('Ajouter', $fields + [
+            'deposit[amount]' => '250',
+            'deposit[exchange]' => (string) $this->data->exchange->getId(),
+            'deposit[fiatCurrency]' => (string) $this->data->usd->getId(),
+            'deposit[type]' => (string) $this->data->depositType->getId(),
+        ]);
+    }
+
+    private function countDeposits(): int
+    {
+        return $this->em()->getRepository(Deposit::class)->count(['owner' => $this->data->user]);
     }
 
     private function em(): EntityManagerInterface

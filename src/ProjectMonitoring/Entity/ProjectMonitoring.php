@@ -24,7 +24,8 @@ class ProjectMonitoring implements OwnedInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $libelle = null;
 
     #[ORM\ManyToOne(targetEntity: Cryptocurrency::class)]
@@ -35,6 +36,7 @@ class ProjectMonitoring implements OwnedInterface
 
     /** @var list<string> */
     #[ORM\Column(type: Types::JSON)]
+    #[Assert\All([new Assert\Url(), new Assert\Length(max: 2048)])]
     private array $links = [];
 
     #[ORM\ManyToOne(targetEntity: TypeProject::class, inversedBy: 'projectMonitorings')]
