@@ -37,4 +37,24 @@ final readonly class WalletHistory
     {
         return $this->points[0]->at ?? null;
     }
+
+    /**
+     * Date format of the X axis, from the span displayed rather than the period: a year of chart with a month of
+     * history shows days. Beyond 124 days (4 × 31), the 5 dates of the axis are more than a month apart.
+     *
+     * @return 'hour'|'day'|'month'
+     */
+    public function tickUnit(): string
+    {
+        if ($this->isEmpty()) {
+            return 'day';
+        }
+        $span = $this->points[\count($this->points) - 1]->at->getTimestamp() - $this->points[0]->at->getTimestamp();
+
+        return match (true) {
+            $span <= 86400 => 'hour',
+            $span <= 124 * 86400 => 'day',
+            default => 'month',
+        };
+    }
 }
